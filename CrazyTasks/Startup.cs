@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PresentationLayer.Middlewares;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,8 +38,9 @@ namespace CrazyTasks
             }
 
             app.UseRouting();
+            // app.UseAuthorization();
 
-           // app.UseAuthorization();
+            app.UseMiddleware<ConsoleReguestLogMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
