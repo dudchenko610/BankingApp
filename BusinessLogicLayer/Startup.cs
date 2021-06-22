@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BusinessLogicLayer.Facade;
+using BusinessLogicLayer.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,8 @@ namespace BusinessLogicLayer
 
         public static void Initialize(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<IBankingService, BankingService>();
+
             DataAccessLayer.Startup.Initialize(services, configuration);
         }
     }
