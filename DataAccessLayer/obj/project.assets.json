@@ -31,16 +31,6 @@
         "runtime": {
           "lib/netcoreapp3.0/Microsoft.Extensions.Primitives.dll": {}
         }
-      },
-      "Shared/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "compile": {
-          "bin/placeholder/Shared.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Shared.dll": {}
-        }
       }
     }
   },
@@ -106,18 +96,12 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
-    },
-    "Shared/1.0.0": {
-      "type": "project",
-      "path": "../Shared/Shared.csproj",
-      "msbuildProject": "../Shared/Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "Microsoft.Extensions.Configuration.Abstractions >= 5.0.0",
-      "Microsoft.Extensions.DependencyInjection.Abstractions >= 5.0.0",
-      "Shared >= 1.0.0"
+      "Microsoft.Extensions.DependencyInjection.Abstractions >= 5.0.0"
     ]
   },
   "packageFolders": {
@@ -154,11 +138,7 @@
       "frameworks": {
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
-          "projectReferences": {
-            "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj": {
-              "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {

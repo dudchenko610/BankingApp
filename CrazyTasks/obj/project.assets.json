@@ -36,8 +36,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
-          "DataAccessLayer": "1.0.0",
-          "Shared": "1.0.0"
+          "DataAccessLayer": "1.0.0"
         },
         "compile": {
           "bin/placeholder/BusinessLogicLayer.dll": {}
@@ -51,24 +50,13 @@
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "5.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0",
-          "Shared": "1.0.0"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0"
         },
         "compile": {
           "bin/placeholder/DataAccessLayer.dll": {}
         },
         "runtime": {
           "bin/placeholder/DataAccessLayer.dll": {}
-        }
-      },
-      "Shared/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "compile": {
-          "bin/placeholder/Shared.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Shared.dll": {}
         }
       }
     }
@@ -145,17 +133,11 @@
       "type": "project",
       "path": "../DataAccessLayer/DataAccessLayer.csproj",
       "msbuildProject": "../DataAccessLayer/DataAccessLayer.csproj"
-    },
-    "Shared/1.0.0": {
-      "type": "project",
-      "path": "../Shared/Shared.csproj",
-      "msbuildProject": "../Shared/Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "BusinessLogicLayer >= 1.0.0",
-      "Shared >= 1.0.0"
+      "BusinessLogicLayer >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -195,9 +177,6 @@
           "projectReferences": {
             "C:\\Programming\\nix_tasks\\CrazyTasks\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
               "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\BusinessLogicLayer\\BusinessLogicLayer.csproj"
-            },
-            "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj": {
-              "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj"
             }
           }
         }
