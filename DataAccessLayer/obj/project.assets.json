@@ -32,35 +32,6 @@
           "lib/netcoreapp3.0/Microsoft.Extensions.Primitives.dll": {}
         }
       },
-      "BusinessLogicLayer/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "dependencies": {
-          "DataAccessLayer": "1.0.0",
-          "Shared": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/BusinessLogicLayer.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/BusinessLogicLayer.dll": {}
-        }
-      },
-      "DataAccessLayer/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "5.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0",
-          "Shared": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/DataAccessLayer.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/DataAccessLayer.dll": {}
-        }
-      },
       "Shared/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
@@ -136,16 +107,6 @@
         "version.txt"
       ]
     },
-    "BusinessLogicLayer/1.0.0": {
-      "type": "project",
-      "path": "../BusinessLogicLayer/BusinessLogicLayer.csproj",
-      "msbuildProject": "../BusinessLogicLayer/BusinessLogicLayer.csproj"
-    },
-    "DataAccessLayer/1.0.0": {
-      "type": "project",
-      "path": "../DataAccessLayer/DataAccessLayer.csproj",
-      "msbuildProject": "../DataAccessLayer/DataAccessLayer.csproj"
-    },
     "Shared/1.0.0": {
       "type": "project",
       "path": "../Shared/Shared.csproj",
@@ -154,7 +115,8 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "BusinessLogicLayer >= 1.0.0",
+      "Microsoft.Extensions.Configuration.Abstractions >= 5.0.0",
+      "Microsoft.Extensions.DependencyInjection.Abstractions >= 5.0.0",
       "Shared >= 1.0.0"
     ]
   },
@@ -166,11 +128,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Programming\\nix_tasks\\CrazyTasks\\CrazyTasks\\PresentationLayer.csproj",
-      "projectName": "PresentationLayer",
-      "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\CrazyTasks\\PresentationLayer.csproj",
+      "projectUniqueName": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj",
+      "projectName": "DataAccessLayer",
+      "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj",
       "packagesPath": "C:\\Users\\Ruslan\\.nuget\\packages\\",
-      "outputPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\CrazyTasks\\obj\\",
+      "outputPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -193,9 +155,6 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Programming\\nix_tasks\\CrazyTasks\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
-              "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\BusinessLogicLayer\\BusinessLogicLayer.csproj"
-            },
             "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj": {
               "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj"
             }
@@ -211,6 +170,16 @@
     "frameworks": {
       "netcoreapp3.1": {
         "targetAlias": "netcoreapp3.1",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": {
+            "target": "Package",
+            "version": "[5.0.0, )"
+          },
+          "Microsoft.Extensions.DependencyInjection.Abstractions": {
+            "target": "Package",
+            "version": "[5.0.0, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
@@ -222,9 +191,6 @@
         "assetTargetFallback": true,
         "warn": true,
         "frameworkReferences": {
-          "Microsoft.AspNetCore.App": {
-            "privateAssets": "none"
-          },
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }

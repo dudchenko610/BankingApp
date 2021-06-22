@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ZKIEaWgDael+GCRUeZDQsMQzOQc1KOhmmMGQ0AQWvi0P8JecNa9gZxb/vjNLZsRQ++x7WoI5qbv1YMMWkzQtFg==",
+  "dgSpecHash": "7Nvsh/1riJ84gEoCKisBsK5PGjEfy0gR5LbIsbnUZ5ZZWUcl/v1dlsKTWn1orjAq6Fhtvx9zde2FqBSItEKg6w==",
   "success": true,
-  "projectFilePath": "C:\\Programming\\nix_tasks\\CrazyTasks\\CrazyTasks\\PresentationLayer.csproj",
+  "projectFilePath": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Ruslan\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\Ruslan\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\5.0.0\\microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
