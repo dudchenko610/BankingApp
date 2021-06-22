@@ -8,6 +8,6 @@ namespace Shared.ViewModels.Banking
     {
         public int MonthNumber { get; set; }
         public int Percents { get; set; }
-        public float TotalMothSum { get; set; }
+        public decimal TotalMonthSum { get; set; }
     }
 }

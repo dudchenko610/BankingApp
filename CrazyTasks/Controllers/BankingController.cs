@@ -4,10 +4,12 @@ using BusinessLogicLayer.Facade;
 using Shared.ViewModels.Banking;
 
 using static Shared.Constants;
+using System;
 
 namespace CrazyTasks.Controllers
 {
     [Route("[controller]")]
+    [ApiController]
     public class BankingController : Controller
     {
         private IBankingService _bankingService;
