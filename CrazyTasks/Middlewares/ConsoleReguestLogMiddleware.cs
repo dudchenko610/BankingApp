@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace PresentationLayer.Middlewares
 {
-    public class ConsoleLogMiddleware
+    public class ConsoleReguestLogMiddleware
     {
         private RequestDelegate _next;
 
-        public ConsoleLogMiddleware(RequestDelegate next)
+        public ConsoleReguestLogMiddleware(RequestDelegate next)
         {
             _next = next;
         }
