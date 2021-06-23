@@ -6,7 +6,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj" />
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\SharedViewModels\SharedViewModels.csproj" />
+    <ProjectReference Include="..\Shared\SharedConstants.csproj" />
   </ItemGroup>
 
 

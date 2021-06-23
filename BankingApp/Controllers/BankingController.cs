@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-using BusinessLogicLayer.Facade;
-using Shared.ViewModels.Banking;
-
+using BusinessLogicLayer.Interfaces;
 using static Shared.Constants;
-using System;
+using SharedViewModels.Banking;
 
 namespace BankingApp.Controllers
 {
@@ -13,18 +10,18 @@ namespace BankingApp.Controllers
     public class BankingController : Controller
     {
         private IBankingService _bankingService;
+
         public BankingController(IBankingService bankingService)
         {
             _bankingService = bankingService;
         }
 
         [HttpPost]
-        [Route(Routes.Banking.CALC_DEPOSITE)]
-        public IActionResult CalcDeposite(DepositeInputData model)
+        [Route(Routes.Banking.CALCULATE_DEPOSITE)]
+        public IActionResult CalculateDeposite(RequestCalculateDepositeBankingView model)
         {
-            DepositeOutputData depositeOutputData = _bankingService.CalculateDeposite(model);
-            return Ok(depositeOutputData);
+            ResponseCalculateDepositeBankingView responseOfDepositeCalculation = _bankingService.CalculateDeposite(model);
+            return Ok(responseOfDepositeCalculation);
         }
-
     }
 }

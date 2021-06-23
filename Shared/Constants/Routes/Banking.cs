@@ -10,7 +10,7 @@ namespace Shared
         { 
             public class Banking
             {
-                public const string CALC_DEPOSITE = "calcDeposite";
+                public const string CALCULATE_DEPOSITE = "calculateDeposite";
             }
         } 
     }

@@ -1,33 +1,27 @@
-﻿using BusinessLogicLayer.Facade;
-using Shared.ViewModels.Banking;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BusinessLogicLayer.Interfaces;
+using SharedViewModels.Banking;
 
 namespace BusinessLogicLayer.Services
 {
     public class BankingService : IBankingService
     {
-        public DepositeOutputData CalculateDeposite(DepositeInputData inData)
+        public ResponseCalculateDepositeBankingView CalculateDeposite(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
-            var outData = new DepositeOutputData();
+            var respDepositeInfo = new ResponseCalculateDepositeBankingView();
+
             // An = A(1 + (n / 12) * (P / 100))
-
-            float percDev12 = inData.Percents / 1200.0f;
-
-            for (int i = 1; i <= inData.Months; i++)
+            float percentsDevidedBy1200 = reqDepositeCalcInfo.Percents / 1200.0f;
+            for (int i = 1; i <= reqDepositeCalcInfo.MonthsCount; i++)
             {
-                decimal monthSum = inData.DepositSum * (decimal) (1.0f + i * percDev12);
-
-                outData.PerMonthInfos.Add(new DepositeMonthInfo
+                decimal monthSum = reqDepositeCalcInfo.DepositeSum * (decimal) (1.0f + i * percentsDevidedBy1200);
+                respDepositeInfo.PerMonthInfos.Add(new ResponseCalculateDepositeBankingViewItem
                 { 
                     MonthNumber = i,
                     TotalMonthSum = decimal.Round(monthSum, 2),
-                    Percents = (int) ((i / 12.0f) * inData.Percents)
+                    Percents = (int) ((i / 12.0f) * reqDepositeCalcInfo.Percents)
                 });
             }
-
-            return outData;
+            return respDepositeInfo;
         }
     }
 }

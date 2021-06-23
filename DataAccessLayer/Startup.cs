@@ -10,7 +10,6 @@ namespace DataAccessLayer
     {
         public static void Initialize(IServiceCollection services, IConfiguration configuration)
         { 
-        
         }
     }
 }

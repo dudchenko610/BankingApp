@@ -21,16 +21,8 @@ namespace PresentationLayer.Middlewares
             Console.WriteLine(context.Request.Path);
             Console.WriteLine("                                         _");
 
-
             Console.WriteLine("__________________ Request Headers __________________");
             foreach (var e in context.Request.Headers)
-            {
-                Console.WriteLine("[] " + e.Key + "   :   " + e.Value);
-            }
-
-
-            Console.WriteLine("__________________ Response Headers __________________");
-            foreach (var e in context.Response.Headers)
             {
                 Console.WriteLine("[] " + e.Key + "   :   " + e.Value);
             }
