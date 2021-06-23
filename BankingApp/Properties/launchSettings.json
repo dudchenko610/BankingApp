@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "CrazyTasks": {
+    "BankingApp": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "",

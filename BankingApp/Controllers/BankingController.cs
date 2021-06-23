@@ -6,7 +6,7 @@ using Shared.ViewModels.Banking;
 using static Shared.Constants;
 using System;
 
-namespace CrazyTasks.Controllers
+namespace BankingApp.Controllers
 {
     [Route("[controller]")]
     [ApiController]

@@ -16,7 +16,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace CrazyTasks
+namespace BankingApp
 {
     public class Startup
     {

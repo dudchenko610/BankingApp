@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Programming\\nix_tasks\\CrazyTasks\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {}
+    "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {}
   },
   "projects": {
-    "C:\\Programming\\nix_tasks\\CrazyTasks\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
+    "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Programming\\nix_tasks\\CrazyTasks\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+        "projectUniqueName": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
         "projectName": "BusinessLogicLayer",
-        "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+        "projectPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
         "packagesPath": "C:\\Users\\Ruslan\\.nuget\\packages\\",
-        "outputPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\BusinessLogicLayer\\obj\\",
+        "outputPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\BusinessLogicLayer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -34,11 +34,11 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj": {
-                "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj"
+              "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\DataAccessLayer\\DataAccessLayer.csproj": {
+                "projectPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\DataAccessLayer\\DataAccessLayer.csproj"
               },
-              "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj": {
-                "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj"
+              "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\Shared\\Shared.csproj": {
+                "projectPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\Shared\\Shared.csproj"
               }
             }
           }
@@ -71,14 +71,14 @@
         }
       }
     },
-    "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj": {
+    "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\DataAccessLayer\\DataAccessLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj",
+        "projectUniqueName": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\DataAccessLayer\\DataAccessLayer.csproj",
         "projectName": "DataAccessLayer",
-        "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj",
+        "projectPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\DataAccessLayer\\DataAccessLayer.csproj",
         "packagesPath": "C:\\Users\\Ruslan\\.nuget\\packages\\",
-        "outputPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\obj\\",
+        "outputPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\DataAccessLayer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -141,14 +141,14 @@
         }
       }
     },
-    "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj": {
+    "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj",
+        "projectUniqueName": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\Shared\\Shared.csproj",
         "projectName": "Shared",
-        "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj",
+        "projectPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\Shared\\Shared.csproj",
         "packagesPath": "C:\\Users\\Ruslan\\.nuget\\packages\\",
-        "outputPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\obj\\",
+        "outputPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
