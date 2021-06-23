@@ -37,6 +37,19 @@ bld/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
+
+BankingApp/bin/
+BankingApp/obj/
+
+BusinessLogicLayer/bin/
+BusinessLogicLayer/obj/
+
+DataAccessLayer/bin/
+DataAccessLayer/obj/
+
+Shared/bin/
+Shared/obj/
+
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
