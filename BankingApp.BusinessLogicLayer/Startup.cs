@@ -1,16 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace DataAccessLayer
+namespace BankingApp.BusinessLogicLayer
 {
     public class Startup
     {
+
         public static void Initialize(IServiceCollection services, IConfiguration configuration)
-        { 
-        
+        {
+            BankingApp.DataAccessLayer.Startup.Initialize(services, configuration);
         }
     }
 }

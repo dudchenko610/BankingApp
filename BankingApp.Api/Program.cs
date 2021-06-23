@@ -4,10 +4,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace PresentationLayer
+namespace BankingApp.Api
 {
     public class Program
     {

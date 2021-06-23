@@ -1,21 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace PresentationLayer
+namespace BankingApp.Api
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
-
 
         public Startup(IConfiguration configuration)
         {
@@ -24,7 +17,7 @@ namespace PresentationLayer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            BusinessLogicLayer.Startup.Initialize(services, Configuration);
+            BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
 
             services.AddControllers();
         }
@@ -37,8 +30,6 @@ namespace PresentationLayer
             }
 
             app.UseRouting();
-            // app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

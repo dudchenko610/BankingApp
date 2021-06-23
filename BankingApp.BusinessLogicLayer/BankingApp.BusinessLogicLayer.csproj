@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
+    <ProjectReference Include="..\BankingApp.DataAccessLayer\BankingApp.DataAccessLayer.csproj" />
   </ItemGroup>
 
 </Project>
