@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BankingApp.Controllers
+namespace PresentationLayer.Controllers
 {
     public class BankingController : Controller
     {

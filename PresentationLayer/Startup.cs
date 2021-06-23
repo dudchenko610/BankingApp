@@ -5,13 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PresentationLayer.Middlewares;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BankingApp
+namespace PresentationLayer
 {
     public class Startup
     {
@@ -39,8 +38,6 @@ namespace BankingApp
 
             app.UseRouting();
             // app.UseAuthorization();
-
-            app.UseMiddleware<ConsoleReguestLogMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
