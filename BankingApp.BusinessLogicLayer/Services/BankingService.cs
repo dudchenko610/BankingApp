@@ -1,7 +1,7 @@
-﻿using BusinessLogicLayer.Interfaces;
-using ViewModels.Banking;
+﻿using BankingApp.BusinessLogicLayer.Interfaces;
+using BankingApp.ViewModels.Banking;
 
-namespace BusinessLogicLayer.Services
+namespace BankingApp.BusinessLogicLayer.Services
 {
     public class BankingService : IBankingService
     {

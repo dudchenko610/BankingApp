@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ViewModels.Banking;
-using ViewModels.Banking.Validators;
+using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Banking.Validators;
 
-namespace PresentationLayer
+namespace BankingApp.Api
 {
     public class Startup
     {
@@ -21,7 +21,7 @@ namespace PresentationLayer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            BusinessLogicLayer.Startup.Initialize(services, Configuration);
+            BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
             services.AddControllers().AddFluentValidation();
             services.AddTransient<IValidator<RequestCalculateDepositeBankingView>, RequestCalculateDepositeBankingViewValidator>();
         }

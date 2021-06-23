@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ViewModels.Banking
+namespace BankingApp.ViewModels.Banking
 {
     public class ResponseCalculateDepositeBankingView
     {

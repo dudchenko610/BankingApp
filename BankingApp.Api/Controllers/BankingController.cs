@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BusinessLogicLayer.Interfaces;
-using static Shared.Constants;
-using ViewModels.Banking;
+using BankingApp.BusinessLogicLayer.Interfaces;
+using static BankingApp.Shared.Constants;
+using BankingApp.ViewModels.Banking;
 
-namespace PresentationLayer.Controllers
+namespace BankingApp.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]

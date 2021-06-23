@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Shared
+namespace BankingApp.Shared
 {
     public static partial class Constants
     {

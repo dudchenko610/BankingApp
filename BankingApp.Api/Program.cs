@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace PresentationLayer
+namespace BankingApp.Api
 {
     public class Program
     {
