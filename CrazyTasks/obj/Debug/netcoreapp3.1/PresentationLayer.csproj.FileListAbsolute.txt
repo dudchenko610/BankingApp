@@ -28,3 +28,7 @@ C:\Programming\nix_tasks\CrazyTasks\CrazyTasks\obj\Debug\netcoreapp3.1\Presentat
 C:\Programming\nix_tasks\CrazyTasks\CrazyTasks\obj\Debug\netcoreapp3.1\PresentationLayer.dll
 C:\Programming\nix_tasks\CrazyTasks\CrazyTasks\obj\Debug\netcoreapp3.1\PresentationLayer.pdb
 C:\Programming\nix_tasks\CrazyTasks\CrazyTasks\obj\Debug\netcoreapp3.1\PresentationLayer.genruntimeconfig.cache
+C:\Programming\nix_tasks\CrazyTasks\CrazyTasks\bin\Debug\netcoreapp3.1\FluentValidation.dll
+C:\Programming\nix_tasks\CrazyTasks\CrazyTasks\bin\Debug\netcoreapp3.1\FluentValidation.AspNetCore.dll
+C:\Programming\nix_tasks\CrazyTasks\CrazyTasks\bin\Debug\netcoreapp3.1\FluentValidation.DependencyInjectionExtensions.dll
+C:\Programming\nix_tasks\CrazyTasks\CrazyTasks\obj\Debug\netcoreapp3.1\PresentationLayer.MvcApplicationPartsAssemblyInfo.cs

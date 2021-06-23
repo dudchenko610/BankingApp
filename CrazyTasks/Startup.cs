@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,9 +8,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PresentationLayer.Middlewares;
+using Shared.Validator.Banking;
+using Shared.ViewModels.Banking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace CrazyTasks
@@ -26,8 +31,10 @@ namespace CrazyTasks
         public void ConfigureServices(IServiceCollection services)
         {
             BusinessLogicLayer.Startup.Initialize(services, Configuration);
+            services.AddControllers().AddFluentValidation();
 
-            services.AddControllers();
+
+            services.AddTransient<IValidator<DepositeInputData>, DepositeInputDataValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -17,12 +17,12 @@ namespace BusinessLogicLayer.Services
 
             for (int i = 1; i <= inData.Months; i++)
             {
-                float monthSum = inData.DepositSum * (1.0f + i * percDev12);
+                decimal monthSum = inData.DepositSum * (decimal) (1.0f + i * percDev12);
 
                 outData.PerMonthInfos.Add(new DepositeMonthInfo
                 { 
                     MonthNumber = i,
-                    TotalMonthSum = decimal.Round((decimal)monthSum, 2),
+                    TotalMonthSum = decimal.Round(monthSum, 2),
                     Percents = (int) ((i / 12.0f) * inData.Percents)
                 });
             }
