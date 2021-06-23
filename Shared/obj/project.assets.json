@@ -15,11 +15,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj",
+      "projectUniqueName": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\Shared\\Shared.csproj",
       "projectName": "Shared",
-      "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\Shared.csproj",
+      "projectPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\Shared\\Shared.csproj",
       "packagesPath": "C:\\Users\\Ruslan\\.nuget\\packages\\",
-      "outputPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\Shared\\obj\\",
+      "outputPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\Shared\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

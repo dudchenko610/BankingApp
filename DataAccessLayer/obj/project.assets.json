@@ -112,11 +112,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj",
+      "projectUniqueName": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\DataAccessLayer\\DataAccessLayer.csproj",
       "projectName": "DataAccessLayer",
-      "projectPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\DataAccessLayer.csproj",
+      "projectPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\DataAccessLayer\\DataAccessLayer.csproj",
       "packagesPath": "C:\\Users\\Ruslan\\.nuget\\packages\\",
-      "outputPath": "C:\\Programming\\nix_tasks\\CrazyTasks\\DataAccessLayer\\obj\\",
+      "outputPath": "C:\\Programming\\nix_tasks\\BankingApp\\BankingApp\\DataAccessLayer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
