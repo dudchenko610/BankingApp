@@ -6,8 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PresentationLayer.Middlewares;
-using SharedViewModels.Banking;
-using SharedViewModels.Banking.Validators;
+using ViewModels.Banking;
+using ViewModels.Banking.Validators;
 
 namespace BankingApp
 {

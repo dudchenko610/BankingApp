@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BusinessLogicLayer.Interfaces;
 using static Shared.Constants;
-using SharedViewModels.Banking;
+using ViewModels.Banking;
 
 namespace BankingApp.Controllers
 {

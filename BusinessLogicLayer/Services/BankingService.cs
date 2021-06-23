@@ -1,5 +1,5 @@
 ﻿using BusinessLogicLayer.Interfaces;
-using SharedViewModels.Banking;
+using ViewModels.Banking;
 
 namespace BusinessLogicLayer.Services
 {

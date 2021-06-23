@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicLayer", "Busin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedConstants", "Shared\SharedConstants.csproj", "{87E096FD-E906-47F7-BA5D-547A71AF9A73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedViewModels", "SharedViewModels\SharedViewModels.csproj", "{4E57DC5A-1D75-4ACB-B349-9C58C4AEE75B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels", "ViewModels\ViewModels.csproj", "{4E57DC5A-1D75-4ACB-B349-9C58C4AEE75B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
