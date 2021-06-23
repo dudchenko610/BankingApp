@@ -3,7 +3,7 @@ using BusinessLogicLayer.Interfaces;
 using static Shared.Constants;
 using ViewModels.Banking;
 
-namespace BankingApp.Controllers
+namespace PresentationLayer.Controllers
 {
     [Route("[controller]")]
     [ApiController]

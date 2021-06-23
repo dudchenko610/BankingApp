@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PresentationLayer.Middlewares;
 using ViewModels.Banking;
 using ViewModels.Banking.Validators;
 
-namespace BankingApp
+namespace PresentationLayer
 {
     public class Startup
     {
@@ -35,7 +34,6 @@ namespace BankingApp
             }
 
             app.UseRouting();
-            app.UseMiddleware<ConsoleReguestLogMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
