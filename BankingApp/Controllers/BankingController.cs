@@ -9,7 +9,7 @@ namespace BankingApp.Controllers
     [ApiController]
     public class BankingController : Controller
     {
-        private IBankingService _bankingService;
+        private readonly IBankingService _bankingService;
 
         public BankingController(IBankingService bankingService)
         {
