@@ -5,7 +5,7 @@ using BankingApp.ViewModels.Banking;
 
 namespace BankingApp.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class BankingController : Controller
     {
