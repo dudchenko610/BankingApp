@@ -1,18 +1,70 @@
 ﻿@page "/calculateDeposite"
 @using ViewModels.Banking
 
-@inject IDepositeService _depositeService 
+@inject IDepositeService _depositeService
 
-<div class="container d-flex align-items-center h-100">
-    <DepositeFormComponent OnFormSubmit="OnDepositeFormSubmit"></DepositeFormComponent>
+<div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100">
+    @switch (pageState)
+    {
+        case PageState.DISPLAY_FORM:
+            <DepositeFormComponent OnFormSubmit="OnDepositeFormSubmit"></DepositeFormComponent>
+            break;
+        case PageState.LOADING:
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+
+            break;
+        case PageState.DISPLAY_LIST:
+            <div class="container-fluid">
+                <button class="btn btn-primary btn-block mt-3 mb-3" @onclick="BackToForm">Back to form</button>
+
+                <ul class="list-group mb-3">
+                    @foreach (var resItem in depositeResponse.PerMonthInfos)
+                    {
+                        <li class="list-group-item">
+                            <div class="container-fluid d-flex justify-content-between">
+                                <label>Month Number: @resItem.MonthNumber</label>
+                                <label>Total Sum: @resItem.TotalMonthSum</label>
+                                <label>Percents: @resItem.Percents</label>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            
+            break;
+        default:
+            <div></div>
+            break;
+    }
 </div>
+
+
+
 
 @code {
 
+    private PageState pageState = PageState.DISPLAY_FORM;
+    private ResponseCalculateDepositeBankingView depositeResponse;
+
+    enum PageState
+    {
+        DISPLAY_FORM = 0,
+        LOADING = 1,
+        DISPLAY_LIST = 2
+    }
+
     private async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
     {
-        var response = await _depositeService.CalculateDepositeAsync(reqModel);
+        depositeResponse = null;
+        pageState = PageState.LOADING;
+        depositeResponse = await _depositeService.CalculateDepositeAsync(reqModel);
+        pageState = PageState.DISPLAY_LIST;
+    }
 
-        Console.WriteLine("Size = " + response.PerMonthInfos.Count);
+    private void BackToForm()
+    {
+        pageState = PageState.DISPLAY_FORM;
     }
 }
