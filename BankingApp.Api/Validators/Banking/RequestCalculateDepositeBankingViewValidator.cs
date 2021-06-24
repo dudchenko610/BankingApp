@@ -1,7 +1,12 @@
-﻿using FluentValidation;
-using BankingApp.Shared;
+﻿using BankingApp.Shared;
+using BankingApp.ViewModels.Banking;
+using FluentValidation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace BankingApp.ViewModels.Banking.Validators
+namespace BankingApp.Api.Validators.Banking
 {
     public class RequestCalculateDepositeBankingViewValidator : AbstractValidator<RequestCalculateDepositeBankingView>
     {

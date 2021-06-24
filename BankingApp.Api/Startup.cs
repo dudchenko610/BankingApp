@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BankingApp.ViewModels.Banking;
-using BankingApp.ViewModels.Banking.Validators;
+using BankingApp.Api.Validators.Banking;
 
 namespace BankingApp.Api
 {

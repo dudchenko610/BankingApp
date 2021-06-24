@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankingApp.UI.Core\BankingApp.UI.Core.csproj" />
+    <ProjectReference Include="..\BankingApp.ViewModels\BankingApp.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>
