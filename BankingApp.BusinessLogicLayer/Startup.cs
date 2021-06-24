@@ -1,4 +1,4 @@
-﻿using BankingApp.BusinessLogicLayer.Interfaces;
+using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.BusinessLogicLayer.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,3 +17,4 @@ namespace BankingApp.BusinessLogicLayer
         }
     }
 }
+
