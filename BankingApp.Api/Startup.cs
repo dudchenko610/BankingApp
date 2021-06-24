@@ -24,6 +24,15 @@ namespace BankingApp.Api
             BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
             services.AddControllers().AddFluentValidation();
             services.AddTransient<IValidator<RequestCalculateDepositeBankingView>, RequestCalculateDepositeBankingViewValidator>();
+
+         
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                builder.WithOrigins("https://localhost:44346")
+                       .AllowAnyMethod()
+                       .AllowAnyHeader());
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -34,6 +43,7 @@ namespace BankingApp.Api
             }
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

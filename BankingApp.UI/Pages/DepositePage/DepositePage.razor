@@ -1,10 +1,18 @@
 ﻿@page "/calculateDeposite"
+@using ViewModels.Banking
 
+@inject IDepositeService _depositeService 
 
 <div class="container d-flex align-items-center h-100">
-    <DepositeFormComponent />
+    <DepositeFormComponent OnFormSubmit="OnDepositeFormSubmit"></DepositeFormComponent>
 </div>
 
 @code {
-  
+
+    private async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
+    {
+        var response = await _depositeService.CalculateDepositeAsync(reqModel);
+
+        Console.WriteLine("Size = " + response.PerMonthInfos.Count);
+    }
 }
