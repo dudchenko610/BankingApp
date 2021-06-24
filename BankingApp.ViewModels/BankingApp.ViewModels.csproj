@@ -5,8 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BankingApp.DataAccessLayer\BankingApp.DataAccessLayer.csproj" />
-    <ProjectReference Include="..\BankingApp.ViewModels\BankingApp.ViewModels.csproj" />
+    <PackageReference Include="FluentValidation" Version="10.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BankingApp.Shared\BankingApp.Shared.csproj" />
   </ItemGroup>
 

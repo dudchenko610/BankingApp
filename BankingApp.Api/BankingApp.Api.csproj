@@ -6,6 +6,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankingApp.BusinessLogicLayer\BankingApp.BusinessLogicLayer.csproj" />
+
+    <ProjectReference Include="..\BankingApp.ViewModels\BankingApp.ViewModels.csproj" />
+    <ProjectReference Include="..\BankingApp.Shared\BankingApp.Shared.csproj" />
+    
   </ItemGroup>
 
 

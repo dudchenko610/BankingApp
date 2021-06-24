@@ -1,8 +1,12 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Banking.Validators;
 
 namespace BankingApp.Api
 {
@@ -18,8 +22,8 @@ namespace BankingApp.Api
         public void ConfigureServices(IServiceCollection services)
         {
             BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
-
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
+            services.AddTransient<IValidator<RequestCalculateDepositeBankingView>, RequestCalculateDepositeBankingViewValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -30,6 +34,7 @@ namespace BankingApp.Api
             }
 
             app.UseRouting();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
