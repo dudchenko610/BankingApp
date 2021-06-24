@@ -1,10 +1,6 @@
 ﻿using BankingApp.Shared;
 using BankingApp.ViewModels.Banking;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BankingApp.Api.Validators.Banking
 {
