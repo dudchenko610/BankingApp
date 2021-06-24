@@ -1,25 +1,43 @@
-﻿
+﻿@using ViewModels.Banking
 
 <div class="container shadow p-3 mb-5 bg-white rounded w-50">
     <h2 class="d-flex justify-content-center">Calculate your deposite</h2>
-    <form>
+    <EditForm Model="@requestModel">
+        <DataAnnotationsValidator/>
+
         <div class="mb-3">
-            <label for="depositeSum" class="form-label">Deposite Sum</label>
-            <input placeholder="deposite sum" type="number" step=".01" class="form-control" id="depositeSum1" aria-describedby="emailHelp">
+            <label class="form-label">Deposite Sum</label>
+            <InputNumber @bind-Value="requestModel.DepositeSum"
+                   placeholder="deposite sum"
+                   type="number" step=".01"
+                   class="form-control"/>
+            <ValidationMessage For="@(() => requestModel.DepositeSum)" />
         </div>
         <div class="mb-3">
-            <label for="depositeSum" class="form-label">Month Count</label>
-            <input type="number" class="form-control" id="depositeSum1">
+            <label class="form-label">Month Count</label>
+            <InputNumber 
+                   @bind-Value="requestModel.MonthsCount"
+                   type="number" 
+                   class="form-control"/>
+            <ValidationMessage For="@(() => requestModel.MonthsCount)" />
         </div>
         <div class="mb-3">
-            <label for="percents" class="form-label">Percents</label>
-            <input type="number" class="form-control" id="percents1">
+            <label class="form-label">Percents</label>
+            <InputNumber @bind-Value="requestModel.Percents"
+                   type="number"
+                   class="form-control"/>
+            <ValidationMessage For="@(() => requestModel.Percents)" />
+
         </div>
-        <button class="btn btn-primary btn-block">Calculate Deposite</button>
-    </form>
+        <button type="submit" class="btn btn-primary btn-block">Calculate Deposite</button>
+    </EditForm>
 </div>
 
 
 @code {
+    [Parameter]
+    public EventCallback<int> OnFormSubmit { get; set; }
+
+    RequestCalculateDepositeBankingView requestModel = new RequestCalculateDepositeBankingView();   
 
 }
