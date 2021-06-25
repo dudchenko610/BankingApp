@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BankingApp.UI.Components.DepositeResponseContainer
 {
-    public partial class DepositeResponseContainerComponent
+    public partial class DepositeResponseContainer
     {
         [Parameter]
         public RenderFragment ChildContent { get; set; }

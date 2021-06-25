@@ -3,16 +3,20 @@ using Microsoft.AspNetCore.Components;
 
 namespace BankingApp.UI.Components.DepositeForm
 {
-    public partial class ComponentDepositeForm
+    public partial class DepositeForm
     {
+        public DepositeForm()
+        { 
+            _requestModel = new RequestCalculateDepositeBankingView();
+        }
         [Parameter]
         public EventCallback<RequestCalculateDepositeBankingView> OnFormSubmit { get; set; }
 
-        private RequestCalculateDepositeBankingView requestModel = new RequestCalculateDepositeBankingView();
+        private RequestCalculateDepositeBankingView _requestModel;
 
         private void SubmitForm()
         {
-            OnFormSubmit.InvokeAsync(requestModel);
+            OnFormSubmit.InvokeAsync(_requestModel);
         }
     }
 }
