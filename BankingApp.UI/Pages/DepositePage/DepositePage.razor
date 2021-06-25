@@ -4,15 +4,15 @@
     @switch (_pageState)
     {
         case DepositePageState.DISPLAY_FORM_STATE:
-            <DepositeForm OnFormSubmit="OnDepositeFormSubmit"/>
+            <DepositeForm OnFormSubmit="OnDepositeFormSubmit" />
             break;
         case DepositePageState.LOADING_STATE:
-            <ComponentCircleLoader/>
+            <ComponentCircleLoader />
             break;
         case DepositePageState.DISPLAY_LIST_STATE:
-            <DepositeResponseContainer OnBackToForm="BackToForm">
-                <DepositeResponseList PerMonthInfos="@depositeResponse.PerMonthInfos"/>
-            </DepositeResponseContainer>
+            <CascadingValue Name="PerMonthInfos" Value="@depositeResponse.PerMonthInfos">
+                <DepositeResponseContainer OnBackToForm="BackToForm" />
+            </CascadingValue>
             break;
         default:
             <div></div>

@@ -6,7 +6,7 @@ namespace BankingApp.UI.Components.DepositeResponseList
 {
     public partial class DepositeResponseList
     {
-        [Parameter]
+        [CascadingParameter(Name = "PerMonthInfos")]
         public IList<ResponseCalculateDepositeBankingViewItem> PerMonthInfos { get; set; }
     }
 }
