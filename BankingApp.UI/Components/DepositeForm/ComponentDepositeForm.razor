@@ -1,5 +1,4 @@
-﻿@using ViewModels.Banking
-
+﻿
 <div class="container shadow p-3 mb-5 bg-white rounded w-50">
     <h2 class="d-flex justify-content-center">Calculate your deposite</h2>
     <EditForm Model="@requestModel" OnSubmit="SubmitForm">
@@ -7,8 +6,7 @@
 
         <div class="mb-3">
             <label class="form-label">Deposite Sum</label>
-            <InputNumber
-                         @bind-Value="requestModel.DepositeSum"
+            <InputNumber @bind-Value="requestModel.DepositeSum"
                          placeholder="deposite sum"
                          type="number" step=".01"
                          class="form-control" />
@@ -16,16 +14,14 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Month Count</label>
-            <InputNumber
-                         @bind-Value="requestModel.MonthsCount"
+            <InputNumber @bind-Value="requestModel.MonthsCount"
                          type="number"
                          class="form-control" />
             <ValidationMessage For="@(() => requestModel.MonthsCount)" />
         </div>
         <div class="mb-3">
             <label class="form-label">Percents</label>
-            <InputNumber
-                         @bind-Value="requestModel.Percents"
+            <InputNumber @bind-Value="requestModel.Percents"
                          type="number"
                          class="form-control" />
             <ValidationMessage For="@(() => requestModel.Percents)" />
@@ -34,17 +30,3 @@
         <button type="submit" disabled="@(!context.Validate() || !context.IsModified())" class="btn btn-primary btn-block">Calculate Deposite</button>
     </EditForm>
 </div>
-
-
-@code {
-    [Parameter]
-    public EventCallback<RequestCalculateDepositeBankingView> OnFormSubmit { get; set; }
-
-    private void SubmitForm()
-    {
-        OnFormSubmit.InvokeAsync(requestModel);
-    }
-
-    RequestCalculateDepositeBankingView requestModel = new RequestCalculateDepositeBankingView();
-
-}

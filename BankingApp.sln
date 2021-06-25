@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.Shared", "Bankin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.ViewModels", "BankingApp.ViewModels\BankingApp.ViewModels.csproj", "{4E57DC5A-1D75-4ACB-B349-9C58C4AEE75B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.UI", "BankingApp.UI\BankingApp.UI.csproj", "{1FCA270D-E1DB-4E76-BFFC-CD692E2A937A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.UI", "BankingApp.UI\BankingApp.UI.csproj", "{1FCA270D-E1DB-4E76-BFFC-CD692E2A937A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.UI.Core", "BankingApp.UI.Core\BankingApp.UI.Core.csproj", "{440A6DCD-E132-4E02-8E73-4C613166FD43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.UI.Core", "BankingApp.UI.Core\BankingApp.UI.Core.csproj", "{440A6DCD-E132-4E02-8E73-4C613166FD43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
