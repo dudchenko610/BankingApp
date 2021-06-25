@@ -8,23 +8,27 @@ namespace BankingApp.UI.Pages.DepositePage
 {
     public partial class DepositePage
     {
+        public DepositePage()
+        {
+            _pageState = DepositePageState.DISPLAY_FORM_STATE;
+        }
         [Inject]
         private IDepositeService _depositeService { get; set; }
 
-        private DepositePageState pageState = DepositePageState.DISPLAY_FORM_STATE;
+        private DepositePageState _pageState;
         private ResponseCalculateDepositeBankingView depositeResponse;
 
         protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
         {
             depositeResponse = null;
-            pageState = DepositePageState.LOADING_STATE;
+            _pageState = DepositePageState.LOADING_STATE;
             depositeResponse = await _depositeService.CalculateDepositeAsync(reqModel);
-            pageState = DepositePageState.DISPLAY_LIST_STATE;
+            _pageState = DepositePageState.DISPLAY_LIST_STATE;
         }
 
         private void BackToForm()
         {
-            pageState = DepositePageState.DISPLAY_FORM_STATE;
+            _pageState = DepositePageState.DISPLAY_FORM_STATE;
         }
     }
 }
