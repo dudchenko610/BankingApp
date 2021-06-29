@@ -1,6 +1,6 @@
-﻿using BankingApp.UI.Core.Enums;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Enums;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 

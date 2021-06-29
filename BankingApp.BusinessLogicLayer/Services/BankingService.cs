@@ -1,5 +1,6 @@
 ﻿using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Enums;
 using System;
 
 namespace BankingApp.BusinessLogicLayer.Services

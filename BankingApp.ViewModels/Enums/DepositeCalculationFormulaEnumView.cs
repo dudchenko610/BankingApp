@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BankingApp.ViewModels.Banking
+namespace BankingApp.ViewModels.Enums
 {
     public enum DepositeCalculationFormulaEnumView
     {

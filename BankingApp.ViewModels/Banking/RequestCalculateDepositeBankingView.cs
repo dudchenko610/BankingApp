@@ -1,4 +1,5 @@
 ﻿using BankingApp.Shared;
+using BankingApp.ViewModels.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankingApp.ViewModels.Banking

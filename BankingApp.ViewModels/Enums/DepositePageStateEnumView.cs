@@ -1,5 +1,5 @@
 ﻿
-namespace BankingApp.UI.Core.Enums
+namespace BankingApp.ViewModels.Enums
 {
     public enum DepositePageStateEnumView
     {

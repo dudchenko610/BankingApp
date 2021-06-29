@@ -1,4 +1,5 @@
 ﻿using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Enums;
 using Microsoft.AspNetCore.Components;
 
 namespace BankingApp.UI.Components.DepositeForm
