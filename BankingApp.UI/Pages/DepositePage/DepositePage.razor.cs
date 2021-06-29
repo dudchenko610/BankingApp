@@ -22,7 +22,7 @@ namespace BankingApp.UI.Pages.DepositePage
         {
             depositeResponse = null;
             _pageState = DepositePageState.LoadingState;
-            depositeResponse = await _depositeService.CalculateDepositeAsync(reqModel);
+            depositeResponse = await _depositeService.CalculateDepositeSimpleInterestAsync(reqModel);
             _pageState = DepositePageState.DispalyListState;
         }
 

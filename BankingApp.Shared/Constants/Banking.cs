@@ -20,7 +20,10 @@ namespace BankingApp.Shared
         {
             public static class Banking
             {
-                public const string CalculateDeposite = "calculateDeposite";
+                public const string BankingRoute = "api/banking";
+
+                public const string CalculateDepositeSimpleInterest = "calculateDepositeSimpleInterest";
+                public const string CalculateDepositeCompoundInterest = "calculateDepositeSimpleInterest";
             }
         }
     }

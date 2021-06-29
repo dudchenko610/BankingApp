@@ -5,7 +5,7 @@ using BankingApp.ViewModels.Banking;
 
 namespace BankingApp.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route(Routes.Banking.BankingRoute)]
     [ApiController]
     public class BankingController : Controller
     {
@@ -17,10 +17,18 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpPost]
-        [Route(Routes.Banking.CalculateDeposite)]
-        public IActionResult CalculateDeposite(RequestCalculateDepositeBankingView model)
+        [Route(Routes.Banking.CalculateDepositeSimpleInterest)]
+        public IActionResult CalculateDepositeSimpleInterest(RequestCalculateDepositeBankingView model)
         {
             ResponseCalculateDepositeBankingView responseOfDepositeCalculation = _bankingService.CalculateDepositeSimpleInterest(model);
+            return Ok(responseOfDepositeCalculation);
+        }
+
+        [HttpPost]
+        [Route(Routes.Banking.CalculateDepositeCompoundInterest)]
+        public IActionResult CalculateDepositeCompoundInterest(RequestCalculateDepositeBankingView model)
+        {
+            ResponseCalculateDepositeBankingView responseOfDepositeCalculation = _bankingService.CalculateDepositeCompoundInterest(model);
             return Ok(responseOfDepositeCalculation);
         }
     }

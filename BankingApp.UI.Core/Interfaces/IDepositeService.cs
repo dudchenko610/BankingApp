@@ -8,6 +8,7 @@ namespace BankingApp.UI.Core.Interfaces
 {
     public interface IDepositeService
     {
-        public Task<ResponseCalculateDepositeBankingView> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDeposite);
+        public Task<ResponseCalculateDepositeBankingView> CalculateDepositeSimpleInterestAsync(RequestCalculateDepositeBankingView reqDeposite);
+        public Task<ResponseCalculateDepositeBankingView> CalculateDepositeCompoundInterestAsync(RequestCalculateDepositeBankingView reqDeposite);
     }
 }
