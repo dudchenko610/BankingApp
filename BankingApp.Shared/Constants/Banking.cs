@@ -10,9 +10,9 @@ namespace BankingApp.Shared
         {
             public static class Banking
             {
-                public const string INCORRECT_PRICE_FORMAT = "Price can't have more than 2 decimal places";
-                public const string INCORRECT_MONTH_NUMBER = "Months number should be positive non-zero integer value";
-                public const string INCORRECT_PERECENT_NUMBER = "Months number should be positive integer value in range of [1; 100]";
+                public const string IncorrectPriceFormat = "Price can't have more than 2 decimal places";
+                public const string IncorrectMonthFormat = "Months number should be positive non-zero integer value";
+                public const string IncorrectPercentNumber = "Percent should be positive integer value in range of [1; 100]";
             }
         }
 
@@ -20,7 +20,7 @@ namespace BankingApp.Shared
         {
             public static class Banking
             {
-                public const string CALCULATE_DEPOSITE = "calculateDeposite";
+                public const string CalculateDeposite = "calculateDeposite";
             }
         }
     }

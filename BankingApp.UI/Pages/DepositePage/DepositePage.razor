@@ -3,13 +3,13 @@
 <div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100">
     @switch (_pageState)
     {
-        case DepositePageState.DISPLAY_FORM_STATE:
+        case DepositePageState.DisplayFormState:
             <DepositeForm OnFormSubmit="OnDepositeFormSubmit" />
             break;
-        case DepositePageState.LOADING_STATE:
+        case DepositePageState.LoadingState:
             <ComponentCircleLoader />
             break;
-        case DepositePageState.DISPLAY_LIST_STATE:
+        case DepositePageState.DispalyListState:
             <CascadingValue Name="PerMonthInfos" Value="@depositeResponse.PerMonthInfos">
                 <DepositeResponseContainer OnBackToForm="BackToForm" />
             </CascadingValue>

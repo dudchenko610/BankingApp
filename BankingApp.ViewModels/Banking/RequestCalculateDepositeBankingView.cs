@@ -7,15 +7,15 @@ namespace BankingApp.ViewModels.Banking
     public class RequestCalculateDepositeBankingView
     {
         [Required]
-        [RegularExpression(@"\A[0-9]{1,10}(?:[.,][0-9]{1,2})?\z", ErrorMessage = Constants.Errors.Banking.INCORRECT_PRICE_FORMAT)]
+        [RegularExpression(@"\A[0-9]{1,10}(?:[.,][0-9]{1,2})?\z", ErrorMessage = Constants.Errors.Banking.IncorrectPriceFormat)]
         public decimal DepositeSum { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = Constants.Errors.Banking.INCORRECT_MONTH_NUMBER)]
+        [Range(1, int.MaxValue, ErrorMessage = Constants.Errors.Banking.IncorrectMonthFormat)]
         public int MonthsCount { get; set; }
 
         [Required]
-        [Range(1, 100, ErrorMessage = Constants.Errors.Banking.INCORRECT_PERECENT_NUMBER)]
+        [Range(1, 100, ErrorMessage = Constants.Errors.Banking.IncorrectPercentNumber)]
         public int Percents { get; set; }
     }
 }

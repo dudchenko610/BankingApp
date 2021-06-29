@@ -17,7 +17,7 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpPost]
-        [Route(Routes.Banking.CALCULATE_DEPOSITE)]
+        [Route(Routes.Banking.CalculateDeposite)]
         public IActionResult CalculateDeposite(RequestCalculateDepositeBankingView model)
         {
             ResponseCalculateDepositeBankingView responseOfDepositeCalculation = _bankingService.CalculateDeposite(model);
