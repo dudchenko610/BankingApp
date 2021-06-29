@@ -5,6 +5,14 @@
         <DataAnnotationsValidator />
 
         <div class="mb-3">
+            <label class="form-label">Choose a formula</label>
+            <select @bind="_selectFormulaType" class="form-control">
+                <option value="0">Simple Interest Formula</option>
+                <option value="1">Compound Interest Formula</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
             <label class="form-label">Deposite Sum</label>
             <InputNumber @bind-Value="_requestModel.DepositeSum"
                          placeholder="deposite sum"

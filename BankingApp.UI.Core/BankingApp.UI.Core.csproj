@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BankingApp.Shared\BankingApp.Shared.csproj" />
     <ProjectReference Include="..\BankingApp.ViewModels\BankingApp.ViewModels.csproj" />
   </ItemGroup>
 

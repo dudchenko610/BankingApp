@@ -8,15 +8,17 @@ namespace BankingApp.UI.Components.DepositeForm
         public DepositeForm()
         { 
             _requestModel = new RequestCalculateDepositeBankingView();
+            _selectFormulaType = 0;
         }
         [Parameter]
-        public EventCallback<RequestCalculateDepositeBankingView> OnFormSubmit { get; set; }
+        public EventCallback<(RequestCalculateDepositeBankingView, int)> OnFormSubmit { get; set; }
 
         private RequestCalculateDepositeBankingView _requestModel;
+        private int _selectFormulaType;
 
         private void SubmitForm()
         {
-            OnFormSubmit.InvokeAsync(_requestModel);
+            OnFormSubmit.InvokeAsync((_requestModel, _selectFormulaType));
         }
     }
 }
