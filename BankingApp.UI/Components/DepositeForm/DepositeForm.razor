@@ -6,12 +6,7 @@
 
         <div class="mb-3">
             <label class="form-label">Choose a formula</label>
-            <InputSelect @bind-Value="_requestModel.CalculationFormula" class="form-control">
-                @foreach (var formula in Enum.GetValues(typeof(DepositeCalculationFormula)))
-                {
-                    <option value="@formula">@formula</option>
-                }
-            </InputSelect>
+            <InputSelectEnum @bind-Value="_requestModel.CalculationFormula" class="form-control"/>
         </div>
 
         <div class="mb-3">
