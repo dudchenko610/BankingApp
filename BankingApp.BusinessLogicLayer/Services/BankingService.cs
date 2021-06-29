@@ -7,12 +7,12 @@ namespace BankingApp.BusinessLogicLayer.Services
 {
     public class BankingService : IBankingService
     {
-        private delegate (decimal monthSum, int percents) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
+        private delegate (decimal MonthSum, int Percents) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
 
         public ResponseCalculateDepositeBankingView CalculateDeposite(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             var respDepositeInfo = new ResponseCalculateDepositeBankingView();
-            CalculationFormula calculationFormula = getCalculationFormula(reqDepositeCalcInfo);
+            CalculationFormula calculationFormula = GetCalculationFormula(reqDepositeCalcInfo);
 
             for (int i = 1; i <= reqDepositeCalcInfo.MonthsCount; i++)
             {
@@ -20,25 +20,25 @@ namespace BankingApp.BusinessLogicLayer.Services
                 respDepositeInfo.PerMonthInfos.Add(new ResponseCalculateDepositeBankingViewItem
                 { 
                     MonthNumber = i,
-                    TotalMonthSum = decimal.Round(res.monthSum, 2),
-                    Percents = res.percents
+                    TotalMonthSum = decimal.Round(res.MonthSum, 2),
+                    Percents = res.Percents
                 });
             }
             return respDepositeInfo;
         }
 
-        private CalculationFormula getCalculationFormula(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private CalculationFormula GetCalculationFormula(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             switch (reqDepositeCalcInfo.CalculationFormula)
             {
                 case DepositeCalculationFormula.SimpleInterest:
-                    return calculateSimpleInterestDepositePerMonth;
+                    return CalculateSimpleInterestDepositePerMonth;
                 default:
-                    return calculateCompoundInterestDepositePerMonth;
+                    return CalculateCompoundInterestDepositePerMonth;
             }
         }
 
-        private (decimal monthSum, int percents) calculateSimpleInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private (decimal MonthSum, int Percents) CalculateSimpleInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (n / 12) * (P / 100))
             float percentsDevidedBy1200 = reqDepositeCalcInfo.Percents / 1200.0f;
@@ -47,7 +47,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             return (monthSum, percents);
         }
 
-        private (decimal monthSum, int percents) calculateCompoundInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private (decimal MonthSum, int Percents) CalculateCompoundInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (P / 1200)) ^ (n)
             float percentsDevidedBy1200 = reqDepositeCalcInfo.Percents / 1200.0f;
