@@ -10,25 +10,25 @@ namespace BankingApp.UI.Pages.DepositePage
     {
         public DepositePage()
         {
-            _pageState = DepositePageState.DisplayFormState;
+            _pageState = DepositePageStateEnumView.DisplayFormState;
         }
         [Inject]
         private IDepositeService _depositeService { get; set; }
 
-        private DepositePageState _pageState;
+        private DepositePageStateEnumView _pageState;
         private ResponseCalculateDepositeBankingView depositeResponse;
 
         protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
         {
             depositeResponse = null;
-            _pageState = DepositePageState.LoadingState;
+            _pageState = DepositePageStateEnumView.LoadingState;
             depositeResponse = await _depositeService.CalculateDepositeAsync(reqModel);
-            _pageState = DepositePageState.DispalyListState;
+            _pageState = DepositePageStateEnumView.DispalyListState;
         }
 
         private void BackToForm()
         {
-            _pageState = DepositePageState.DisplayFormState;
+            _pageState = DepositePageStateEnumView.DisplayFormState;
         }
     }
 }

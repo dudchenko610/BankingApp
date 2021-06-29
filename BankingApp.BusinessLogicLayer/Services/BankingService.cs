@@ -1,5 +1,4 @@
 ﻿using BankingApp.BusinessLogicLayer.Interfaces;
-using BankingApp.Shared.Enums.Banking;
 using BankingApp.ViewModels.Banking;
 using System;
 
@@ -31,7 +30,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         {
             switch (reqDepositeCalcInfo.CalculationFormula)
             {
-                case DepositeCalculationFormula.SimpleInterest:
+                case DepositeCalculationFormulaEnumView.SimpleInterest:
                     return CalculateSimpleInterestDepositePerMonth;
                 default:
                     return CalculateCompoundInterestDepositePerMonth;
