@@ -1,11 +1,14 @@
 ﻿
 using BankingApp.Shared;
+using BankingApp.Shared.Enums.Banking;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankingApp.ViewModels.Banking
 {
     public class RequestCalculateDepositeBankingView
     {
+        public DepositeCalculationFormula CalculationFormula { get; set; }
+
         [Required]
         [RegularExpression(@"\A[0-9]{1,10}(?:[.,][0-9]{1,2})?\z", ErrorMessage = Constants.Errors.Banking.IncorrectPriceFormat)]
         public decimal DepositeSum { get; set; }

@@ -17,18 +17,10 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpPost]
-        [Route(Routes.Banking.CalculateDepositeSimpleInterest)]
+        [Route(Routes.Banking.CalculateDeposite)]
         public IActionResult CalculateDepositeSimpleInterest(RequestCalculateDepositeBankingView model)
         {
-            ResponseCalculateDepositeBankingView responseOfDepositeCalculation = _bankingService.CalculateDepositeSimpleInterest(model);
-            return Ok(responseOfDepositeCalculation);
-        }
-
-        [HttpPost]
-        [Route(Routes.Banking.CalculateDepositeCompoundInterest)]
-        public IActionResult CalculateDepositeCompoundInterest(RequestCalculateDepositeBankingView model)
-        {
-            ResponseCalculateDepositeBankingView responseOfDepositeCalculation = _bankingService.CalculateDepositeCompoundInterest(model);
+            ResponseCalculateDepositeBankingView responseOfDepositeCalculation = _bankingService.CalculateDeposite(model);
             return Ok(responseOfDepositeCalculation);
         }
     }

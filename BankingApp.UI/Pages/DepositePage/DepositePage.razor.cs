@@ -18,19 +18,11 @@ namespace BankingApp.UI.Pages.DepositePage
         private DepositePageState _pageState;
         private ResponseCalculateDepositeBankingView depositeResponse;
 
-        protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel, int formulaType)
+        protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
         {
             depositeResponse = null;
             _pageState = DepositePageState.LoadingState;
-            switch (formulaType)
-            {
-                case 0:
-                    depositeResponse = await _depositeService.CalculateDepositeSimpleInterestAsync(reqModel);
-                    break;
-                default:
-                    depositeResponse = await _depositeService.CalculateDepositeCompoundInterestAsync(reqModel);
-                    break;
-            }
+            depositeResponse = await _depositeService.CalculateDepositeAsync(reqModel);
             _pageState = DepositePageState.DispalyListState;
         }
 

@@ -1,4 +1,6 @@
 ﻿
+
+
 <div class="container shadow p-3 mb-5 bg-white rounded w-50">
     <h2 class="d-flex justify-content-center">Calculate your deposite</h2>
     <EditForm Model="@_requestModel" OnSubmit="SubmitForm">
@@ -6,10 +8,12 @@
 
         <div class="mb-3">
             <label class="form-label">Choose a formula</label>
-            <select @bind="_selectFormulaType" class="form-control">
-                <option value="0">Simple Interest Formula</option>
-                <option value="1">Compound Interest Formula</option>
-            </select>
+            <InputSelect @bind-Value="_requestModel.CalculationFormula" class="form-control">
+                @foreach (var formula in Enum.GetValues(typeof(DepositeCalculationFormula)))
+                {
+                    <option value="@formula">@formula</option>
+                }
+            </InputSelect>
         </div>
 
         <div class="mb-3">

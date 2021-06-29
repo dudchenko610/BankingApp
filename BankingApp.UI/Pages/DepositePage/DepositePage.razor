@@ -5,7 +5,7 @@
     @switch (_pageState)
     {
         case DepositePageState.DisplayFormState:
-            <DepositeForm OnFormSubmit="@((args) => OnDepositeFormSubmit(args.Item1, args.Item2))" />
+            <DepositeForm OnFormSubmit="@OnDepositeFormSubmit" />
             break;
         case DepositePageState.LoadingState:
             <CircleLoader />
