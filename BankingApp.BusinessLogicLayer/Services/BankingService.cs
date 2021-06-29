@@ -1,5 +1,6 @@
 ﻿using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.ViewModels.Banking;
+using System;
 
 namespace BankingApp.BusinessLogicLayer.Services
 {
@@ -28,16 +29,16 @@ namespace BankingApp.BusinessLogicLayer.Services
         {
             var respDepositeInfo = new ResponseCalculateDepositeBankingView();
 
-            // An = A(1 + (P / 100)) * (n / 12)
-            float percentsDevidedBy100 = reqDepositeCalcInfo.Percents / 100.0f;
+            // An = A(1 + (P / 100)) ^ (n / 12)
+            double percentsDevidedBy100 = reqDepositeCalcInfo.Percents / 100.0;
             for (int i = 1; i <= reqDepositeCalcInfo.MonthsCount; i++)
             {
-                decimal monthSum = reqDepositeCalcInfo.DepositeSum * (decimal) (1.0f + percentsDevidedBy100) * (i / 12.0m);
+                decimal monthSum = reqDepositeCalcInfo.DepositeSum * (decimal) Math.Pow(1.0 + percentsDevidedBy100, (i / 12.0));
                 respDepositeInfo.PerMonthInfos.Add(new ResponseCalculateDepositeBankingViewItem
                 {
                     MonthNumber = i,
                     TotalMonthSum = decimal.Round(monthSum, 2),
-                    Percents = (int) ((monthSum / reqDepositeCalcInfo.DepositeSum) * 100)
+                    Percents = (int) (((monthSum - reqDepositeCalcInfo.DepositeSum) / reqDepositeCalcInfo.DepositeSum) * 100.0m)
                 });
             }
             return respDepositeInfo;
