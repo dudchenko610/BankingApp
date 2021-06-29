@@ -2,14 +2,11 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
-namespace BankingApp.UI.Shared.Inputs
+namespace BankingApp.UI.Components.InputSelectEnum
 {
     public sealed class InputSelectEnum<TEnum> : InputBase<TEnum>
     {
