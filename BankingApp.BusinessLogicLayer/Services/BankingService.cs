@@ -8,7 +8,7 @@ namespace BankingApp.BusinessLogicLayer.Services
     public class BankingService : IBankingService
     {
 
-        private delegate (decimal, int) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
+        private delegate (decimal monthSum, int percents) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
 
         public ResponseCalculateDepositeBankingView CalculateDeposite(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
@@ -21,8 +21,8 @@ namespace BankingApp.BusinessLogicLayer.Services
                 respDepositeInfo.PerMonthInfos.Add(new ResponseCalculateDepositeBankingViewItem
                 { 
                     MonthNumber = i,
-                    TotalMonthSum = decimal.Round(res.Item1, 2),
-                    Percents = res.Item2
+                    TotalMonthSum = decimal.Round(res.monthSum, 2),
+                    Percents = res.percents
                 });
             }
             return respDepositeInfo;
@@ -39,7 +39,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             }
         }
 
-        private (decimal, int) calculateSimpleInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private (decimal monthSum, int percents) calculateSimpleInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (n / 12) * (P / 100))
             float percentsDevidedBy1200 = reqDepositeCalcInfo.Percents / 1200.0f;
@@ -48,7 +48,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             return (monthSum, percents);
         }
 
-        private (decimal, int) calculateCompoundInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private (decimal monthSum, int percents) calculateCompoundInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (P / 1200)) ^ (n)
             float percentsDevidedBy1200 = reqDepositeCalcInfo.Percents / 1200.0f;
