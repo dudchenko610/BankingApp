@@ -8,22 +8,12 @@ namespace BankingApp.BusinessLogicLayer.Services
     public class BankingService : IBankingService
     {
 
-        delegate (decimal, int) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
+        private delegate (decimal, int) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
 
         public ResponseCalculateDepositeBankingView CalculateDeposite(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             var respDepositeInfo = new ResponseCalculateDepositeBankingView();
-            CalculationFormula calculationFormula = null;
-
-            switch (reqDepositeCalcInfo.CalculationFormula)
-            {
-                case DepositeCalculationFormula.SimpleInterest:
-                    calculationFormula = calculateSimpleInterestDepositePerMonth;
-                    break;
-                default:
-                    calculationFormula = calculateCompoundInterestDepositePerMonth;
-                    break;
-            }
+            CalculationFormula calculationFormula = getCalculationFormula(reqDepositeCalcInfo);
 
             for (int i = 1; i <= reqDepositeCalcInfo.MonthsCount; i++)
             {
@@ -36,6 +26,17 @@ namespace BankingApp.BusinessLogicLayer.Services
                 });
             }
             return respDepositeInfo;
+        }
+
+        private CalculationFormula getCalculationFormula(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        {
+            switch (reqDepositeCalcInfo.CalculationFormula)
+            {
+                case DepositeCalculationFormula.SimpleInterest:
+                    return calculateSimpleInterestDepositePerMonth;
+                default:
+                    return calculateCompoundInterestDepositePerMonth;
+            }
         }
 
         private (decimal, int) calculateSimpleInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
