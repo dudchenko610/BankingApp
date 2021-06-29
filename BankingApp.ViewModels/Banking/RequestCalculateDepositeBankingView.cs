@@ -1,15 +1,21 @@
 ﻿
+using BankingApp.Shared;
+using System.ComponentModel.DataAnnotations;
+
 namespace BankingApp.ViewModels.Banking
 {
     public class RequestCalculateDepositeBankingView
     {
-        //  [RegularExpression(@"^\d+.\d{0,2}$", ErrorMessage = Constants.Errors.Banking.INCORRECT_PRICE_FORMAT)]
+        [Required]
+        [RegularExpression(@"\A[0-9]{1,10}(?:[.,][0-9]{1,2})?\z", ErrorMessage = Constants.Errors.Banking.IncorrectPriceFormat)]
         public decimal DepositeSum { get; set; }
 
-        //   [Range(1, int.MaxValue, ErrorMessage = Constants.Errors.Banking.INCORRECT_MONTH_NUMBER)]
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = Constants.Errors.Banking.IncorrectMonthFormat)]
         public int MonthsCount { get; set; }
 
-        //  [Range(1, 100, ErrorMessage = Constants.Errors.Banking.INCORRECT_PERECENT_NUMBER)]
+        [Required]
+        [Range(1, 100, ErrorMessage = Constants.Errors.Banking.IncorrectPercentNumber)]
         public int Percents { get; set; }
     }
 }
