@@ -37,7 +37,7 @@ namespace BankingApp.BusinessLogicLayer.Services
                 {
                     MonthNumber = i,
                     TotalMonthSum = decimal.Round(monthSum, 2),
-                    Percents = (int) (((monthSum - reqDepositeCalcInfo.DepositeSum) / reqDepositeCalcInfo.DepositeSum) * 100)
+                    Percents = (int) ((monthSum / reqDepositeCalcInfo.DepositeSum) * 100)
                 });
             }
             return respDepositeInfo;
