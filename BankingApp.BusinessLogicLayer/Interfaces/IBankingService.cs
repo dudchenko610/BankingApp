@@ -4,6 +4,7 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
 {
     public interface IBankingService
     {
-        ResponseCalculateDepositeBankingView CalculateDeposite(RequestCalculateDepositeBankingView reqDepositeCalcInfo);
+        ResponseCalculateDepositeBankingView CalculateDepositeSimpleInterest(RequestCalculateDepositeBankingView reqDepositeCalcInfo);
+        ResponseCalculateDepositeBankingView CalculateDepositeCompoundInterest(RequestCalculateDepositeBankingView reqDepositeCalcInfo);
     }
 }
