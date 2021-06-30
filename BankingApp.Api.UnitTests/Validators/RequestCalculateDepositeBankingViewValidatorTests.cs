@@ -3,10 +3,10 @@ using BankingApp.ViewModels.Banking;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace BankingApp.Tests.UnitTests
+namespace BankingApp.Api.UnitTests.Validators
 {
     [TestFixture]
-    public class RequestCalculateDepositeBankingViewValidatorTest
+    public class RequestCalculateDepositeBankingViewValidatorTests
     {
         private RequestCalculateDepositeBankingViewValidator _validator;
 
@@ -20,7 +20,7 @@ namespace BankingApp.Tests.UnitTests
         {
             get
             {
-                yield return new RequestCalculateDepositeBankingView { DepositeSum = -1, CalculationFormula = 0, MonthsCount = 1, Percents = 1};
+                yield return new RequestCalculateDepositeBankingView { DepositeSum = -1, CalculationFormula = 0, MonthsCount = 1, Percents = 1 };
                 yield return new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = -1, Percents = 1 };
                 yield return new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = 101 };
                 yield return new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = -1 };

@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 
-namespace BankingApp.Tests.UnitTests
+namespace BankingApp.Api.UnitTests.Controllers
 {
     [TestFixture]
-    public class BankingControllerTest
+    public class BankingControllerTests
     {
         private BankingController _bankingController;
 

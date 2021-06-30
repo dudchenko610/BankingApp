@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.UI.Core", "Banki
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.Tests", "BankingApp.Tests\BankingApp.Tests.csproj", "{864AFFEC-52FA-44FE-BD68-9D1B9EB24BF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.Api.UnitTests", "BankingApp.Api.UnitTests\BankingApp.Api.UnitTests.csproj", "{61E5F297-B86A-47E0-B3A5-D83C95AE5FE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.BusinessLogicLayer.UnitTests", "BankingApp.BusinessLogicLayer.UnitTests\BankingApp.BusinessLogicLayer.UnitTests.csproj", "{5A1D0CCE-AD68-4116-9033-13387F1FADE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{864AFFEC-52FA-44FE-BD68-9D1B9EB24BF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{864AFFEC-52FA-44FE-BD68-9D1B9EB24BF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{864AFFEC-52FA-44FE-BD68-9D1B9EB24BF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61E5F297-B86A-47E0-B3A5-D83C95AE5FE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61E5F297-B86A-47E0-B3A5-D83C95AE5FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61E5F297-B86A-47E0-B3A5-D83C95AE5FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61E5F297-B86A-47E0-B3A5-D83C95AE5FE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A1D0CCE-AD68-4116-9033-13387F1FADE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A1D0CCE-AD68-4116-9033-13387F1FADE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A1D0CCE-AD68-4116-9033-13387F1FADE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A1D0CCE-AD68-4116-9033-13387F1FADE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
