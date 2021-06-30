@@ -5,6 +5,11 @@
         <DataAnnotationsValidator />
 
         <div class="mb-3">
+            <label class="form-label">Choose a formula</label>
+            <InputSelectEnum @bind-Value="_requestModel.CalculationFormula" class="form-control"/>
+        </div>
+
+        <div class="mb-3">
             <label class="form-label">Deposite Sum</label>
             <InputNumber @bind-Value="_requestModel.DepositeSum"
                          placeholder="deposite sum"

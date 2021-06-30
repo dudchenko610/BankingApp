@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace BankingApp.Shared
 {
     public static partial class Constants
@@ -20,6 +17,8 @@ namespace BankingApp.Shared
         {
             public static class Banking
             {
+                public const string BankingRoute = "api/banking";
+
                 public const string CalculateDeposite = "calculateDeposite";
             }
         }

@@ -1,4 +1,5 @@
 ﻿using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Enums;
 using Microsoft.AspNetCore.Components;
 
 namespace BankingApp.UI.Components.DepositeForm
@@ -8,7 +9,9 @@ namespace BankingApp.UI.Components.DepositeForm
         public DepositeForm()
         { 
             _requestModel = new RequestCalculateDepositeBankingView();
+            _requestModel.CalculationFormula = DepositeCalculationFormulaEnumView.SimpleInterest;
         }
+
         [Parameter]
         public EventCallback<RequestCalculateDepositeBankingView> OnFormSubmit { get; set; }
 

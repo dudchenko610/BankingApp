@@ -1,0 +1,9 @@
+﻿@typeparam T
+@inherits InputNumber<T>
+
+<input @attributes="AdditionalAttributes"
+       type="number"
+       class="@CssClass"
+       value="@stringValue"
+       @oninput="OnInput"
+       @onblur="OnBlur" />
