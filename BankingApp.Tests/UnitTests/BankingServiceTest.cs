@@ -1,5 +1,7 @@
 ﻿using BankingApp.BusinessLogicLayer.Services;
 using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Enums;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace BankingApp.Tests.UnitTests
@@ -33,6 +35,31 @@ namespace BankingApp.Tests.UnitTests
             Assert.NotNull(response);
             Assert.NotNull(response.PerMonthInfos);
             Assert.AreEqual(response.PerMonthInfos.Count, MONTH_NUMBER); // Equals for reference equality !!!
+        }
+
+        [Test]
+        public void ValidResult_On_ValidRequest()
+        {
+            var response = _bankingService.CalculateDeposite(
+                new RequestCalculateDepositeBankingView
+                {
+                    DepositeSum = 100,
+                    Percents = 10,
+                    CalculationFormula = DepositeCalculationFormulaEnumView.CompoundInterest,
+                    MonthsCount = 2
+                }
+            );
+
+            var expectedResult = new ResponseCalculateDepositeBankingView 
+            { 
+                PerMonthInfos =
+                { 
+                    new ResponseCalculateDepositeBankingViewItem { MonthNumber = 1, TotalMonthSum = 100.83m, Percents = 0 },
+                    new ResponseCalculateDepositeBankingViewItem { MonthNumber = 2, TotalMonthSum = 101.67m, Percents = 1 }
+                }
+            };
+
+            Assert.AreEqual(JsonConvert.SerializeObject(response), JsonConvert.SerializeObject(expectedResult));
         }
     }
 }
