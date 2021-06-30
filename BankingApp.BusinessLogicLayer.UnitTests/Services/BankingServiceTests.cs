@@ -19,7 +19,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void MonthNumber_Equals_ResultListCount()
+        public void CalculateDeposite_PerMonthInfosCountEqualsToMonthCount_PerMonthInfosValidSize()
         {
             const int MONTH_NUMBER = 100;
 
@@ -39,7 +39,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ValidResult_On_ValidRequest()
+        public void CalculateDeposite_ResultEqualsToExpected_ExpectedResult()
         {
             var response = _bankingService.CalculateDeposite(
                 new RequestCalculateDepositeBankingView

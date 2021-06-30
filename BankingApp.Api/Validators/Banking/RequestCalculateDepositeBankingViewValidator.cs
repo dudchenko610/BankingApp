@@ -10,7 +10,7 @@ namespace BankingApp.Api.Validators.Banking
         {
             RuleFor(d => d.Percents).InclusiveBetween(1, 100).WithMessage(Constants.Errors.Banking.IncorrectPercentNumber);
             RuleFor(d => d.MonthsCount).InclusiveBetween(1, int.MaxValue).WithMessage(Constants.Errors.Banking.IncorrectMonthFormat);
-            RuleFor(d => d.DepositeSum).GreaterThan(0).ScalePrecision(2, 8).WithMessage(Constants.Errors.Banking.IncorrectPriceFormat);
+            RuleFor(d => d.DepositeSum).ScalePrecision(2, 8).GreaterThan(0).WithMessage(Constants.Errors.Banking.IncorrectPriceFormat);
         }
     }
 }

@@ -2,6 +2,9 @@
 using BankingApp.ViewModels.Banking;
 using NUnit.Framework;
 using System.Collections.Generic;
+using FluentAssertions;
+using System.Linq;
+using BankingApp.Shared;
 
 namespace BankingApp.Api.UnitTests.Validators
 {
@@ -16,28 +19,46 @@ namespace BankingApp.Api.UnitTests.Validators
             _validator = new RequestCalculateDepositeBankingViewValidator();
         }
 
-        public static IEnumerable<RequestCalculateDepositeBankingView> RequestCalculateDepositeBankingViews
+        private IList<RequestCalculateDepositeBankingView> RequestCalculateDepositeBankingViews
         {
             get
             {
-                yield return new RequestCalculateDepositeBankingView { DepositeSum = -1, CalculationFormula = 0, MonthsCount = 1, Percents = 1 };
-                yield return new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = -1, Percents = 1 };
-                yield return new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = 101 };
-                yield return new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = -1 };
+                return new List<RequestCalculateDepositeBankingView>
+                {
+                    new RequestCalculateDepositeBankingView { DepositeSum = -1.0m, CalculationFormula = 0, MonthsCount = 1, Percents = 1 },
+                    new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = -1, Percents = 1 },
+                    new RequestCalculateDepositeBankingView { DepositeSum = -1.05m, CalculationFormula = 0, MonthsCount = 0, Percents = 105 },
+                    new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = 0 }
+                };
             }
         }
 
         [Test]
-        [TestCaseSource("RequestCalculateDepositeBankingViews")]
-        public void Test_RequestCalculateDepositeBankingView_Validation(RequestCalculateDepositeBankingView input)
+        public void Validate_DepositeSumLessThanZero_ValidErrorMessage()
         {
-            var validateResult = _validator.Validate(input);
-
-            if (validateResult.Errors.Count == 0)
-            {
-                Assert.Fail();
-            }
+            var validateResult = _validator.Validate(RequestCalculateDepositeBankingViews[0]);
+            validateResult.Errors.Any(x => x.ErrorMessage == Constants.Errors.Banking.IncorrectPriceFormat).Should().BeTrue();
         }
 
+        [Test]
+        public void Validate_MonthCountLessThanZero_ValidErrorMessage()
+        {
+            var validateResult = _validator.Validate(RequestCalculateDepositeBankingViews[1]);
+            validateResult.Errors.Any(x => x.ErrorMessage == Constants.Errors.Banking.IncorrectMonthFormat).Should().BeTrue();
+        }
+
+        [Test]
+        public void Validate_PercentBiggerThan100_ValidErrorMessage()
+        {
+            var validateResult = _validator.Validate(RequestCalculateDepositeBankingViews[2]);
+            validateResult.Errors.Any(x => x.ErrorMessage == Constants.Errors.Banking.IncorrectPercentNumber).Should().BeTrue();
+        }
+
+        [Test]
+        public void Validate_PercentLessThan1_ValidErrorMessage()
+        {
+            var validateResult = _validator.Validate(RequestCalculateDepositeBankingViews[3]);
+            validateResult.Errors.Any(x => x.ErrorMessage == Constants.Errors.Banking.IncorrectPercentNumber).Should().BeTrue();
+        }
     }
 }
