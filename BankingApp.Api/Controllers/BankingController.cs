@@ -23,5 +23,7 @@ namespace BankingApp.Api.Controllers
             ResponseCalculateDepositeBankingView responseOfDepositeCalculation = _bankingService.CalculateDeposite(model);
             return Ok(responseOfDepositeCalculation);
         }
+
+
     }
 }
