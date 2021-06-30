@@ -1,7 +1,7 @@
 ﻿
-namespace BankingApp.ViewModels.Enums
+namespace BankingApp.UI.Core.Enums
 {
-    public enum DepositePageStateEnumView
+    public enum DepositePageState
     {
         DisplayFormState = 0,
         LoadingState = 1,

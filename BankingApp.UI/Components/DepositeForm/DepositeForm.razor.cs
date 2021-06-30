@@ -11,6 +11,7 @@ namespace BankingApp.UI.Components.DepositeForm
             _requestModel = new RequestCalculateDepositeBankingView();
             _requestModel.CalculationFormula = DepositeCalculationFormulaEnumView.SimpleInterest;
         }
+
         [Parameter]
         public EventCallback<RequestCalculateDepositeBankingView> OnFormSubmit { get; set; }
 
