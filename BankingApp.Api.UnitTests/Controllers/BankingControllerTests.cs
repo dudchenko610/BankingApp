@@ -26,7 +26,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public void CalcaulateDeposite_IncorrectInputData_ValidData()
+        public void CalcaulateDeposite_IncorrectInputData_ReturnsOkResultExpectedStatusCodeReturned()
         {
             var input = new RequestCalculateDepositeBankingView { DepositeSum = 0, MonthsCount = 0, Percents = 0 };
 
@@ -36,6 +36,7 @@ namespace BankingApp.Api.UnitTests.Controllers
             var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
             whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculateDepositeBankingView>();
             whereAndConstr.Which.StatusCode.Should().Equals(StatusCodes.Status200OK);
+
         }
     }
 }

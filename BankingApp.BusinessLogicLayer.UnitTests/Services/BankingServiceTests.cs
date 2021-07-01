@@ -2,7 +2,6 @@
 using BankingApp.BusinessLogicLayer.Services;
 using BankingApp.ViewModels.Banking;
 using BankingApp.ViewModels.Enums;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using FluentAssertions;
 
@@ -20,7 +19,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void CalculateDeposite__PerMonthInfosCountEqualsToMonthCount()
+        public void CalculateDeposite_SimpleInterestFormulaPasses_PerMonthInfosCountEqualsToMonthCount()
         {
             const int MonthNumber = 100;
 
@@ -40,7 +39,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void CalculateDeposite_IncorrectInnerRealization_ResultEqualsToExpected()
+        public void CalculateDeposite_CompoundInterestFormulaPasses_ResultEqualsToExpected()
         {
             var response = _bankingService.CalculateDeposite(
                 new RequestCalculateDepositeBankingView
