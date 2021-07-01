@@ -61,6 +61,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
 
             response.Should().BeEquivalentTo(expectedResult);
+            
         }
     }
 }

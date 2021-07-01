@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using FluentAssertions;
+using BankingApp.ViewModels.Enums;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
@@ -26,9 +27,15 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public void CalcaulateDeposite_IncorrectInputData_ReturnsOkResultExpectedStatusCodeReturned()
+        public void CalcaulateDeposite_СorrectInputData_ReturnsOkResultExpectedStatusCodeReturned()
         {
-            var input = new RequestCalculateDepositeBankingView { DepositeSum = 0, MonthsCount = 0, Percents = 0 };
+            var input = new RequestCalculateDepositeBankingView 
+            { 
+                DepositeSum = 100, 
+                MonthsCount = 12, 
+                Percents = 10,
+                CalculationFormula = DepositeCalculationFormulaEnumView.CompoundInterest
+            };
 
             var controllerResult = _bankingController.CalculateDeposite(input);
             var okResult = controllerResult as ObjectResult;
