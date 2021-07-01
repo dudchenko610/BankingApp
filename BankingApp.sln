@@ -17,9 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.UI", "BankingApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.UI.Core", "BankingApp.UI.Core\BankingApp.UI.Core.csproj", "{440A6DCD-E132-4E02-8E73-4C613166FD43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.Api.UnitTests", "BankingApp.Api.UnitTests\BankingApp.Api.UnitTests.csproj", "{61E5F297-B86A-47E0-B3A5-D83C95AE5FE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.Api.UnitTests", "BankingApp.Api.UnitTests\BankingApp.Api.UnitTests.csproj", "{61E5F297-B86A-47E0-B3A5-D83C95AE5FE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.BusinessLogicLayer.UnitTests", "BankingApp.BusinessLogicLayer.UnitTests\BankingApp.BusinessLogicLayer.UnitTests.csproj", "{5A1D0CCE-AD68-4116-9033-13387F1FADE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.BusinessLogicLayer.UnitTests", "BankingApp.BusinessLogicLayer.UnitTests\BankingApp.BusinessLogicLayer.UnitTests.csproj", "{5A1D0CCE-AD68-4116-9033-13387F1FADE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.UI.UnitTests", "BankingApp.UI.UnitTests\BankingApp.UI.UnitTests.csproj", "{6742CD0C-75B1-4B95-8BDD-84EA1B639E4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{5A1D0CCE-AD68-4116-9033-13387F1FADE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A1D0CCE-AD68-4116-9033-13387F1FADE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A1D0CCE-AD68-4116-9033-13387F1FADE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6742CD0C-75B1-4B95-8BDD-84EA1B639E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6742CD0C-75B1-4B95-8BDD-84EA1B639E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6742CD0C-75B1-4B95-8BDD-84EA1B639E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6742CD0C-75B1-4B95-8BDD-84EA1B639E4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
