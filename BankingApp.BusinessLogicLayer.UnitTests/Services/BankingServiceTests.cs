@@ -4,11 +4,12 @@ using BankingApp.ViewModels.Banking;
 using BankingApp.ViewModels.Enums;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using FluentAssertions;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
     [TestFixture]
-    class BankingServiceTests
+    public class BankingServiceTests
     {
         private BankingService _bankingService;
 
@@ -19,27 +20,27 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void CalculateDeposite_PerMonthInfosCountEqualsToMonthCount_PerMonthInfosValidSize()
+        public void CalculateDeposite__PerMonthInfosCountEqualsToMonthCount()
         {
-            const int MONTH_NUMBER = 100;
+            const int MonthNumber = 100;
 
             var response = _bankingService.CalculateDeposite(
                 new RequestCalculateDepositeBankingView
                 {
                     DepositeSum = 1,
                     Percents = 1,
-                    CalculationFormula = 0,
-                    MonthsCount = MONTH_NUMBER
+                    CalculationFormula = DepositeCalculationFormulaEnumView.SimpleInterest,
+                    MonthsCount = MonthNumber
                 }
             );
 
-            Assert.NotNull(response);
-            Assert.NotNull(response.PerMonthInfos);
-            Assert.AreEqual(response.PerMonthInfos.Count, MONTH_NUMBER); // Equals for reference equality !!!
+            response.Should()
+                .NotBeNull().And.BeOfType<ResponseCalculateDepositeBankingView>()
+                .Which.PerMonthInfos.Should().NotBeNull().And.HaveCount(MonthNumber);
         }
 
         [Test]
-        public void CalculateDeposite_ResultEqualsToExpected_ExpectedResult()
+        public void CalculateDeposite_IncorrectInnerRealization_ResultEqualsToExpected()
         {
             var response = _bankingService.CalculateDeposite(
                 new RequestCalculateDepositeBankingView
@@ -60,7 +61,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 }
             };
 
-            Assert.AreEqual(JsonConvert.SerializeObject(response), JsonConvert.SerializeObject(expectedResult));
+            response.Should().BeEquivalentTo(expectedResult);
         }
     }
 }

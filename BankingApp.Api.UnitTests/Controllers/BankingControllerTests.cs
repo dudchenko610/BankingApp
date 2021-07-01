@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using FluentAssertions;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
@@ -25,17 +26,16 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public void CalcaulateDeposite_Returns_ValidData()
+        public void CalcaulateDeposite_IncorrectInputData_ValidData()
         {
             var input = new RequestCalculateDepositeBankingView { DepositeSum = 0, MonthsCount = 0, Percents = 0 };
 
             var controllerResult = _bankingController.CalculateDeposite(input);
             var okResult = controllerResult as ObjectResult;
 
-            Assert.NotNull(okResult);
-            Assert.True(okResult is OkObjectResult);
-            Assert.AreEqual(okResult.Value.GetType(), typeof(ResponseCalculateDepositeBankingView));
-            Assert.AreEqual(StatusCodes.Status200OK, okResult.StatusCode);
+            var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
+            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculateDepositeBankingView>();
+            whereAndConstr.Which.StatusCode.Should().Equals(StatusCodes.Status200OK);
         }
     }
 }
