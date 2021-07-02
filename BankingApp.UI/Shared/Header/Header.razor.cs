@@ -25,6 +25,5 @@ namespace BankingApp.UI.Shared.Header
         {
             return IsActive(href, navLinkMatch) ? "active" : "";
         }
-
     }
 }

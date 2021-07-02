@@ -6,7 +6,6 @@ namespace BankingApp.UI.Core.Routes
 {
     public static class Routes
     {
-        public const string HomePage = "/";
         public const string DepositePage = "/calculateDeposite";
     }
 }
