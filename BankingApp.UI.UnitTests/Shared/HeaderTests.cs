@@ -1,11 +1,10 @@
-﻿
-using BankingApp.UI.Shared.Header;
+﻿using BankingApp.UI.Shared.Header;
 using Bunit;
 using Xunit;
 
 namespace BankingApp.UI.UnitTests.Shared
 {
-    public class HeaderLayoutTests : TestContext
+    public class HeaderTests : TestContext
     {
         [Fact]
         public void Header_UserClicksUrlLink_LinkGetsActiveState()

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BankingApp.UI.Shared.Header;
+using Bunit;
+using Xunit;
 
 namespace BankingApp.UI.UnitTests.Components.DepositeForm
 {
-    public class DepositeFormTests
+    public class DepositeFormTests : TestContext
     {
+      
     }
 }
