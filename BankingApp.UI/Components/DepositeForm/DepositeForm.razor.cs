@@ -23,4 +23,3 @@ namespace BankingApp.UI.Components.DepositeForm
         }
     }
 }
-//disabled="@(!context.Validate() || !context.IsModified())"

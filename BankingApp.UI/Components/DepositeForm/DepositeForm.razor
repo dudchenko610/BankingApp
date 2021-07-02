@@ -35,6 +35,6 @@
             <ValidationMessage For="@(() => _requestModel.Percents)" />
 
         </div>
-        <button type="submit"  class="btn btn-primary btn-block">Calculate Deposite</button>
+        <button type="submit" disabled="@(!context.Validate() || !context.IsModified())" class="btn btn-primary btn-block">Calculate Deposite</button>
     </EditForm>
 </div>
