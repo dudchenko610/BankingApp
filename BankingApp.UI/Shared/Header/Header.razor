@@ -7,11 +7,11 @@
 
     <div class="collapse navbar-collapse" id="navbarsExample02">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <NavLink class="nav-link" href="calculateDeposite" Match="NavLinkMatch.All">
-                    <span aria-hidden="true"></span> Deposite
-                </NavLink>
+
+            <li class="nav-item  @GetActive(Routes.DepositePage, NavLinkMatch.All)">
+                <a class="nav-link" href="" @onclick="(e) => {  _navigationManager.NavigateTo(Routes.DepositePage); }" @onclick:preventDefault>Deposite</a>
             </li>
         </ul>
     </div>
 </nav>
+
