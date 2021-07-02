@@ -15,7 +15,7 @@ namespace BankingApp.UI.Pages.DepositePage
         [Inject]
         private IDepositeService _depositeService { get; set; }
 
-        private DepositePageState _pageState;
+        public DepositePageState _pageState;
         private ResponseCalculateDepositeBankingView depositeResponse;
 
         protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
