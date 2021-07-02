@@ -15,7 +15,7 @@ namespace BankingApp.UI.Components.DepositeForm
         [Parameter]
         public EventCallback<RequestCalculateDepositeBankingView> OnFormSubmit { get; set; }
 
-        private RequestCalculateDepositeBankingView _requestModel;
+        public RequestCalculateDepositeBankingView _requestModel;
 
         private void SubmitForm()
         {
@@ -23,3 +23,4 @@ namespace BankingApp.UI.Components.DepositeForm
         }
     }
 }
+//disabled="@(!context.Validate() || !context.IsModified())"

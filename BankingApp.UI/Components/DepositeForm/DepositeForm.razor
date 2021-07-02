@@ -12,6 +12,7 @@
         <div class="mb-3">
             <label class="form-label">Deposite Sum</label>
             <InputNumber @bind-Value="_requestModel.DepositeSum"
+                         id ="depositeSum"
                          placeholder="deposite sum"
                          type="number" step=".01"
                          class="form-control" />
@@ -20,6 +21,7 @@
         <div class="mb-3">
             <label class="form-label">Month Count</label>
             <InputNumber @bind-Value="_requestModel.MonthsCount"
+                         id ="monthCount"
                          type="number"
                          class="form-control" />
             <ValidationMessage For="@(() => _requestModel.MonthsCount)" />
@@ -27,11 +29,12 @@
         <div class="mb-3">
             <label class="form-label">Percents</label>
             <InputNumber @bind-Value="_requestModel.Percents"
+                         id ="percents"
                          type="number"
                          class="form-control" />
             <ValidationMessage For="@(() => _requestModel.Percents)" />
 
         </div>
-        <button type="submit" disabled="@(!context.Validate() || !context.IsModified())" class="btn btn-primary btn-block">Calculate Deposite</button>
+        <button type="submit"  class="btn btn-primary btn-block">Calculate Deposite</button>
     </EditForm>
 </div>
