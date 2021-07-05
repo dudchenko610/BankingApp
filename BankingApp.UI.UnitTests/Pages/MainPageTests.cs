@@ -4,6 +4,7 @@ using BankingApp.UI.Core.Enums;
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Pages.MainPage;
 using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Banking.History;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -20,6 +21,11 @@ namespace BankingApp.UI.UnitTests.Pages
             {
                 await Task.Delay(100); // simulating api call
                 return new ResponseCalculateDepositeBankingView();
+            }
+
+            public Task<ResponseCalculationHistoryBankingView> GetCalculationDepositeHistoryAsync()
+            {
+                throw new NotImplementedException();
             }
         }
 

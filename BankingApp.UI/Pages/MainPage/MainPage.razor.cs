@@ -8,16 +8,16 @@ namespace BankingApp.UI.Pages.MainPage
 {
     public partial class MainPage
     {
-        public MainPage()
-        {
-            _pageState = DepositePageState.DisplayFormState;
-        }
-
         [Inject]
         private IDepositeService _depositeService { get; set; }
 
         public DepositePageState _pageState;
         private ResponseCalculateDepositeBankingView depositeResponse;
+
+        public MainPage()
+        {
+            _pageState = DepositePageState.DisplayFormState;
+        }
 
         protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
         {

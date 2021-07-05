@@ -9,7 +9,7 @@ namespace BankingApp.BusinessLogicLayer.Mapper
         public DepositeHistoryItemProfile()
         {
             CreateMap<ResponseCalculateDepositeBankingViewItem, DepositeHistoryItem>();
-            CreateMap<DepositeHistoryItem, ResponseCalculateDepositeBankingViewItem> ();
+            CreateMap<DepositeHistoryItem, ResponseCalculateDepositeBankingViewItem>();
         }
     }
 }

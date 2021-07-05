@@ -1,6 +1,7 @@
 ﻿using BankingApp.Shared;
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Banking.History;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
@@ -25,6 +26,16 @@ namespace BankingApp.UI.Core.Services
 
             var serializedResponse = await response.Content.ReadAsStringAsync();
             var responseObject = JsonConvert.DeserializeObject<ResponseCalculateDepositeBankingView>(serializedResponse);
+
+            return responseObject;
+        }
+
+        public async Task<ResponseCalculationHistoryBankingView> GetCalculationDepositeHistoryAsync()
+        {
+            var response = await _httpClient.GetAsync($"{Constants.Routes.Banking.BankingRoute}/{Constants.Routes.Banking.CalculationHistory}");
+
+            var serializedResponse = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<ResponseCalculationHistoryBankingView>(serializedResponse);
 
             return responseObject;
         }
