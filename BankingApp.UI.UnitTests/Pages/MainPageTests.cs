@@ -2,7 +2,7 @@
 using BankingApp.UI.Components.DepositeForm;
 using BankingApp.UI.Core.Enums;
 using BankingApp.UI.Core.Interfaces;
-using BankingApp.UI.Pages.DepositePage;
+using BankingApp.UI.Pages.MainPage;
 using BankingApp.ViewModels.Banking;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ using Xunit;
 
 namespace BankingApp.UI.UnitTests.Pages
 {
-    public class DepositePageTests : TestContext
+    public class MainPageTests : TestContext
     {
         private class MockDepositeService : IDepositeService
         {
@@ -23,15 +23,15 @@ namespace BankingApp.UI.UnitTests.Pages
             }
         }
 
-        public DepositePageTests()
+        public MainPageTests()
         {
             Services.AddSingleton<IDepositeService>(new MockDepositeService());
         }
 
         [Fact]
-        public void DepositePage_UserSubmitsValidData_PageContentReplacesWithLoader()
+        public void MainPage_UserSubmitsValidData_PageContentReplacesWithLoader()
         {
-            var cut = RenderComponent<DepositePage>();
+            var cut = RenderComponent<MainPage>();
 
             const int DepositeSum = 100;
             const int MonthsCount = 12;
@@ -46,9 +46,9 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public async Task DepositePage_UserClicksBackButton_DepositeFormReplacesResultList()
+        public async Task MainPage_UserClicksBackButton_DepositeFormReplacesResultList()
         {
-            var cut = RenderComponent<DepositePage>();
+            var cut = RenderComponent<MainPage>();
 
             const int DepositeSum = 100;
             const int MonthsCount = 12;

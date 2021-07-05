@@ -4,14 +4,15 @@ using BankingApp.UI.Core.Enums;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
-namespace BankingApp.UI.Pages.DepositePage
+namespace BankingApp.UI.Pages.MainPage
 {
-    public partial class DepositePage
+    public partial class MainPage
     {
-        public DepositePage()
+        public MainPage()
         {
             _pageState = DepositePageState.DisplayFormState;
         }
+
         [Inject]
         private IDepositeService _depositeService { get; set; }
 

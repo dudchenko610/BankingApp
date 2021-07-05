@@ -7,8 +7,17 @@
 
     <div class="collapse navbar-collapse" id="navbarsExample02">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item  @GetActive("calculateDeposite", NavLinkMatch.All)">
-                <a class="nav-link" href="#" @onclick="() => { _navigationManager.NavigateTo(Routes.DepositePage); }" @onclick:preventDefault>Deposite</a>
+
+            <li class="nav-item  @GetActive("", NavLinkMatch.All)">
+                <a class="nav-link" href="#" @onclick="() => { _navigationManager.NavigateTo(Routes.MainPage); }" @onclick:preventDefault>MainPage</a>
+            </li>
+
+            <li class="nav-item  @GetActive("history", NavLinkMatch.All)">
+                <a class="nav-link" href="#" @onclick="() => { _navigationManager.NavigateTo(Routes.HistoryPage); }" @onclick:preventDefault>History</a>
+            </li>
+
+            <li class="nav-item  @GetActive("details", NavLinkMatch.All)">
+                <a class="nav-link" href="#" @onclick="() => { _navigationManager.NavigateTo(Routes.DetailsPage); }" @onclick:preventDefault>Details</a>
             </li>
 
         </ul>

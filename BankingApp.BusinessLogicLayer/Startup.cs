@@ -12,8 +12,9 @@ namespace BankingApp.BusinessLogicLayer
     {
         public static void Initialize(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IBankingService, BankingService>();
             BankingApp.DataAccessLayer.Startup.Initialize(services, configuration);
+
+            services.AddTransient<IBankingService, BankingService>();
         }
     }
 }
