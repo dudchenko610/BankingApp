@@ -24,7 +24,7 @@ namespace BankingApp.Api.Controllers
         public async Task<IActionResult> CalculateDeposite(RequestCalculateDepositeBankingView requestDepositeData)
         {
             var responseOfDepositeCalculation = _bankingCalculationService.CalculateDeposite(requestDepositeData);
-            await _bankingHistoryService.SaveDepositeCalculationAsync(requestDepositeData, responseOfDepositeCalculation);
+            await _bankingHistoryService?.SaveDepositeCalculationAsync(requestDepositeData, responseOfDepositeCalculation);
             return Ok(responseOfDepositeCalculation);
         }
 

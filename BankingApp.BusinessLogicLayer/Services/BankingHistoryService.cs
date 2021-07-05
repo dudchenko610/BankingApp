@@ -38,6 +38,8 @@ namespace BankingApp.BusinessLogicLayer.Services
             depositeHistory.DepositeHistoryItems 
                 = _mapper.Map<IList<ResponseCalculateDepositeBankingViewItem>, IList<DepositeHistoryItem>>(depositeCalculation.PerMonthInfos);
 
+            depositeHistory.CalulationDateTime = System.DateTime.Now;
+
             await _depositeHistoryRepository.AddAsync(depositeHistory);
         }
     }

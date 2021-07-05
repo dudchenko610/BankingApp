@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BankingApp.ViewModels.Banking.History
 {
@@ -8,6 +9,7 @@ namespace BankingApp.ViewModels.Banking.History
         public decimal DepositeSum { get; set; }
         public int MonthsCount { get; set; }
         public int Percents { get; set; }
+        public DateTime CalulationDateTime { get; set; }
 
         public IList<ResponseCalculateDepositeBankingViewItem> DepositePerMonthInfo { get; set; }
     }

@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using FluentAssertions;
 using BankingApp.ViewModels.Enums;
+using System.Threading.Tasks;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
@@ -23,11 +24,11 @@ namespace BankingApp.Api.UnitTests.Controllers
                 .Setup(bsm => bsm.CalculateDeposite(It.IsAny<RequestCalculateDepositeBankingView>()))
                 .Returns(new ResponseCalculateDepositeBankingView());
 
-            _bankingController = new BankingController(bankingServiceMock.Object);
+            _bankingController = new BankingController(bankingServiceMock.Object, null);
         }
 
         [Test]
-        public void CalcaulateDeposite_СorrectInputData_ReturnsOkResult()
+        public async Task CalcaulateDeposite_СorrectInputData_ReturnsOkResult()
         {
             var input = new RequestCalculateDepositeBankingView 
             { 
@@ -37,7 +38,7 @@ namespace BankingApp.Api.UnitTests.Controllers
                 CalculationFormula = DepositeCalculationFormulaEnumView.CompoundInterest
             };
 
-            var controllerResult = _bankingController.CalculateDeposite(input);
+            var controllerResult = await _bankingController.CalculateDeposite(input);
             var okResult = controllerResult as ObjectResult;
 
             var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
