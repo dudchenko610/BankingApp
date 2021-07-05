@@ -1,14 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BankingApp.DataAccessLayer.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace BankingApp.DataAccessLayer.Core
+namespace BankingApp.DataAccessLayer.Repositories.EFRepositories
 {
-    public class GenericRepository<E> where E : class
+    public class GenericRepository<E> : IGenericRepository<E> where E : class
     {
         protected DbContext _context;
         protected DbSet<E> _dbSet;
-
         public GenericRepository(DbContext context)
         {
             _context = context;
@@ -27,7 +29,7 @@ namespace BankingApp.DataAccessLayer.Core
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<E>> GetAsync()
+        public async Task<IEnumerable<E>> GetAsync()
         {
             return await _dbSet.ToListAsync();
         }
@@ -38,12 +40,7 @@ namespace BankingApp.DataAccessLayer.Core
             await _context.SaveChangesAsync();
         }
 
-        public async Task<E> GetByIdAsync(int id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
-
-        public async Task<E> GetByIdAsync(string id)
+        public async Task<E> GetByIdAsync(long id)
         {
             return await _dbSet.FindAsync(id);
         }
