@@ -46,7 +46,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public async Task DepositePage_UserClickBackButton_DepositeFormReplacesResultList()
+        public async Task DepositePage_UserClicksBackButton_DepositeFormReplacesResultList()
         {
             var cut = RenderComponent<DepositePage>();
 
