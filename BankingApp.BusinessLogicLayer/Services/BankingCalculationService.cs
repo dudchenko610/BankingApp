@@ -5,7 +5,7 @@ using System;
 
 namespace BankingApp.BusinessLogicLayer.Services
 {
-    public class BankingService : IBankingService
+    public class BankingCalculationService : IBankingCalculationService
     {
         private delegate (decimal MonthSum, int Percents) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
 

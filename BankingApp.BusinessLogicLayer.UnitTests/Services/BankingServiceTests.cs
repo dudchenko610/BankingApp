@@ -10,12 +10,12 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
     [TestFixture]
     public class BankingServiceTests
     {
-        private BankingService _bankingService;
+        private BankingCalculationService _bankingService;
 
         [SetUp]
         public void SetUp()
         {
-            _bankingService = new BankingService();
+            _bankingService = new BankingCalculationService();
         }
 
         [Test]

@@ -18,7 +18,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         [SetUp]
         public void SetUp()
         {
-            var bankingServiceMock = new Mock<IBankingService>();
+            var bankingServiceMock = new Mock<IBankingCalculationService>();
             bankingServiceMock
                 .Setup(bsm => bsm.CalculateDeposite(It.IsAny<RequestCalculateDepositeBankingView>()))
                 .Returns(new ResponseCalculateDepositeBankingView());

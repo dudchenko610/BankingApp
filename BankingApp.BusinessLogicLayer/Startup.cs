@@ -2,9 +2,6 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.BusinessLogicLayer.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BankingApp.BusinessLogicLayer
 {
@@ -14,7 +11,8 @@ namespace BankingApp.BusinessLogicLayer
         {
             BankingApp.DataAccessLayer.Startup.Initialize(services, configuration);
 
-            services.AddTransient<IBankingService, BankingService>();
+            services.AddTransient<IBankingCalculationService, BankingCalculationService>();
+            services.AddTransient<IBankingHistoryService, BankingHistoryService>();
         }
     }
 }
