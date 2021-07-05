@@ -21,10 +21,10 @@ namespace BankingApp.Api.Controllers
 
         [HttpPost]
         [Route(Routes.Banking.CalculateDeposite)]
-        public async Task<IActionResult> CalculateDeposite(RequestCalculateDepositeBankingView model)
+        public async Task<IActionResult> CalculateDeposite(RequestCalculateDepositeBankingView requestDepositeData)
         {
-            var responseOfDepositeCalculation = _bankingCalculationService.CalculateDeposite(model);
-            await _bankingHistoryService.SaveDepositeCalculationAsync(responseOfDepositeCalculation);
+            var responseOfDepositeCalculation = _bankingCalculationService.CalculateDeposite(requestDepositeData);
+            await _bankingHistoryService.SaveDepositeCalculationAsync(requestDepositeData, responseOfDepositeCalculation);
             return Ok(responseOfDepositeCalculation);
         }
 
@@ -32,7 +32,8 @@ namespace BankingApp.Api.Controllers
         [Route(Routes.Banking.CalculationHistory)]
         public async Task<IActionResult> CalculationHistory()
         {
-            return Ok();
+            var depositeCalculationHistory = await _bankingHistoryService.GetDepositesCalculationHistoryAsync();
+            return Ok(depositeCalculationHistory);
         }
     }
 }

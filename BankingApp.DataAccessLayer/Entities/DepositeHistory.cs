@@ -12,6 +12,6 @@ namespace BankingApp.DataAccessLayer.Entities
         public int MonthsCount { get; set; }
         public int Percents { get; set; }
 
-        public List<DepositeHistoryItem> DepositeHistoryItems { get; set; }
+        public IList<DepositeHistoryItem> DepositeHistoryItems { get; set; }
     }
 }
