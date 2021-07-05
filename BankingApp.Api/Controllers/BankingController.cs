@@ -34,7 +34,5 @@ namespace BankingApp.Api.Controllers
         {
             return Ok();
         }
-
-
     }
 }
