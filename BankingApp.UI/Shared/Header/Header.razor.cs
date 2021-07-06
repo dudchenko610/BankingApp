@@ -18,6 +18,10 @@ namespace BankingApp.UI.Shared.Header
         bool IsActive(string href, NavLinkMatch navLinkMatch = NavLinkMatch.Prefix)
         {
             var relativePath = _navigationManager.ToBaseRelativePath(_navigationManager.Uri).ToLower();
+
+            if (relativePath.Contains("/"))
+                relativePath = relativePath.Split("/")[0];
+
             return navLinkMatch == NavLinkMatch.All ? relativePath == href.ToLower() : relativePath.StartsWith(href.ToLower());
         }
 

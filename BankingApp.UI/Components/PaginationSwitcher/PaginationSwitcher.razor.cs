@@ -18,11 +18,19 @@ namespace BankingApp.UI.Components.PaginationSwitcher
         private string _prevDisabledClass;
         private string _nextDisabledClass;
 
+        private string _1DisabledClass;
+        private string _2DisabledClass;
+        private string _3DisabledClass;
+
         public PaginationSwitcher()
         {
             _pageOffset = 0;
             _prevDisabledClass = "";
             _nextDisabledClass = "";
+
+            _1DisabledClass = "";
+            _2DisabledClass = "";
+            _3DisabledClass = "";
         }
 
         protected override void OnInitialized()
@@ -34,10 +42,36 @@ namespace BankingApp.UI.Components.PaginationSwitcher
             StateHasChanged();
         }
 
+
         private void RecalculateConstraints()
         {
             _prevDisabledClass = "";
             _nextDisabledClass = "";
+            _1DisabledClass = "";
+            _2DisabledClass = "";
+            _3DisabledClass = "";
+
+            switch (PageCount)
+            {
+                case 1:
+                    _2DisabledClass = "disabled";
+                    _3DisabledClass = "disabled";
+                    _prevDisabledClass = "disabled";
+                    _nextDisabledClass = "disabled";
+                    _pageOffset = 0;
+                    return;
+                case 2:
+                    _3DisabledClass = "disabled";
+                    _prevDisabledClass = "disabled";
+                    _nextDisabledClass = "disabled";
+                    _pageOffset = 0;
+                    return;
+                case 3:
+                    _prevDisabledClass = "disabled";
+                    _nextDisabledClass = "disabled";
+                    _pageOffset = 0;
+                    return;
+            }
 
             if (_pageOffset <= 0)
             {

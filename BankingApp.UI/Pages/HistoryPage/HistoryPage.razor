@@ -1,9 +1,26 @@
-﻿@page "/history" 
+﻿@page "/history/{page:int}" 
 
-<div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100">
+<div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100 w-100">
 
+    @switch (_historyPageState)
+    {
+        case HistoryPageState.LoadingState:
+            <CircleLoader />
+            break;
+        case HistoryPageState.DisplayHistoryState:
+            <div class="d-flex align-items-center justify-content-center flex-column w-100">
 
+                <div class="w-100">
+                    <DepositeHistoryList DepositesHistoryList ="_pagedChunck"/>
+                </div>
 
-    <PaginationSwitcher PageCount="10" CurrentPage="5" OnPageClick="@OnPageClicked" />
+                <div class="mt-4">
+                    <PaginationSwitcher PageCount="_totalPageCount" CurrentPage="Page" OnPageClick="@OnPageClicked" />
+                </div>
+            </div>
+            break;
+    }
+
+   
 </div>
-    
+

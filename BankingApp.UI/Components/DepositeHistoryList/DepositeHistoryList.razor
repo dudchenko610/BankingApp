@@ -1,0 +1,41 @@
+﻿<div id="accordion">
+    @foreach (var element in DepositesHistoryList)
+    {
+        <div class="card mb-2">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button @onclick="() => { SetCollapse(DepositesHistoryList.IndexOf(element)); }" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        @element.CalulationDateTime
+                    </button>
+                </h5>
+
+                <h6>
+                    <div class="container-fluid d-flex flex-column">
+                        <label>Formula: @element.CalculationFormula</label>
+                        <label>Deposite Sum: @element.DepositeSum</label>
+                        <label>Month Count: @element.MonthsCount</label>
+                        <label>Percents: @element.Percents</label>
+                    </div>
+                </h6>
+            </div>
+
+            <div id="collapseOne" class="collapse @(_collapsed[DepositesHistoryList.IndexOf(element)] ? "show" : "")" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var item in element.DepositePerMonthInfo)
+                        {
+                            <li class="list-group-item">
+                                <div class="container-fluid d-flex justify-content-between">
+                                    <label>Month Number: @item.MonthNumber</label>
+                                    <label>Total Sum: @item.TotalMonthSum</label>
+                                    <label>Percents: @item.Percents</label>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                        
+                </div>
+            </div>
+        </div>
+    }
+</div>

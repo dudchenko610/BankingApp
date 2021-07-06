@@ -8,13 +8,13 @@
             </a>
         </li>
 
-        <li class="page-item @IsButtonActive(0)">
+        <li class="page-item @IsButtonActive(0) @_1DisabledClass">
             <a class="page-link not-copyable" href="#" @onclick="() => { OnPageSelected(0); }" @onclick:preventDefault>@(_pageOffset + 1)</a>
         </li>
-        <li class="page-item @IsButtonActive(1)">
+        <li class="page-item @IsButtonActive(1) @_2DisabledClass">
             <a class="page-link not-copyable" href="#" @onclick="() => { OnPageSelected(1); }" @onclick:preventDefault>@(_pageOffset + 2)</a>
         </li>
-        <li class="page-item @IsButtonActive(2)">
+        <li class="page-item @IsButtonActive(2) @_3DisabledClass">
             <a class="page-link not-copyable" href="#" @onclick="() => { OnPageSelected(2); }" @onclick:preventDefault>@(_pageOffset + 3)</a>
         </li>
 
