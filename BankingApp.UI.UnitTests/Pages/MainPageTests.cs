@@ -7,6 +7,7 @@ using BankingApp.ViewModels.Banking;
 using BankingApp.ViewModels.Banking.History;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -15,33 +16,23 @@ namespace BankingApp.UI.UnitTests.Pages
 {
     public class MainPageTests : TestContext
     {
-        private class MockDepositeService : IDepositeService
-        {
-            public async Task<ResponseCalculateDepositeBankingView> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDeposite)
-            {
-                await Task.Delay(100); // simulating api call
-                return new ResponseCalculateDepositeBankingView();
-            }
-
-            public Task<ResponseCalculationHistoryBankingView> GetCalculationDepositeHistoryAsync()
-            {
-                throw new NotImplementedException();
-            }
-        }
+        private const int DepositeSum = 100;
+        private const int MonthsCount = 12;
+        private const int Percents = 10;
 
         public MainPageTests()
         {
-            Services.AddSingleton<IDepositeService>(new MockDepositeService());
+            var depositeServiceMock = new Mock<IDepositeService>();
+            depositeServiceMock.Setup(repo => repo.CalculateDepositeAsync(null)).Callback( async () => { await Task.Delay(100); });
+            depositeServiceMock.Setup(repo => repo.GetCalculationDepositeHistoryAsync()).Callback( async () => { await Task.Delay(100); });
+
+            Services.AddSingleton<IDepositeService>(depositeServiceMock.Object);
         }
 
         [Fact]
         public void MainPage_UserSubmitsValidData_PageContentReplacesWithLoader()
         {
             var cut = RenderComponent<MainPage>();
-
-            const int DepositeSum = 100;
-            const int MonthsCount = 12;
-            const int Percents = 10;
 
             cut.Find("input[id=depositeSum]").Change(DepositeSum.ToString());
             cut.Find("input[id=monthCount]").Change(MonthsCount.ToString());
@@ -55,10 +46,6 @@ namespace BankingApp.UI.UnitTests.Pages
         public async Task MainPage_UserClicksBackButton_DepositeFormReplacesResultList()
         {
             var cut = RenderComponent<MainPage>();
-
-            const int DepositeSum = 100;
-            const int MonthsCount = 12;
-            const int Percents = 10;
 
             cut.Find("input[id=depositeSum]").Change(DepositeSum.ToString());
             cut.Find("input[id=monthCount]").Change(MonthsCount.ToString());
