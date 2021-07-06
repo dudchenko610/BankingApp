@@ -2,18 +2,24 @@
 <nav aria-label="Page navigation example">
     <ul class="pagination">
         <li class="page-item @_prevDisabledClass">
-            <a class="page-link" href="#" aria-label="Previous" @onclick="OnPrevClick" @onclick:preventDefault>
+            <a class="page-link not-copyable" href="#" aria-label="Previous" @onclick="OnPrevClick" @onclick:preventDefault>
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
             </a>
         </li>
 
-        <li class="page-item"><a class="page-link" href="#" @onclick:preventDefault>@(_pageOffset + 1)</a></li>
-        <li class="page-item"><a class="page-link" href="#" @onclick:preventDefault>@(_pageOffset + 2)</a></li>
-        <li class="page-item"><a class="page-link" href="#" @onclick:preventDefault>@(_pageOffset + 3)</a></li>
+        <li class="page-item @IsButtonActive(0)">
+            <a class="page-link not-copyable" href="#" @onclick="() => { OnPageSelected(0); }" @onclick:preventDefault>@(_pageOffset + 1)</a>
+        </li>
+        <li class="page-item @IsButtonActive(1)">
+            <a class="page-link not-copyable" href="#" @onclick="() => { OnPageSelected(1); }" @onclick:preventDefault>@(_pageOffset + 2)</a>
+        </li>
+        <li class="page-item @IsButtonActive(2)">
+            <a class="page-link not-copyable" href="#" @onclick="() => { OnPageSelected(2); }" @onclick:preventDefault>@(_pageOffset + 3)</a>
+        </li>
 
         <li class="page-item @_nextDisabledClass">
-            <a class="page-link" href="#" aria-label="Next"  @onclick="OnNextClick" @onclick:preventDefault>
+            <a class="page-link not-copyable" href="#" aria-label="Next"  @onclick="OnNextClick" @onclick:preventDefault>
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>

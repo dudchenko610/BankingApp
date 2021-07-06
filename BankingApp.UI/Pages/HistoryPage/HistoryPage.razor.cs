@@ -11,5 +11,10 @@ namespace BankingApp.UI.Pages.HistoryPage
     {
         [Inject]
         private IDepositeService _depositeService { get; set; }
+
+        protected void OnPageClicked(int page)
+        { 
+        
+        }
     }
 }

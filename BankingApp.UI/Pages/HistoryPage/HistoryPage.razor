@@ -1,5 +1,9 @@
 ﻿@page "/history" 
 
-<h3>HistoryPage</h3>
+<div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100">
 
-<PaginationSwitcher PageCount="10" />
+
+
+    <PaginationSwitcher PageCount="10" CurrentPage="5" OnPageClick="@OnPageClicked" />
+</div>
+    
