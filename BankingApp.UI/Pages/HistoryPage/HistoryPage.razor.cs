@@ -36,10 +36,19 @@ namespace BankingApp.UI.Pages.HistoryPage
         protected override async Task OnInitializedAsync()
         {
             _depositeHistory = await _depositeService.GetCalculationDepositeHistoryAsync();
-            _historyPageState = HistoryPageState.DisplayHistoryState;
 
+            if (_depositeHistory.DepositesHistory.Count == 0)
+            {
+                _historyPageState = HistoryPageState.EmptyHistoryState;
+                return;
+            }
+
+            _historyPageState = HistoryPageState.DisplayHistoryState;
             _totalPageCount = (int) Math.Ceiling(_depositeHistory.DepositesHistory.Count / ((double) DepositesOnPage));
             _pagedChunck = _depositeHistory.DepositesHistory.Skip((Page - 1) * DepositesOnPage).Take(DepositesOnPage).ToList();
+
+            if (Page > _totalPageCount || Page < 1)
+                _navigationManager.NavigateTo($"{Routes.HistoryPage}/1");
         }
 
         protected override void OnParametersSet()
@@ -51,7 +60,6 @@ namespace BankingApp.UI.Pages.HistoryPage
         private void OnPageClicked(int page)
         {
             _navigationManager.NavigateTo($"{Routes.HistoryPage}/{page}");
-            StateHasChanged();
         }
     }
 }
