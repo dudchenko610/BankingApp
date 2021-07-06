@@ -12,6 +12,7 @@ namespace BankingApp.UI.Core.Services
     public class DepositeService : IDepositeService
     {
         private readonly HttpClient _httpClient;
+
         public DepositeService(HttpClient httpClient)
         {
             _httpClient = httpClient;

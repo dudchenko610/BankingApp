@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BankingApp.BusinessLogicLayer.Interfaces;
-using BankingApp.DataAccessLayer.Entities;
 using BankingApp.DataAccessLayer.Repositories.Interfaces;
+using BankingApp.Entities.Entities;
 using BankingApp.ViewModels.Banking;
 using BankingApp.ViewModels.Banking.History;
 using System.Collections.Generic;

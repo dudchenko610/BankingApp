@@ -1,4 +1,4 @@
-﻿using BankingApp.DataAccessLayer.Entities;
+﻿using BankingApp.Entities.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

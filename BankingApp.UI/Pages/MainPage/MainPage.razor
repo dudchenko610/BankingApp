@@ -10,7 +10,7 @@
             <CircleLoader />
             break;
         case DepositePageState.DispalyListState:
-            <CascadingValue Name="PerMonthInfos" Value="@depositeResponse.PerMonthInfos">
+            <CascadingValue Name="PerMonthInfos" Value="@_depositeResponse.PerMonthInfos">
                 <DepositeResponseContainer OnBackToForm="BackToForm" />
             </CascadingValue>
             break;

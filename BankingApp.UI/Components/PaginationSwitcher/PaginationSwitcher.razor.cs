@@ -5,13 +5,6 @@ namespace BankingApp.UI.Components.PaginationSwitcher
 {
     public partial class PaginationSwitcher
     {
-        [Parameter]
-        public int PageCount { get; set; }
-        [Parameter]
-        public int CurrentPage { get; set; }
-        [Parameter]
-        public EventCallback<int> OnPageClick { get; set; }
-
         private int _pageOffset;
         private int _selectedPage;
 
@@ -22,6 +15,14 @@ namespace BankingApp.UI.Components.PaginationSwitcher
         private string _2DisabledClass;
         private string _3DisabledClass;
 
+        [Parameter]
+        public int PageCount { get; set; }
+        [Parameter]
+        public int CurrentPage { get; set; }
+        [Parameter]
+        public EventCallback<int> OnPageClick { get; set; }
+
+        
         public PaginationSwitcher()
         {
             _pageOffset = 0;

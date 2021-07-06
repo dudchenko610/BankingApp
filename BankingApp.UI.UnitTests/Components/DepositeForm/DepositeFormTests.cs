@@ -1,4 +1,5 @@
-﻿using Bunit;
+﻿using BankingApp.ViewModels.Banking;
+using Bunit;
 using Xunit;
 
 namespace BankingApp.UI.UnitTests.Components.DepositeForm
@@ -8,22 +9,27 @@ namespace BankingApp.UI.UnitTests.Components.DepositeForm
         [Fact]
         public void DepositeForm_UserSubmitsValidData_CallbackTriggersAndSetsValidDataToStateVariable()
         {
-            var cut = RenderComponent<BankingApp.UI.Components.DepositeForm.DepositeForm>();
-
             const int DepositeSum = 100;
             const int MonthsCount = 12;
             const int Percents = 10;
 
-            cut.Find("input[id=depositeSum]").Change(DepositeSum.ToString());
-            cut.Find("input[id=monthCount]").Change(MonthsCount.ToString());
-            cut.Find("input[id=percents]").Change(Percents.ToString());
-            cut.Find("form").Submit();
+            RequestCalculateDepositeBankingView model = null;
 
-            var formModel = cut.Instance._requestModel;
+            var depositeForm = RenderComponent<BankingApp.UI.Components.DepositeForm.DepositeForm>(
+                parameters => parameters.Add(component => component.OnFormSubmit, 
+                    (formModel) => { model = formModel; }
+                )
+            );
 
-            Assert.Equal(formModel.DepositeSum, DepositeSum);
-            Assert.Equal(formModel.MonthsCount, MonthsCount);
-            Assert.Equal(formModel.Percents, Percents);
+            depositeForm.Find("input[id=depositeSum]").Change(DepositeSum.ToString());
+            depositeForm.Find("input[id=monthCount]").Change(MonthsCount.ToString());
+            depositeForm.Find("input[id=percents]").Change(Percents.ToString());
+            depositeForm.Find("form").Submit();
+
+            Assert.NotNull(model);
+            Assert.Equal(model.DepositeSum, DepositeSum);
+            Assert.Equal(model.MonthsCount, MonthsCount);
+            Assert.Equal(model.Percents, Percents);
         }
     }
 }

@@ -10,9 +10,9 @@ namespace BankingApp.UI.Pages.MainPage
     {
         [Inject]
         private IDepositeService _depositeService { get; set; }
+        private ResponseCalculateDepositeBankingView _depositeResponse;
 
         public DepositePageState _pageState;
-        private ResponseCalculateDepositeBankingView depositeResponse;
 
         public MainPage()
         {
@@ -21,9 +21,9 @@ namespace BankingApp.UI.Pages.MainPage
 
         protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
         {
-            depositeResponse = null;
+            _depositeResponse = null;
             _pageState = DepositePageState.LoadingState;
-            depositeResponse = await _depositeService.CalculateDepositeAsync(reqModel);
+            _depositeResponse = await _depositeService.CalculateDepositeAsync(reqModel);
             _pageState = DepositePageState.DispalyListState;
         }
 

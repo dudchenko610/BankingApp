@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using BankingApp.Entities.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BankingApp.DataAccessLayer.Repositories.Interfaces
 {
-    public interface IGenericRepository<E> where E : class
+    public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        public Task AddAsync(E item);
-        public Task UpdateAsync(E item);
-        public Task RemoveAsync(E item);
-        public Task<IEnumerable<E>> GetAsync();
-        public Task<E> GetByIdAsync(long id);
-        public Task AddRangeAsync(IEnumerable<E> item);
-        public Task RemoveRangeAsync(IEnumerable<E> items);
+        public Task<int> AddAsync(TEntity item);
+        public Task UpdateAsync(TEntity item);
+        public Task RemoveAsync(TEntity item);
+        public Task<IEnumerable<TEntity>> GetAsync();
+        public Task<TEntity> GetByIdAsync(int id);
+        public Task AddRangeAsync(IEnumerable<TEntity> item);
+        public Task RemoveRangeAsync(IEnumerable<TEntity> items);
         public Task<int> GetCountAsync();
     }
 }

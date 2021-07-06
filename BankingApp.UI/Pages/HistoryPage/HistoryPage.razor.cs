@@ -14,6 +14,12 @@ namespace BankingApp.UI.Pages.HistoryPage
     {
         private static readonly int DepositesOnPage = 2;
 
+        private HistoryPageState _historyPageState;
+        private int _totalPageCount;
+
+        private ResponseCalculationHistoryBankingView _depositeHistory;
+        private IList<ResponseCalculationHistoryBankingViewItem> _pagedChunck;
+
         [Inject]
         private IDepositeService _depositeService { get; set; }
         [Inject]
@@ -22,11 +28,7 @@ namespace BankingApp.UI.Pages.HistoryPage
         [Parameter]
         public int Page { get; set; }
 
-        private HistoryPageState _historyPageState;
-        private int _totalPageCount;
-
-        private ResponseCalculationHistoryBankingView _depositeHistory;
-        private IList<ResponseCalculationHistoryBankingViewItem> _pagedChunck;
+        
 
         public HistoryPage()
         {

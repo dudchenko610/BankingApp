@@ -1,4 +1,4 @@
-﻿using BankingApp.DataAccessLayer.Entities;
+﻿using BankingApp.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.DataAccessLayer.DatabaseContexts

@@ -1,7 +1,5 @@
-﻿using BankingApp.UI.Core.Routes;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
-using System;
 
 namespace BankingApp.UI.Shared.Header
 {
@@ -13,9 +11,9 @@ namespace BankingApp.UI.Shared.Header
         protected override void OnInitialized()
         {
             _navigationManager.LocationChanged += (s, e) => StateHasChanged();
-        } 
+        }
 
-        bool IsActive(string href, NavLinkMatch navLinkMatch = NavLinkMatch.Prefix)
+        private bool IsActive(string href, NavLinkMatch navLinkMatch = NavLinkMatch.Prefix)
         {
             var relativePath = _navigationManager.ToBaseRelativePath(_navigationManager.Uri).ToLower();
 
@@ -25,7 +23,7 @@ namespace BankingApp.UI.Shared.Header
             return navLinkMatch == NavLinkMatch.All ? relativePath == href.ToLower() : relativePath.StartsWith(href.ToLower());
         }
 
-        string GetActive(string href, NavLinkMatch navLinkMatch = NavLinkMatch.Prefix)
+        private string GetActive(string href, NavLinkMatch navLinkMatch = NavLinkMatch.Prefix)
         {
             return IsActive(href, navLinkMatch) ? "active" : "";
         }

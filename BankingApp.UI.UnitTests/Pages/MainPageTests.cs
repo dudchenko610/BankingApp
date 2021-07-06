@@ -30,7 +30,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void MainPage_UserSubmitsValidData_PageContentReplacesWithLoader()
+        public void MainPage_UserSubmitsValidData_PageContentReplacesWithLoader() // Deprecated
         {
             var cut = RenderComponent<MainPage>();
 
@@ -55,7 +55,7 @@ namespace BankingApp.UI.UnitTests.Pages
             await Task.Delay(200);
             cut.Find("button").Click();
 
-            cut.FindComponent<DepositeForm>();
+            cut.FindComponent<DepositeForm>(); // тестируем инпуты
         }
     }
 }

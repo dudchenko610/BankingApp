@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using BankingApp.DataAccessLayer.Entities;
 using BankingApp.ViewModels.Banking;
 using BankingApp.Shared.Extensions;
 using BankingApp.ViewModels.Banking.History;
+using BankingApp.Entities.Entities;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {
