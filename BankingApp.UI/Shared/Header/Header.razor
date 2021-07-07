@@ -16,10 +16,6 @@
                 <a class="nav-link @_navLinksDisabledClass" href="#" @onclick='() => { _navigationManager.NavigateTo(Routes.HistoryPage + "/1"); }' @onclick:preventDefault>History</a>
             </li>
 
-            <li class="nav-item  @GetActive("details", NavLinkMatch.All)">
-                <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationManager.NavigateTo(Routes.DetailsPage); }" @onclick:preventDefault>Details</a>
-            </li>
-
         </ul>
     </div>
 </nav>

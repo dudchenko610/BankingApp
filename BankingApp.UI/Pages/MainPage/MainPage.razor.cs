@@ -23,11 +23,11 @@ namespace BankingApp.UI.Pages.MainPage
         protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
         {
             _depositeResponse = null;
-            //_pageState = DepositePageState.LoadingState;
-            _loaderService.SwitchOn();
+            _pageState = DepositePageState.LoadingState;
+            //_loaderService.SwitchOn();
 
             _depositeResponse = await _depositeService.CalculateDepositeAsync(reqModel);
-            _loaderService.SwitchOff();
+            //_loaderService.SwitchOff();
             _pageState = DepositePageState.DispalyListState;
         }
 

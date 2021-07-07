@@ -2,21 +2,16 @@
 
 <Header />
 
-
 @if (_showLoader)
 {
     <div class="loading-spinner-container">
         <CircleLoader />
     </div>
 }
-else
-{
-    <div class="page">
-        <div class="container h-100">
-            @Body
-        </div>
+
+<div class="page @(_showLoader ? "invisible" : "")">
+    <div class="container h-100">
+        @Body
     </div>
-}
-
-
+</div>
 

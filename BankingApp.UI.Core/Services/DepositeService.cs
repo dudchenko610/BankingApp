@@ -40,5 +40,15 @@ namespace BankingApp.UI.Core.Services
 
             return responseObject;
         }
+
+        public async Task<ResponseCalculationHistoryBankingViewItem> GetCalculationHistoryDetailsAsync()
+        {
+            var response = await _httpClient.GetAsync($"{Constants.Routes.Banking.BankingRoute}/{Constants.Routes.Banking.CalculationHistoryDetails}");
+
+            var serializedResponse = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<ResponseCalculationHistoryBankingViewItem>(serializedResponse);
+
+            return responseObject;
+        }
     }
 }

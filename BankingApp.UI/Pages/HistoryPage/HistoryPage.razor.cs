@@ -14,36 +14,33 @@ namespace BankingApp.UI.Pages.HistoryPage
     {
         private static readonly int DepositesOnPage = 2;
 
-        private HistoryPageState _historyPageState;
         private int _totalPageCount;
-
         private ResponseCalculationHistoryBankingView _depositeHistory;
         private IList<ResponseCalculationHistoryBankingViewItem> _pagedChunck;
 
         [Inject]
+        private ILoaderService _loaderService { get; set; }
+        [Inject]
         private IDepositeService _depositeService { get; set; }
         [Inject]
         private NavigationManager _navigationManager { get; set; }
-
         [Parameter]
         public int Page { get; set; }
 
         public HistoryPage()
         {
-            _historyPageState = HistoryPageState.LoadingState;
+            _depositeHistory = null;
         }
 
         protected override async Task OnInitializedAsync()
         {
+            _loaderService.SwitchOn();
             _depositeHistory = await _depositeService.GetCalculationDepositeHistoryAsync();
+            _loaderService.SwitchOff();
 
             if (_depositeHistory.DepositesHistory.Count == 0)
-            {
-                _historyPageState = HistoryPageState.EmptyHistoryState;
                 return;
-            }
 
-            _historyPageState = HistoryPageState.DisplayHistoryState;
             _totalPageCount = (int) Math.Ceiling(_depositeHistory.DepositesHistory.Count / ((double) DepositesOnPage));
             _pagedChunck = _depositeHistory.DepositesHistory.Skip((Page - 1) * DepositesOnPage).Take(DepositesOnPage).ToList();
 
