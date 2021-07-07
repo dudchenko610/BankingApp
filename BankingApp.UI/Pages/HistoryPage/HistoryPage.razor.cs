@@ -1,5 +1,4 @@
-﻿using BankingApp.UI.Core.Enums;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Core.Routes;
 using BankingApp.ViewModels.Banking.History;
 using Microsoft.AspNetCore.Components;

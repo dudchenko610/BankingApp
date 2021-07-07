@@ -1,6 +1,7 @@
 ﻿using BankingApp.ViewModels.Banking;
 using Bunit;
 using Xunit;
+using FluentAssertions;
 
 namespace BankingApp.UI.UnitTests.Components.DepositeForm
 {
@@ -9,7 +10,7 @@ namespace BankingApp.UI.UnitTests.Components.DepositeForm
 
         // for routing use mock of NavManager and Verify method
         [Fact]
-        public void DepositeForm_UserSubmitsValidData_CallbackTriggersAndSetsValidDataToStateVariable()
+        public void DepositeForm_UserSubmitsValidData_CallbackTriggersAndReturnsValidData()
         {
             const int DepositeSum = 100;
             const int MonthsCount = 12;
@@ -28,10 +29,10 @@ namespace BankingApp.UI.UnitTests.Components.DepositeForm
             depositeForm.Find("input[id=percents]").Change(Percents.ToString());
             depositeForm.Find("form").Submit();
 
-            Assert.NotNull(model);
-            Assert.Equal(model.DepositeSum, DepositeSum);
-            Assert.Equal(model.MonthsCount, MonthsCount);
-            Assert.Equal(model.Percents, Percents);
+            model.Should().NotBeNull();
+            model.DepositeSum.Should().Equals(DepositeSum);
+            model.MonthsCount.Should().Equals(MonthsCount);
+            model.Percents.Should().Equals(Percents);
         }
     }
 }

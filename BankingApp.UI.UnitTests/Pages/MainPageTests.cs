@@ -1,6 +1,5 @@
 ﻿using BankingApp.UI.Components.CircleLoader;
 using BankingApp.UI.Components.DepositeForm;
-using BankingApp.UI.Core.Enums;
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Pages.MainPage;
 using BankingApp.ViewModels.Banking;
@@ -43,7 +42,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public async Task MainPage_UserClicksBackButton_DepositeFormReplacesResultList()
+        public async Task MainPage_UserClicksBackButton_DepositeFormReplacesResultList()  // Deprecated
         {
             var cut = RenderComponent<MainPage>();
 
