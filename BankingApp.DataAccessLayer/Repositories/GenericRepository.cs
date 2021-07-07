@@ -31,7 +31,7 @@ namespace BankingApp.DataAccessLayer.Repositories.EFRepositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAsync()
+        public async Task<IList<TEntity>> GetAsync()
         {
             return await _dbSet.ToListAsync();
         }
@@ -47,13 +47,13 @@ namespace BankingApp.DataAccessLayer.Repositories.EFRepositories
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task AddRangeAsync(IEnumerable<TEntity> item)
+        public async Task AddRangeAsync(IList<TEntity> item)
         {
             await _dbSet.AddRangeAsync(item);
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveRangeAsync(IEnumerable<TEntity> items)
+        public async Task RemoveRangeAsync(IList<TEntity> items)
         {
             _dbSet.RemoveRange(items);
             await _context.SaveChangesAsync();

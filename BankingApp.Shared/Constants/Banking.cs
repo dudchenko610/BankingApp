@@ -21,6 +21,7 @@ namespace BankingApp.Shared
 
                 public const string CalculateDeposite = "calculateDeposite";
                 public const string CalculationHistory = "calculationHistory";
+                public const string CalculationHistoryDetails = "calculationHistoryDetails";
             }
         }
     }

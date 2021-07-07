@@ -28,8 +28,6 @@ namespace BankingApp.UI.Pages.HistoryPage
         [Parameter]
         public int Page { get; set; }
 
-        
-
         public HistoryPage()
         {
             _historyPageState = HistoryPageState.LoadingState;

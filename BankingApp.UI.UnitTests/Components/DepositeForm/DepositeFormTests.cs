@@ -6,6 +6,8 @@ namespace BankingApp.UI.UnitTests.Components.DepositeForm
 {
     public class DepositeFormTests : TestContext
     {
+
+        // for routing use mock of NavManager and Verify method
         [Fact]
         public void DepositeForm_UserSubmitsValidData_CallbackTriggersAndSetsValidDataToStateVariable()
         {

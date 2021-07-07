@@ -14,10 +14,12 @@ namespace BankingApp.DataAccessLayer.Repositories
         { 
         }
 
-        public async Task<IList<DepositeHistory>> GetDepositesHistoryWithItemsAsync()
+        public async Task<DepositeHistory> GetDepositeHistoryWithItemsAsync(int depositeHistoryId)
         {
-            var depositesHistory = await _dbSet.Include(dh => dh.DepositeHistoryItems).ToListAsync();
-            return depositesHistory;
+            var depositeHistory = await _dbSet
+                .Include(dep => dep.DepositeHistoryItems)
+                .FirstOrDefaultAsync(dep => dep.Id == depositeHistoryId);
+            return depositeHistory;
         }
     }
 }
