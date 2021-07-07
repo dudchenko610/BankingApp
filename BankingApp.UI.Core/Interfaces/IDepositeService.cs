@@ -6,8 +6,8 @@ namespace BankingApp.UI.Core.Interfaces
 {
     public interface IDepositeService
     {
-        public Task<ResponseCalculateDepositeBankingView> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDeposite);
+        public Task<int> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDeposite);
         public Task<ResponseCalculationHistoryBankingView> GetCalculationDepositeHistoryAsync();
-        public Task<ResponseCalculationHistoryBankingViewItem> GetCalculationHistoryDetailsAsync();
+        public Task<ResponseCalculationHistoryBankingViewItem> GetCalculationHistoryDetailsAsync(int depositeHistoryId);
     }
 }

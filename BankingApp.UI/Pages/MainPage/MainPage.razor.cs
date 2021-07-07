@@ -1,39 +1,28 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking;
-using BankingApp.UI.Core.Enums;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
+using BankingApp.UI.Core.Routes;
 
 namespace BankingApp.UI.Pages.MainPage
 {
     public partial class MainPage
     {
         [Inject]
+        private NavigationManager _navigationManager { get; set; }
+        [Inject]
         private IDepositeService _depositeService { get; set; }
         [Inject]
         private ILoaderService _loaderService { get; set; }
-        private ResponseCalculateDepositeBankingView _depositeResponse;
-        public DepositePageState _pageState;
-
-        public MainPage()
-        {
-            _pageState = DepositePageState.DisplayFormState;
-        }
-
+        
         protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
         {
-            _depositeResponse = null;
-            _pageState = DepositePageState.LoadingState;
-            //_loaderService.SwitchOn();
+            _loaderService.SwitchOn();
+            int depositeHistoryId = await _depositeService.CalculateDepositeAsync(reqModel);
+            _loaderService.SwitchOff();
 
-            _depositeResponse = await _depositeService.CalculateDepositeAsync(reqModel);
-            //_loaderService.SwitchOff();
-            _pageState = DepositePageState.DispalyListState;
+            _navigationManager.NavigateTo($"{Routes.DetailsPage}/{depositeHistoryId}");
         }
 
-        private void BackToForm()
-        {
-            _pageState = DepositePageState.DisplayFormState;
-        }
     }
 }

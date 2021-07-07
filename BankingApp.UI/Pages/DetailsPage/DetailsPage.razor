@@ -1,4 +1,34 @@
-﻿@page "/details/{depositeHistory:int}"
+﻿@page "/details/{depositeHistoryId:int}"
 
-<h3>DetailsPage</h3>
+<div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100 w-100">
+
+    @if (_responseCalculationHistoryItem != null)
+    {
+        <div class="card mb-2">
+            <div class="card-header" id="headingOne">
+                <h6>
+                    <div class="container-fluid d-flex flex-column">
+                        <label>Date: @_responseCalculationHistoryItem.CalulationDateTime</label>
+                        <label>Formula: @_responseCalculationHistoryItem.CalculationFormula</label>
+                        <label>Deposite Sum: @_responseCalculationHistoryItem.DepositeSum</label>
+                        <label>Month Count: @_responseCalculationHistoryItem.MonthsCount</label>
+                        <label>Percents: @_responseCalculationHistoryItem.Percents</label>
+                    </div>
+                </h6>
+            </div>
+
+            <div class="" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <DepositeHistoryItemList PerMonthInfos ="_responseCalculationHistoryItem.DepositePerMonthInfo" />
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            <h6>There is no such deposite calculation in history list!</h6>
+        </div>
+    }
+</div>
 

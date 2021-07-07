@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 
-namespace BankingApp.UI.Components.DepositeResponseList
+namespace BankingApp.UI.Components.DepositeHistoryItemList
 {
-    public partial class DepositeResponseList
+    public partial class DepositeHistoryItemList
     {
-        [CascadingParameter(Name = "PerMonthInfos")]
+        [Parameter]
         public IList<ResponseCalculateDepositeBankingViewItem> PerMonthInfos { get; set; }
     }
 }

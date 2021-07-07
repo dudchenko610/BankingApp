@@ -5,6 +5,7 @@ namespace BankingApp.ViewModels.Banking.History
 {
     public class ResponseCalculationHistoryBankingViewItem
     {
+        public int Id { get; set; }
         public string CalculationFormula { get; set; }
         public decimal DepositeSum { get; set; }
         public int MonthsCount { get; set; }

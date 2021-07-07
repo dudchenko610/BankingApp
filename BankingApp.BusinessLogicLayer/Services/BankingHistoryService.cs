@@ -38,7 +38,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             return response;
         }
 
-        public async Task SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo,
+        public async Task<int> SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo,
             ResponseCalculateDepositeBankingView depositeCalculation)
         {
             var depositeHistory = _mapper.Map<DepositeHistory>(reqDepositeCalcInfo);
@@ -47,6 +47,7 @@ namespace BankingApp.BusinessLogicLayer.Services
                 = _mapper.Map<IList<ResponseCalculateDepositeBankingViewItem>, IList<DepositeHistoryItem>>(depositeCalculation.PerMonthInfos);
 
             await _depositeHistoryRepository.AddAsync(depositeHistory);
+            return depositeHistory.Id;
         }
     }
 }

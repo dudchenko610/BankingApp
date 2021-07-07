@@ -18,7 +18,7 @@ namespace BankingApp.UI.Core.Services
             _httpClient = httpClient;
         }
 
-        public async Task<ResponseCalculateDepositeBankingView> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDeposite)
+        public async Task<int> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDeposite)
         {
             var serializedDepositeRequest = JsonConvert.SerializeObject(reqDeposite);
 
@@ -26,7 +26,7 @@ namespace BankingApp.UI.Core.Services
             var response = await _httpClient.PostAsync($"{Constants.Routes.Banking.BankingRoute}/{Constants.Routes.Banking.CalculateDeposite}", requestContent);
 
             var serializedResponse = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<ResponseCalculateDepositeBankingView>(serializedResponse);
+            var responseObject = JsonConvert.DeserializeObject<int>(serializedResponse);
 
             return responseObject;
         }
@@ -41,9 +41,10 @@ namespace BankingApp.UI.Core.Services
             return responseObject;
         }
 
-        public async Task<ResponseCalculationHistoryBankingViewItem> GetCalculationHistoryDetailsAsync()
+        public async Task<ResponseCalculationHistoryBankingViewItem> GetCalculationHistoryDetailsAsync(int depositeHistoryId)
         {
-            var response = await _httpClient.GetAsync($"{Constants.Routes.Banking.BankingRoute}/{Constants.Routes.Banking.CalculationHistoryDetails}");
+            var response = await _httpClient
+                .GetAsync($"{Constants.Routes.Banking.BankingRoute}/{Constants.Routes.Banking.CalculationHistoryDetails}?depositeHistoryId={depositeHistoryId}");
 
             var serializedResponse = await response.Content.ReadAsStringAsync();
             var responseObject = JsonConvert.DeserializeObject<ResponseCalculationHistoryBankingViewItem>(serializedResponse);

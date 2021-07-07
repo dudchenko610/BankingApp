@@ -1,0 +1,12 @@
+﻿<ul class="list-group">
+    @foreach (var resItem in PerMonthInfos)
+    {
+        <li class="list-group-item">
+            <div class="container-fluid d-flex justify-content-between">
+                <label>Month Number: @resItem.MonthNumber</label>
+                <label>Total Sum: @resItem.TotalMonthSum</label>
+                <label>Percents: @resItem.Percents</label>
+            </div>
+        </li>
+    }
+</ul>

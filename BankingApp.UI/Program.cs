@@ -15,7 +15,6 @@ namespace BankingApp.UI
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-           // var configuration = builder.Services.BuildServiceProvider().GetRequiredService<IConfiguration>();
             var apiBaseAddress = builder.Configuration["ApiBaseAddress"];
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 

@@ -13,6 +13,7 @@ namespace BankingApp.UI.Shared
         { 
             _showLoader = false;
         }
+
         protected override void OnInitialized()
         {
             _loaderService.OnLoaderSwitch += OnLoaderSwitch;

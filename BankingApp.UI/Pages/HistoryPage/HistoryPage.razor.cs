@@ -58,5 +58,10 @@ namespace BankingApp.UI.Pages.HistoryPage
         {
             _navigationManager.NavigateTo($"{Routes.HistoryPage}/{page}");
         }
+
+        private void OnDepositeHistoryItemClicked(int depositeHistoryId)
+        {
+            _navigationManager.NavigateTo($"{Routes.DetailsPage}/{depositeHistoryId}");
+        }
     }
 }
