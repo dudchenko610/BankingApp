@@ -28,6 +28,7 @@ namespace BankingApp.UI.UnitTests.Pages
             Services.AddSingleton<IDepositeService>(depositeServiceMock.Object);
         }
 
+        /*
         [Fact]
         public void MainPage_UserSubmitsValidData_PageContentReplacesWithLoader() // Deprecated
         {
@@ -56,5 +57,6 @@ namespace BankingApp.UI.UnitTests.Pages
 
             cut.FindComponent<DepositeForm>(); // тестируем инпуты
         }
+        */
     }
 }

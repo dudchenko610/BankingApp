@@ -3,12 +3,10 @@ using Bunit;
 using Xunit;
 using FluentAssertions;
 
-namespace BankingApp.UI.UnitTests.Components.DepositeForm
+namespace BankingApp.UI.UnitTests.Components
 {
-    public class DepositeFormTests : TestContext
+    public class DepositeFormTest : TestContext
     {
-
-        // for routing use mock of NavManager and Verify method
         [Fact]
         public void DepositeForm_UserSubmitsValidData_CallbackTriggersAndReturnsValidData()
         {
@@ -19,7 +17,7 @@ namespace BankingApp.UI.UnitTests.Components.DepositeForm
             RequestCalculateDepositeBankingView model = null;
 
             var depositeForm = RenderComponent<BankingApp.UI.Components.DepositeForm.DepositeForm>(
-                parameters => parameters.Add(component => component.OnFormSubmit, 
+                parameters => parameters.Add(component => component.OnFormSubmit,
                     (formModel) => { model = formModel; }
                 )
             );
@@ -30,9 +28,9 @@ namespace BankingApp.UI.UnitTests.Components.DepositeForm
             depositeForm.Find("form").Submit();
 
             model.Should().NotBeNull();
-            model.DepositeSum.Should().Equals(DepositeSum);
-            model.MonthsCount.Should().Equals(MonthsCount);
-            model.Percents.Should().Equals(Percents);
+            model.DepositeSum.Should().Be(DepositeSum);
+            model.MonthsCount.Should().Be(MonthsCount);
+            model.Percents.Should().Be(Percents);
         }
     }
 }

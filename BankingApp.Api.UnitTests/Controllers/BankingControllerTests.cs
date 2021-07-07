@@ -8,6 +8,7 @@ using NUnit.Framework;
 using FluentAssertions;
 using BankingApp.ViewModels.Enums;
 using System.Threading.Tasks;
+using BankingApp.ViewModels.Banking.History;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
@@ -19,12 +20,29 @@ namespace BankingApp.Api.UnitTests.Controllers
         [SetUp]
         public void SetUp()
         {
-            var bankingServiceMock = new Mock<IBankingCalculationService>();
-            bankingServiceMock
+            var bankingCalcukationServiceMock = new Mock<IBankingCalculationService>();
+            bankingCalcukationServiceMock
                 .Setup(bsm => bsm.CalculateDeposite(It.IsAny<RequestCalculateDepositeBankingView>()))
                 .Returns(new ResponseCalculateDepositeBankingView());
 
-            _bankingController = new BankingController(bankingServiceMock.Object, null);
+            var bankingHistoryServiceMock = new Mock<IBankingHistoryService>();
+            bankingHistoryServiceMock
+                .Setup(bhs => bhs.GetDepositeCalculationHistoryDetailsAsync(It.IsAny<int>()))
+                .ReturnsAsync(new ResponseCalculationHistoryBankingViewItem());
+
+            bankingHistoryServiceMock
+                .Setup(
+                    bhs => bhs.SaveDepositeCalculationAsync(It.IsAny<RequestCalculateDepositeBankingView>(),
+                                It.IsAny<ResponseCalculateDepositeBankingView>())
+                )
+                .ReturnsAsync(0);
+
+            bankingHistoryServiceMock
+                .Setup(bhs => bhs.GetDepositesCalculationHistoryAsync())
+                .ReturnsAsync(new ResponseCalculationHistoryBankingView());
+
+
+            _bankingController = new BankingController(bankingCalcukationServiceMock.Object, bankingHistoryServiceMock.Object);
         }
 
         [Test]
@@ -42,8 +60,8 @@ namespace BankingApp.Api.UnitTests.Controllers
             var okResult = controllerResult as ObjectResult;
 
             var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
-            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculateDepositeBankingView>();
-            whereAndConstr.Which.StatusCode.Should().Equals(StatusCodes.Status200OK);
+            whereAndConstr.Which.Value.Should().BeOfType<int>();
+            whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
         }
     }
 }
