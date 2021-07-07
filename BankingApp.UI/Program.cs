@@ -30,6 +30,7 @@ namespace BankingApp.UI
 
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ILoaderService, LoaderService>();
             services.AddScoped<IDepositeService, DepositeService>();
         }
     }

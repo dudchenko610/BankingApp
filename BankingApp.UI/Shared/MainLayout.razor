@@ -1,9 +1,22 @@
 ﻿@inherits LayoutComponentBase
 
-<Header/>
+<Header />
 
-<div class="page">
-    <div class="container h-100">
-        @Body
+
+@if (_showLoader)
+{
+    <div class="loading-spinner-container">
+        <CircleLoader />
     </div>
-</div>
+}
+else
+{
+    <div class="page">
+        <div class="container h-100">
+            @Body
+        </div>
+    </div>
+}
+
+
+

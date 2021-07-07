@@ -1,4 +1,12 @@
-﻿.page {
+﻿
+.loading-spinner-container {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+}
+
+.page {
     position: relative;
     display: flex;
     flex-direction: column;
