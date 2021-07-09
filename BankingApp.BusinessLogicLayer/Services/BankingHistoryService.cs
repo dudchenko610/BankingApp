@@ -46,8 +46,8 @@ namespace BankingApp.BusinessLogicLayer.Services
             depositeHistory.DepositeHistoryItems 
                 = _mapper.Map<IList<ResponseCalculateDepositeBankingViewItem>, IList<DepositeHistoryItem>>(depositeCalculation.PerMonthInfos);
 
-            await _depositeHistoryRepository.AddAsync(depositeHistory);
-            return depositeHistory.Id;
+            int savedId = await _depositeHistoryRepository.AddAsync(depositeHistory);
+            return savedId;
         }
     }
 }

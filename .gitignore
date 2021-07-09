@@ -65,6 +65,9 @@ BankingApp.BusinessLogicLayer.UnitTests/obj/
 BankingApp.UI.UnitTests/bin/
 BankingApp.UI.UnitTests/obj/
 
+BankingApp.UI.Core.UnitTests/bin/
+BankingApp.UI.Core.UnitTests/obj/
+
 BankingApp.Entities/bin/
 BankingApp.Entities/obj/
 
