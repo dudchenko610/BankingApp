@@ -1,5 +1,6 @@
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Core.Services;
+using BankingApp.UI.Core.Wrappers;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,6 +28,7 @@ namespace BankingApp.UI
         {
             services.AddSingleton<ILoaderService, LoaderService>();
             services.AddScoped<IDepositeService, DepositeService>();
+            services.AddScoped<INavigationWrapper, NavigationWrapper>();
         }
     }
 }

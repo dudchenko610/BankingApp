@@ -8,8 +8,9 @@ namespace BankingApp.UI.Pages.MainPage
 {
     public partial class MainPage
     {
+
         [Inject]
-        private NavigationManager _navigationManager { get; set; }
+        private INavigationWrapper _navigationWrapper { get; set; }
         [Inject]
         private IDepositeService _depositeService { get; set; }
         [Inject]
@@ -21,7 +22,7 @@ namespace BankingApp.UI.Pages.MainPage
             int depositeHistoryId = await _depositeService.CalculateDepositeAsync(reqModel);
             _loaderService.SwitchOff();
 
-            _navigationManager.NavigateTo($"{Routes.DetailsPage}/{depositeHistoryId}");
+            _navigationWrapper.NavigateTo($"{Routes.DetailsPage}/{depositeHistoryId}");
         }
 
     }

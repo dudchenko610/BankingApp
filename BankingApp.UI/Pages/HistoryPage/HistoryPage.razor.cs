@@ -22,7 +22,7 @@ namespace BankingApp.UI.Pages.HistoryPage
         [Inject]
         private IDepositeService _depositeService { get; set; }
         [Inject]
-        private NavigationManager _navigationManager { get; set; }
+        private INavigationWrapper _navigationWrapper { get; set; }
         [Parameter]
         public int Page { get; set; }
 
@@ -44,7 +44,7 @@ namespace BankingApp.UI.Pages.HistoryPage
             _pagedChunck = _depositeHistory.DepositesHistory.Skip((Page - 1) * DepositesOnPage).Take(DepositesOnPage).ToList();
 
             if (Page > _totalPageCount || Page < 1)
-                _navigationManager.NavigateTo($"{Routes.HistoryPage}/1");
+                _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/1");
         }
 
         protected override void OnParametersSet()
@@ -55,12 +55,12 @@ namespace BankingApp.UI.Pages.HistoryPage
 
         private void OnPageClicked(int page)
         {
-            _navigationManager.NavigateTo($"{Routes.HistoryPage}/{page}");
+            _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/{page}");
         }
 
         private void OnDepositeHistoryItemClicked(int depositeHistoryId)
         {
-            _navigationManager.NavigateTo($"{Routes.DetailsPage}/{depositeHistoryId}");
+            _navigationWrapper.NavigateTo($"{Routes.DetailsPage}/{depositeHistoryId}");
         }
     }
 }

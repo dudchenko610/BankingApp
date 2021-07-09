@@ -2,11 +2,8 @@
 using BankingApp.ViewModels.Enums;
 using Bunit;
 using Microsoft.AspNetCore.Components.Forms;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Xunit;
-
-using BankingApp.Shared.Extensions;
 using BankingApp.Shared.Helpers;
 using FluentAssertions;
 

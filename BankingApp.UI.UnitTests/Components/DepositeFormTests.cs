@@ -2,10 +2,11 @@
 using Bunit;
 using Xunit;
 using FluentAssertions;
+using BankingApp.UI.Components.DepositeForm;
 
 namespace BankingApp.UI.UnitTests.Components
 {
-    public class DepositeFormTest : TestContext
+    public class DepositeFormTests : TestContext
     {
         [Fact]
         public void DepositeForm_UserSubmitsValidData_CallbackTriggersAndReturnsValidData()
@@ -16,7 +17,7 @@ namespace BankingApp.UI.UnitTests.Components
 
             RequestCalculateDepositeBankingView model = null;
 
-            var depositeForm = RenderComponent<BankingApp.UI.Components.DepositeForm.DepositeForm>(
+            var depositeForm = RenderComponent<DepositeForm>(
                 parameters => parameters.Add(component => component.OnFormSubmit,
                     (formModel) => { model = formModel; }
                 )

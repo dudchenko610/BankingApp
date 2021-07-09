@@ -8,7 +8,7 @@ namespace BankingApp.UI.Shared.Header
     {
         private string _navLinksDisabledClass;
         [Inject]
-        private NavigationManager _navigationManager { get; set; }
+        private INavigationWrapper _navigationWrapper { get; set; }
         [Inject]
         private ILoaderService _loaderService { get; set; }
 
@@ -19,7 +19,7 @@ namespace BankingApp.UI.Shared.Header
 
         protected override void OnInitialized()
         {
-            _navigationManager.LocationChanged += (s, e) => StateHasChanged();
+            _navigationWrapper.LocationChanged += (s, e) => StateHasChanged();
             _loaderService.OnLoaderSwitch += (show) => {
                 _navLinksDisabledClass = show ? "disabled" : "";
                 StateHasChanged();
@@ -28,7 +28,7 @@ namespace BankingApp.UI.Shared.Header
 
         private bool IsActive(string href, NavLinkMatch navLinkMatch = NavLinkMatch.Prefix)
         {
-            var relativePath = _navigationManager.ToBaseRelativePath(_navigationManager.Uri).ToLower();
+            var relativePath = _navigationWrapper.ToBaseRelativePath(_navigationWrapper.Uri).ToLower();
 
             if (relativePath.Contains("/"))
                 relativePath = relativePath.Split("/")[0];

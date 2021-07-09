@@ -9,11 +9,11 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item  @GetActive("", NavLinkMatch.All)">
-                <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationManager.NavigateTo(Routes.MainPage); }" @onclick:preventDefault>MainPage</a>
+                <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.MainPage); }" @onclick:preventDefault>MainPage</a>
             </li>
 
             <li class="nav-item  @GetActive("history", NavLinkMatch.All)">
-                <a class="nav-link @_navLinksDisabledClass" href="#" @onclick='() => { _navigationManager.NavigateTo(Routes.HistoryPage + "/1"); }' @onclick:preventDefault>History</a>
+                <a class="nav-link @_navLinksDisabledClass" href="#" @onclick='() => { _navigationWrapper.NavigateTo(Routes.HistoryPage + "/1"); }' @onclick:preventDefault>History</a>
             </li>
 
         </ul>
