@@ -4,6 +4,7 @@ using BankingApp.DataAccessLayer.Repositories.Interfaces;
 using BankingApp.Entities.Entities;
 using BankingApp.ViewModels.Banking;
 using BankingApp.ViewModels.Banking.History;
+using BankingApp.ViewModels.Pagination;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,14 +29,20 @@ namespace BankingApp.BusinessLogicLayer.Services
             return responseCalculationHistoryViewItem;
         }
 
-        public async Task<ResponseCalculationHistoryBankingView> GetDepositesCalculationHistoryAsync()
+        public async Task<ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>> GetDepositesCalculationHistoryAsync(RequestPaginationFilterView requestPaginationModel)
         {
-            IList<DepositeHistory> depositesHistoryFromDb = await _depositeHistoryRepository.GetAsync();
+            var dbRes = await _depositeHistoryRepository
+                .GetDepositesHistoryPagedAsync((requestPaginationModel.PageNumber - 1) * requestPaginationModel.PageSize, requestPaginationModel.PageSize);
 
-            var response = new ResponseCalculationHistoryBankingView();
-            response.DepositesHistory = _mapper.Map<IList<DepositeHistory>, IList<ResponseCalculationHistoryBankingViewItem>>(depositesHistoryFromDb);
+            var pagedResponse = new ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>
+            {
+                Data = _mapper.Map<IList<DepositeHistory>, IList<ResponseCalculationHistoryBankingViewItem>>(dbRes.DepositeHistory),
+                PageNumber = requestPaginationModel.PageNumber,
+                PageSize = requestPaginationModel.PageSize,
+                TotalItems = dbRes.TotalCount
+            };
 
-            return response;
+            return pagedResponse;
         }
 
         public async Task<int> SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo,

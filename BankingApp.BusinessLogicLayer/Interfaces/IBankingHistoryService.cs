@@ -1,5 +1,6 @@
 ﻿using BankingApp.ViewModels.Banking;
 using BankingApp.ViewModels.Banking.History;
+using BankingApp.ViewModels.Pagination;
 using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Interfaces
@@ -8,7 +9,7 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
     {
         Task<int> SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo, 
             ResponseCalculateDepositeBankingView depositeCalculation);
-        Task<ResponseCalculationHistoryBankingView> GetDepositesCalculationHistoryAsync();
+        Task<ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>> GetDepositesCalculationHistoryAsync(RequestPaginationFilterView requestPaginationModel);
         Task<ResponseCalculationHistoryBankingViewItem> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId);
     }
 }
