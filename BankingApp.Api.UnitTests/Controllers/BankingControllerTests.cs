@@ -9,13 +9,30 @@ using FluentAssertions;
 using BankingApp.ViewModels.Enums;
 using System.Threading.Tasks;
 using BankingApp.ViewModels.Banking.History;
+using AutoMapper;
+using BankingApp.BusinessLogicLayer.Mapper;
+using System.Collections.Generic;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
     [TestFixture]
     public class BankingControllerTests
     {
+        private readonly ResponseCalculationHistoryBankingViewItem _detailsHistoryResponseData =
+            new ResponseCalculationHistoryBankingViewItem
+            {
+                DepositePerMonthInfo = new List<ResponseCalculateDepositeBankingViewItem>
+                {
+                    new ResponseCalculateDepositeBankingViewItem(),
+                    new ResponseCalculateDepositeBankingViewItem(),
+                    new ResponseCalculateDepositeBankingViewItem(),
+                    new ResponseCalculateDepositeBankingViewItem(),
+                    new ResponseCalculateDepositeBankingViewItem()
+                }
+            };
+
         private BankingController _bankingController;
+        private IMapper _mapper;
 
         [SetUp]
         public void SetUp()
@@ -37,12 +54,25 @@ namespace BankingApp.Api.UnitTests.Controllers
                 )
                 .ReturnsAsync(0);
 
+
+            bankingHistoryServiceMock
+                .Setup(bhs => bhs.GetDepositeCalculationHistoryDetailsAsync(It.IsAny<int>()))
+                .ReturnsAsync(_detailsHistoryResponseData);
+
             bankingHistoryServiceMock
                 .Setup(bhs => bhs.GetDepositesCalculationHistoryAsync())
                 .ReturnsAsync(new ResponseCalculationHistoryBankingView());
 
 
             _bankingController = new BankingController(bankingCalcukationServiceMock.Object, bankingHistoryServiceMock.Object);
+
+            var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile(new DepositeHistoryProfile());
+                config.AddProfile(new DepositeHistoryItemProfile());
+            });
+
+            _mapper = mapperConfig.CreateMapper();
         }
 
         [Test]
@@ -62,6 +92,22 @@ namespace BankingApp.Api.UnitTests.Controllers
             var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
             whereAndConstr.Which.Value.Should().BeOfType<int>();
             whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
+        }
+
+        [Test]
+        public async Task CalculationHistoryDetails_DepositeHistoryIdPassed_ReturnsListWithValidSize()
+        {
+            const int DepositeHistoryId = 1;
+            var controllerResult = await _bankingController.CalculationHistoryDetails(DepositeHistoryId);
+
+            var okResult = controllerResult as ObjectResult;
+
+            var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
+            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculationHistoryBankingViewItem>();
+            whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
+
+            var payload = (ResponseCalculationHistoryBankingViewItem)okResult.Value;
+            payload.DepositePerMonthInfo.Count.Should().Be(_detailsHistoryResponseData.DepositePerMonthInfo.Count);
         }
     }
 }

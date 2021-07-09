@@ -8,7 +8,7 @@ using FluentAssertions;
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
     [TestFixture]
-    public class BankingServiceTests
+    public class BankingCalculationServiceTests
     {
         private BankingCalculationService _bankingService;
 
