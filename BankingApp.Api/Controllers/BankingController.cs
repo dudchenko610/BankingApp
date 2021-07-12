@@ -28,9 +28,9 @@ namespace BankingApp.Api.Controllers
 
         [HttpGet]
         [Route(Routes.Banking.CalculationHistory)]
-        public async Task<IActionResult> CalculationHistory(int pageNumber, int pageSize)
+        public async Task<IActionResult> CalculationHistory()
         {
-            var depositeCalculationHistory = await _bankingService.GetDepositesCalculationHistoryAsync(pageNumber, pageSize);
+            var depositeCalculationHistory = await _bankingService.GetDepositesCalculationHistoryAsync();
             return Ok(depositeCalculationHistory);
         }
 

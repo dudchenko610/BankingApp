@@ -7,7 +7,7 @@ namespace BankingApp.UI.Components.DepositeHistoryList
     public partial class DepositeHistoryList
     {
         [Parameter]
-        public IList<ResponseCalculationHistoryDetailsBankingView> DepositesHistoryList { get; set; }
+        public IList<ResponseCalculationHistoryBankingViewItem> DepositesHistoryList { get; set; }
 
         [Parameter]
         public EventCallback<int> OnDepositeHistoryItemClicked { get; set; }

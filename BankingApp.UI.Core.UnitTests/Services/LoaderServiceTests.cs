@@ -12,23 +12,23 @@ namespace BankingApp.UI.Core.UnitTests.Services
 {
     public class LoaderServiceTests : TestContext
     {
-        private ILoaderService _loaderService;
-        public LoaderServiceTests()
-        {
-            var navWrapperMock = new Mock<INavigationWrapper>();
-            navWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns("");
-            Services.AddSingleton(navWrapperMock.Object);
+        //private ILoaderService _loaderService;
+        //public LoaderServiceTests()
+        //{
+        //    var navWrapperMock = new Mock<INavigationWrapper>();
+        //    navWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns("");
+        //    Services.AddSingleton(navWrapperMock.Object);
 
-            Services.AddSingleton<ILoaderService, LoaderService>();
-            _loaderService = Services.GetService<ILoaderService>();
-        }
+        //    Services.AddSingleton<ILoaderService, LoaderService>();
+        //    _loaderService = Services.GetService<ILoaderService>();
+        //}
 
-        [Fact]
-        public async Task SwitchOn_SwitchOnLoader_CircleLoaderComponentAppearsInRendringTree()
-        {
-            var depositeForm = RenderComponent<MainLayout>();
-            await depositeForm.InvokeAsync(() => { _loaderService.SwitchOn(); });
-            depositeForm.FindComponent<CircleLoader>();
-        }
+        //[Fact]
+        //public async Task SwitchOn_SwitchOnLoader_CircleLoaderComponentAppearsInRendringTree()
+        //{
+        //    var depositeForm = RenderComponent<MainLayout>();
+        //    await depositeForm.InvokeAsync(() => { _loaderService.SwitchOn(); });
+        //    depositeForm.FindComponent<CircleLoader>();
+        //}
     }
 }

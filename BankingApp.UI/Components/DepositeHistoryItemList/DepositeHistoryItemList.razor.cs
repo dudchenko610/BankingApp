@@ -7,6 +7,6 @@ namespace BankingApp.UI.Components.DepositeHistoryItemList
     public partial class DepositeHistoryItemList
     {
         [Parameter]
-        public IList<ResponseCalculationHistoryBankingViewItem> PerMonthInfos { get; set; }
+        public IList<ResponseCalculationHistoryDetailsBankingViewItem> PerMonthInfo { get; set; }
     }
 }

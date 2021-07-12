@@ -8,7 +8,7 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
     public interface IBankingService
     {
         Task<int> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo);
-        Task<ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>> GetDepositesCalculationHistoryAsync(int pageNumber, int pageSize);
+        Task<ResponseCalculationHistoryBankingView> GetDepositesCalculationHistoryAsync();
         Task<ResponseCalculationHistoryDetailsBankingView> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId);
     }
 }
