@@ -2,6 +2,7 @@
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Banking.History;
+using BankingApp.ViewModels.Pagination;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
@@ -31,12 +32,13 @@ namespace BankingApp.UI.Core.Services
             return responseObject;
         }
 
-        public async Task<ResponseCalculationHistoryBankingView> GetCalculationDepositeHistoryAsync()
+        public async Task<ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>> GetCalculationDepositeHistoryAsync(int pageNumber, int pageSize)
         {
-            var response = await _httpClient.GetAsync($"{Constants.Routes.Banking.BankingRoute}/{Constants.Routes.Banking.CalculationHistory}");
+            var response = await _httpClient
+                .GetAsync($"{Constants.Routes.Banking.BankingRoute}/{Constants.Routes.Banking.CalculationHistory}?pageNumber={pageNumber}&pageSize={pageSize}");
 
             var serializedResponse = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<ResponseCalculationHistoryBankingView>(serializedResponse);
+            var responseObject = JsonConvert.DeserializeObject<ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>>(serializedResponse);
 
             return responseObject;
         }
