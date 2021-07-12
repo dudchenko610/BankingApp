@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BankingApp.BusinessLogicLayer.Interfaces;
-using BankingApp.DataAccessLayer.Repositories.Interfaces;
+using BankingApp.DataAccessLayer.Interfaces;
 using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Calculate;

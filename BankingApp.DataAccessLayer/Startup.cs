@@ -1,6 +1,6 @@
 using BankingApp.DataAccessLayer.DatabaseContexts;
+using BankingApp.DataAccessLayer.Interfaces;
 using BankingApp.DataAccessLayer.Repositories;
-using BankingApp.DataAccessLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

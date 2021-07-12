@@ -4,7 +4,6 @@ using FluentAssertions;
 using AutoMapper;
 using BankingApp.BusinessLogicLayer.Mapper;
 using Moq;
-using BankingApp.DataAccessLayer.Repositories.Interfaces;
 using System.Threading.Tasks;
 using BankingApp.Entities.Entities;
 using BankingApp.ViewModels.Banking.Calculate;
@@ -13,6 +12,7 @@ using BankingApp.ViewModels.Banking.History;
 using System;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Pagination;
+using BankingApp.DataAccessLayer.Interfaces;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {

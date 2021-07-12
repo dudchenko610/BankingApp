@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BankingApp.DataAccessLayer.Repositories.Interfaces
+namespace BankingApp.DataAccessLayer.Interfaces
 {
     public interface IDepositeHistoryRepository : IGenericRepository<DepositeHistory>
     {
