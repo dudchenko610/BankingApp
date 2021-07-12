@@ -28,22 +28,23 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         public async Task<int> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
-            var respDepositeInfo = new ResponseCalculateDepositeBankingView();
+            var depositeHistory = new DepositeHistory();
+            depositeHistory.CalulationDateTime = System.DateTime.Now;
             CalculationFormula calculationFormula = GetCalculationFormula(reqDepositeCalcInfo);
 
             for (int i = 1; i <= reqDepositeCalcInfo.MonthsCount; i++)
             {
                 var res = calculationFormula(i, reqDepositeCalcInfo);
-                respDepositeInfo.PerMonthInfos.Add(new ResponseCalculateDepositeBankingViewItem
+                depositeHistory.DepositeHistoryItems.Add(new DepositeHistoryItem
                 { 
                     MonthNumber = i,
                     TotalMonthSum = decimal.Round(res.MonthSum, 2),
                     Percents = res.Percents
                 });
             }
-
-            int id = await SaveDepositeCalculationAsync(reqDepositeCalcInfo, respDepositeInfo);
-            return id;
+            
+            int savedId = await _depositeHistoryRepository.AddAsync(depositeHistory);
+            return savedId;
         }
 
         public async Task<ResponseCalculationHistoryDetailsBankingView> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId)
@@ -76,18 +77,6 @@ namespace BankingApp.BusinessLogicLayer.Services
             };
 
             return pagedResponse;
-        }
-       
-        public async Task<int> SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo,
-            ResponseCalculateDepositeBankingView depositeCalculation)
-        {
-            var depositeHistory = _mapper.Map<DepositeHistory>(reqDepositeCalcInfo);
-            depositeHistory.CalulationDateTime = System.DateTime.Now;
-            depositeHistory.DepositeHistoryItems
-                = _mapper.Map<IList<ResponseCalculateDepositeBankingViewItem>, IList<DepositeHistoryItem>>(depositeCalculation.PerMonthInfos);
-
-            int savedId = await _depositeHistoryRepository.AddAsync(depositeHistory);
-            return savedId;
         }
 
         private CalculationFormula GetCalculationFormula(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
