@@ -22,7 +22,6 @@ namespace BankingApp.UI.Components.PaginationSwitcher
         [Parameter]
         public EventCallback<int> OnPageClick { get; set; }
 
-        
         public PaginationSwitcher()
         {
             _pageOffset = 0;
@@ -37,9 +36,7 @@ namespace BankingApp.UI.Components.PaginationSwitcher
         protected override void OnInitialized()
         {
             if (PageCount <= 0)
-            {
                 PageCount = 10;
-            }
 
             _pageOffset = CurrentPage - 2;
             _selectedPage = CurrentPage < 1 || CurrentPage > PageCount ? 1 : CurrentPage;

@@ -23,8 +23,8 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         private const int InvalidPageSize = 0;
         private const int ValidPageNumber = 1;
         private const int ValidPageSize = 1;
-
         private const int DepositeRepositoryAddAsyncReturnValue = 1;
+
         private BankingService _bankingService;
         private IMapper _mapper;
 
@@ -40,6 +40,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var depositeServiceMoq = new Mock<IDepositeHistoryRepository>();
             depositeServiceMoq.Setup(x => x.AddAsync(It.IsAny<DepositeHistory>())).ReturnsAsync(DepositeRepositoryAddAsyncReturnValue);
             depositeServiceMoq.Setup(x => x.GetDepositeHistoryWithItemsAsync(It.IsAny<int>())).ReturnsAsync(new DepositeHistory());
+
             _mapper = mapperConfig.CreateMapper();
             _bankingService = new BankingService(_mapper, depositeServiceMoq.Object);
         }

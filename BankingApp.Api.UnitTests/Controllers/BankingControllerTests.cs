@@ -11,8 +11,6 @@ using System.Collections.Generic;
 using BankingApp.ViewModels.Banking.Calculate;
 using NUnit.Framework;
 using BankingApp.ViewModels.Pagination;
-using System;
-using BankingApp.Shared;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace BankingApp.UI.Core.Interfaces
 {
