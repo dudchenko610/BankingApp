@@ -8,7 +8,6 @@ namespace BankingApp.UI.Pages.MainPage
 {
     public partial class MainPage
     {
-
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
         [Inject]
@@ -24,6 +23,5 @@ namespace BankingApp.UI.Pages.MainPage
 
             _navigationWrapper.NavigateTo($"{Routes.DetailsPage}/{depositeHistoryId}");
         }
-
     }
 }

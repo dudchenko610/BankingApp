@@ -15,7 +15,7 @@ namespace BankingApp.UI.Pages.HistoryPage
 
         private int _totalPageCount;
         private ResponseCalculationHistoryBankingView _depositeHistory;
-        private IList<ResponseCalculationHistoryDetailsBankingView> _pagedChunck;
+        private IList<ResponseCalculationHistoryBankingViewItem> _pagedChunck;
 
         [Inject]
         private ILoaderService _loaderService { get; set; }
