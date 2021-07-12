@@ -19,9 +19,7 @@ namespace BankingApp.Api.UnitTests.Controllers
     public class BankingControllerTests
     {
         private const int BankingServiceCalculateDepositeAsyncReturnValue = 1;
-            
         private BankingController _bankingController;
-        private IMapper _mapper;
 
         [SetUp]
         public void SetUp()
@@ -38,21 +36,12 @@ namespace BankingApp.Api.UnitTests.Controllers
             bankingServiceMock
                 .Setup(bhs => bhs.GetDepositesCalculationHistoryAsync())
                 .ReturnsAsync(new ResponseCalculationHistoryBankingView());
-
-
+            
             _bankingController = new BankingController(bankingServiceMock.Object);
-
-            var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile(new DepositeHistoryProfile());
-                config.AddProfile(new DepositeHistoryItemProfile());
-            });
-
-            _mapper = mapperConfig.CreateMapper();
         }
 
         [Test]
-        public async Task CalcaulateDeposite_СorrectInputData_ReturnsOkResult()
+        public async Task CalculateDeposite_СorrectInputData_ReturnsOkResult()
         {
             var input = new RequestCalculateDepositeBankingView
             {
@@ -101,7 +90,7 @@ namespace BankingApp.Api.UnitTests.Controllers
                 .BeOfType<ResponseCalculationHistoryBankingView>()
                 .Which.DepositesHistory.Should().NotBeNull();
         }
-
+        
         private ResponseCalculationHistoryDetailsBankingView GetTestDetailsHistoryResponseData()
         {
             return new ResponseCalculationHistoryDetailsBankingView

@@ -26,11 +26,11 @@ namespace BankingApp.UI.UnitTests.Shared
         [Fact]
         public void Header_UserClicksUrlLink_LinkGetsActiveState()
         {
-            var mainLayoutComp = RenderComponent<Header>();
+            var headerComponent = RenderComponent<Header>();
 
-            Assert.Contains(mainLayoutComp.Find("li").ClassList, i => i != "active");
-            mainLayoutComp.Find("a").Click();
-            Assert.Contains(mainLayoutComp.Find("li").ClassList, i => i == "active");
+            Assert.Contains(headerComponent.Find("li").ClassList, i => i != "active");
+            headerComponent.Find("a").Click();
+            Assert.Contains(headerComponent.Find("li").ClassList, i => i == "active");
         }
         
         [Fact]
@@ -41,6 +41,5 @@ namespace BankingApp.UI.UnitTests.Shared
 
             _navWrapperMock.Verify(mock => mock.NavigateTo(It.IsAny<string>(), false), Times.AtLeastOnce);
         }
-        
     }
 }
