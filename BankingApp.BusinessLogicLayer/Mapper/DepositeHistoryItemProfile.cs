@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BankingApp.Entities.Entities;
-using BankingApp.ViewModels.Banking.Calculate;
+using BankingApp.ViewModels.Banking.History;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {
@@ -8,8 +8,7 @@ namespace BankingApp.BusinessLogicLayer.Mapper
     {
         public DepositeHistoryItemProfile()
         {
-            CreateMap<ResponseCalculateDepositeBankingViewItem, DepositeHistoryItem>();
-            CreateMap<DepositeHistoryItem, ResponseCalculateDepositeBankingViewItem>();
+            CreateMap<DepositeHistoryItem, ResponseCalculationHistoryDetailsBankingViewItem>();
         }
     }
 }

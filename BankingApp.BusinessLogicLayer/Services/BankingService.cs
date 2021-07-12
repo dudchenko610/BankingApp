@@ -6,7 +6,6 @@ using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Banking.History;
 using BankingApp.ViewModels.Enums;
-using BankingApp.ViewModels.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,7 +17,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         private readonly IMapper _mapper;
         private readonly IDepositeHistoryRepository _depositeHistoryRepository;
 
-        private delegate (decimal MonthSum, int Percents) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
+        private delegate (decimal MonthSum, float Percents) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
 
         public BankingService(IMapper mapper, IDepositeHistoryRepository depositeHistoryRepository)
         {
@@ -28,67 +27,44 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         public async Task<int> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
-            var respDepositeInfo = new ResponseCalculateDepositeBankingView();
+            var depositeHistory = _mapper.Map<RequestCalculateDepositeBankingView, DepositeHistory>(reqDepositeCalcInfo);
+            
+            depositeHistory.CalulationDateTime = System.DateTime.Now;
             CalculationFormula calculationFormula = GetCalculationFormula(reqDepositeCalcInfo);
 
             for (int i = 1; i <= reqDepositeCalcInfo.MonthsCount; i++)
             {
                 var res = calculationFormula(i, reqDepositeCalcInfo);
-                respDepositeInfo.PerMonthInfos.Add(new ResponseCalculateDepositeBankingViewItem
+                depositeHistory.DepositeHistoryItems.Add(new DepositeHistoryItem
                 { 
                     MonthNumber = i,
                     TotalMonthSum = decimal.Round(res.MonthSum, 2),
                     Percents = res.Percents
                 });
             }
-
-            int id = await SaveDepositeCalculationAsync(reqDepositeCalcInfo, respDepositeInfo);
-            return id;
-        }
-
-        public async Task<ResponseCalculationHistoryBankingViewItem> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId)
-        {
-            if (depositeHistoryId < 1)
-                throw new Exception(Constants.Errors.Banking.IncorrectDepositeHistoryId);
-
-            // maybe in future, here should be checking for null and throwing an exception
-            var depositeHistoryWithItems = await _depositeHistoryRepository.GetDepositeHistoryWithItemsAsync(depositeHistoryId);
-            var responseCalculationHistoryViewItem = _mapper.Map<DepositeHistory, ResponseCalculationHistoryBankingViewItem>(depositeHistoryWithItems);
-            return responseCalculationHistoryViewItem;
-        }
-       
-        public async Task<ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>> GetDepositesCalculationHistoryAsync(int pageNumber, int pageSize)
-        {
-            if (pageNumber < 1)
-                throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
-
-            if (pageSize < 1)
-                throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
-
-            (IList<DepositeHistory> DepositeHistory, int TotalCount) 
-                = await _depositeHistoryRepository.GetDepositesHistoryPagedAsync((pageNumber - 1) * pageSize, pageSize);
-
-            var pagedResponse = new ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>
-            {
-                Data = _mapper.Map<IList<DepositeHistory>, IList<ResponseCalculationHistoryBankingViewItem>>(DepositeHistory),
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalItems = TotalCount
-            };
-
-            return pagedResponse;
-        }
-       
-        public async Task<int> SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo,
-            ResponseCalculateDepositeBankingView depositeCalculation)
-        {
-            var depositeHistory = _mapper.Map<DepositeHistory>(reqDepositeCalcInfo);
-            depositeHistory.CalulationDateTime = System.DateTime.Now;
-            depositeHistory.DepositeHistoryItems
-                = _mapper.Map<IList<ResponseCalculateDepositeBankingViewItem>, IList<DepositeHistoryItem>>(depositeCalculation.PerMonthInfos);
-
+            
             int savedId = await _depositeHistoryRepository.AddAsync(depositeHistory);
             return savedId;
+        }
+
+        public async Task<ResponseCalculationHistoryDetailsBankingView> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId)
+        {
+            var depositeHistoryWithItems = await _depositeHistoryRepository.GetDepositeHistoryWithItemsAsync(depositeHistoryId);
+            if (depositeHistoryWithItems == null)
+                throw new Exception(Constants.Errors.Banking.IncorrectDepositeHistoryId);
+
+            var responseCalculationHistoryViewItem = _mapper.Map<DepositeHistory, ResponseCalculationHistoryDetailsBankingView>(depositeHistoryWithItems);
+            return responseCalculationHistoryViewItem;
+        }
+
+        public async Task<ResponseCalculationHistoryBankingView> GetDepositesCalculationHistoryAsync()
+        {
+            IList<DepositeHistory> depositesHistoryFromDb = await _depositeHistoryRepository.GetAsync();
+
+            var response = new ResponseCalculationHistoryBankingView();
+            response.DepositesHistory = _mapper.Map<IList<DepositeHistory>, IList<ResponseCalculationHistoryBankingViewItem>>(depositesHistoryFromDb);
+
+            return response;
         }
 
         private CalculationFormula GetCalculationFormula(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
@@ -102,21 +78,21 @@ namespace BankingApp.BusinessLogicLayer.Services
             }
         }
 
-        private (decimal MonthSum, int Percents) CalculateSimpleInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private (decimal MonthSum, float Percents) CalculateSimpleInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (n / 12) * (P / 100))
             float percentsDevidedBy1200 = (float) reqDepositeCalcInfo.Percents / 1200.0f;
             decimal monthSum = reqDepositeCalcInfo.DepositeSum * (decimal)(1.0f + monthNumber * percentsDevidedBy1200);
-            int percents = (int)((monthNumber / 12.0f) * (float)reqDepositeCalcInfo.Percents);
+            float percents = (float) decimal.Round((decimal)(monthNumber / 12.0f) * reqDepositeCalcInfo.Percents, 2);
             return (monthSum, percents);
         }
 
-        private (decimal MonthSum, int Percents) CalculateCompoundInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private (decimal MonthSum, float Percents) CalculateCompoundInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (P / 1200)) ^ (n)
             float percentsDevidedBy1200 = (float) reqDepositeCalcInfo.Percents / 1200.0f;
             decimal monthSum = reqDepositeCalcInfo.DepositeSum * (decimal)Math.Pow(1.0 + percentsDevidedBy1200, monthNumber);
-            int percents = (int)(((monthSum - reqDepositeCalcInfo.DepositeSum) / reqDepositeCalcInfo.DepositeSum) * 100.0m);
+            float percents = (float)decimal.Round(((monthSum - reqDepositeCalcInfo.DepositeSum) / reqDepositeCalcInfo.DepositeSum) * 100.0m, 2);
             return (monthSum, percents);
         }
     }

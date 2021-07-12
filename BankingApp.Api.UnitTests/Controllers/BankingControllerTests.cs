@@ -3,7 +3,6 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using NUnit.Framework;
 using FluentAssertions;
 using BankingApp.ViewModels.Enums;
 using System.Threading.Tasks;
@@ -12,27 +11,15 @@ using AutoMapper;
 using BankingApp.BusinessLogicLayer.Mapper;
 using System.Collections.Generic;
 using BankingApp.ViewModels.Banking.Calculate;
+using NUnit.Framework;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
     [TestFixture]
     public class BankingControllerTests
     {
-        private readonly ResponseCalculationHistoryBankingViewItem _detailsHistoryResponseData =
-            new ResponseCalculationHistoryBankingViewItem
-            {
-                DepositePerMonthInfo = new List<ResponseCalculateDepositeBankingViewItem>
-                {
-                    new ResponseCalculateDepositeBankingViewItem(),
-                    new ResponseCalculateDepositeBankingViewItem(),
-                    new ResponseCalculateDepositeBankingViewItem(),
-                    new ResponseCalculateDepositeBankingViewItem(),
-                    new ResponseCalculateDepositeBankingViewItem()
-                }
-            };
-
+        private const int BankingServiceCalculateDepositeAsyncReturnValue = 1;
         private BankingController _bankingController;
-        private IMapper _mapper;
 
         [SetUp]
         public void SetUp()
@@ -40,46 +27,26 @@ namespace BankingApp.Api.UnitTests.Controllers
             var bankingServiceMock = new Mock<IBankingService>();
             bankingServiceMock
                 .Setup(bsm => bsm.CalculateDepositeAsync(It.IsAny<RequestCalculateDepositeBankingView>()))
-                .Returns(new ResponseCalculateDepositeBankingView());
+                .ReturnsAsync(BankingServiceCalculateDepositeAsyncReturnValue);
 
             bankingServiceMock
                 .Setup(bhs => bhs.GetDepositeCalculationHistoryDetailsAsync(It.IsAny<int>()))
-                .ReturnsAsync(new ResponseCalculationHistoryBankingViewItem());
-
-            bankingServiceMock
-                .Setup(
-                    bhs => bhs.SaveDepositeCalculationAsync(It.IsAny<RequestCalculateDepositeBankingView>(),
-                                It.IsAny<ResponseCalculateDepositeBankingView>())
-                )
-                .ReturnsAsync(0);
-
-            bankingServiceMock
-                .Setup(bhs => bhs.GetDepositeCalculationHistoryDetailsAsync(It.IsAny<int>()))
-                .ReturnsAsync(_detailsHistoryResponseData);
+                .ReturnsAsync(GetTestDetailsHistoryResponseData());
 
             bankingServiceMock
                 .Setup(bhs => bhs.GetDepositesCalculationHistoryAsync())
                 .ReturnsAsync(new ResponseCalculationHistoryBankingView());
-
-
+            
             _bankingController = new BankingController(bankingServiceMock.Object);
-
-            var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile(new DepositeHistoryProfile());
-                config.AddProfile(new DepositeHistoryItemProfile());
-            });
-
-            _mapper = mapperConfig.CreateMapper();
         }
 
         [Test]
-        public async Task CalcaulateDeposite_СorrectInputData_ReturnsOkResult()
+        public async Task CalculateDeposite_СorrectInputData_ReturnsOkResult()
         {
-            var input = new RequestCalculateDepositeBankingView 
-            { 
-                DepositeSum = 100, 
-                MonthsCount = 12, 
+            var input = new RequestCalculateDepositeBankingView
+            {
+                DepositeSum = 100,
+                MonthsCount = 12,
                 Percents = 10,
                 CalculationFormula = DepositeCalculationFormulaEnumView.CompoundInterest
             };
@@ -101,11 +68,42 @@ namespace BankingApp.Api.UnitTests.Controllers
             var okResult = controllerResult as ObjectResult;
 
             var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
-            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculationHistoryBankingViewItem>();
+            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculationHistoryDetailsBankingView>();
             whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
 
-            var payload = (ResponseCalculationHistoryBankingViewItem)okResult.Value;
-            payload.DepositePerMonthInfo.Count.Should().Be(_detailsHistoryResponseData.DepositePerMonthInfo.Count);
+            var payload = (ResponseCalculationHistoryDetailsBankingView)okResult.Value;
+            payload.DepositePerMonthInfo.Count.Should().Be(GetTestDetailsHistoryResponseData().DepositePerMonthInfo.Count);
+        }
+
+        [Test]
+        public async Task CalculationHistory_CallCalculationHistoryMethod_ReturnsNotNullNodelWithNotNullMemberList()
+        {
+            var controllerResult = await _bankingController.CalculationHistory();
+            var okResult = controllerResult as ObjectResult;
+
+            var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
+            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculationHistoryDetailsBankingView>();
+            whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
+
+            var payload = (ResponseCalculationHistoryBankingView) okResult.Value;
+            payload.Should().NotBeNull().And
+                .BeOfType<ResponseCalculationHistoryBankingView>()
+                .Which.DepositesHistory.Should().NotBeNull();
+        }
+        
+        private ResponseCalculationHistoryDetailsBankingView GetTestDetailsHistoryResponseData()
+        {
+            return new ResponseCalculationHistoryDetailsBankingView
+            {
+                DepositePerMonthInfo = new List<ResponseCalculationHistoryDetailsBankingViewItem>
+                {
+                    new ResponseCalculationHistoryDetailsBankingViewItem(),
+                    new ResponseCalculationHistoryDetailsBankingViewItem(),
+                    new ResponseCalculationHistoryDetailsBankingViewItem(),
+                    new ResponseCalculationHistoryDetailsBankingViewItem(),
+                    new ResponseCalculationHistoryDetailsBankingViewItem()
+                }
+            };
         }
     }
 }

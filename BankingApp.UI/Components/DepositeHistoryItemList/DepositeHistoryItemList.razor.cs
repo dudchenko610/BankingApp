@@ -1,4 +1,4 @@
-﻿using BankingApp.ViewModels.Banking.Calculate;
+﻿using BankingApp.ViewModels.Banking.History;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 
@@ -7,6 +7,6 @@ namespace BankingApp.UI.Components.DepositeHistoryItemList
     public partial class DepositeHistoryItemList
     {
         [Parameter]
-        public IList<ResponseCalculateDepositeBankingViewItem> PerMonthInfos { get; set; }
+        public IList<ResponseCalculationHistoryDetailsBankingViewItem> PerMonthInfo { get; set; }
     }
 }

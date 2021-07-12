@@ -1,50 +1,50 @@
 ﻿using BankingApp.UI.Components.DepositeHistoryList;
 using BankingApp.ViewModels.Banking.History;
-using Bunit;
 using System.Collections.Generic;
 using Xunit;
 using FluentAssertions;
+using Bunit;
 
 namespace BankingApp.UI.UnitTests.Components
 {
     public class DepositeHistoryListTests : TestContext
     {
-        private IList<ResponseCalculationHistoryBankingViewItem> _depositesHistoryList;
-
-        public DepositeHistoryListTests()
-        {
-            _depositesHistoryList = new List<ResponseCalculationHistoryBankingViewItem>
-            {
-                new ResponseCalculationHistoryBankingViewItem { Id = 1 },
-                new ResponseCalculationHistoryBankingViewItem { Id = 2 },
-                new ResponseCalculationHistoryBankingViewItem { Id = 3 }
-            };
-        }
-
         [Fact]
         public void DepositeHistoryList_PassValidListData_ComponentContainsAsMuchDivWithSpecifiedClassElementsAsListDataCount()
         {
+            var testDepositeHistoryList = GetTestDepositesHistoryList();
             var depositeHistoryList = RenderComponent<DepositeHistoryList>(parameters => parameters
-                .Add(p => p.DepositesHistoryList, _depositesHistoryList)
+                .Add(p => p.DepositesHistoryList, testDepositeHistoryList)
             );
 
-            depositeHistoryList.FindAll("div[class=card-header]").Count.Should().Be(_depositesHistoryList.Count);
+            depositeHistoryList.FindAll("div[class=card-header]").Count.Should().Be(testDepositeHistoryList.Count);
         }
 
         [Fact]
         public void DepositeHistoryList_UserClicksHistoryItem_EventTriggers()
         {
             int depositeHistoryId = -1;
+            var testDepositeHistoryList = GetTestDepositesHistoryList();
 
             var depositeHistoryList = RenderComponent<DepositeHistoryList>(parameters => parameters
-                .Add(p => p.DepositesHistoryList, _depositesHistoryList)
-                .Add(p => p.OnDepositeHistoryItemClicked, 
+                .Add(p => p.DepositesHistoryList, testDepositeHistoryList)
+                .Add(p => p.OnDepositeHistoryItemClicked,
                     (id) => { depositeHistoryId = id; }
                 )
             );
 
             depositeHistoryList.Find("button.btn").Click();
             depositeHistoryId.Should().NotBe(-1);
+        }
+
+        private IList<ResponseCalculationHistoryBankingViewItem> GetTestDepositesHistoryList()
+        {
+            return new List<ResponseCalculationHistoryBankingViewItem>
+            {
+                new ResponseCalculationHistoryBankingViewItem { Id = 1 },
+                new ResponseCalculationHistoryBankingViewItem { Id = 2 },
+                new ResponseCalculationHistoryBankingViewItem { Id = 3 }
+            };
         }
     }
 }

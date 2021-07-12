@@ -2,7 +2,7 @@
 @page "/history/{page:int}" 
 
 <div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100 w-100">
-    @if (_depositeHistory != null && _depositeHistory.DepositesHistory.Count != 0)
+    @if (_depositeHistory != null && _depositeHistory.DepositesHistory.Any())
     {
         <div class="d-flex align-items-center justify-content-center flex-column w-100">
             <div class="w-100">

@@ -1,11 +1,7 @@
-﻿using BankingApp.UI.Components.CircleLoader;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Core.Services;
-using BankingApp.UI.Shared;
 using Bunit;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using System.Threading.Tasks;
+using FluentAssertions;
 using Xunit;
 
 namespace BankingApp.UI.Core.UnitTests.Services
@@ -13,22 +9,23 @@ namespace BankingApp.UI.Core.UnitTests.Services
     public class LoaderServiceTests : TestContext
     {
         private ILoaderService _loaderService;
+
         public LoaderServiceTests()
         {
-            var navWrapperMock = new Mock<INavigationWrapper>();
-            navWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns("");
-            Services.AddSingleton(navWrapperMock.Object);
-
-            Services.AddSingleton<ILoaderService, LoaderService>();
-            _loaderService = Services.GetService<ILoaderService>();
+            _loaderService = new LoaderService();
         }
 
         [Fact]
-        public async Task SwitchOn_SwitchOnLoader_CircleLoaderComponentAppearsInRendringTree()
+        public void SwitchOn_SwitchOnLoader_CircleLoaderComponentAppearsInRendringTree()
         {
-            var depositeForm = RenderComponent<MainLayout>();
-            await depositeForm.InvokeAsync(() => { _loaderService.SwitchOn(); });
-            depositeForm.FindComponent<CircleLoader>();
+            bool switched = false;
+            _loaderService.OnLoaderSwitch += (isSwitched) => { switched = isSwitched; };
+
+            _loaderService.SwitchOn();
+            switched.Should().Be(true);
+
+            _loaderService.SwitchOff();
+            switched.Should().Be(false);
         }
     }
 }

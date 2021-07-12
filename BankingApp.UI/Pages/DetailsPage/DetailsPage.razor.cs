@@ -8,7 +8,7 @@ namespace BankingApp.UI.Pages.DetailsPage
 {
     public partial class DetailsPage
     {
-        private ResponseCalculationHistoryBankingViewItem _responseCalculationHistoryItem;
+        private ResponseCalculationHistoryDetailsBankingView _responseCalculationHistoryItem;
 
         [Inject]
         private ILoaderService _loaderService { get; set; }
@@ -19,11 +19,9 @@ namespace BankingApp.UI.Pages.DetailsPage
 
         protected override async Task OnInitializedAsync()
         {
-            Console.WriteLine("DetailsPage DepositeHistoryId = " + DepositeHistoryId);
             _loaderService.SwitchOn();
             _responseCalculationHistoryItem = await _depositeService.GetCalculationHistoryDetailsAsync(DepositeHistoryId);
             _loaderService.SwitchOff();
         }
-
     }
 }

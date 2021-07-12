@@ -9,6 +9,6 @@ namespace BankingApp.Entities.Entities
         public virtual DepositeHistory DepositeHistory { get; set; }
         public int MonthNumber { get; set; }
         public decimal TotalMonthSum { get; set; }
-        public int Percents { get; set; }
+        public float Percents { get; set; }
     }
 }
