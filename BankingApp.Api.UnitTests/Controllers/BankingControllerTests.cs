@@ -37,34 +37,32 @@ namespace BankingApp.Api.UnitTests.Controllers
         [SetUp]
         public void SetUp()
         {
-            var bankingCalcukationServiceMock = new Mock<IBankingService>();
-            bankingCalcukationServiceMock
+            var bankingServiceMock = new Mock<IBankingService>();
+            bankingServiceMock
                 .Setup(bsm => bsm.CalculateDeposite(It.IsAny<RequestCalculateDepositeBankingView>()))
                 .Returns(new ResponseCalculateDepositeBankingView());
 
-            var bankingHistoryServiceMock = new Mock<IBankingHistoryService>();
-            bankingHistoryServiceMock
+            bankingServiceMock
                 .Setup(bhs => bhs.GetDepositeCalculationHistoryDetailsAsync(It.IsAny<int>()))
                 .ReturnsAsync(new ResponseCalculationHistoryBankingViewItem());
 
-            bankingHistoryServiceMock
+            bankingServiceMock
                 .Setup(
                     bhs => bhs.SaveDepositeCalculationAsync(It.IsAny<RequestCalculateDepositeBankingView>(),
                                 It.IsAny<ResponseCalculateDepositeBankingView>())
                 )
                 .ReturnsAsync(0);
 
-
-            bankingHistoryServiceMock
+            bankingServiceMock
                 .Setup(bhs => bhs.GetDepositeCalculationHistoryDetailsAsync(It.IsAny<int>()))
                 .ReturnsAsync(_detailsHistoryResponseData);
 
-            bankingHistoryServiceMock
+            bankingServiceMock
                 .Setup(bhs => bhs.GetDepositesCalculationHistoryAsync())
                 .ReturnsAsync(new ResponseCalculationHistoryBankingView());
 
 
-            _bankingController = new BankingController(bankingCalcukationServiceMock.Object, bankingHistoryServiceMock.Object);
+            _bankingController = new BankingController(bankingServiceMock.Object);
 
             var mapperConfig = new MapperConfiguration(config =>
             {

@@ -86,16 +86,16 @@ namespace BankingApp.BusinessLogicLayer.Services
         private (decimal MonthSum, int Percents) CalculateSimpleInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (n / 12) * (P / 100))
-            float percentsDevidedBy1200 = reqDepositeCalcInfo.Percents / 1200.0f;
+            float percentsDevidedBy1200 = (float) reqDepositeCalcInfo.Percents / 1200.0f;
             decimal monthSum = reqDepositeCalcInfo.DepositeSum * (decimal)(1.0f + monthNumber * percentsDevidedBy1200);
-            int percents = (int)((monthNumber / 12.0f) * reqDepositeCalcInfo.Percents);
+            int percents = (int)((monthNumber / 12.0f) * (float)reqDepositeCalcInfo.Percents);
             return (monthSum, percents);
         }
 
         private (decimal MonthSum, int Percents) CalculateCompoundInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (P / 1200)) ^ (n)
-            float percentsDevidedBy1200 = reqDepositeCalcInfo.Percents / 1200.0f;
+            float percentsDevidedBy1200 = (float) reqDepositeCalcInfo.Percents / 1200.0f;
             decimal monthSum = reqDepositeCalcInfo.DepositeSum * (decimal)Math.Pow(1.0 + percentsDevidedBy1200, monthNumber);
             int percents = (int)(((monthSum - reqDepositeCalcInfo.DepositeSum) / reqDepositeCalcInfo.DepositeSum) * 100.0m);
             return (monthSum, percents);

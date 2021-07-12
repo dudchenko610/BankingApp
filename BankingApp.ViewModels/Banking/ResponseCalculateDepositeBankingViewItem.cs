@@ -5,6 +5,6 @@ namespace BankingApp.ViewModels.Banking
     {
         public int MonthNumber { get; set; }
         public decimal TotalMonthSum { get; set; }
-        public int Percents { get; set; }
+        public float Percents { get; set; }
     }
 }
