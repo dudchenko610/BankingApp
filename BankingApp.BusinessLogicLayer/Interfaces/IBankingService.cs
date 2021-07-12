@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Interfaces
 {
-    public interface IBankingHistoryService
+    public interface IBankingService
     {
-        Task<int> SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo, 
+        ResponseCalculateDepositeBankingView CalculateDeposite(RequestCalculateDepositeBankingView reqDepositeCalcInfo);
+        Task<int> SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo,
             ResponseCalculateDepositeBankingView depositeCalculation);
         Task<ResponseCalculationHistoryBankingView> GetDepositesCalculationHistoryAsync();
         Task<ResponseCalculationHistoryBankingViewItem> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId);

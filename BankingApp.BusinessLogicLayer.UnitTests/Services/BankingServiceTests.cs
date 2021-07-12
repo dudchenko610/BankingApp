@@ -4,18 +4,33 @@ using BankingApp.ViewModels.Banking;
 using BankingApp.ViewModels.Enums;
 using NUnit.Framework;
 using FluentAssertions;
+using AutoMapper;
+using BankingApp.BusinessLogicLayer.Mapper;
+using Moq;
+using BankingApp.DataAccessLayer.Repositories.Interfaces;
+using System.Threading.Tasks;
+using BankingApp.Entities.Entities;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
     [TestFixture]
-    public class BankingCalculationServiceTests
+    public class BankingServiceTests
     {
-        private BankingCalculationService _bankingService;
+        private BankingService _bankingService;
+        private IMapper _mapper;
 
         [SetUp]
         public void SetUp()
         {
-            _bankingService = new BankingCalculationService();
+            var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile(new DepositeHistoryProfile());
+                config.AddProfile(new DepositeHistoryItemProfile());
+            });
+
+            var depositeServiceMoq = new Mock<IDepositeHistoryRepository>();
+            _mapper = mapperConfig.CreateMapper();
+            _bankingService = new BankingService(_mapper, depositeServiceMoq.Object);
         }
 
         [Test]
@@ -61,7 +76,21 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
 
             response.Should().BeEquivalentTo(expectedResult);
-            
+        }
+
+        [Test]
+        public async Task SaveDepositeCalculation_PassDataForSave_ReturnsIdOfSavedEntity()
+        {
+            const int DatabaseId = 5;
+
+            var mockDepositeHistoryRepository = new Mock<IDepositeHistoryRepository>();
+            mockDepositeHistoryRepository.Setup(m => m.AddAsync(It.IsAny<DepositeHistory>())).ReturnsAsync(DatabaseId);
+            var bankingService = new BankingService(_mapper, mockDepositeHistoryRepository.Object);
+
+            int addedHistoryId = await bankingService.SaveDepositeCalculationAsync(new RequestCalculateDepositeBankingView(),
+                new ResponseCalculateDepositeBankingView());
+
+            addedHistoryId.Should().Be(DatabaseId);
         }
     }
 }
