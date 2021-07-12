@@ -7,11 +7,12 @@ using FluentAssertions;
 using BankingApp.ViewModels.Enums;
 using System.Threading.Tasks;
 using BankingApp.ViewModels.Banking.History;
-using AutoMapper;
-using BankingApp.BusinessLogicLayer.Mapper;
 using System.Collections.Generic;
 using BankingApp.ViewModels.Banking.Calculate;
 using NUnit.Framework;
+using BankingApp.ViewModels.Pagination;
+using System;
+using BankingApp.Shared;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
@@ -34,8 +35,8 @@ namespace BankingApp.Api.UnitTests.Controllers
                 .ReturnsAsync(GetTestDetailsHistoryResponseData());
 
             bankingServiceMock
-                .Setup(bhs => bhs.GetDepositesCalculationHistoryAsync())
-                .ReturnsAsync(new ResponseCalculationHistoryBankingView());
+                .Setup(bhs => bhs.GetDepositesCalculationHistoryAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(new ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>());
             
             _bankingController = new BankingController(bankingServiceMock.Object);
         }
@@ -78,17 +79,20 @@ namespace BankingApp.Api.UnitTests.Controllers
         [Test]
         public async Task CalculationHistory_CallCalculationHistoryMethod_ReturnsNotNullNodelWithNotNullMemberList()
         {
-            var controllerResult = await _bankingController.CalculationHistory();
+            const int PageNumber = 1;
+            const int PageSize = 1;
+
+            var controllerResult = await _bankingController.CalculationHistory(PageNumber, PageSize);
             var okResult = controllerResult as ObjectResult;
 
             var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
             whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculationHistoryDetailsBankingView>();
             whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
 
-            var payload = (ResponseCalculationHistoryBankingView) okResult.Value;
+            var payload = (ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>)okResult.Value;
             payload.Should().NotBeNull().And
-                .BeOfType<ResponseCalculationHistoryBankingView>()
-                .Which.DepositesHistory.Should().NotBeNull();
+                .BeOfType<ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>>()
+                .Which.Data.Should().NotBeNull();
         }
         
         private ResponseCalculationHistoryDetailsBankingView GetTestDetailsHistoryResponseData()

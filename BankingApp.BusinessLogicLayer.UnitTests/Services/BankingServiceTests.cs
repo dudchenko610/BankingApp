@@ -10,12 +10,20 @@ using BankingApp.Entities.Entities;
 using BankingApp.ViewModels.Banking.Calculate;
 using NUnit.Framework;
 using BankingApp.ViewModels.Banking.History;
+using System;
+using BankingApp.Shared;
+using BankingApp.ViewModels.Pagination;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
     [TestFixture]
     public class BankingServiceTests
     {
+        private const int InvalidPageNumber = 0;
+        private const int InvalidPageSize = 0;
+        private const int ValidPageNumber = 1;
+        private const int ValidPageSize = 1;
+
         private const int DepositeRepositoryAddAsyncReturnValue = 1;
         private BankingService _bankingService;
         private IMapper _mapper;
@@ -31,6 +39,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var depositeServiceMoq = new Mock<IDepositeHistoryRepository>();
             depositeServiceMoq.Setup(x => x.AddAsync(It.IsAny<DepositeHistory>())).ReturnsAsync(DepositeRepositoryAddAsyncReturnValue);
+            depositeServiceMoq.Setup(x => x.GetDepositeHistoryWithItemsAsync(It.IsAny<int>())).ReturnsAsync(new DepositeHistory());
             _mapper = mapperConfig.CreateMapper();
             _bankingService = new BankingService(_mapper, depositeServiceMoq.Object);
         }
@@ -56,12 +65,12 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         [Test]
         public async Task GetDepositesCalculationHistory_CallGetHistoryMethod_ReturnsNotNullModelContainingNotNullList()
         {
-            var resCalculationHistory = await _bankingService.GetDepositesCalculationHistoryAsync();
+            var resCalculationHistory = await _bankingService.GetDepositesCalculationHistoryAsync(ValidPageNumber, ValidPageSize);
 
             resCalculationHistory
                 .Should().NotBeNull().And
-                .BeOfType<ResponseCalculationHistoryBankingView>()
-                .Which.DepositesHistory.Should().NotBeNull();
+                .BeOfType<ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>>()
+                .Which.Data.Should().NotBeNull();
         }
 
         [Test]
@@ -74,6 +83,20 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                .Should().NotBeNull().And
                .BeOfType<ResponseCalculationHistoryDetailsBankingView>()
                .Which.DepositePerMonthInfo.Should().NotBeNull();
+        }
+        
+        [Test]
+        public void GetDepositesCalculationHistory_PassInvalidPageNumber_ThrowsExceptionWithCorrespondingMessage()
+        {
+            Func<Task> taskFuncResult = async () => { await _bankingService.GetDepositesCalculationHistoryAsync(InvalidPageNumber, ValidPageSize); };
+            taskFuncResult.Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageNumberFormat);
+        }
+
+        [Test]
+        public void GetDepositesCalculationHistory_PassInvalidPageSize_ThrowsExceptionWithCorrespondingMessage()
+        {
+            Func<Task> taskFuncResult = async () => { await _bankingService.GetDepositesCalculationHistoryAsync(ValidPageNumber, InvalidPageSize); };
+            taskFuncResult.Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageSizeFormat);
         }
     }
 }
