@@ -45,14 +45,14 @@ namespace BankingApp.BusinessLogicLayer.Services
             return id;
         }
 
-        public async Task<ResponseCalculationHistoryBankingViewItem> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId)
+        public async Task<ResponseCalculationHistoryDetailsBankingView> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId)
         {
             if (depositeHistoryId < 1)
                 throw new Exception(Constants.Errors.Banking.IncorrectDepositeHistoryId);
 
             // maybe in future, here should be checking for null and throwing an exception
             var depositeHistoryWithItems = await _depositeHistoryRepository.GetDepositeHistoryWithItemsAsync(depositeHistoryId);
-            var responseCalculationHistoryViewItem = _mapper.Map<DepositeHistory, ResponseCalculationHistoryBankingViewItem>(depositeHistoryWithItems);
+            var responseCalculationHistoryViewItem = _mapper.Map<DepositeHistory, ResponseCalculationHistoryDetailsBankingView>(depositeHistoryWithItems);
             return responseCalculationHistoryViewItem;
         }
        

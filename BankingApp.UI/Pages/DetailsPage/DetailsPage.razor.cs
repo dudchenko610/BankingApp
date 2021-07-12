@@ -8,7 +8,7 @@ namespace BankingApp.UI.Pages.DetailsPage
 {
     public partial class DetailsPage
     {
-        private ResponseCalculationHistoryBankingViewItem _responseCalculationHistoryItem;
+        private ResponseCalculationHistoryDetailsBankingView _responseCalculationHistoryItem;
 
         [Inject]
         private ILoaderService _loaderService { get; set; }

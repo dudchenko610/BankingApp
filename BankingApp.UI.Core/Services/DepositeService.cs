@@ -41,13 +41,13 @@ namespace BankingApp.UI.Core.Services
             return responseObject;
         }
 
-        public async Task<ResponseCalculationHistoryBankingViewItem> GetCalculationHistoryDetailsAsync(int depositeHistoryId)
+        public async Task<ResponseCalculationHistoryDetailsBankingView> GetCalculationHistoryDetailsAsync(int depositeHistoryId)
         {
             var response = await _httpClient
                 .GetAsync($"{Constants.Routes.Banking.BankingRoute}/{Constants.Routes.Banking.CalculationHistoryDetails}?depositeHistoryId={depositeHistoryId}");
 
             var serializedResponse = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<ResponseCalculationHistoryBankingViewItem>(serializedResponse);
+            var responseObject = JsonConvert.DeserializeObject<ResponseCalculationHistoryDetailsBankingView>(serializedResponse);
 
             return responseObject;
         }

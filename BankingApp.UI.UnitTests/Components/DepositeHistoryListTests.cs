@@ -9,15 +9,15 @@ namespace BankingApp.UI.UnitTests.Components
 {
     public class DepositeHistoryListTests : TestContext
     {
-        private IList<ResponseCalculationHistoryBankingViewItem> _depositesHistoryList;
+        private IList<ResponseCalculationHistoryDetailsBankingView> _depositesHistoryList;
 
         public DepositeHistoryListTests()
         {
-            _depositesHistoryList = new List<ResponseCalculationHistoryBankingViewItem>
+            _depositesHistoryList = new List<ResponseCalculationHistoryDetailsBankingView>
             {
-                new ResponseCalculationHistoryBankingViewItem { Id = 1 },
-                new ResponseCalculationHistoryBankingViewItem { Id = 2 },
-                new ResponseCalculationHistoryBankingViewItem { Id = 3 }
+                new ResponseCalculationHistoryDetailsBankingView { Id = 1 },
+                new ResponseCalculationHistoryDetailsBankingView { Id = 2 },
+                new ResponseCalculationHistoryDetailsBankingView { Id = 3 }
             };
         }
 

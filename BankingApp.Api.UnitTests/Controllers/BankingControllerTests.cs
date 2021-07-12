@@ -18,8 +18,8 @@ namespace BankingApp.Api.UnitTests.Controllers
     [TestFixture]
     public class BankingControllerTests
     {
-        private readonly ResponseCalculationHistoryBankingViewItem _detailsHistoryResponseData =
-            new ResponseCalculationHistoryBankingViewItem
+        private readonly ResponseCalculationHistoryDetailsBankingView _detailsHistoryResponseData =
+            new ResponseCalculationHistoryDetailsBankingView
             {
                 DepositePerMonthInfo = new List<ResponseCalculateDepositeBankingViewItem>
                 {
@@ -44,7 +44,7 @@ namespace BankingApp.Api.UnitTests.Controllers
 
             bankingServiceMock
                 .Setup(bhs => bhs.GetDepositeCalculationHistoryDetailsAsync(It.IsAny<int>()))
-                .ReturnsAsync(new ResponseCalculationHistoryBankingViewItem());
+                .ReturnsAsync(new ResponseCalculationHistoryDetailsBankingView());
 
             bankingServiceMock
                 .Setup(
@@ -101,10 +101,10 @@ namespace BankingApp.Api.UnitTests.Controllers
             var okResult = controllerResult as ObjectResult;
 
             var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
-            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculationHistoryBankingViewItem>();
+            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculationHistoryDetailsBankingView>();
             whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
 
-            var payload = (ResponseCalculationHistoryBankingViewItem)okResult.Value;
+            var payload = (ResponseCalculationHistoryDetailsBankingView)okResult.Value;
             payload.DepositePerMonthInfo.Count.Should().Be(_detailsHistoryResponseData.DepositePerMonthInfo.Count);
         }
     }

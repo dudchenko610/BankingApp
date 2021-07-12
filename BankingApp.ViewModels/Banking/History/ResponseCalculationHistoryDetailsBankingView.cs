@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BankingApp.ViewModels.Banking.History
 {
-    public class ResponseCalculationHistoryBankingViewItem
+    public class ResponseCalculationHistoryDetailsBankingView
     {
         public int Id { get; set; }
         public string CalculationFormula { get; set; }

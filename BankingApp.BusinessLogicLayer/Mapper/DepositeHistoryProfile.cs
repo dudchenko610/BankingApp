@@ -13,7 +13,7 @@ namespace BankingApp.BusinessLogicLayer.Mapper
         {
             CreateMap<RequestCalculateDepositeBankingView, DepositeHistory>();
 
-            CreateMap<DepositeHistory, ResponseCalculationHistoryBankingViewItem>()
+            CreateMap<DepositeHistory, ResponseCalculationHistoryDetailsBankingView>()
                 .ForMember(i => i.DepositePerMonthInfo, model => model.MapFrom(c => c.DepositeHistoryItems))
                 .ForMember(i => i.CalculationFormula,
                     model => model.MapFrom(c => ((DepositeCalculationFormulaEnumView)c.CalculationFormula).GetDisplayValue()));

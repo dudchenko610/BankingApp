@@ -10,6 +10,6 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
         Task<int> SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo,
             ResponseCalculateDepositeBankingView depositeCalculation);
         Task<ResponseCalculationHistoryBankingView> GetDepositesCalculationHistoryAsync();
-        Task<ResponseCalculationHistoryBankingViewItem> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId);
+        Task<ResponseCalculationHistoryDetailsBankingView> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId);
     }
 }
