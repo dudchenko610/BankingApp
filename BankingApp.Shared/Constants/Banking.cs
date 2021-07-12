@@ -15,7 +15,7 @@ namespace BankingApp.Shared
             public static class Page
             {
                 public const string IncorrectPageNumberFormat = "Page number should be integer, bigger than one number";
-                public const string IncorrectPageSizeFormat = "Page size should be positive integer number";
+                public const string IncorrectPageSizeFormat = "Page size should be positive integer number, bigger than one number";
             }
         }
 
