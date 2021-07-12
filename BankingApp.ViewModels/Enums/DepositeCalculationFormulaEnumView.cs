@@ -2,7 +2,7 @@
 
 namespace BankingApp.ViewModels.Enums
 {
-    public enum DepositeCalculationFormulaEnumView
+    public enum DepositeCalculationFormulaEnumView : int
     {
         [Display(Name = "Simple Interest")]
         SimpleInterest = 0,

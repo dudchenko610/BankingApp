@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApp.DataAccessLayer.Migrations
 {
     [DbContext(typeof(BankingDbContext))]
-    [Migration("20210706185930_NewAttributesWereAdded")]
-    partial class NewAttributesWereAdded
+    [Migration("20210712073528_CalculationFormulaRemadeToEnumInDB")]
+    partial class CalculationFormulaRemadeToEnumInDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,8 +28,8 @@ namespace BankingApp.DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CalculationFormula")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CalculationFormula")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CalulationDateTime")
                         .HasColumnType("datetime2");
@@ -40,8 +40,8 @@ namespace BankingApp.DataAccessLayer.Migrations
                     b.Property<int>("MonthsCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("Percents")
-                        .HasColumnType("int");
+                    b.Property<float>("Percents")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

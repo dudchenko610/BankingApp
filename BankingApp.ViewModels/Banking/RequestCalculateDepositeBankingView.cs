@@ -17,7 +17,8 @@ namespace BankingApp.ViewModels.Banking
         public int MonthsCount { get; set; }
 
         [Required]
-        [Range(1, 100, ErrorMessage = Constants.Errors.Banking.IncorrectPercentNumber)]
-        public int Percents { get; set; }
+        [RegularExpression(@"\A[0-9]{1,10}(?:[.,][0-9]{1,2})?\z", ErrorMessage = Constants.Errors.Banking.IncorrectPercentNumber)]
+        [Range(1.0f, 100.0f, ErrorMessage = Constants.Errors.Banking.IncorrectPercentNumber)]
+        public decimal Percents { get; set; }
     }
 }

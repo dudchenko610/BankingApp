@@ -3,6 +3,7 @@ using BankingApp.ViewModels.Banking;
 using BankingApp.Shared.Extensions;
 using BankingApp.ViewModels.Banking.History;
 using BankingApp.Entities.Entities;
+using BankingApp.ViewModels.Enums;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {
@@ -10,11 +11,12 @@ namespace BankingApp.BusinessLogicLayer.Mapper
     {
         public DepositeHistoryProfile()
         {
-            CreateMap<RequestCalculateDepositeBankingView, DepositeHistory>()
-                .ForMember(i => i.CalculationFormula, model => model.MapFrom(c => c.CalculationFormula.GetDisplayValue()));
+            CreateMap<RequestCalculateDepositeBankingView, DepositeHistory>();
 
             CreateMap<DepositeHistory, ResponseCalculationHistoryBankingViewItem>()
-                .ForMember(i => i.DepositePerMonthInfo, model => model.MapFrom(c => c.DepositeHistoryItems));
+                .ForMember(i => i.DepositePerMonthInfo, model => model.MapFrom(c => c.DepositeHistoryItems))
+                .ForMember(i => i.CalculationFormula,
+                    model => model.MapFrom(c => ((DepositeCalculationFormulaEnumView)c.CalculationFormula).GetDisplayValue()));
         }
     }
 }

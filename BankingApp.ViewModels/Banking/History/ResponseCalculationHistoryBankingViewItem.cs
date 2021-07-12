@@ -9,7 +9,7 @@ namespace BankingApp.ViewModels.Banking.History
         public string CalculationFormula { get; set; }
         public decimal DepositeSum { get; set; }
         public int MonthsCount { get; set; }
-        public int Percents { get; set; }
+        public float Percents { get; set; }
         public DateTime CalulationDateTime { get; set; }
 
         public IList<ResponseCalculateDepositeBankingViewItem> DepositePerMonthInfo { get; set; }

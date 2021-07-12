@@ -11,21 +11,19 @@ namespace BankingApp.Api.Controllers
     [ApiController]
     public class BankingController : Controller
     {
-        private readonly IBankingCalculationService _bankingCalculationService;
-        private readonly IBankingHistoryService _bankingHistoryService;
+        private readonly IBankingService _bankingService;
 
-        public BankingController(IBankingCalculationService bankingService, IBankingHistoryService bankingHistoryService)
+        public BankingController(IBankingService bankingService)
         {
-            _bankingCalculationService = bankingService;
-            _bankingHistoryService = bankingHistoryService;
+            _bankingService = bankingService;
         }
 
         [HttpPost]
         [Route(Routes.Banking.CalculateDeposite)]
         public async Task<IActionResult> CalculateDeposite(RequestCalculateDepositeBankingView requestDepositeData)
         {
-            var responseOfDepositeCalculation = _bankingCalculationService.CalculateDeposite(requestDepositeData);
-            int id = await _bankingHistoryService?.SaveDepositeCalculationAsync(requestDepositeData, responseOfDepositeCalculation);
+            var responseOfDepositeCalculation = _bankingService.CalculateDeposite(requestDepositeData);
+            int id = await _bankingService?.SaveDepositeCalculationAsync(requestDepositeData, responseOfDepositeCalculation);
             return Ok(id);
         }
 
@@ -33,8 +31,8 @@ namespace BankingApp.Api.Controllers
         [Route(Routes.Banking.CalculationHistory)]
         public async Task<IActionResult> CalculationHistory(RequestPaginationFilterView requestPaginationModel)
         {
-            var depositePagedResponse = await _bankingHistoryService.GetDepositesCalculationHistoryAsync(requestPaginationModel);
-            return Ok(depositePagedResponse);
+            var depositeCalculationHistory = await _bankingService.GetDepositesCalculationHistoryAsync();
+            return Ok(depositeCalculationHistory);
         }
 
         [HttpGet]
@@ -42,7 +40,7 @@ namespace BankingApp.Api.Controllers
         public async Task<IActionResult> CalculationHistoryDetails(int depositeHistoryId)
         {
             var responseCalculationHistoryViewItem 
-                = await _bankingHistoryService.GetDepositeCalculationHistoryDetailsAsync(depositeHistoryId);
+                = await _bankingService.GetDepositeCalculationHistoryDetailsAsync(depositeHistoryId);
             return Ok(responseCalculationHistoryViewItem);
         }
     }
