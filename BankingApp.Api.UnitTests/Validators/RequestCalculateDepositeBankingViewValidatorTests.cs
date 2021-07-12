@@ -1,9 +1,9 @@
 ﻿using BankingApp.Api.Validators.Banking;
-using BankingApp.ViewModels.Banking;
 using NUnit.Framework;
 using System.Collections.Generic;
 using FluentAssertions;
 using BankingApp.Shared;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.Api.UnitTests.Validators
 {

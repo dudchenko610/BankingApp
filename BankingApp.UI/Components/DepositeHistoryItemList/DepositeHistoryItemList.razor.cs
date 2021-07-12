@@ -1,4 +1,4 @@
-﻿using BankingApp.ViewModels.Banking;
+﻿using BankingApp.ViewModels.Banking.Calculate;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 

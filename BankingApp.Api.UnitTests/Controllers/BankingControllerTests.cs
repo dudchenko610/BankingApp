@@ -1,6 +1,5 @@
 ﻿using BankingApp.Api.Controllers;
 using BankingApp.BusinessLogicLayer.Interfaces;
-using BankingApp.ViewModels.Banking;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -12,6 +11,7 @@ using BankingApp.ViewModels.Banking.History;
 using AutoMapper;
 using BankingApp.BusinessLogicLayer.Mapper;
 using System.Collections.Generic;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
@@ -39,7 +39,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         {
             var bankingServiceMock = new Mock<IBankingService>();
             bankingServiceMock
-                .Setup(bsm => bsm.CalculateDeposite(It.IsAny<RequestCalculateDepositeBankingView>()))
+                .Setup(bsm => bsm.CalculateDepositeAsync(It.IsAny<RequestCalculateDepositeBankingView>()))
                 .Returns(new ResponseCalculateDepositeBankingView());
 
             bankingServiceMock

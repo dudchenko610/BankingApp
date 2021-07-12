@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.BusinessLogicLayer.Interfaces;
-using static BankingApp.Shared.Constants;
-using BankingApp.ViewModels.Banking;
 using System.Threading.Tasks;
+using BankingApp.ViewModels.Banking.Calculate;
+using static BankingApp.Shared.Constants;
 using BankingApp.ViewModels.Pagination;
 
 namespace BankingApp.Api.Controllers
@@ -22,8 +22,7 @@ namespace BankingApp.Api.Controllers
         [Route(Routes.Banking.CalculateDeposite)]
         public async Task<IActionResult> CalculateDeposite(RequestCalculateDepositeBankingView requestDepositeData)
         {
-            var responseOfDepositeCalculation = _bankingService.CalculateDeposite(requestDepositeData);
-            int id = await _bankingService?.SaveDepositeCalculationAsync(requestDepositeData, responseOfDepositeCalculation);
+            var id = await _bankingService.CalculateDepositeAsync(requestDepositeData);
             return Ok(id);
         }
 

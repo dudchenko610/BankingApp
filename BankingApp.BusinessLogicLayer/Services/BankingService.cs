@@ -3,7 +3,7 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.DataAccessLayer.Repositories.Interfaces;
 using BankingApp.Entities.Entities;
 using BankingApp.Shared;
-using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Banking.History;
 using BankingApp.ViewModels.Enums;
 using BankingApp.ViewModels.Pagination;
@@ -26,7 +26,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             _depositeHistoryRepository = depositeHistoryRepository;
         }
 
-        public ResponseCalculateDepositeBankingView CalculateDeposite(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        public async Task<int> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             var respDepositeInfo = new ResponseCalculateDepositeBankingView();
             CalculationFormula calculationFormula = GetCalculationFormula(reqDepositeCalcInfo);
@@ -41,11 +41,16 @@ namespace BankingApp.BusinessLogicLayer.Services
                     Percents = res.Percents
                 });
             }
-            return respDepositeInfo;
+
+            int id = await SaveDepositeCalculationAsync(reqDepositeCalcInfo, respDepositeInfo);
+            return id;
         }
 
         public async Task<ResponseCalculationHistoryBankingViewItem> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId)
         {
+            if (depositeHistoryId < 1)
+                throw new Exception(Constants.Errors.Banking.IncorrectDepositeHistoryId);
+
             // maybe in future, here should be checking for null and throwing an exception
             var depositeHistoryWithItems = await _depositeHistoryRepository.GetDepositeHistoryWithItemsAsync(depositeHistoryId);
             var responseCalculationHistoryViewItem = _mapper.Map<DepositeHistory, ResponseCalculationHistoryBankingViewItem>(depositeHistoryWithItems);

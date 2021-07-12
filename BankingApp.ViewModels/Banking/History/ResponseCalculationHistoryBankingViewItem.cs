@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BankingApp.ViewModels.Banking.Calculate;
+using System;
 using System.Collections.Generic;
 
 namespace BankingApp.ViewModels.Banking.History

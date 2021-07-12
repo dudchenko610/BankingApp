@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using BankingApp.ViewModels.Banking;
 using BankingApp.Shared.Extensions;
 using BankingApp.ViewModels.Banking.History;
 using BankingApp.Entities.Entities;
 using BankingApp.ViewModels.Enums;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {

@@ -10,6 +10,7 @@ using Moq;
 using BankingApp.DataAccessLayer.Repositories.Interfaces;
 using System.Threading.Tasks;
 using BankingApp.Entities.Entities;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
@@ -38,7 +39,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         {
             const int MonthNumber = 100;
 
-            var response = _bankingService.CalculateDeposite(
+            var response = _bankingService.CalculateDepositeAsync(
                 new RequestCalculateDepositeBankingView
                 {
                     DepositeSum = 1,
@@ -56,7 +57,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         [Test]
         public void CalculateDeposite_CompoundInterestFormulaPasses_ResultEqualsToExpected()
         {
-            var response = _bankingService.CalculateDeposite(
+            var response = _bankingService.CalculateDepositeAsync(
                 new RequestCalculateDepositeBankingView
                 {
                     DepositeSum = 100,

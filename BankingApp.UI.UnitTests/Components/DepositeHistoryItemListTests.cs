@@ -2,8 +2,8 @@
 using Bunit;
 using Xunit;
 using FluentAssertions;
-using BankingApp.ViewModels.Banking;
 using System.Collections.Generic;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.UI.UnitTests.Components
 {
