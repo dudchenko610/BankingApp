@@ -3,7 +3,6 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using System.Threading.Tasks;
 using BankingApp.ViewModels.Banking.Calculate;
 using static BankingApp.Shared.Constants;
-using BankingApp.ViewModels.Pagination;
 
 namespace BankingApp.Api.Controllers
 {

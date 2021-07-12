@@ -1,6 +1,5 @@
 ﻿using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Banking.History;
-using BankingApp.ViewModels.Pagination;
 using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Interfaces

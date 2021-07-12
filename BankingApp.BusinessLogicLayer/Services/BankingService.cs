@@ -6,7 +6,6 @@ using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Banking.History;
 using BankingApp.ViewModels.Enums;
-using BankingApp.ViewModels.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
