@@ -6,6 +6,7 @@ using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Banking.History;
 using BankingApp.ViewModels.Enums;
+using BankingApp.ViewModels.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -56,14 +57,26 @@ namespace BankingApp.BusinessLogicLayer.Services
             return responseCalculationHistoryViewItem;
         }
        
-        public async Task<ResponseCalculationHistoryBankingView> GetDepositesCalculationHistoryAsync()
+        public async Task<ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>> GetDepositesCalculationHistoryAsync(int pageNumber, int pageSize)
         {
-            IList<DepositeHistory> depositesHistoryFromDb = await _depositeHistoryRepository.GetAsync();
+            if (pageNumber < 1)
+                throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
 
-            var response = new ResponseCalculationHistoryBankingView();
-            response.DepositesHistory = _mapper.Map<IList<DepositeHistory>, IList<ResponseCalculationHistoryBankingViewItem>>(depositesHistoryFromDb);
+            if (pageSize < 1)
+                throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
 
-            return response;
+            (IList<DepositeHistory> DepositeHistory, int TotalCount) 
+                = await _depositeHistoryRepository.GetDepositesHistoryPagedAsync((pageNumber - 1) * pageSize, pageSize);
+
+            var pagedResponse = new ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem>
+            {
+                Data = _mapper.Map<IList<DepositeHistory>, IList<ResponseCalculationHistoryBankingViewItem>>(DepositeHistory),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = TotalCount
+            };
+
+            return pagedResponse;
         }
        
         public async Task<int> SaveDepositeCalculationAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo,
