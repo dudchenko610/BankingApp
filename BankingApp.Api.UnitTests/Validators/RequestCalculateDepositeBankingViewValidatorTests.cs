@@ -12,17 +12,6 @@ namespace BankingApp.Api.UnitTests.Validators
     {
         private RequestCalculateDepositeBankingViewValidator _validator;
 
-        private IList<RequestCalculateDepositeBankingView> RequestCalculateDepositeBankingViews()
-        {
-            return new List<RequestCalculateDepositeBankingView>
-            {
-                new RequestCalculateDepositeBankingView { DepositeSum = -1.0m, CalculationFormula = 0, MonthsCount = 1, Percents = 1 },
-                new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = -1, Percents = 1 },
-                new RequestCalculateDepositeBankingView { DepositeSum = 1.05m, CalculationFormula = 0, MonthsCount = 0, Percents = 105 },
-                new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = 0 }
-            };
-        }
-
         [SetUp]
         public void SetUp()
         {
@@ -56,5 +45,17 @@ namespace BankingApp.Api.UnitTests.Validators
             var validateResult = _validator.Validate(RequestCalculateDepositeBankingViews()[3]);
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Banking.IncorrectPercentNumber);
         }
+
+        private IList<RequestCalculateDepositeBankingView> RequestCalculateDepositeBankingViews()
+        {
+            return new List<RequestCalculateDepositeBankingView>
+            {
+                new RequestCalculateDepositeBankingView { DepositeSum = -1.0m, CalculationFormula = 0, MonthsCount = 1, Percents = 1 },
+                new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = -1, Percents = 1 },
+                new RequestCalculateDepositeBankingView { DepositeSum = 1.05m, CalculationFormula = 0, MonthsCount = 0, Percents = 105 },
+                new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = 0 }
+            };
+        }
+
     }
 }

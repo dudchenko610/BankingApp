@@ -7,8 +7,6 @@ using FluentAssertions;
 using BankingApp.ViewModels.Enums;
 using System.Threading.Tasks;
 using BankingApp.ViewModels.Banking.History;
-using AutoMapper;
-using BankingApp.BusinessLogicLayer.Mapper;
 using System.Collections.Generic;
 using BankingApp.ViewModels.Banking.Calculate;
 using NUnit.Framework;

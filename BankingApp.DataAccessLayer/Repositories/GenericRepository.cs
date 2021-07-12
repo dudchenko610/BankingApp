@@ -21,7 +21,6 @@ namespace BankingApp.DataAccessLayer.Repositories
         {
             await _dbSet.AddAsync(item);
             await _context.SaveChangesAsync();
-
             return item.Id;
         }
 
