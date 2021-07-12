@@ -2,7 +2,7 @@
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.DataAccessLayer.Repositories.Interfaces;
 using BankingApp.Entities.Entities;
-using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Banking.History;
 using BankingApp.ViewModels.Enums;
 using System;

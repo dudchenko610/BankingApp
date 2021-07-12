@@ -10,6 +10,7 @@ using Moq;
 using BankingApp.DataAccessLayer.Repositories.Interfaces;
 using System.Threading.Tasks;
 using BankingApp.Entities.Entities;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {

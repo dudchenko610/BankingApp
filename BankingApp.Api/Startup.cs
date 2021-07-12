@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BankingApp.ViewModels.Banking;
 using BankingApp.Api.Validators.Banking;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.Api
 {

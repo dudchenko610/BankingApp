@@ -1,8 +1,8 @@
 ﻿using BankingApp.UI.Core.Interfaces;
-using BankingApp.ViewModels.Banking;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using BankingApp.UI.Core.Routes;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.UI.Pages.MainPage
 {

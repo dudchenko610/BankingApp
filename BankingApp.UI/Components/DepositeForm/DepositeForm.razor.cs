@@ -1,4 +1,4 @@
-﻿using BankingApp.ViewModels.Banking;
+﻿using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Enums;
 using Microsoft.AspNetCore.Components;
 

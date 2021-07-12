@@ -1,5 +1,4 @@
-﻿
-namespace BankingApp.ViewModels.Banking
+﻿namespace BankingApp.ViewModels.Banking.Calculate
 {
     public class ResponseCalculateDepositeBankingViewItem
     {

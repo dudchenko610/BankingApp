@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BankingApp.Entities.Entities;
-using BankingApp.ViewModels.Banking;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {

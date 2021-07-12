@@ -1,8 +1,8 @@
-﻿using BankingApp.ViewModels.Banking;
-using Bunit;
+﻿using Bunit;
 using Xunit;
 using FluentAssertions;
 using BankingApp.UI.Components.DepositeForm;
+using BankingApp.ViewModels.Banking.Calculate;
 
 namespace BankingApp.UI.UnitTests.Components
 {

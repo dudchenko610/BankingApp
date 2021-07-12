@@ -2,7 +2,7 @@
 using BankingApp.ViewModels.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace BankingApp.ViewModels.Banking
+namespace BankingApp.ViewModels.Banking.Calculate
 {
     public class RequestCalculateDepositeBankingView
     {
