@@ -3,6 +3,7 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using System.Threading.Tasks;
 using BankingApp.ViewModels.Banking.Calculate;
 using static BankingApp.Shared.Constants;
+using BankingApp.ViewModels.Pagination;
 
 namespace BankingApp.Api.Controllers
 {
@@ -27,9 +28,9 @@ namespace BankingApp.Api.Controllers
 
         [HttpGet]
         [Route(Routes.Banking.CalculationHistory)]
-        public async Task<IActionResult> CalculationHistory()
+        public async Task<IActionResult> CalculationHistory(int pageNumber, int pageSize)
         {
-            var depositeCalculationHistory = await _bankingService.GetDepositesCalculationHistoryAsync();
+            var depositeCalculationHistory = await _bankingService.GetDepositesCalculationHistoryAsync(pageNumber, pageSize);
             return Ok(depositeCalculationHistory);
         }
 
