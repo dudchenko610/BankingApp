@@ -2,6 +2,7 @@
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.DataAccessLayer.Repositories.Interfaces;
 using BankingApp.Entities.Entities;
+using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Banking.History;
 using BankingApp.ViewModels.Enums;
@@ -46,6 +47,9 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         public async Task<ResponseCalculationHistoryBankingViewItem> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId)
         {
+            if (depositeHistoryId < 1)
+                throw new Exception(Constants.Errors.Banking.IncorrectDepositeHistoryId);
+
             // maybe in future, here should be checking for null and throwing an exception
             var depositeHistoryWithItems = await _depositeHistoryRepository.GetDepositeHistoryWithItemsAsync(depositeHistoryId);
             var responseCalculationHistoryViewItem = _mapper.Map<DepositeHistory, ResponseCalculationHistoryBankingViewItem>(depositeHistoryWithItems);

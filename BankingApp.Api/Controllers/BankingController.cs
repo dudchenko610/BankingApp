@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.BusinessLogicLayer.Interfaces;
-using static BankingApp.Shared.Constants;
 using System.Threading.Tasks;
 using BankingApp.ViewModels.Banking.Calculate;
+using static BankingApp.Shared.Constants;
 
 namespace BankingApp.Api.Controllers
 {

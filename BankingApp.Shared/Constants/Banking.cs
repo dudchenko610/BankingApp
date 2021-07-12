@@ -10,6 +10,8 @@ namespace BankingApp.Shared
                 public const string IncorrectPriceFormat = "Price can't have more than 2 decimal places";
                 public const string IncorrectMonthFormat = "Months number should be positive non-zero integer value";
                 public const string IncorrectPercentNumber = "Percent should be positive fractional value in range of [1; 100] with two decimal places";
+
+                public const string IncorrectDepositeHistoryId = "DepositeHistoryId should be integer, bigger than one number";
             }
         }
 
