@@ -1,6 +1,5 @@
 ﻿using BankingApp.DataAccessLayer.DatabaseContexts;
 using BankingApp.DataAccessLayer.Interfaces;
-using BankingApp.DataAccessLayer.Repositories.EFRepositories;
 using BankingApp.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
