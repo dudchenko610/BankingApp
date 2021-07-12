@@ -24,7 +24,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             _depositeHistoryRepository = depositeHistoryRepository;
         }
 
-        public ResponseCalculateDepositeBankingView CalculateDeposite(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        public async Task<int> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
         {
             var respDepositeInfo = new ResponseCalculateDepositeBankingView();
             CalculationFormula calculationFormula = GetCalculationFormula(reqDepositeCalcInfo);
@@ -39,7 +39,9 @@ namespace BankingApp.BusinessLogicLayer.Services
                     Percents = res.Percents
                 });
             }
-            return respDepositeInfo;
+
+            int id = await SaveDepositeCalculationAsync(reqDepositeCalcInfo, respDepositeInfo);
+            return id;
         }
 
         public async Task<ResponseCalculationHistoryBankingViewItem> GetDepositeCalculationHistoryDetailsAsync(int depositeHistoryId)
