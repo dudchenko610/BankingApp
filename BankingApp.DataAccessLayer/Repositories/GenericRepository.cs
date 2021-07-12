@@ -1,10 +1,10 @@
-﻿using BankingApp.DataAccessLayer.Repositories.Interfaces;
+﻿using BankingApp.DataAccessLayer.Interfaces;
 using BankingApp.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BankingApp.DataAccessLayer.Repositories.EFRepositories
+namespace BankingApp.DataAccessLayer.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {

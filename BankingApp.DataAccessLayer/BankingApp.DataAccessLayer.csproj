@@ -26,4 +26,9 @@
     <ProjectReference Include="..\BankingApp.Entities\BankingApp.Entities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\EFRepositories\" />
+    <Folder Include="Repositories\Interfaces\" />
+  </ItemGroup>
+
 </Project>
