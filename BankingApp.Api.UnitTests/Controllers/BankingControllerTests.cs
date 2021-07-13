@@ -17,79 +17,124 @@ namespace BankingApp.Api.UnitTests.Controllers
     public class BankingControllerTests
     {
         private const int BankingServiceCalculateDepositeAsyncReturnValue = 1;
-        private BankingController _bankingController;
 
-        [SetUp]
-        public void SetUp()
+        [Test]
+        public async Task CalculateDeposite_СorrectInputData_ReturnsOkResultAndBankingServiceReceivesValidModel()
         {
+            CalculateDepositeBankingView inputModelOfCalculateDepositeMethod = null;
+
             var bankingServiceMock = new Mock<IBankingService>();
             bankingServiceMock
-                .Setup(bsm => bsm.CalculateDepositeAsync(It.IsAny<CalculateDepositeBankingView>()))
-                .ReturnsAsync(BankingServiceCalculateDepositeAsyncReturnValue);
+                .Setup(x => x.CalculateDepositeAsync(It.IsAny<CalculateDepositeBankingView>()))
+                .ReturnsAsync(BankingServiceCalculateDepositeAsyncReturnValue)
+                .Callback((CalculateDepositeBankingView x) => inputModelOfCalculateDepositeMethod = x);
+            var bankingController = new BankingController(bankingServiceMock.Object);
 
-            bankingServiceMock
-                .Setup(bhs => bhs.GetDepositeCalculationHistoryDetailsAsync(It.IsAny<int>()))
-                .ReturnsAsync(GetTestDetailsHistoryResponseData());
+            var controllerResult = await bankingController.CalculateDeposite(GetValidCalculateDepositeRequest());
 
-            bankingServiceMock
-                .Setup(bhs => bhs.GetDepositesCalculationHistoryAsync())
-                .ReturnsAsync(new ResponseCalculationHistoryBankingView());
-            
-            _bankingController = new BankingController(bankingServiceMock.Object);
+            inputModelOfCalculateDepositeMethod
+                .Should().NotBeNull()
+                .And.BeEquivalentTo(GetValidCalculateDepositeRequest());
+
+            var resultOfOkObjectResultValidation = controllerResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
+            resultOfOkObjectResultValidation.Which.Value.Should().BeOfType<int>().And.Be(BankingServiceCalculateDepositeAsyncReturnValue);
+            resultOfOkObjectResultValidation.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
         }
 
         [Test]
-        public async Task CalculateDeposite_СorrectInputData_ReturnsOkResult()
+        public async Task CalculationHistoryDetails_ValidDepositeHistoryIdPassed_ReturnsObjectThatReturnsService()
         {
-            var input = new CalculateDepositeBankingView
+            const int DepositeHistoryId = 1;
+            int inputOfBankingServiceDepositeHistoryId = -1;
+
+            var bankingServiceMock = new Mock<IBankingService>();
+            bankingServiceMock
+                .Setup(x => x.GetDepositeCalculationHistoryDetailsAsync(It.IsAny<int>()))
+                .ReturnsAsync(GetValidCalculationHistoryDetails())
+                .Callback((int depositeHistoryId) => inputOfBankingServiceDepositeHistoryId = depositeHistoryId);
+            var bankingController = new BankingController(bankingServiceMock.Object);
+
+            var controllerResult = await bankingController.CalculationHistoryDetails(DepositeHistoryId);
+
+            inputOfBankingServiceDepositeHistoryId.Should().Be(DepositeHistoryId);
+
+            var okResult = controllerResult as ObjectResult;
+            var resultOfOkObjectResultValidation = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
+            resultOfOkObjectResultValidation.Which.Value.Should().BeOfType<ResponseCalculationHistoryDetailsBankingView>();
+            resultOfOkObjectResultValidation.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
+
+            okResult.Value.Should().BeEquivalentTo(GetValidCalculationHistoryDetails());
+        }
+
+        [Test]
+        public async Task CalculationHistory_CallCalculationHistoryMethod_ReturnsNotNullNodelWithNotNullMemberList()
+        {
+            var bankingServiceMock = new Mock<IBankingService>();
+            bankingServiceMock
+                .Setup(x => x.GetDepositesCalculationHistoryAsync())
+                .ReturnsAsync(GetValidResponseCalculationHistory());
+
+            var bankingController = new BankingController(bankingServiceMock.Object);
+
+            var controllerResult = await bankingController.CalculationHistory();
+            var okResult = controllerResult as ObjectResult;
+
+            var resultOfOkObjectResultValidation = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
+            resultOfOkObjectResultValidation.Which.Value.Should().BeOfType<ResponseCalculationHistoryDetailsBankingView>();
+            resultOfOkObjectResultValidation.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
+
+            okResult.Value.Should().NotBeNull().And.BeEquivalentTo(GetValidResponseCalculationHistory());
+        }
+
+        private CalculateDepositeBankingView GetValidCalculateDepositeRequest()
+        { 
+            return new CalculateDepositeBankingView
             {
                 DepositeSum = 100,
                 MonthsCount = 12,
                 Percents = 10,
                 CalculationFormula = DepositeCalculationFormulaEnumView.CompoundInterest
             };
-
-            var controllerResult = await _bankingController.CalculateDeposite(input);
-            var okResult = controllerResult as ObjectResult;
-
-            var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
-            whereAndConstr.Which.Value.Should().BeOfType<int>();
-            whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
         }
 
-        [Test]
-        public async Task CalculationHistoryDetails_DepositeHistoryIdPassed_ReturnsListWithValidSize()
+        private ResponseCalculationHistoryBankingView GetValidResponseCalculationHistory()
         {
-            const int DepositeHistoryId = 1;
-            var controllerResult = await _bankingController.CalculationHistoryDetails(DepositeHistoryId);
-
-            var okResult = controllerResult as ObjectResult;
-
-            var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
-            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculationHistoryDetailsBankingView>();
-            whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
-
-            var payload = (ResponseCalculationHistoryDetailsBankingView)okResult.Value;
-            payload.DepositePerMonthInfo.Count.Should().Be(GetTestDetailsHistoryResponseData().DepositePerMonthInfo.Count);
+            return new ResponseCalculationHistoryBankingView
+            {
+                DepositesHistory =
+                {
+                    new DepositeInfoResponseCalculationHistoryBankingViewItem
+                    {
+                        Id = 1,
+                        Percents = 2.4f,
+                        DepositeSum = 100m,
+                        MonthsCount = 2,
+                        CalulationDateTime = System.DateTime.Now,
+                        CalculationFormula = "some formula"
+                    },
+                    new DepositeInfoResponseCalculationHistoryBankingViewItem
+                    {
+                        Id = 2,
+                        Percents = 5.4f,
+                        DepositeSum = 200m,
+                        MonthsCount = 4,
+                        CalulationDateTime = System.DateTime.Now,
+                        CalculationFormula = "some formula"
+                    },
+                    new DepositeInfoResponseCalculationHistoryBankingViewItem
+                    {
+                        Id = 5,
+                        Percents = 10.4f,
+                        DepositeSum = 100m,
+                        MonthsCount = 2,
+                        CalulationDateTime = System.DateTime.Now,
+                        CalculationFormula = "some formula"
+                    },
+                }
+            };
         }
 
-        [Test]
-        public async Task CalculationHistory_CallCalculationHistoryMethod_ReturnsNotNullNodelWithNotNullMemberList()
-        {
-            var controllerResult = await _bankingController.CalculationHistory();
-            var okResult = controllerResult as ObjectResult;
-
-            var whereAndConstr = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
-            whereAndConstr.Which.Value.Should().BeOfType<ResponseCalculationHistoryDetailsBankingView>();
-            whereAndConstr.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
-
-            var payload = (ResponseCalculationHistoryBankingView) okResult.Value;
-            payload.Should().NotBeNull().And
-                .BeOfType<ResponseCalculationHistoryBankingView>()
-                .Which.DepositesHistory.Should().NotBeNull();
-        }
-        
-        private ResponseCalculationHistoryDetailsBankingView GetTestDetailsHistoryResponseData()
+        private ResponseCalculationHistoryDetailsBankingView GetValidCalculationHistoryDetails()
         {
             return new ResponseCalculationHistoryDetailsBankingView
             {

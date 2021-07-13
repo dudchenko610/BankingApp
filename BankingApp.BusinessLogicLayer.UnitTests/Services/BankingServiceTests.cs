@@ -32,13 +32,6 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         [Test]
         public async Task CalculateDeposite_ValidDataPasses_ReturnsExpectedIdAndMappingHappensCorrectly()
         {
-            var requestModelToCalculate = new CalculateDepositeBankingView
-            {
-                DepositeSum = 100.00m,
-                Percents = 5,
-                CalculationFormula = DepositeCalculationFormulaEnumView.SimpleInterest,
-                MonthsCount = 2
-            };
             DepositeHistory depositeHistory = null;
 
             var depositeHistoryRepositoryMock = new Mock<IDepositeHistoryRepository>();
@@ -48,22 +41,89 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 .Callback((DepositeHistory depHistory) => depositeHistory = depHistory);
 
             BankingService bankingService = new BankingService(_mapper, depositeHistoryRepositoryMock.Object);
-            int response = await bankingService.CalculateDepositeAsync(requestModelToCalculate);
+            int response = await bankingService.CalculateDepositeAsync(GetValidCalculateDepositeRequest());
 
             response.Should().Be(DepositeRepositoryAddAsyncReturnValue);
             depositeHistory
                 .Should().NotBeNull().And
-                .BeEquivalentTo(depositeHistory, options => options.ExcludingMissingMembers());
+                .BeEquivalentTo(GetValidCalculateDepositeRequest(), options => options.ExcludingMissingMembers());
         }
 
         [Test]
         public async Task GetDepositesCalculationHistory_CallGetHistoryMethod_ReturnsNotNullModelContainingCorrectlyMappedList()
         {
-            var calculationHistoryFromDb = new List<DepositeHistory>
+            var depositeHistoryRepositoryMock = new Mock<IDepositeHistoryRepository>();
+            depositeHistoryRepositoryMock
+                .Setup(x => x.GetAsync())
+                .ReturnsAsync(GetValidDepositesHistory());
+            BankingService bankingService = new BankingService(_mapper, depositeHistoryRepositoryMock.Object);
+
+            var resCalculationHistory = await bankingService.GetDepositesCalculationHistoryAsync();
+
+            resCalculationHistory
+                .Should().NotBeNull().And
+                .BeOfType<ResponseCalculationHistoryBankingView>()
+                .Which.DepositesHistory.Should().NotBeNull();
+
+            resCalculationHistory.DepositesHistory
+                .Should().BeEquivalentTo(GetValidDepositesHistory(), options => options.ExcludingMissingMembers());
+        }
+
+        [Test]
+        public async Task GetDepositeCalculationHistoryDetails_CallGetHistoryDetailsMethodPassingValidId_ReturnsNotNullModelContainingCorrectlyMappedList()
+        {
+            const int ValidDepositeHistoryId = 1;
+
+            var depositeHistoryRepositoryMock = new Mock<IDepositeHistoryRepository>();
+            depositeHistoryRepositoryMock
+                .Setup(x => x.GetDepositeHistoryWithItemsAsync(It.IsAny<int>()))
+                .ReturnsAsync(GetValidDepositeHistoryWithItems());
+            BankingService bankingService = new BankingService(_mapper, depositeHistoryRepositoryMock.Object);
+
+            var resCalculationHistoryDetails = await bankingService.GetDepositeCalculationHistoryDetailsAsync(ValidDepositeHistoryId);
+
+            resCalculationHistoryDetails
+               .Should().NotBeNull().And
+               .BeOfType<ResponseCalculationHistoryDetailsBankingView>()
+               .Which.DepositePerMonthInfo.Should().NotBeNull();
+
+            resCalculationHistoryDetails
+                .Should().BeEquivalentTo(GetValidDepositeHistoryWithItems(), options => options.ExcludingMissingMembers());
+        }
+
+        [Test]
+        public void GetDepositeCalculationHistoryDetails_CallGetHistoryDetailsMethodPassingInvalidId_ThrowsExceptionWithCorrespondingMessage()
+        {
+            const int InvalidDepositeHistoryId = -1;
+
+            var depositeHistoryRepositoryMock = new Mock<IDepositeHistoryRepository>();
+            depositeHistoryRepositoryMock
+                .Setup(x => x.GetDepositeHistoryWithItemsAsync(It.IsAny<int>()))
+                .ReturnsAsync(() => { return null; });
+            BankingService bankingService = new BankingService(_mapper, depositeHistoryRepositoryMock.Object);
+
+            FluentActions.Awaiting(() => bankingService.GetDepositeCalculationHistoryDetailsAsync(InvalidDepositeHistoryId))
+                .Should().Throw<Exception>().WithMessage(Constants.Errors.Banking.IncorrectDepositeHistoryId);
+        }
+
+        private CalculateDepositeBankingView GetValidCalculateDepositeRequest()
+        { 
+            return new CalculateDepositeBankingView
             {
-                new DepositeHistory { 
-                    Id = 1, 
-                    DepositeSum = 100, 
+                DepositeSum = 100.00m,
+                Percents = 5,
+                CalculationFormula = DepositeCalculationFormulaEnumView.SimpleInterest,
+                MonthsCount = 2
+            };
+        }
+
+        private IList<DepositeHistory> GetValidDepositesHistory()
+        { 
+            return new List<DepositeHistory>
+            {
+                new DepositeHistory {
+                    Id = 1,
+                    DepositeSum = 100,
                     CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
                     Percents = 2.45f
                 },
@@ -80,29 +140,11 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                     Percents = 6
                 }
             };
-
-            var depositeHistoryRepositoryMock = new Mock<IDepositeHistoryRepository>();
-            depositeHistoryRepositoryMock
-                .Setup(x => x.GetAsync())
-                .ReturnsAsync(calculationHistoryFromDb);
-            BankingService bankingService = new BankingService(_mapper, depositeHistoryRepositoryMock.Object);
-
-            var resCalculationHistory = await bankingService.GetDepositesCalculationHistoryAsync();
-
-            resCalculationHistory
-                .Should().NotBeNull().And
-                .BeOfType<ResponseCalculationHistoryBankingView>()
-                .Which.DepositesHistory.Should().NotBeNull();
-
-            resCalculationHistory.DepositesHistory
-                .Should().BeEquivalentTo(calculationHistoryFromDb, options => options.ExcludingMissingMembers());
         }
 
-        [Test]
-        public async Task GetDepositeCalculationHistoryDetails_CallGetHistoryDetailsMethodPassingValidId_ReturnsNotNullModelContainingCorrectlyMappedList()
-        {
-            const int ValidDepositeHistoryId = 1;
-            var depositeHistoryWithItemsFromDb = new DepositeHistory
+        private DepositeHistory GetValidDepositeHistoryWithItems()
+        { 
+            return new DepositeHistory
             {
                 Id = 1,
                 CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
@@ -111,9 +153,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 MonthsCount = 4,
                 Percents = 2.5f,
                 DepositeHistoryItems = new List<DepositeHistoryItem>
-                { 
+                {
                     new DepositeHistoryItem
-                    { 
+                    {
                         Id = 1,
                         DepositeHistoryId = 1,
                         MonthNumber = 1,
@@ -130,37 +172,6 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                     }
                 }
             };
-
-            var depositeHistoryRepositoryMock = new Mock<IDepositeHistoryRepository>();
-            depositeHistoryRepositoryMock
-                .Setup(x => x.GetDepositeHistoryWithItemsAsync(It.IsAny<int>()))
-                .ReturnsAsync(depositeHistoryWithItemsFromDb);
-            BankingService bankingService = new BankingService(_mapper, depositeHistoryRepositoryMock.Object);
-
-            var resCalculationHistoryDetails = await bankingService.GetDepositeCalculationHistoryDetailsAsync(ValidDepositeHistoryId);
-
-            resCalculationHistoryDetails
-               .Should().NotBeNull().And
-               .BeOfType<ResponseCalculationHistoryDetailsBankingView>()
-               .Which.DepositePerMonthInfo.Should().NotBeNull();
-
-            resCalculationHistoryDetails
-                .Should().BeEquivalentTo(depositeHistoryWithItemsFromDb, options => options.ExcludingMissingMembers());
-        }
-
-        [Test]
-        public void GetDepositeCalculationHistoryDetails_CallGetHistoryDetailsMethodPassingInvalidId_ThrowsExceptionWithCorrespondingMessage()
-        {
-            const int InvalidDepositeHistoryId = -1;
-
-            var depositeHistoryRepositoryMock = new Mock<IDepositeHistoryRepository>();
-            depositeHistoryRepositoryMock
-                .Setup(x => x.GetDepositeHistoryWithItemsAsync(It.IsAny<int>()))
-                .ReturnsAsync(() => { return null; });
-            BankingService bankingService = new BankingService(_mapper, depositeHistoryRepositoryMock.Object);
-
-            Func<Task> f = async () => { await bankingService.GetDepositeCalculationHistoryDetailsAsync(InvalidDepositeHistoryId); };
-            f.Should().Throw<Exception>().WithMessage(Constants.Errors.Banking.IncorrectDepositeHistoryId);
         }
     }
 }
