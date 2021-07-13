@@ -101,8 +101,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         [Test]
         public async Task GetDepositeCalculationHistoryDetails__CallGetHistoryDetailsMethodPassingValidId_ReturnsNotNullModelContainingCorrectlyMappedList()
         {
-            const int DepositeHistoryId = 1;
-
+            const int ValidDepositeHistoryId = 1;
             var depositeHistoryWithItemsFromDb = new DepositeHistory
             {
                 Id = 1,
@@ -138,7 +137,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 .ReturnsAsync(depositeHistoryWithItemsFromDb);
             BankingService bankingService = new BankingService(_mapper, depositeHistoryRepositoryMock.Object);
 
-            var resCalculationHistoryDetails = await bankingService.GetDepositeCalculationHistoryDetailsAsync(DepositeHistoryId);
+            var resCalculationHistoryDetails = await bankingService.GetDepositeCalculationHistoryDetailsAsync(ValidDepositeHistoryId);
 
             resCalculationHistoryDetails
                .Should().NotBeNull().And
