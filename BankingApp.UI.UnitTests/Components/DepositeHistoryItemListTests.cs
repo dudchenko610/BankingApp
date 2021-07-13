@@ -12,11 +12,11 @@ namespace BankingApp.UI.UnitTests.Components
         [Fact]
         public void DepositeHistoryItemList_PassValidListData_ComponentContainsAsMuchLiElementsAsListDataCount()
         {
-            var perMonthInfos = new List<ResponseCalculationHistoryDetailsBankingViewItem>
+            var perMonthInfos = new List<MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem>
             {
-                new ResponseCalculationHistoryDetailsBankingViewItem { },
-                new ResponseCalculationHistoryDetailsBankingViewItem { },
-                new ResponseCalculationHistoryDetailsBankingViewItem { }
+                new MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem { },
+                new MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem { },
+                new MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem { }
             };
 
             var depositeHistoryItemList = RenderComponent<DepositeHistoryItemList>(parameters => parameters

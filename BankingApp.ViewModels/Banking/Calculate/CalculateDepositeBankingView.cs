@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BankingApp.ViewModels.Banking.Calculate
 {
-    public class RequestCalculateDepositeBankingView
+    public class CalculateDepositeBankingView
     {
         public DepositeCalculationFormulaEnumView CalculationFormula { get; set; }
 

@@ -17,7 +17,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         private readonly IMapper _mapper;
         private readonly IDepositeHistoryRepository _depositeHistoryRepository;
 
-        private delegate (decimal MonthSum, float Percents) CalculationFormula(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo);
+        private delegate (decimal MonthSum, float Percents) CalculationFormula(int monthNumber, CalculateDepositeBankingView reqDepositeCalcInfo);
 
         public BankingService(IMapper mapper, IDepositeHistoryRepository depositeHistoryRepository)
         {
@@ -25,9 +25,9 @@ namespace BankingApp.BusinessLogicLayer.Services
             _depositeHistoryRepository = depositeHistoryRepository;
         }
 
-        public async Task<int> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        public async Task<int> CalculateDepositeAsync(CalculateDepositeBankingView reqDepositeCalcInfo)
         {
-            var depositeHistory = _mapper.Map<RequestCalculateDepositeBankingView, DepositeHistory>(reqDepositeCalcInfo);
+            var depositeHistory = _mapper.Map<CalculateDepositeBankingView, DepositeHistory>(reqDepositeCalcInfo);
             
             depositeHistory.CalulationDateTime = System.DateTime.Now;
             CalculationFormula calculationFormula = GetCalculationFormula(reqDepositeCalcInfo);
@@ -62,12 +62,12 @@ namespace BankingApp.BusinessLogicLayer.Services
             IList<DepositeHistory> depositesHistoryFromDb = await _depositeHistoryRepository.GetAsync();
 
             var response = new ResponseCalculationHistoryBankingView();
-            response.DepositesHistory = _mapper.Map<IList<DepositeHistory>, IList<ResponseCalculationHistoryBankingViewItem>>(depositesHistoryFromDb);
+            response.DepositesHistory = _mapper.Map<IList<DepositeHistory>, IList<DepositeInfoResponseCalculationHistoryBankingViewItem>>(depositesHistoryFromDb);
 
             return response;
         }
 
-        private CalculationFormula GetCalculationFormula(RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private CalculationFormula GetCalculationFormula(CalculateDepositeBankingView reqDepositeCalcInfo)
         {
             switch (reqDepositeCalcInfo.CalculationFormula)
             {
@@ -78,7 +78,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             }
         }
 
-        private (decimal MonthSum, float Percents) CalculateSimpleInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private (decimal MonthSum, float Percents) CalculateSimpleInterestDepositePerMonth(int monthNumber, CalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (n / 12) * (P / 100))
             float percentsDevidedBy1200 = (float) reqDepositeCalcInfo.Percents / 1200.0f;
@@ -87,7 +87,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             return (monthSum, percents);
         }
 
-        private (decimal MonthSum, float Percents) CalculateCompoundInterestDepositePerMonth(int monthNumber, RequestCalculateDepositeBankingView reqDepositeCalcInfo)
+        private (decimal MonthSum, float Percents) CalculateCompoundInterestDepositePerMonth(int monthNumber, CalculateDepositeBankingView reqDepositeCalcInfo)
         {
             // An = A(1 + (P / 1200)) ^ (n)
             float percentsDevidedBy1200 = (float) reqDepositeCalcInfo.Percents / 1200.0f;

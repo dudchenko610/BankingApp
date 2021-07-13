@@ -18,7 +18,7 @@ namespace BankingApp.UI.Core.Services
             _httpClient = httpClient;
         }
 
-        public async Task<int> CalculateDepositeAsync(RequestCalculateDepositeBankingView reqDeposite)
+        public async Task<int> CalculateDepositeAsync(CalculateDepositeBankingView reqDeposite)
         {
             var serializedDepositeRequest = JsonConvert.SerializeObject(reqDeposite);
 

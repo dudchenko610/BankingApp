@@ -17,8 +17,7 @@ namespace BankingApp.BusinessLogicLayer
 
             var mapperConfig = new MapperConfiguration(config =>
             {
-                config.AddProfile(new DepositeHistoryProfile());
-                config.AddProfile(new DepositeHistoryItemProfile());
+                config.AddProfile(new MapperProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();

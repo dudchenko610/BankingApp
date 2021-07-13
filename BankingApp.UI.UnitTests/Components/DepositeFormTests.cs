@@ -15,7 +15,7 @@ namespace BankingApp.UI.UnitTests.Components
             const int MonthsCount = 12;
             const int Percents = 10;
 
-            RequestCalculateDepositeBankingView model = null;
+            CalculateDepositeBankingView model = null;
 
             var depositeForm = RenderComponent<DepositeForm>(
                 parameters => parameters.Add(component => component.OnFormSubmit,

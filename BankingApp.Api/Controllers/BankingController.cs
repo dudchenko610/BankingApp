@@ -19,7 +19,7 @@ namespace BankingApp.Api.Controllers
 
         [HttpPost]
         [Route(Routes.Banking.CalculateDeposite)]
-        public async Task<IActionResult> CalculateDeposite(RequestCalculateDepositeBankingView requestDepositeData)
+        public async Task<IActionResult> CalculateDeposite(CalculateDepositeBankingView requestDepositeData)
         {
             var id = await _bankingService.CalculateDepositeAsync(requestDepositeData);
             return Ok(id);

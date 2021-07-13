@@ -24,7 +24,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         {
             var bankingServiceMock = new Mock<IBankingService>();
             bankingServiceMock
-                .Setup(bsm => bsm.CalculateDepositeAsync(It.IsAny<RequestCalculateDepositeBankingView>()))
+                .Setup(bsm => bsm.CalculateDepositeAsync(It.IsAny<CalculateDepositeBankingView>()))
                 .ReturnsAsync(BankingServiceCalculateDepositeAsyncReturnValue);
 
             bankingServiceMock
@@ -41,7 +41,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         [Test]
         public async Task CalculateDeposite_СorrectInputData_ReturnsOkResult()
         {
-            var input = new RequestCalculateDepositeBankingView
+            var input = new CalculateDepositeBankingView
             {
                 DepositeSum = 100,
                 MonthsCount = 12,
@@ -93,13 +93,13 @@ namespace BankingApp.Api.UnitTests.Controllers
         {
             return new ResponseCalculationHistoryDetailsBankingView
             {
-                DepositePerMonthInfo = new List<ResponseCalculationHistoryDetailsBankingViewItem>
+                DepositePerMonthInfo = new List<MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem>
                 {
-                    new ResponseCalculationHistoryDetailsBankingViewItem(),
-                    new ResponseCalculationHistoryDetailsBankingViewItem(),
-                    new ResponseCalculationHistoryDetailsBankingViewItem(),
-                    new ResponseCalculationHistoryDetailsBankingViewItem(),
-                    new ResponseCalculationHistoryDetailsBankingViewItem()
+                    new MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem(),
+                    new MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem(),
+                    new MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem(),
+                    new MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem(),
+                    new MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem()
                 }
             };
         }

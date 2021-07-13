@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace BankingApp.Api.Validators.Banking
 {
-    public class RequestCalculateDepositeBankingViewValidator : AbstractValidator<RequestCalculateDepositeBankingView>
+    public class RequestCalculateDepositeBankingViewValidator : AbstractValidator<CalculateDepositeBankingView>
     {
         public RequestCalculateDepositeBankingViewValidator()
         {

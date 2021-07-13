@@ -5,15 +5,15 @@ namespace BankingApp.ViewModels.Banking.History
 {
     public class ResponseCalculationHistoryBankingView
     {
-        public IList<ResponseCalculationHistoryBankingViewItem> DepositesHistory { get; set; }
+        public IList<DepositeInfoResponseCalculationHistoryBankingViewItem> DepositesHistory { get; set; }
         
         public ResponseCalculationHistoryBankingView()
         {
-            DepositesHistory = new List<ResponseCalculationHistoryBankingViewItem>();
+            DepositesHistory = new List<DepositeInfoResponseCalculationHistoryBankingViewItem>();
         }
     }
 
-    public class ResponseCalculationHistoryBankingViewItem
+    public class DepositeInfoResponseCalculationHistoryBankingViewItem
     {
         public int Id { get; set; }
         public string CalculationFormula { get; set; }

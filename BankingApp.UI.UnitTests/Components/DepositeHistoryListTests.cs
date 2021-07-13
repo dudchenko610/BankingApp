@@ -37,13 +37,13 @@ namespace BankingApp.UI.UnitTests.Components
             depositeHistoryId.Should().NotBe(-1);
         }
 
-        private IList<ResponseCalculationHistoryBankingViewItem> GetTestDepositesHistoryList()
+        private IList<DepositeInfoResponseCalculationHistoryBankingViewItem> GetTestDepositesHistoryList()
         {
-            return new List<ResponseCalculationHistoryBankingViewItem>
+            return new List<DepositeInfoResponseCalculationHistoryBankingViewItem>
             {
-                new ResponseCalculationHistoryBankingViewItem { Id = 1 },
-                new ResponseCalculationHistoryBankingViewItem { Id = 2 },
-                new ResponseCalculationHistoryBankingViewItem { Id = 3 }
+                new DepositeInfoResponseCalculationHistoryBankingViewItem { Id = 1 },
+                new DepositeInfoResponseCalculationHistoryBankingViewItem { Id = 2 },
+                new DepositeInfoResponseCalculationHistoryBankingViewItem { Id = 3 }
             };
         }
     }

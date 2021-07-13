@@ -6,14 +6,14 @@ namespace BankingApp.UI.Components.DepositeForm
 {
     public partial class DepositeForm
     {
-        private RequestCalculateDepositeBankingView _requestModel;
+        private CalculateDepositeBankingView _requestModel;
 
         [Parameter]
-        public EventCallback<RequestCalculateDepositeBankingView> OnFormSubmit { get; set; }
+        public EventCallback<CalculateDepositeBankingView> OnFormSubmit { get; set; }
 
         public DepositeForm()
         { 
-            _requestModel = new RequestCalculateDepositeBankingView();
+            _requestModel = new CalculateDepositeBankingView();
             _requestModel.CalculationFormula = DepositeCalculationFormulaEnumView.SimpleInterest;
         }
         

@@ -1,19 +1,18 @@
 ﻿using AutoMapper;
-using BankingApp.Shared.Extensions;
-using BankingApp.ViewModels.Banking.History;
 using BankingApp.Entities.Entities;
-using BankingApp.ViewModels.Enums;
 using BankingApp.ViewModels.Banking.Calculate;
+using BankingApp.ViewModels.Banking.History;
+using BankingApp.ViewModels.Enums;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {
-    public class DepositeHistoryProfile : Profile
+    public class MapperProfile : Profile
     {
-        public DepositeHistoryProfile()
+        public MapperProfile()
         {
-            CreateMap<RequestCalculateDepositeBankingView, DepositeHistory>();
+            CreateMap<CalculateDepositeBankingView, DepositeHistory>();
 
-            CreateMap<DepositeHistory, ResponseCalculationHistoryBankingViewItem>()
+            CreateMap<DepositeHistory, DepositeInfoResponseCalculationHistoryBankingViewItem>()
                 .ForMember(i => i.CalculationFormula,
                     model => model.MapFrom(c => ((DepositeCalculationFormulaEnumView)c.CalculationFormula).GetDisplayValue()));
 
@@ -21,6 +20,8 @@ namespace BankingApp.BusinessLogicLayer.Mapper
                 .ForMember(i => i.DepositePerMonthInfo, model => model.MapFrom(c => c.DepositeHistoryItems))
                 .ForMember(i => i.CalculationFormula,
                     model => model.MapFrom(c => ((DepositeCalculationFormulaEnumView)c.CalculationFormula).GetDisplayValue()));
+       
+            CreateMap<DepositeHistoryItem, MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem>();
         }
     }
 }

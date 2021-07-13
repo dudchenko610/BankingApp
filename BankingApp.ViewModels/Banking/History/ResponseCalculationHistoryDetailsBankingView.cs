@@ -12,10 +12,10 @@ namespace BankingApp.ViewModels.Banking.History
         public float Percents { get; set; }
         public DateTime CalulationDateTime { get; set; }
 
-        public IList<ResponseCalculationHistoryDetailsBankingViewItem> DepositePerMonthInfo { get; set; }
+        public IList<MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem> DepositePerMonthInfo { get; set; }
     }
 
-    public class ResponseCalculationHistoryDetailsBankingViewItem
+    public class MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem
     {
         public int MonthNumber { get; set; }
         public decimal TotalMonthSum { get; set; }

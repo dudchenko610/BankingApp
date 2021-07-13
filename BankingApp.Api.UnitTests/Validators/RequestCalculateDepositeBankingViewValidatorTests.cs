@@ -46,16 +46,15 @@ namespace BankingApp.Api.UnitTests.Validators
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Banking.IncorrectPercentNumber);
         }
 
-        private IList<RequestCalculateDepositeBankingView> RequestCalculateDepositeBankingViews()
+        private IList<CalculateDepositeBankingView> RequestCalculateDepositeBankingViews()
         {
-            return new List<RequestCalculateDepositeBankingView>
+            return new List<CalculateDepositeBankingView>
             {
-                new RequestCalculateDepositeBankingView { DepositeSum = -1.0m, CalculationFormula = 0, MonthsCount = 1, Percents = 1 },
-                new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = -1, Percents = 1 },
-                new RequestCalculateDepositeBankingView { DepositeSum = 1.05m, CalculationFormula = 0, MonthsCount = 0, Percents = 105 },
-                new RequestCalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = 0 }
+                new CalculateDepositeBankingView { DepositeSum = -1.0m, CalculationFormula = 0, MonthsCount = 1, Percents = 1 },
+                new CalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = -1, Percents = 1 },
+                new CalculateDepositeBankingView { DepositeSum = 1.05m, CalculationFormula = 0, MonthsCount = 0, Percents = 105 },
+                new CalculateDepositeBankingView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = 0 }
             };
         }
-
     }
 }
