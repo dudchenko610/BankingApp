@@ -5,8 +5,8 @@ namespace BankingApp.DataAccessLayer.DatabaseContexts
 {
     public class BankingDbContext : DbContext
     {
-        public DbSet<DepositeHistory> DepositeHistories { get; set; }
-        public DbSet<DepositeHistoryItem> DepositeHistoryItems { get; set; }
+        public DbSet<Deposit> Deposits { get; set; }
+        public DbSet<MonthlyPayment> MonthlyPayments { get; set; }
 
         public BankingDbContext(DbContextOptions<BankingDbContext> options) : base(options) 
         {
@@ -14,9 +14,9 @@ namespace BankingApp.DataAccessLayer.DatabaseContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DepositeHistoryItem>()
-               .HasOne(dhi => dhi.DepositeHistory)
-               .WithMany(dh => dh.DepositeHistoryItems)
+            modelBuilder.Entity<MonthlyPayment>()
+               .HasOne(dhi => dhi.Deposit)
+               .WithMany(dh => dh.MonthlyPayments)
                .OnDelete(DeleteBehavior.Cascade);
         }
     }

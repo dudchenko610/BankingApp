@@ -1,18 +1,18 @@
 ﻿
 <div class="container shadow p-3 mb-5 bg-white rounded w-50">
     <h2 class="d-flex justify-content-center">Calculate your deposite</h2>
-    <EditForm Model="@_requestModel" OnSubmit="SubmitForm">
+    <EditForm Model="@_requestModel" OnValidSubmit="SubmitForm">
         <DataAnnotationsValidator />
 
         <div class="mb-3">
             <label class="form-label">Choose a formula</label>
-            <InputSelectEnum @bind-Value="_requestModel.CalculationFormula" class="form-control"/>
+            <InputSelectEnum @bind-Value="_requestModel.CalculationFormula" class="form-control" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Deposite Sum</label>
             <InputNumber @bind-Value="_requestModel.DepositeSum"
-                         id ="depositeSum"
+                         id="depositeSum"
                          placeholder="deposite sum"
                          type="number" step=".01"
                          class="form-control" />
@@ -21,7 +21,7 @@
         <div class="mb-3">
             <label class="form-label">Month Count</label>
             <InputNumber @bind-Value="_requestModel.MonthsCount"
-                         id ="monthCount"
+                         id="monthCount"
                          type="number"
                          class="form-control" />
             <ValidationMessage For="@(() => _requestModel.MonthsCount)" />
@@ -29,7 +29,7 @@
         <div class="mb-3">
             <label class="form-label">Percents</label>
             <InputNumber @bind-Value="_requestModel.Percents"
-                         id ="percents"
+                         id="percents"
                          type="number"
                          class="form-control" />
             <ValidationMessage For="@(() => _requestModel.Percents)" />

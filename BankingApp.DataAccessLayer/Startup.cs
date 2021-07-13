@@ -16,7 +16,7 @@ namespace BankingApp.DataAccessLayer
                 builder.UseSqlServer(connection, x => x.MigrationsAssembly("BankingApp.DataAccessLayer"))
             );
 
-            services.AddTransient<IDepositeHistoryRepository, DepositeHistoryRepository>();
+            services.AddTransient<IDepositRepository, DepositRepository>();
         }
     }
 }

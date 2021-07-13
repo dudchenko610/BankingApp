@@ -23,7 +23,7 @@ namespace BankingApp.Api
         {
             services.AddControllers().AddFluentValidation();
             BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
-            services.AddTransient<IValidator<CalculateDepositeBankingView>, RequestCalculateDepositeBankingViewValidator>();
+            services.AddTransient<IValidator<CalculateDepositView>, CalculateDepositeViewValidator>();
 
             services.AddCors(options =>
             {

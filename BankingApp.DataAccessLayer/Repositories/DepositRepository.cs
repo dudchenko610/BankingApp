@@ -2,22 +2,20 @@
 using BankingApp.DataAccessLayer.Interfaces;
 using BankingApp.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BankingApp.DataAccessLayer.Repositories
 {
-    public class DepositeHistoryRepository : GenericRepository<DepositeHistory>, IDepositeHistoryRepository
+    public class DepositRepository : GenericRepository<Deposit>, IDepositRepository
     {
-        public DepositeHistoryRepository(BankingDbContext dbContext) : base(dbContext)
+        public DepositRepository(BankingDbContext dbContext) : base(dbContext)
         { 
         }
 
-        public async Task<DepositeHistory> GetDepositeHistoryWithItemsAsync(int depositeHistoryId)
+        public async Task<Deposit> GetDepositWithItemsByIdAsync(int depositeHistoryId)
         {
             var depositeHistory = await _dbSet
-                .Include(dep => dep.DepositeHistoryItems)
+                .Include(dep => dep.MonthlyPayments)
                 .FirstOrDefaultAsync(dep => dep.Id == depositeHistoryId);
             return depositeHistory;
         }

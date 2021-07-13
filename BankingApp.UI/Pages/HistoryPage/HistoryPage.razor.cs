@@ -14,13 +14,13 @@ namespace BankingApp.UI.Pages.HistoryPage
         private static readonly int DepositesOnPage = 2;
 
         private int _totalPageCount;
-        private ResponseCalculationHistoryBankingView _depositeHistory;
-        private IList<DepositeInfoResponseCalculationHistoryBankingViewItem> _pagedChunck;
+        private GetAllDepositView _depositViews;
+        private IList<DepositGetAllDepositViewItem> _pagedChunck;
 
         [Inject]
         private ILoaderService _loaderService { get; set; }
         [Inject]
-        private IDepositeService _depositeService { get; set; }
+        private IDepositService _depositeService { get; set; }
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
         [Parameter]
@@ -28,20 +28,20 @@ namespace BankingApp.UI.Pages.HistoryPage
 
         public HistoryPage()
         {
-            _depositeHistory = null;
+            _depositViews = null;
         }
 
         protected override async Task OnInitializedAsync()
         {
             _loaderService.SwitchOn();
-            _depositeHistory = await _depositeService.GetCalculationDepositeHistoryAsync();
+            _depositViews = await _depositeService.GetAllAsync();
             _loaderService.SwitchOff();
 
-            if (_depositeHistory.DepositesHistory.Count == 0)
+            if (_depositViews.DepositItems.Count == 0)
                 return;
 
-            _totalPageCount = (int) Math.Ceiling(_depositeHistory.DepositesHistory.Count / ((double) DepositesOnPage));
-            _pagedChunck = _depositeHistory.DepositesHistory.Skip((Page - 1) * DepositesOnPage).Take(DepositesOnPage).ToList();
+            _totalPageCount = (int) Math.Ceiling(_depositViews.DepositItems.Count / ((double) DepositesOnPage));
+            _pagedChunck = _depositViews.DepositItems.Skip((Page - 1) * DepositesOnPage).Take(DepositesOnPage).ToList();
 
             if (Page > _totalPageCount || Page < 1)
                 _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/1");
@@ -49,7 +49,7 @@ namespace BankingApp.UI.Pages.HistoryPage
 
         protected override void OnParametersSet()
         {
-            _pagedChunck = _depositeHistory.DepositesHistory.Skip((Page - 1) * DepositesOnPage).Take(DepositesOnPage).ToList();
+            _pagedChunck = _depositViews.DepositItems.Skip((Page - 1) * DepositesOnPage).Take(DepositesOnPage).ToList();
             StateHasChanged();
         }
 

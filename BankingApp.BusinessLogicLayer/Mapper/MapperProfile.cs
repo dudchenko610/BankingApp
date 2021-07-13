@@ -3,6 +3,7 @@ using BankingApp.Entities.Entities;
 using BankingApp.ViewModels.Banking.Calculate;
 using BankingApp.ViewModels.Banking.History;
 using BankingApp.ViewModels.Enums;
+using BankingApp.Shared.Extensions;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {
@@ -10,18 +11,18 @@ namespace BankingApp.BusinessLogicLayer.Mapper
     {
         public MapperProfile()
         {
-            CreateMap<CalculateDepositeBankingView, DepositeHistory>();
+            CreateMap<CalculateDepositView, Deposit>();
 
-            CreateMap<DepositeHistory, DepositeInfoResponseCalculationHistoryBankingViewItem>()
+            CreateMap<Deposit, DepositGetAllDepositViewItem>()
                 .ForMember(i => i.CalculationFormula,
-                    model => model.MapFrom(c => ((DepositeCalculationFormulaEnumView)c.CalculationFormula).GetDisplayValue()));
+                    model => model.MapFrom(c => ((DepositCalculationFormulaEnumView)c.CalculationFormula).GetDisplayValue()));
 
-            CreateMap<DepositeHistory, ResponseCalculationHistoryDetailsBankingView>()
-                .ForMember(i => i.DepositePerMonthInfo, model => model.MapFrom(c => c.DepositeHistoryItems))
+            CreateMap<Deposit, GetByIdDepositView>()
+                .ForMember(i => i.MonthlyPaymentItems, model => model.MapFrom(c => c.MonthlyPayments))
                 .ForMember(i => i.CalculationFormula,
-                    model => model.MapFrom(c => ((DepositeCalculationFormulaEnumView)c.CalculationFormula).GetDisplayValue()));
+                    model => model.MapFrom(c => ((DepositCalculationFormulaEnumView)c.CalculationFormula).GetDisplayValue()));
        
-            CreateMap<DepositeHistoryItem, MonthlyPaymentResponseCalculationHistoryDetailsBankingViewItem>();
+            CreateMap<MonthlyPayment, MonthlyPaymentGetByIdDepositViewItem>();
         }
     }
 }

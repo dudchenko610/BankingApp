@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace BankingApp.Entities.Entities
 {
-    public class DepositeHistory : BaseEntity
+    public class Deposit : BaseEntity
     {
-        public DepositeHistory()
+        public Deposit()
         {
-            DepositeHistoryItems = new List<DepositeHistoryItem>();
+            MonthlyPayments = new List<MonthlyPayment>();
         }
 
         public CalculationFormulaEnum CalculationFormula { get; set; }
@@ -16,6 +16,6 @@ namespace BankingApp.Entities.Entities
         public int MonthsCount { get; set; }
         public float Percents { get; set; }
         public DateTime CalulationDateTime { get; set; }
-        public virtual IList<DepositeHistoryItem> DepositeHistoryItems { get; set; }
+        public virtual IList<MonthlyPayment> MonthlyPayments { get; set; }
     }
 }

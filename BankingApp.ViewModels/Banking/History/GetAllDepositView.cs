@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace BankingApp.ViewModels.Banking.History
 {
-    public class ResponseCalculationHistoryBankingView
+    public class GetAllDepositView
     {
-        public IList<DepositeInfoResponseCalculationHistoryBankingViewItem> DepositesHistory { get; set; }
+        public IList<DepositGetAllDepositViewItem> DepositItems { get; set; }
         
-        public ResponseCalculationHistoryBankingView()
+        public GetAllDepositView()
         {
-            DepositesHistory = new List<DepositeInfoResponseCalculationHistoryBankingViewItem>();
+            DepositItems = new List<DepositGetAllDepositViewItem>();
         }
     }
 
-    public class DepositeInfoResponseCalculationHistoryBankingViewItem
+    public class DepositGetAllDepositViewItem
     {
         public int Id { get; set; }
         public string CalculationFormula { get; set; }

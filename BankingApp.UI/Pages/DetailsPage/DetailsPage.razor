@@ -1,25 +1,25 @@
-﻿@page "/details/{depositeHistoryId:int}"
+﻿@page "/details/{depositId:int}"
 
 <div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100 w-100">
 
-    @if (_responseCalculationHistoryItem != null)
+    @if (_responseDepositView != null)
     {
         <div class="card mb-2">
             <div class="card-header" id="headingOne">
                 <h6>
                     <div class="container-fluid d-flex flex-column">
-                        <label>Date: @_responseCalculationHistoryItem.CalulationDateTime</label>
-                        <label>Formula: @_responseCalculationHistoryItem.CalculationFormula</label>
-                        <label>Deposite Sum: @_responseCalculationHistoryItem.DepositeSum</label>
-                        <label>Month Count: @_responseCalculationHistoryItem.MonthsCount</label>
-                        <label>Percents: @_responseCalculationHistoryItem.Percents</label>
+                        <label>Date: @_responseDepositView.CalulationDateTime</label>
+                        <label>Formula: @_responseDepositView.CalculationFormula</label>
+                        <label>Deposite Sum: @_responseDepositView.DepositeSum</label>
+                        <label>Month Count: @_responseDepositView.MonthsCount</label>
+                        <label>Percents: @_responseDepositView.Percents</label>
                     </div>
                 </h6>
             </div>
 
             <div class="" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                    <DepositeHistoryItemList PerMonthInfo ="_responseCalculationHistoryItem.DepositePerMonthInfo" />
+                    <MonthlyPaymentList MonthlyPaymentViewList ="_responseDepositView.MonthlyPaymentItems" />
                 </div>
             </div>
         </div>

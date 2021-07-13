@@ -5,7 +5,7 @@ namespace BankingApp.Shared
     {
         public static partial class Errors
         {
-            public static class Banking
+            public static class Deposit
             {
                 public const string IncorrectPriceFormat = "Price can't have more than 2 decimal places";
                 public const string IncorrectMonthFormat = "Months number should be positive non-zero integer value";
@@ -25,11 +25,11 @@ namespace BankingApp.Shared
         {
             public static class Banking
             {
-                public const string BankingRoute = "api/banking";
+                public const string DepositRoute = "api/deposit";
 
-                public const string CalculateDeposite = "calculateDeposite";
-                public const string CalculationHistory = "calculationHistory";
-                public const string CalculationHistoryDetails = "calculationHistoryDetails";
+                public const string Calculate = "calculateDeposit";
+                public const string GetAll = "getDeposits";
+                public const string GetById = "getDeposit";
             }
         }
 
