@@ -99,7 +99,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task GetDepositeCalculationHistoryDetails__CallGetHistoryDetailsMethodPassingValidId_ReturnsNotNullModelContainingCorrectlyMappedList()
+        public async Task GetDepositeCalculationHistoryDetails_CallGetHistoryDetailsMethodPassingValidId_ReturnsNotNullModelContainingCorrectlyMappedList()
         {
             const int ValidDepositeHistoryId = 1;
             var depositeHistoryWithItemsFromDb = new DepositeHistory
@@ -149,7 +149,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void GetDepositeCalculationHistoryDetails__CallGetHistoryDetailsMethodPassingInvalidId_ThrowsExceptionWithCorrespondingMessage()
+        public void GetDepositeCalculationHistoryDetails_CallGetHistoryDetailsMethodPassingInvalidId_ThrowsExceptionWithCorrespondingMessage()
         {
             const int InvalidDepositeHistoryId = -1;
 
