@@ -31,6 +31,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         [Test]
         public async Task Calculate_ValidDataPasses_ReturnsExpectedIdAndMappingHappensCorrectly()
         {
+            var inputServiceModel = GetValidCalculateDepositeView();
+            var validMonthlyPayments = GetValidMonthlyPayments();
+
             Deposit deposit = null;
 
             var depositRepositoryMock = new Mock<IDepositRepository>();
@@ -40,12 +43,13 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 .Callback((Deposit depHistory) => deposit = depHistory);
 
             DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
-            int response = await depositService.CalculateAsync(GetValidCalculateDepositeView());
+            int response = await depositService.CalculateAsync(inputServiceModel);
 
             response.Should().Be(DepositRepositoryAddReturnValue);
             deposit
                 .Should().NotBeNull().And
-                .BeEquivalentTo(GetValidCalculateDepositeView(), options => options.ExcludingMissingMembers());
+                .BeEquivalentTo(inputServiceModel, options => options.ExcludingMissingMembers());
+            deposit.MonthlyPayments.Should().NotBeNull().And.BeEquivalentTo(validMonthlyPayments);
         }
 
         [Test]
@@ -118,6 +122,25 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 Percents = 5,
                 CalculationFormula = DepositCalculationFormulaEnumView.SimpleInterest,
                 MonthsCount = 2
+            };
+        }
+
+        private IList<MonthlyPayment> GetValidMonthlyPayments()
+        {
+            return new List<MonthlyPayment>
+            {
+                new MonthlyPayment
+                { 
+                    MonthNumber = 1,
+                    TotalMonthSum = 100.42m,
+                    Percents = 0.42f
+                },
+                new MonthlyPayment
+                {
+                    MonthNumber = 2,
+                    TotalMonthSum = 100.83m,
+                    Percents = 0.83f
+                }
             };
         }
 

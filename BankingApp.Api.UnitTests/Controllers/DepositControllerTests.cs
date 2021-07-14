@@ -20,6 +20,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         [Test]
         public async Task Calculate_СorrectInputData_ReturnsOkResultAndBankingServiceReceivesValidModel()
         {
+            var validCalculateDepositViw = GetValidCalculateDepositView();
             CalculateDepositView inputModelOfCalculateDepositeMethod = null;
 
             var depositServiceMock = new Mock<IDepositService>();
@@ -29,7 +30,7 @@ namespace BankingApp.Api.UnitTests.Controllers
                 .Callback((CalculateDepositView x) => inputModelOfCalculateDepositeMethod = x);
             var depositController = new DepositController(depositServiceMock.Object);
 
-            var controllerResult = await depositController.Calculate(GetValidCalculateDepositView());
+            var controllerResult = await depositController.Calculate();
 
             inputModelOfCalculateDepositeMethod
                 .Should().NotBeNull()
