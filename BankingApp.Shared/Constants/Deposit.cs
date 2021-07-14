@@ -1,9 +1,9 @@
 ﻿
 namespace BankingApp.Shared
 {
-    public static partial class Constants
+    public static class Constants
     {
-        public static partial class Errors
+        public static class Errors
         {
             public static class Deposit
             {
@@ -21,19 +21,19 @@ namespace BankingApp.Shared
             }
         }
 
-        public static partial class Routes
+        public static class Routes
         {
             public static class Banking
             {
                 public const string DepositRoute = "api/deposit";
 
                 public const string Calculate = "calculateDeposit";
-                public const string GetAll = "getDeposits";
-                public const string GetById = "getDeposit";
+                public const string GetAll = "getAll";
+                public const string GetById = "getById";
             }
         }
 
-        public static partial class Page
+        public static class Page
         {
             public const int PageNumber = 1;
             public const int PageSizeElements = 2;

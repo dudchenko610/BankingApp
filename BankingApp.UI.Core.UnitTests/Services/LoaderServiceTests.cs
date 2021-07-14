@@ -23,6 +23,13 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
             _loaderService.SwitchOn();
             switched.Should().Be(true);
+        }
+
+        [Fact]
+        public void SwitchOff_SwitchOffLoader_CircleLoaderComponentDisappearsFromRendringTree()
+        {
+            bool switched = false;
+            _loaderService.OnLoaderSwitch += (isSwitched) => { switched = isSwitched; };
 
             _loaderService.SwitchOff();
             switched.Should().Be(false);

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Deposit;
+using BankingApp.Shared.Extensions;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
@@ -29,10 +30,10 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task Calculate_ValidDataPasses_ReturnsExpectedIdAndMappingHappensCorrectly()
+        public async Task Calculate_SimpleInterestCalculationFormula_ReturnsExpectedIdAndMappingHappensCorrectly()
         {
-            var inputServiceModel = GetValidCalculateDepositeView();
-            var validMonthlyPayments = GetValidMonthlyPayments();
+            var inputServiceModel = GetValidSimpleInterestCalculateDepositeView();
+            var validMonthlyPayments = GetValidSimpleInterestMonthlyPayments();
 
             Deposit deposit = null;
 
@@ -53,14 +54,59 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
+        public async Task Calculate_CompoundInterestCalculationFormula_ReturnsExpectedIdAndMappingHappensCorrectly()
+        {
+            var inputServiceModel = GetValidCompoundInterestCalculateDepositeView();
+            var validMonthlyPayments = GetValidCompoundInterestMonthlyPayments();
+
+            Deposit deposit = null;
+
+            var depositRepositoryMock = new Mock<IDepositRepository>();
+            depositRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<Deposit>()))
+                .ReturnsAsync(DepositRepositoryAddReturnValue)
+                .Callback((Deposit depHistory) => deposit = depHistory);
+
+            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
+            int response = await depositService.CalculateAsync(inputServiceModel);
+
+            response.Should().Be(DepositRepositoryAddReturnValue);
+            deposit
+                .Should().NotBeNull().And
+                .BeEquivalentTo(inputServiceModel, options => options.ExcludingMissingMembers());
+            deposit.MonthlyPayments.Should().NotBeNull().And.BeEquivalentTo(validMonthlyPayments);
+        }
+
+        [Test]
+        public async Task Calculate_ValidDataPasses_MonthCountEqualsToMonthlyPaymentsCount()
+        {
+            var inputServiceModel = GetValidCompoundInterestCalculateDepositeView();
+            var validMonthlyPayments = GetValidCompoundInterestMonthlyPayments();
+
+            Deposit deposit = null;
+
+            var depositRepositoryMock = new Mock<IDepositRepository>();
+            depositRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<Deposit>()))
+                .ReturnsAsync(DepositRepositoryAddReturnValue)
+                .Callback((Deposit depHistory) => deposit = depHistory);
+
+            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
+            await depositService.CalculateAsync(inputServiceModel);
+
+            deposit.Should().NotBeNull();
+            deposit.MonthlyPayments.Count.Should().Be(validMonthlyPayments.Count);
+        }
+
+        [Test]
         public async Task GetAllAsync_CallGetAllMethod_ReturnsNotNullModelContainingCorrectlyMappedList()
         {
-            var getAllDepositViewResponseFromService = GetValidDeposits();
+            var depositsResponseOfRepoistory = GetValidDeposits();
 
             var depositRepositoryMock = new Mock<IDepositRepository>();
             depositRepositoryMock
                 .Setup(x => x.GetAsync())
-                .ReturnsAsync(getAllDepositViewResponseFromService);
+                .ReturnsAsync(depositsResponseOfRepoistory);
             DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
 
             var resCalculationHistory = await depositService.GetAllAsync();
@@ -70,21 +116,27 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 .BeOfType<GetAllDepositView>()
                 .Which.DepositItems.Should().NotBeNull();
 
-            getAllDepositViewResponseFromService
+            depositsResponseOfRepoistory
                 .Should().BeEquivalentTo(resCalculationHistory.DepositItems,
                     options => options.ExcludingMissingMembers().Excluding(x => x.CalculationFormula));
+
+            for (int i = 0; i < depositsResponseOfRepoistory.Count; i++)
+            {
+                ((DepositCalculationFormulaEnumView) depositsResponseOfRepoistory[i].CalculationFormula).GetDisplayValue()
+                .Should().Be(resCalculationHistory.DepositItems[i].CalculationFormula);
+            }
         }
 
         [Test]
         public async Task GetByIdAsync_CallGetByIdMethodPassingValidId_ReturnsNotNullModelContainingCorrectlyMappedList()
         {
             const int ValidDepositeHistoryId = 1;
-            var getByIdDepositViewResponseFromService = GetValidDepositWithMonthlyPaymentItems();
+            var depositsResponseOfRepository = GetValidDepositWithMonthlyPaymentItems();
 
             var depositRepositoryMock = new Mock<IDepositRepository>();
             depositRepositoryMock
                 .Setup(x => x.GetDepositWithItemsByIdAsync(It.IsAny<int>()))
-                .ReturnsAsync(getByIdDepositViewResponseFromService);
+                .ReturnsAsync(depositsResponseOfRepository);
             DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
 
             var responseGetByIdDepositView = await depositService.GetByIdAsync(ValidDepositeHistoryId);
@@ -94,9 +146,13 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                .BeOfType<GetByIdDepositView>()
                .Which.MonthlyPaymentItems.Should().NotBeNull();
 
-            getByIdDepositViewResponseFromService
+            depositsResponseOfRepository
                 .Should().BeEquivalentTo(responseGetByIdDepositView, 
-                    options => options.ExcludingMissingMembers().Excluding(x => x.CalculationFormula));
+                    options => options
+                        .ExcludingMissingMembers().Excluding(x => x.CalculationFormula));
+
+            ((DepositCalculationFormulaEnumView) depositsResponseOfRepository.CalculationFormula).GetDisplayValue()
+                .Should().Be(responseGetByIdDepositView.CalculationFormula);
         }
 
         [Test]
@@ -114,7 +170,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 .Should().Throw<Exception>().WithMessage(Constants.Errors.Deposit.IncorrectDepositeHistoryId);
         }
 
-        private CalculateDepositView GetValidCalculateDepositeView()
+        private CalculateDepositView GetValidSimpleInterestCalculateDepositeView()
         { 
             return new CalculateDepositView
             {
@@ -125,7 +181,18 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private IList<MonthlyPayment> GetValidMonthlyPayments()
+        private CalculateDepositView GetValidCompoundInterestCalculateDepositeView()
+        {
+            return new CalculateDepositView
+            {
+                DepositSum = 300.00m,
+                Percents = 6,
+                CalculationFormula = DepositCalculationFormulaEnumView.CompoundInterest,
+                MonthsCount = 2
+            };
+        }
+
+        private IList<MonthlyPayment> GetValidSimpleInterestMonthlyPayments()
         {
             return new List<MonthlyPayment>
             {
@@ -140,6 +207,25 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                     MonthNumber = 2,
                     TotalMonthSum = 100.83m,
                     Percents = 0.83f
+                }
+            };
+        }
+
+        private IList<MonthlyPayment> GetValidCompoundInterestMonthlyPayments()
+        {
+            return new List<MonthlyPayment>
+            {
+                new MonthlyPayment
+                {
+                    MonthNumber = 1,
+                    TotalMonthSum = 301.50m,
+                    Percents = 0.5f
+                },
+                new MonthlyPayment
+                {
+                    MonthNumber = 2,
+                    TotalMonthSum = 303.01m,
+                    Percents = 1f
                 }
             };
         }

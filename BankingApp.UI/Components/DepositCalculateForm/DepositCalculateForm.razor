@@ -5,12 +5,12 @@
         <DataAnnotationsValidator />
 
         <div class="mb-3">
-            <label class="form-label">Choose a formula</label>
-            <InputSelectEnum @bind-Value="_requestModel.CalculationFormula" class="form-control" />
+            <label for="calculationFormula" class="form-label">Choose a formula</label>
+            <InputSelectEnum id="calculationFormula" @bind-Value="_requestModel.CalculationFormula" class="form-control" />
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Deposite Sum</label>
+            <label for="depositeSum" class="form-label">Deposite Sum</label>
             <InputNumber @bind-Value="_requestModel.DepositSum"
                          id="depositeSum"
                          placeholder="deposite sum"
@@ -19,7 +19,7 @@
             <ValidationMessage For="@(() => _requestModel.DepositSum)" />
         </div>
         <div class="mb-3">
-            <label class="form-label">Month Count</label>
+            <label for="monthCount" class="form-label">Month Count</label>
             <InputNumber @bind-Value="_requestModel.MonthsCount"
                          id="monthCount"
                          type="number"
@@ -27,7 +27,7 @@
             <ValidationMessage For="@(() => _requestModel.MonthsCount)" />
         </div>
         <div class="mb-3">
-            <label class="form-label">Percents</label>
+            <label for="percents" class="form-label">Percents</label>
             <InputNumber @bind-Value="_requestModel.Percents"
                          id="percents"
                          type="number"

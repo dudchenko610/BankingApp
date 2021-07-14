@@ -30,11 +30,11 @@ namespace BankingApp.Api.UnitTests.Controllers
                 .Callback((CalculateDepositView x) => inputModelOfCalculateDepositeMethod = x);
             var depositController = new DepositController(depositServiceMock.Object);
 
-            var controllerResult = await depositController.Calculate();
+            var controllerResult = await depositController.Calculate(validCalculateDepositViw);
 
             inputModelOfCalculateDepositeMethod
                 .Should().NotBeNull()
-                .And.BeEquivalentTo(GetValidCalculateDepositView());
+                .And.BeEquivalentTo(validCalculateDepositViw);
 
             var resultOfOkObjectResultValidation = controllerResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
             resultOfOkObjectResultValidation.Which.Value.Should().BeOfType<int>().And.Be(DepositeServiceCalculateReturnValue);

@@ -2,8 +2,6 @@
 using Xunit;
 using FluentAssertions;
 using BankingApp.UI.Components.DepositCalculateForm;
-using Microsoft.AspNetCore.Components.Forms;
-using System.Linq;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Deposit;
 
