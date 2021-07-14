@@ -6,13 +6,12 @@ using BankingApp.BusinessLogicLayer.Mapper;
 using Moq;
 using System.Threading.Tasks;
 using BankingApp.Entities.Entities;
-using BankingApp.ViewModels.Banking.Calculate;
 using NUnit.Framework;
-using BankingApp.ViewModels.Banking.History;
 using BankingApp.DataAccessLayer.Interfaces;
 using System.Collections.Generic;
 using System;
 using BankingApp.Shared;
+using BankingApp.ViewModels.Banking.Deposit;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
@@ -115,7 +114,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         { 
             return new CalculateDepositView
             {
-                DepositeSum = 100.00m,
+                DepositSum = 100.00m,
                 Percents = 5,
                 CalculationFormula = DepositCalculationFormulaEnumView.SimpleInterest,
                 MonthsCount = 2
@@ -128,19 +127,19 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             {
                 new Deposit {
                     Id = 1,
-                    DepositeSum = 100,
+                    DepositSum = 100,
                     CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
                     Percents = 2.45f
                 },
                 new Deposit {
                     Id = 2,
-                    DepositeSum = 200,
+                    DepositSum = 200,
                     CalculationFormula = Entities.Enums.CalculationFormulaEnum.CompoundInterest,
                     Percents = 5
                 },
                 new Deposit {
                     Id = 3,
-                    DepositeSum = 300,
+                    DepositSum = 300,
                     CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
                     Percents = 6
                 }
@@ -153,8 +152,8 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             {
                 Id = 1,
                 CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
-                CalulationDateTime = System.DateTime.Now,
-                DepositeSum = 100.00m,
+                CalсulationDateTime = System.DateTime.Now,
+                DepositSum = 100.00m,
                 MonthsCount = 4,
                 Percents = 2.5f,
                 MonthlyPayments = new List<MonthlyPayment>

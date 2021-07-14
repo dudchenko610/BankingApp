@@ -2,10 +2,10 @@
 using Xunit;
 using FluentAssertions;
 using BankingApp.UI.Components.DepositCalculateForm;
-using BankingApp.ViewModels.Banking.Calculate;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Linq;
 using BankingApp.Shared;
+using BankingApp.ViewModels.Banking.Deposit;
 
 namespace BankingApp.UI.UnitTests.Components
 {
@@ -32,7 +32,7 @@ namespace BankingApp.UI.UnitTests.Components
             depositeCalculateForm.Find("form").Submit();
 
             depositeViewModel.Should().NotBeNull();
-            depositeViewModel.DepositeSum.Should().Be(ValidDepositeSum);
+            depositeViewModel.DepositSum.Should().Be(ValidDepositeSum);
             depositeViewModel.MonthsCount.Should().Be(ValidMonthsCount);
             depositeViewModel.Percents.Should().Be((decimal)ValidPercents);
         }

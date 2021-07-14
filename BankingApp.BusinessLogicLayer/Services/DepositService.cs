@@ -3,8 +3,7 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.DataAccessLayer.Interfaces;
 using BankingApp.Entities.Entities;
 using BankingApp.Shared;
-using BankingApp.ViewModels.Banking.Calculate;
-using BankingApp.ViewModels.Banking.History;
+using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Enums;
 using System;
 using System.Collections.Generic;
@@ -29,7 +28,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         {
             var depositModel = _mapper.Map<CalculateDepositView, Deposit>(requestDepositCalcInfo);
             
-            depositModel.CalulationDateTime = System.DateTime.Now;
+            depositModel.CalсulationDateTime = System.DateTime.Now;
             CalculationFormula calculationFormula = GetCalculationFormula(requestDepositCalcInfo);
 
             for (int i = 1; i <= requestDepositCalcInfo.MonthsCount; i++)
@@ -82,7 +81,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         {
             // An = A(1 + (n / 12) * (P / 100))
             float percentsDevidedBy1200 = (float) reqDepositCalcInfo.Percents / 1200.0f;
-            decimal monthSum = reqDepositCalcInfo.DepositeSum * (decimal)(1.0f + monthNumber * percentsDevidedBy1200);
+            decimal monthSum = reqDepositCalcInfo.DepositSum * (decimal)(1.0f + monthNumber * percentsDevidedBy1200);
             float percents = (float) decimal.Round((decimal)(monthNumber / 12.0f) * reqDepositCalcInfo.Percents, 2);
             return (monthSum, percents);
         }
@@ -91,8 +90,8 @@ namespace BankingApp.BusinessLogicLayer.Services
         {
             // An = A(1 + (P / 1200)) ^ (n)
             float percentsDevidedBy1200 = (float) reqDepositCalcInfo.Percents / 1200.0f;
-            decimal monthSum = reqDepositCalcInfo.DepositeSum * (decimal)Math.Pow(1.0 + percentsDevidedBy1200, monthNumber);
-            float percents = (float)decimal.Round(((monthSum - reqDepositCalcInfo.DepositeSum) / reqDepositCalcInfo.DepositeSum) * 100.0m, 2);
+            decimal monthSum = reqDepositCalcInfo.DepositSum * (decimal)Math.Pow(1.0 + percentsDevidedBy1200, monthNumber);
+            float percents = (float)decimal.Round(((monthSum - reqDepositCalcInfo.DepositSum) / reqDepositCalcInfo.DepositSum) * 100.0m, 2);
             return (monthSum, percents);
         }
     }

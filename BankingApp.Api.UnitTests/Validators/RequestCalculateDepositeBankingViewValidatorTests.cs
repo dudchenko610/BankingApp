@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using FluentAssertions;
 using BankingApp.Shared;
-using BankingApp.ViewModels.Banking.Calculate;
+using BankingApp.ViewModels.Banking.Deposit;
 
 namespace BankingApp.Api.UnitTests.Validators
 {
@@ -50,10 +50,10 @@ namespace BankingApp.Api.UnitTests.Validators
         {
             return new List<CalculateDepositView>
             {
-                new CalculateDepositView { DepositeSum = -1.0m, CalculationFormula = 0, MonthsCount = 1, Percents = 1 },
-                new CalculateDepositView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = -1, Percents = 1 },
-                new CalculateDepositView { DepositeSum = 1.05m, CalculationFormula = 0, MonthsCount = 0, Percents = 105 },
-                new CalculateDepositView { DepositeSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = 0 }
+                new CalculateDepositView { DepositSum = -1.0m, CalculationFormula = 0, MonthsCount = 1, Percents = 1 },
+                new CalculateDepositView { DepositSum = 1, CalculationFormula = 0, MonthsCount = -1, Percents = 1 },
+                new CalculateDepositView { DepositSum = 1.05m, CalculationFormula = 0, MonthsCount = 0, Percents = 105 },
+                new CalculateDepositView { DepositSum = 1, CalculationFormula = 0, MonthsCount = 1, Percents = 0 }
             };
         }
     }

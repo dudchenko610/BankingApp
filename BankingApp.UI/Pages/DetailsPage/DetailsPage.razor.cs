@@ -1,5 +1,5 @@
 ﻿using BankingApp.UI.Core.Interfaces;
-using BankingApp.ViewModels.Banking.History;
+using BankingApp.ViewModels.Banking.Deposit;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;

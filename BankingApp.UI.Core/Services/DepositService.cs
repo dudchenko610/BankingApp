@@ -1,7 +1,6 @@
 ﻿using BankingApp.Shared;
 using BankingApp.UI.Core.Interfaces;
-using BankingApp.ViewModels.Banking.Calculate;
-using BankingApp.ViewModels.Banking.History;
+using BankingApp.ViewModels.Banking.Deposit;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;

@@ -5,14 +5,14 @@
             <div class="card-header" id="headingOne">
                 <h5 class="mb-0">
                     <button @onclick="() => { OnDepositeHistoryClicked(element.Id); }" class="btn btn-link" aria-expanded="true">
-                        @element.CalulationDateTime
+                        @element.CalсulationDateTime
                     </button>
                 </h5>
 
                 <h6>
                     <div class="container-fluid d-flex flex-column">
                         <label>Formula: @element.CalculationFormula</label>
-                        <label>Deposite Sum: @element.DepositeSum</label>
+                        <label>Deposite Sum: @element.DepositSum</label>
                         <label>Month Count: @element.MonthsCount</label>
                         <label>Percents: @element.Percents</label>
                     </div>

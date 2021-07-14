@@ -12,10 +12,10 @@ namespace BankingApp.Entities.Entities
         }
 
         public CalculationFormulaEnum CalculationFormula { get; set; }
-        public decimal DepositeSum { get; set; }
+        public decimal DepositSum { get; set; }
         public int MonthsCount { get; set; }
         public float Percents { get; set; }
-        public DateTime CalulationDateTime { get; set; }
+        public DateTime CalсulationDateTime { get; set; }
         public virtual IList<MonthlyPayment> MonthlyPayments { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using BankingApp.ViewModels.Banking.Calculate;
-using BankingApp.ViewModels.Banking.History;
+﻿using BankingApp.ViewModels.Banking.Deposit;
 using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Interfaces

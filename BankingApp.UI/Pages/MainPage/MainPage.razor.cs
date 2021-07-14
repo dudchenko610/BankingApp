@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using BankingApp.UI.Core.Routes;
-using BankingApp.ViewModels.Banking.Calculate;
+using BankingApp.ViewModels.Banking.Deposit;
 
 namespace BankingApp.UI.Pages.MainPage
 {

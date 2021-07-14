@@ -2,7 +2,7 @@
 using BankingApp.ViewModels.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace BankingApp.ViewModels.Banking.Calculate
+namespace BankingApp.ViewModels.Banking.Deposit
 {
     public class CalculateDepositView
     {
@@ -10,7 +10,7 @@ namespace BankingApp.ViewModels.Banking.Calculate
 
         [Required]
         [RegularExpression(@"\A[0-9]{1,10}(?:[.,][0-9]{1,2})?\z", ErrorMessage = Constants.Errors.Deposit.IncorrectPriceFormat)]
-        public decimal DepositeSum { get; set; }
+        public decimal DepositSum { get; set; }
 
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = Constants.Errors.Deposit.IncorrectMonthFormat)]

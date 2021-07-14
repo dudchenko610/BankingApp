@@ -6,10 +6,9 @@ using Moq;
 using FluentAssertions;
 using BankingApp.ViewModels.Enums;
 using System.Threading.Tasks;
-using BankingApp.ViewModels.Banking.History;
 using System.Collections.Generic;
-using BankingApp.ViewModels.Banking.Calculate;
 using NUnit.Framework;
+using BankingApp.ViewModels.Banking.Deposit;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
@@ -93,7 +92,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         { 
             return new CalculateDepositView
             {
-                DepositeSum = 100,
+                DepositSum = 100,
                 MonthsCount = 12,
                 Percents = 10,
                 CalculationFormula = DepositCalculationFormulaEnumView.CompoundInterest
@@ -110,27 +109,27 @@ namespace BankingApp.Api.UnitTests.Controllers
                     {
                         Id = 1,
                         Percents = 2.4f,
-                        DepositeSum = 100m,
+                        DepositSum = 100m,
                         MonthsCount = 2,
-                        CalulationDateTime = System.DateTime.Now,
+                        CalсulationDateTime = System.DateTime.Now,
                         CalculationFormula = "some formula"
                     },
                     new DepositGetAllDepositViewItem
                     {
                         Id = 2,
                         Percents = 5.4f,
-                        DepositeSum = 200m,
+                        DepositSum = 200m,
                         MonthsCount = 4,
-                        CalulationDateTime = System.DateTime.Now,
+                        CalсulationDateTime = System.DateTime.Now,
                         CalculationFormula = "some formula"
                     },
                     new DepositGetAllDepositViewItem
                     {
                         Id = 5,
                         Percents = 10.4f,
-                        DepositeSum = 100m,
+                        DepositSum = 100m,
                         MonthsCount = 2,
-                        CalulationDateTime = System.DateTime.Now,
+                        CalсulationDateTime = System.DateTime.Now,
                         CalculationFormula = "some formula"
                     },
                 }

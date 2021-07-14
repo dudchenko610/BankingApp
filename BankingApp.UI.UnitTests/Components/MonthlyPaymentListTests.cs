@@ -3,7 +3,7 @@ using Bunit;
 using Xunit;
 using FluentAssertions;
 using System.Collections.Generic;
-using BankingApp.ViewModels.Banking.History;
+using BankingApp.ViewModels.Banking.Deposit;
 
 namespace BankingApp.UI.UnitTests.Components
 {

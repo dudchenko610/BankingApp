@@ -1,9 +1,9 @@
 ﻿using BankingApp.UI.Components.DepositList;
-using BankingApp.ViewModels.Banking.History;
 using System.Collections.Generic;
 using Xunit;
 using FluentAssertions;
 using Bunit;
+using BankingApp.ViewModels.Banking.Deposit;
 
 namespace BankingApp.UI.UnitTests.Components
 {

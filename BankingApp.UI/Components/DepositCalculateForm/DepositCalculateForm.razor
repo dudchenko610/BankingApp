@@ -11,12 +11,12 @@
 
         <div class="mb-3">
             <label class="form-label">Deposite Sum</label>
-            <InputNumber @bind-Value="_requestModel.DepositeSum"
+            <InputNumber @bind-Value="_requestModel.DepositSum"
                          id="depositeSum"
                          placeholder="deposite sum"
                          type="number" step=".01"
                          class="form-control" />
-            <ValidationMessage For="@(() => _requestModel.DepositeSum)" />
+            <ValidationMessage For="@(() => _requestModel.DepositSum)" />
         </div>
         <div class="mb-3">
             <label class="form-label">Month Count</label>
