@@ -13,6 +13,7 @@ using System;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.Shared.Extensions;
+using BankingApp.ViewModels.Pagination;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
@@ -20,6 +21,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
     public class DepositServiceTests
     {
         private const int DepositRepositoryAddReturnValue = 1;
+        private const int ValidPageNumber = 1;
+        private const int ValidPageSize = 1;
+
         private IMapper _mapper;
 
         [SetUp]
@@ -69,32 +73,64 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task GetAllAsync_CallGetAllMethod_ReturnsNotNullModelContainingCorrectlyMappedList()
+        public async Task GetAllAsync_CallGetAllMethodPassingValidParameters_ReturnsNotNullModelContainingCorrectlyMappedList()
         {
-            var depositsResponseOfRepoistory = GetValidDeposits();
+            var depositsResponseOfRepository = GetValidDepositsAndTotalCount();
 
             var depositRepositoryMock = new Mock<IDepositRepository>();
             depositRepositoryMock
-                .Setup(x => x.GetAsync())
-                .ReturnsAsync(depositsResponseOfRepoistory);
+                .Setup(x => x.GetDepositsPagedAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(depositsResponseOfRepository);
             DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
 
-            var resCalculationHistory = await depositService.GetAllAsync();
+            var resPagedDeposits = await depositService.GetAllAsync(ValidPageNumber, ValidPageSize);
 
-            resCalculationHistory
+            resPagedDeposits
                 .Should().NotBeNull().And
-                .BeOfType<GetAllDepositView>()
-                .Which.DepositItems.Should().NotBeNull();
+                .BeOfType<PagedDataView<DepositGetAllDepositViewItem>>()
+                .Which.Items.Should().NotBeNull();
 
-            depositsResponseOfRepoistory
-                .Should().BeEquivalentTo(resCalculationHistory.DepositItems,
+            depositsResponseOfRepository.Deposits
+                .Should().BeEquivalentTo(resPagedDeposits.Items,
                     options => options.ExcludingMissingMembers().Excluding(x => x.CalculationFormula));
 
-            for (int i = 0; i < depositsResponseOfRepoistory.Count; i++)
+            for (int i = 0; i < depositsResponseOfRepository.Deposits.Count; i++)
             {
-                ((DepositCalculationFormulaEnumView) depositsResponseOfRepoistory[i].CalculationFormula).GetDisplayValue()
-                .Should().Be(resCalculationHistory.DepositItems[i].CalculationFormula);
+                ((DepositCalculationFormulaEnumView)depositsResponseOfRepository.Deposits[i].CalculationFormula).GetDisplayValue()
+                .Should().Be(resPagedDeposits.Items[i].CalculationFormula);
             }
+        }
+
+        [Test]
+        public void GetAllAsync_CallGetAllMethodPassingInvalidPageNumber_ThrowsExceptionWithCorrespondingMessage()
+        {
+            const int InvalidPageNumber = -1;
+            var depositsResponseOfRepository = GetValidDepositsAndTotalCount();
+
+            var depositRepositoryMock = new Mock<IDepositRepository>();
+            depositRepositoryMock
+                .Setup(x => x.GetDepositsPagedAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(depositsResponseOfRepository);
+            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
+            
+            FluentActions.Awaiting(() => depositService.GetAllAsync(InvalidPageNumber, ValidPageSize))
+                .Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageNumberFormat);
+        }
+
+        [Test]
+        public void GetAllAsync_CallGetAllMethodPassingInvalidPageSize_ThrowsExceptionWithCorrespondingMessage()
+        {
+            const int InvalidPageSize = -1;
+            var depositsResponseOfRepository = GetValidDepositsAndTotalCount();
+
+            var depositRepositoryMock = new Mock<IDepositRepository>();
+            depositRepositoryMock
+                .Setup(x => x.GetDepositsPagedAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(depositsResponseOfRepository);
+            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
+
+            FluentActions.Awaiting(() => depositService.GetAllAsync(ValidPageSize, InvalidPageSize))
+                .Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageSizeFormat);
         }
 
         [Test]
@@ -220,9 +256,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private IList<Deposit> GetValidDeposits()
-        { 
-            return new List<Deposit>
+        private (IList<Deposit> Deposits, int TotalCount) GetValidDepositsAndTotalCount()
+        {
+            return (new List<Deposit>
             {
                 new Deposit {
                     Id = 1,
@@ -242,7 +278,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                     CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
                     Percents = 6
                 }
-            };
+            }, 
+            
+            5);
         }
 
         private Deposit GetValidDepositWithMonthlyPaymentItems()
