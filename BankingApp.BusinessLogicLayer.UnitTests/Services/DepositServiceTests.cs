@@ -35,7 +35,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var inputServiceModel = GetValidSimpleInterestCalculateDepositeView();
             var validMonthlyPayments = GetValidSimpleInterestMonthlyPayments();
 
-            await Calculate_WithGivenData_ReturnsExpectedIdAndMappingHappensCorrectlyAsync(inputServiceModel, validMonthlyPayments);
+            await CalculateTestForFormulaLogicAsync(inputServiceModel, validMonthlyPayments);
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var inputServiceModel = GetValidCompoundInterestCalculateDepositeView();
             var validMonthlyPayments = GetValidCompoundInterestMonthlyPayments();
 
-            await Calculate_WithGivenData_ReturnsExpectedIdAndMappingHappensCorrectlyAsync(inputServiceModel, validMonthlyPayments);
+            await CalculateTestForFormulaLogicAsync(inputServiceModel, validMonthlyPayments);
         }
 
         [Test]
@@ -140,7 +140,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 .Should().Throw<Exception>().WithMessage(Constants.Errors.Deposit.IncorrectDepositeHistoryId);
         }
 
-        private async Task Calculate_WithGivenData_ReturnsExpectedIdAndMappingHappensCorrectlyAsync(CalculateDepositView calculateDepositView, IList<MonthlyPayment> monthlyPayments)
+        private async Task CalculateTestForFormulaLogicAsync(CalculateDepositView calculateDepositView, IList<MonthlyPayment> monthlyPayments)
         {
             Deposit deposit = null;
 
