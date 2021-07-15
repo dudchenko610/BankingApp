@@ -35,22 +35,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var inputServiceModel = GetValidSimpleInterestCalculateDepositeView();
             var validMonthlyPayments = GetValidSimpleInterestMonthlyPayments();
 
-            Deposit deposit = null;
-
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
-                .Setup(x => x.AddAsync(It.IsAny<Deposit>()))
-                .ReturnsAsync(DepositRepositoryAddReturnValue)
-                .Callback((Deposit depHistory) => deposit = depHistory);
-
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
-            int response = await depositService.CalculateAsync(inputServiceModel);
-
-            response.Should().Be(DepositRepositoryAddReturnValue);
-            deposit
-                .Should().NotBeNull().And
-                .BeEquivalentTo(inputServiceModel, options => options.ExcludingMissingMembers());
-            deposit.MonthlyPayments.Should().NotBeNull().And.BeEquivalentTo(validMonthlyPayments);
+            await Calculate_WithGivenData_ReturnsExpectedIdAndMappingHappensCorrectlyAsync(inputServiceModel, validMonthlyPayments);
         }
 
         [Test]
@@ -59,22 +44,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var inputServiceModel = GetValidCompoundInterestCalculateDepositeView();
             var validMonthlyPayments = GetValidCompoundInterestMonthlyPayments();
 
-            Deposit deposit = null;
-
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
-                .Setup(x => x.AddAsync(It.IsAny<Deposit>()))
-                .ReturnsAsync(DepositRepositoryAddReturnValue)
-                .Callback((Deposit depHistory) => deposit = depHistory);
-
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
-            int response = await depositService.CalculateAsync(inputServiceModel);
-
-            response.Should().Be(DepositRepositoryAddReturnValue);
-            deposit
-                .Should().NotBeNull().And
-                .BeEquivalentTo(inputServiceModel, options => options.ExcludingMissingMembers());
-            deposit.MonthlyPayments.Should().NotBeNull().And.BeEquivalentTo(validMonthlyPayments);
+            await Calculate_WithGivenData_ReturnsExpectedIdAndMappingHappensCorrectlyAsync(inputServiceModel, validMonthlyPayments);
         }
 
         [Test]
@@ -168,6 +138,26 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             FluentActions.Awaiting(() => depositService.GetByIdAsync(InvalidDepositeHistoryId))
                 .Should().Throw<Exception>().WithMessage(Constants.Errors.Deposit.IncorrectDepositeHistoryId);
+        }
+
+        private async Task Calculate_WithGivenData_ReturnsExpectedIdAndMappingHappensCorrectlyAsync(CalculateDepositView calculateDepositView, IList<MonthlyPayment> monthlyPayments)
+        {
+            Deposit deposit = null;
+
+            var depositRepositoryMock = new Mock<IDepositRepository>();
+            depositRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<Deposit>()))
+                .ReturnsAsync(DepositRepositoryAddReturnValue)
+                .Callback((Deposit depHistory) => deposit = depHistory);
+
+            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
+            int response = await depositService.CalculateAsync(calculateDepositView);
+
+            response.Should().Be(DepositRepositoryAddReturnValue);
+            deposit
+                .Should().NotBeNull().And
+                .BeEquivalentTo(calculateDepositView, options => options.ExcludingMissingMembers());
+            deposit.MonthlyPayments.Should().NotBeNull().And.BeEquivalentTo(monthlyPayments);
         }
 
         private CalculateDepositView GetValidSimpleInterestCalculateDepositeView()
