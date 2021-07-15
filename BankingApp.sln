@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.UI.UnitTests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.Entities", "BankingApp.Entities\BankingApp.Entities.csproj", "{F38763F9-3B29-4507-8BE6-37C37DD85F74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingApp.UI.Core.UnitTests", "BankingApp.UI.Core.UnitTests\BankingApp.UI.Core.UnitTests.csproj", "{DBDE8A97-0C7D-418B-B095-486154D40450}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingApp.UI.Core.UnitTests", "BankingApp.UI.Core.UnitTests\BankingApp.UI.Core.UnitTests.csproj", "{DBDE8A97-0C7D-418B-B095-486154D40450}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

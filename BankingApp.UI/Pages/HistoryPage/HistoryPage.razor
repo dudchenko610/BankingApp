@@ -2,11 +2,11 @@
 @page "/history/{page:int}" 
 
 <div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100 w-100">
-    @if (_pagedInfo is not null && _pagedInfo.Data.Any())
+    @if (_depositViews != null && _depositViews.DepositItems.Any())
     {
         <div class="d-flex align-items-center justify-content-center flex-column w-100">
             <div class="w-100">
-                <DepositeHistoryList DepositesHistoryList="_pagedInfo.Data" OnDepositeHistoryItemClicked="OnDepositeHistoryItemClicked" />
+                <DepositList DepositViewList="_pagedChunck" OnDepositItemClicked="OnDepositeHistoryItemClicked" />
             </div>
 
             <div class="mt-4">

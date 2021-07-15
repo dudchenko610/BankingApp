@@ -15,15 +15,15 @@ namespace BankingApp.UI.UnitTests.Components
         public void InputSelectEnum_PassEnumWithAttributeNames_OptionsContainsAttributeNames()
         {
             var editContext = new EditContext(new { });
-            var myEnum = DepositeCalculationFormulaEnumView.CompoundInterest;
+            var myEnum = DepositCalculationFormulaEnumView.CompoundInterest;
 
-            var inputSelectEnum = RenderComponent<InputSelectEnum<DepositeCalculationFormulaEnumView>>(parameters => parameters
+            var inputSelectEnum = RenderComponent<InputSelectEnum<DepositCalculationFormulaEnumView>>(parameters => parameters
                 .AddCascadingValue(editContext)
                 .Add(p => p.ValueExpression, () => myEnum)
             );
 
             var optionsTextList = inputSelectEnum.FindAll("option").Select(x => x.TextContent).ToList();
-            var enumDisplayNames = EnumHelper.GetDisplayValues<DepositeCalculationFormulaEnumView>();
+            var enumDisplayNames = EnumHelper.GetDisplayValues<DepositCalculationFormulaEnumView>();
 
             optionsTextList.Should().BeEquivalentTo(enumDisplayNames);
         }

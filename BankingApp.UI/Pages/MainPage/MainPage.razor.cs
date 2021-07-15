@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using BankingApp.UI.Core.Routes;
-using BankingApp.ViewModels.Banking.Calculate;
+using BankingApp.ViewModels.Banking.Deposit;
 
 namespace BankingApp.UI.Pages.MainPage
 {
@@ -11,14 +11,14 @@ namespace BankingApp.UI.Pages.MainPage
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
         [Inject]
-        private IDepositeService _depositeService { get; set; }
+        private IDepositService _depositeService { get; set; }
         [Inject]
         private ILoaderService _loaderService { get; set; }
         
-        protected async Task OnDepositeFormSubmit(RequestCalculateDepositeBankingView reqModel)
+        protected async Task OnDepositeFormSubmit(CalculateDepositView reqModel)
         {
             _loaderService.SwitchOn();
-            int depositeHistoryId = await _depositeService.CalculateDepositeAsync(reqModel);
+            int depositeHistoryId = await _depositeService.CalculateAsync(reqModel);
             _loaderService.SwitchOff();
 
             _navigationWrapper.NavigateTo($"{Routes.DetailsPage}/{depositeHistoryId}");

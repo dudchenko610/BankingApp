@@ -1,7 +1,6 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Core.Routes;
-using BankingApp.ViewModels.Banking.History;
-using BankingApp.ViewModels.Pagination;
+using BankingApp.ViewModels.Banking.Deposit;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -15,12 +14,13 @@ namespace BankingApp.UI.Pages.HistoryPage
         private static readonly int DepositesOnPage = 2;
 
         private int _totalPageCount;
-        private ResponsePagedDataView<ResponseCalculationHistoryBankingViewItem> _pagedInfo;
+        private GetAllDepositView _depositViews;
+        private IList<DepositGetAllDepositViewItem> _pagedChunck;
 
         [Inject]
         private ILoaderService _loaderService { get; set; }
         [Inject]
-        private IDepositeService _depositeService { get; set; }
+        private IDepositService _depositeService { get; set; }
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
         [Parameter]
@@ -28,17 +28,28 @@ namespace BankingApp.UI.Pages.HistoryPage
 
         public HistoryPage()
         {
-            _pagedInfo = null;
+            _depositViews = null;
         }
 
         protected override async Task OnInitializedAsync()
         {
-            await UpdateDepositeHistoryDataAsync();
+            _loaderService.SwitchOn();
+            _depositViews = await _depositeService.GetAllAsync();
+            _loaderService.SwitchOff();
+
+            if (_depositViews.DepositItems.Count == 0)
+                return;
+
+            _totalPageCount = (int) Math.Ceiling(_depositViews.DepositItems.Count / ((double) DepositesOnPage));
+            _pagedChunck = _depositViews.DepositItems.Skip((Page - 1) * DepositesOnPage).Take(DepositesOnPage).ToList();
+
+            if (Page > _totalPageCount || Page < 1)
+                _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/1");
         }
 
-        protected override async Task OnParametersSetAsync()
+        protected override void OnParametersSet()
         {
-            await UpdateDepositeHistoryDataAsync();
+            _pagedChunck = _depositViews.DepositItems.Skip((Page - 1) * DepositesOnPage).Take(DepositesOnPage).ToList();
             StateHasChanged();
         }
 
@@ -50,27 +61,6 @@ namespace BankingApp.UI.Pages.HistoryPage
         private void OnDepositeHistoryItemClicked(int depositeHistoryId)
         {
             _navigationWrapper.NavigateTo($"{Routes.DetailsPage}/{depositeHistoryId}");
-        }
-
-        private async Task UpdateDepositeHistoryDataAsync()
-        {
-            if (Page < 1)
-            {
-                _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/1");
-                return;
-            }
-
-            _loaderService.SwitchOn();
-            _pagedInfo = await _depositeService.GetCalculationDepositeHistoryAsync(Page, DepositesOnPage);
-            _loaderService.SwitchOff();
-
-            if (_pagedInfo.Data.Count == 0)
-                return;
-
-            _totalPageCount = (int)Math.Ceiling(_pagedInfo.TotalItems / ((double)DepositesOnPage));
-
-            if (Page > _totalPageCount || Page < 1)
-                _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/1");
         }
     }
 }

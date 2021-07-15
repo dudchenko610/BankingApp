@@ -4,14 +4,16 @@ using BankingApp.DataAccessLayer.DatabaseContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankingApp.DataAccessLayer.Migrations
 {
     [DbContext(typeof(BankingDbContext))]
-    partial class BankingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210713172014_RenamedTables")]
+    partial class RenamedTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,10 +31,10 @@ namespace BankingApp.DataAccessLayer.Migrations
                     b.Property<int>("CalculationFormula")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CalсulationDateTime")
+                    b.Property<DateTime>("CalulationDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("DepositSum")
+                    b.Property<decimal>("DepositeSum")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("MonthsCount")
@@ -43,10 +45,10 @@ namespace BankingApp.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Deposits");
+                    b.ToTable("DepositeHistories");
                 });
 
-            modelBuilder.Entity("BankingApp.Entities.Entities.MonthlyPayment", b =>
+            modelBuilder.Entity("BankingApp.Entities.Entities.MonthlyPayments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,10 +71,10 @@ namespace BankingApp.DataAccessLayer.Migrations
 
                     b.HasIndex("DepositId");
 
-                    b.ToTable("MonthlyPayments");
+                    b.ToTable("DepositeHistoryItems");
                 });
 
-            modelBuilder.Entity("BankingApp.Entities.Entities.MonthlyPayment", b =>
+            modelBuilder.Entity("BankingApp.Entities.Entities.MonthlyPayments", b =>
                 {
                     b.HasOne("BankingApp.Entities.Entities.Deposit", "Deposit")
                         .WithMany("MonthlyPayments")

@@ -13,12 +13,11 @@ namespace BankingApp.BusinessLogicLayer
         {
             DataAccessLayer.Startup.Initialize(services, configuration);
 
-            services.AddTransient<IBankingService, BankingService>();
+            services.AddTransient<IDepositService, DepositService>();
 
             var mapperConfig = new MapperConfiguration(config =>
             {
-                config.AddProfile(new DepositeHistoryProfile());
-                config.AddProfile(new DepositeHistoryItemProfile());
+                config.AddProfile(new MapperProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();

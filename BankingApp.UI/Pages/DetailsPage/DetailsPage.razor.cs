@@ -1,5 +1,5 @@
 ﻿using BankingApp.UI.Core.Interfaces;
-using BankingApp.ViewModels.Banking.History;
+using BankingApp.ViewModels.Banking.Deposit;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
@@ -7,19 +7,19 @@ namespace BankingApp.UI.Pages.DetailsPage
 {
     public partial class DetailsPage
     {
-        private ResponseCalculationHistoryDetailsBankingView _responseCalculationHistoryItem;
+        private GetByIdDepositView _responseDepositView;
 
         [Inject]
         private ILoaderService _loaderService { get; set; }
         [Inject]
-        private IDepositeService _depositeService { get; set; }
+        private IDepositService _depositeService { get; set; }
         [Parameter]
-        public int DepositeHistoryId { get; set; }
+        public int DepositId { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             _loaderService.SwitchOn();
-            _responseCalculationHistoryItem = await _depositeService.GetCalculationHistoryDetailsAsync(DepositeHistoryId);
+            _responseDepositView = await _depositeService.GetByIdAsync(DepositId);
             _loaderService.SwitchOff();
         }
     }
