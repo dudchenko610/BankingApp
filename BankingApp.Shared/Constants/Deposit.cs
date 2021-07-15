@@ -44,9 +44,9 @@ namespace BankingApp.Shared
                 public const string GetById = "getById";
             }
 
-            public static class Account
+            public static class Authentication
             {
-                public const string Route = "api/account";
+                public const string Route = "api/authentication";
 
                 public const string SignUp = "signUp";
                 public const string SignIn = "signIn";

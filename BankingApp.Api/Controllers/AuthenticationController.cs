@@ -10,24 +10,24 @@ using static BankingApp.Shared.Constants;
 
 namespace BankingApp.Api.Controllers
 {
-    [Route(Routes.Account.Route)]
+    [Route(Routes.Authentication.Route)]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AccountController(IAccountService accountService)
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
-            _accountService = accountService;
+            _authenticationService = authenticationService;
         }
 
         [HttpPost]
-        [Route(Routes.Account.SignUp)]
-        public async Task<IActionResult> SignUp(SignUpAccountView signUpAccountView)
+        [Route(Routes.Authentication.SignUp)]
+        public async Task<IActionResult> SignUp(SignUpAuthenticationView signUpAccountView)
         {
             try
             {
-                await _accountService.SignUpAsync(signUpAccountView);
+                await _authenticationService.SignUpAsync(signUpAccountView);
                 return Ok();
             }
             catch (Exception e)
@@ -37,12 +37,12 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpPost]
-        [Route(Routes.Account.SignIn)]
-        public async Task<IActionResult> SignIn(SignInAccountView signInAccountView)
+        [Route(Routes.Authentication.SignIn)]
+        public async Task<IActionResult> SignIn(SignInAuthenticationView signInAccountView)
         {
             try
             {
-                var tokensView = await _accountService.SignInAsync(signInAccountView);
+                var tokensView = await _authenticationService.SignInAsync(signInAccountView);
                 return Ok(tokensView);
             }
             catch (Exception e)
@@ -52,12 +52,12 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpPost]
-        [Route(Routes.Account.ConfirmEmail)]
-        public async Task<IActionResult> ConfirmEmail(ConfirmEmailAccountView confirmEmailAccountView)
+        [Route(Routes.Authentication.ConfirmEmail)]
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailAuthenticationView confirmEmailAccountView)
         {
             try
             {
-                var tokensView = await _accountService.ConfirmEmailAsync(confirmEmailAccountView);
+                var tokensView = await _authenticationService.ConfirmEmailAsync(confirmEmailAccountView);
                 return Ok(tokensView);
             }
             catch (Exception e)

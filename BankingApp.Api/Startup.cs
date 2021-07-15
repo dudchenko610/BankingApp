@@ -26,8 +26,8 @@ namespace BankingApp.Api
             BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
 
             services.AddTransient<IValidator<CalculateDepositView>, CalculateDepositeViewValidator>();
-            services.AddTransient<IValidator<SignInAccountView>, SignInAccountViewValidator>();
-            services.AddTransient<IValidator<SignUpAccountView>, SignUpAccountViewValidator>();
+            services.AddTransient<IValidator<SignInAuthenticationView>, SignInAccountViewValidator>();
+            services.AddTransient<IValidator<SignUpAuthenticationView>, SignUpAccountViewValidator>();
 
             services.AddCors(options =>
             {

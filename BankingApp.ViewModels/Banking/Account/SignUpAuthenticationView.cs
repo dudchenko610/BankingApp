@@ -1,7 +1,7 @@
 ﻿
 namespace BankingApp.ViewModels.Banking.Account
 {
-    public class SignUpAccountView
+    public class SignUpAuthenticationView
     {
         public string Nickname { get; set; }
         public string Email { get; set; }

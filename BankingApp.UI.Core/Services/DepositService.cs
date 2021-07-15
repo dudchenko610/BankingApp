@@ -32,7 +32,7 @@ namespace BankingApp.UI.Core.Services
             if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
                 var errorMessage = JsonConvert.DeserializeObject<string>(serializedResponse);
-                _navigationWrapper.NavigateTo($"{Routes.Routes.ErrorPage}?errorMessage={errorMessage}");
+                _navigationWrapper.NavigateTo($"{Routes.Routes.NotificationPage}?message={errorMessage}");
             }
 
             var responseObject = JsonConvert.DeserializeObject<int>(serializedResponse);
@@ -49,7 +49,7 @@ namespace BankingApp.UI.Core.Services
             if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
                 var errorMessage = JsonConvert.DeserializeObject<string>(serializedResponse);
-                _navigationWrapper.NavigateTo($"{Routes.Routes.ErrorPage}?errorMessage={errorMessage}");
+                _navigationWrapper.NavigateTo($"{Routes.Routes.NotificationPage}?message={errorMessage}");
             }
 
             var responseObject = JsonConvert.DeserializeObject<PagedDataView<DepositGetAllDepositViewItem>>(serializedResponse);
@@ -66,7 +66,7 @@ namespace BankingApp.UI.Core.Services
             if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
                 var errorMessage = JsonConvert.DeserializeObject<string>(serializedResponse);
-                _navigationWrapper.NavigateTo($"{Routes.Routes.ErrorPage}?errorMessage={errorMessage}");
+                _navigationWrapper.NavigateTo($"{Routes.Routes.NotificationPage}?message={errorMessage}");
             }
 
             var responseObject = JsonConvert.DeserializeObject<GetByIdDepositView>(serializedResponse);

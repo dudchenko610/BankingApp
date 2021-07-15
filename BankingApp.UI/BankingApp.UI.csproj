@@ -16,4 +16,8 @@
     <ProjectReference Include="..\BankingApp.ViewModels\BankingApp.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\ConfirmEmailPage\" />
+  </ItemGroup>
+
 </Project>

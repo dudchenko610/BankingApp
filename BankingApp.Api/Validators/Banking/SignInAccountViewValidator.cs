@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace BankingApp.Api.Validators.Banking
 {
-    public class SignInAccountViewValidator : AbstractValidator<SignInAccountView>
+    public class SignInAccountViewValidator : AbstractValidator<SignInAuthenticationView>
     {
         public SignInAccountViewValidator()
         {

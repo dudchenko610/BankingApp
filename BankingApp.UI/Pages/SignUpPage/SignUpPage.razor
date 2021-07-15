@@ -1,0 +1,42 @@
+﻿@page "/signUp"
+
+<div class="container shadow p-3 mb-5 bg-white rounded w-50 mt-3">
+    <h2 class="d-flex justify-content-center">Type your register data</h2>
+    <EditForm Model="@_signUpView" OnValidSubmit="() => { OnFormSubmit(); }">
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+            <label for="nickname" class="form-label">Nickname</label>
+            <InputText @bind-Value="_signUpView.Nickname"
+                         id="nickname"
+                         placeholder="nickname"
+                         class="form-control" />
+            <ValidationMessage For="@(() => _signUpView.Nickname)" />
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <InputText @bind-Value="_signUpView.Email"
+                         id="email"
+                         placeholder="email"
+                         class="form-control" />
+            <ValidationMessage For="@(() => _signUpView.Email)" />
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <InputText @bind-Value="_signUpView.Password"
+                         id="password"
+                         placeholder="password"
+                         class="form-control" />
+            <ValidationMessage For="@(() => _signUpView.Password)" />
+        </div>
+        <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <InputText @bind-Value="_signUpView.ConfirmPassword"
+                         id="confirmPassword"
+                         placeholder="password"
+                         class="form-control" />
+            <ValidationMessage For="@(() => _signUpView.ConfirmPassword)" />
+        </div>
+        <button type="submit" disabled="@(!context.Validate() || !context.IsModified())" class="btn btn-primary btn-block">Sign Up</button>
+    </EditForm>
+</div>

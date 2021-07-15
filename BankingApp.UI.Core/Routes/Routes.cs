@@ -9,6 +9,6 @@ namespace BankingApp.UI.Core.Routes
         public const string MainPage = "/";
         public const string HistoryPage = "/history";
         public const string DetailsPage = "/details";
-        public const string ErrorPage = "/error";
+        public const string NotificationPage = "/notification";
     }
 }

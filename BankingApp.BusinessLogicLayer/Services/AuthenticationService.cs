@@ -4,19 +4,19 @@ using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Services
 {
-    public class AccountService : IAccountService
+    public class AuthenticationService : IAuthenticationService
     {
-        public async Task<TokensView> ConfirmEmailAsync(ConfirmEmailAccountView confirmEmailAccountView)
+        public async Task<TokensView> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<TokensView> SignInAsync(SignInAccountView signInAccountView)
+        public async Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task SignUpAsync(SignUpAccountView signUpAccountView)
+        public async Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
             throw new System.NotImplementedException();
         }

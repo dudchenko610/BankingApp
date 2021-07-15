@@ -14,7 +14,7 @@ namespace BankingApp.BusinessLogicLayer
             DataAccessLayer.Startup.Initialize(services, configuration);
 
             services.AddTransient<IDepositService, DepositService>();
-            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
 
             var mapperConfig = new MapperConfiguration(config =>
             {
