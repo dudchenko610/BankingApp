@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\EFRepositories\**" />
+    <Compile Remove="Repositories\Interfaces\**" />
+    <EmbeddedResource Remove="Repositories\EFRepositories\**" />
+    <EmbeddedResource Remove="Repositories\Interfaces\**" />
+    <None Remove="Repositories\EFRepositories\**" />
+    <None Remove="Repositories\Interfaces\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.7">
@@ -24,11 +33,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankingApp.Entities\BankingApp.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Repositories\EFRepositories\" />
-    <Folder Include="Repositories\Interfaces\" />
   </ItemGroup>
 
 </Project>

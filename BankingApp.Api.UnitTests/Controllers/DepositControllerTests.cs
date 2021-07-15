@@ -17,8 +17,8 @@ namespace BankingApp.Api.UnitTests.Controllers
     public class DepositControllerTests
     {
         private const int DepositeServiceCalculateReturnValue = 1;
-        private const int PageNumber = 1;
-        private const int PageSize = 1;
+        private const int ValidPageNumber = 1;
+        private const int ValidPageSize = 1;
 
         [Test]
         public async Task Calculate_СorrectInputData_ReturnsOkResultAndBankingServiceReceivesValidModel()
@@ -82,7 +82,7 @@ namespace BankingApp.Api.UnitTests.Controllers
 
             var depositController = new DepositController(depositServiceMock.Object);
 
-            var controllerResult = await depositController.GetAll(PageNumber, PageSize);
+            var controllerResult = await depositController.GetAll(ValidPageNumber, ValidPageSize);
             var okResult = controllerResult as ObjectResult;
 
             var resultOfOkObjectResultValidation = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
@@ -110,10 +110,10 @@ namespace BankingApp.Api.UnitTests.Controllers
                 );
 
             var depositController = new DepositController(depositServiceMock.Object);
-            await depositController.GetAll(PageNumber, PageSize);
+            await depositController.GetAll(ValidPageNumber, ValidPageSize);
 
-            passedPageNumber.Should().Be(PageNumber);
-            passedPageSize.Should().Be(PageSize);
+            passedPageNumber.Should().Be(ValidPageNumber);
+            passedPageSize.Should().Be(ValidPageSize);
         }
 
         private CalculateDepositView GetValidCalculateDepositView()
