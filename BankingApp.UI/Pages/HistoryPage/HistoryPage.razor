@@ -1,0 +1,24 @@
+﻿@page "/history" 
+@page "/history/{page:int}" 
+
+<div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100 w-100">
+    @if (_depositViews != null && _depositViews.DepositItems.Any())
+    {
+        <div class="d-flex align-items-center justify-content-center flex-column w-100">
+            <div class="w-100">
+                <DepositList DepositViewList="_pagedChunck" OnDepositItemClicked="OnDepositeHistoryItemClicked" />
+            </div>
+
+            <div class="mt-4">
+                <PaginationSwitcher PageCount="_totalPageCount" CurrentPage="Page" OnPageClick="@OnPageClicked" />
+            </div>
+        </div>
+    }
+    else 
+    {
+        <div>
+            <h6>Deposit history list is empty !</h6>
+        </div>
+    }
+</div>
+

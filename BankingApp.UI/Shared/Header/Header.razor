@@ -1,0 +1,21 @@
+﻿<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <label class="navbar-brand" href="/">BankingApp</label>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample02">
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item  @GetActive("", NavLinkMatch.All)">
+                <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.MainPage); }" @onclick:preventDefault>MainPage</a>
+            </li>
+
+            <li class="nav-item  @GetActive("history", NavLinkMatch.All)">
+                <a class="nav-link @_navLinksDisabledClass" href="#" @onclick='() => { _navigationWrapper.NavigateTo(Routes.HistoryPage + "/1"); }' @onclick:preventDefault>History</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>

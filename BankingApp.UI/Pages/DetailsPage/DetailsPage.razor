@@ -1,0 +1,34 @@
+﻿@page "/details/{depositId:int}"
+
+<div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100 w-100">
+
+    @if (_responseDepositView != null)
+    {
+        <div class="card mb-2">
+            <div class="card-header" id="headingOne">
+                <h6>
+                    <div class="container-fluid d-flex flex-column">
+                        <label>Date: @_responseDepositView.CalсulationDateTime</label>
+                        <label>Formula: @_responseDepositView.CalculationFormula</label>
+                        <label>Deposite Sum: @_responseDepositView.DepositSum</label>
+                        <label>Month Count: @_responseDepositView.MonthsCount</label>
+                        <label>Percents: @_responseDepositView.Percents</label>
+                    </div>
+                </h6>
+            </div>
+
+            <div class="" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <MonthlyPaymentList MonthlyPaymentViewList ="_responseDepositView.MonthlyPaymentItems" />
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            <h6>There is no such deposite calculation in history list!</h6>
+        </div>
+    }
+</div>
+

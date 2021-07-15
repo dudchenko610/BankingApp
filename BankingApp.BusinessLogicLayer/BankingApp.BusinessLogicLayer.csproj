@@ -6,8 +6,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankingApp.DataAccessLayer\BankingApp.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\BankingApp.Entities\BankingApp.Entities.csproj" />
     <ProjectReference Include="..\BankingApp.ViewModels\BankingApp.ViewModels.csproj" />
     <ProjectReference Include="..\BankingApp.Shared\BankingApp.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
   </ItemGroup>
 
 </Project>
