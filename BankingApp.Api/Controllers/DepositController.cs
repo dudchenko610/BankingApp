@@ -3,10 +3,12 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;
 using BankingApp.ViewModels.Banking.Deposit;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace BankingApp.Api.Controllers
 {
-    [Route(Routes.Banking.DepositRoute)]
+    [Route(Routes.Deposit.Route)]
     [ApiController]
     public class DepositController : Controller
     {
@@ -18,28 +20,49 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpPost]
-        [Route(Routes.Banking.Calculate)]
+        [Route(Routes.Deposit.Calculate)]
         public async Task<IActionResult> Calculate(CalculateDepositView requestDepositeData)
         {
-            var id = await _depositService.CalculateAsync(requestDepositeData);
-            return Ok(id);
+            try
+            {
+                var id = await _depositService.CalculateAsync(requestDepositeData);
+                return Ok(id);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
 
         [HttpGet]
-        [Route(Routes.Banking.GetAll)]
+        [Route(Routes.Deposit.GetAll)]
         public async Task<IActionResult> GetAll(int pageNumber, int pageSize)
         {
-            var pagedDepositResponse = await _depositService.GetAllAsync(pageNumber, pageSize);
-            return Ok(pagedDepositResponse);
+            try
+            {
+                var pagedDepositResponse = await _depositService.GetAllAsync(pageNumber, pageSize);
+                return Ok(pagedDepositResponse);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
 
         [HttpGet]
-        [Route(Routes.Banking.GetById)]
+        [Route(Routes.Deposit.GetById)]
         public async Task<IActionResult> GetById(int depositeHistoryId)
         {
-            var responseCalculationHistoryViewItem 
-                = await _depositService.GetByIdAsync(depositeHistoryId);
-            return Ok(responseCalculationHistoryViewItem);
+            try
+            {
+                var responseCalculationHistoryViewItem
+                    = await _depositService.GetByIdAsync(depositeHistoryId);
+                return Ok(responseCalculationHistoryViewItem);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
     }
 }
