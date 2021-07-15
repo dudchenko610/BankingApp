@@ -27,10 +27,10 @@ namespace BankingApp.Api.Controllers
 
         [HttpGet]
         [Route(Routes.Banking.GetAll)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int pageNumber, int pageSize)
         {
-            var depositeCalculationHistory = await _depositService.GetAllAsync();
-            return Ok(depositeCalculationHistory);
+            var pagedDepositResponse = await _depositService.GetAllAsync(pageNumber, pageSize);
+            return Ok(pagedDepositResponse);
         }
 
         [HttpGet]
