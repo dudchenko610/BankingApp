@@ -13,17 +13,17 @@ namespace BankingApp.UI.Shared.AppRouteView
     public class AppRouteView : RouteView
     {
         [Inject]
-        public INavigationWrapper NavigationWrapper { get; set; }
+        private INavigationWrapper _navigationWrapper { get; set; }
 
         [Inject]
-        public IAuthenticationService AuthenticationService { get; set; }
+        private IAuthenticationService _authenticationService { get; set; }
 
         protected override void Render(RenderTreeBuilder builder)
         {
             bool authorize = Attribute.GetCustomAttribute(RouteData.PageType, typeof(AuthorizeAttribute)) != null;
-            if (authorize && AuthenticationService.User == null)
+            if (authorize && _authenticationService.User == null)
             {
-                NavigationWrapper.NavigateTo(Routes.SignInPage);
+                _navigationWrapper.NavigateTo(Routes.SignInPage);
             }
             else
             {

@@ -8,14 +8,30 @@
     <div class="collapse navbar-collapse" id="navbarsExample02">
         <ul class="navbar-nav mr-auto">
 
-            <li class="nav-item  @GetActive("", NavLinkMatch.All)">
-                <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.MainPage); }" @onclick:preventDefault>MainPage</a>
-            </li>
+            @if (_authenticationService.User is not null)
+            {
+                <li class="nav-item  @GetActive("", NavLinkMatch.All)">
+                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.MainPage); }" @onclick:preventDefault>MainPage</a>
+                </li>
 
-            <li class="nav-item  @GetActive("history", NavLinkMatch.All)">
-                <a class="nav-link @_navLinksDisabledClass" href="#" @onclick='() => { _navigationWrapper.NavigateTo(Routes.HistoryPage + "/1"); }' @onclick:preventDefault>History</a>
-            </li>
+                <li class="nav-item  @GetActive("history", NavLinkMatch.All)">
+                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick='() => { _navigationWrapper.NavigateTo(Routes.HistoryPage + "/1"); }' @onclick:preventDefault>History</a>
+                </li>
 
+                <li class="nav-item  @GetActive("logout", NavLinkMatch.All)">
+                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="async () => { await _authenticationService.LogoutAsync(); }" @onclick:preventDefault>Logout</a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item  @GetActive("signIn", NavLinkMatch.All)">
+                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.SignInPage); }" @onclick:preventDefault>SignIn</a>
+                </li>
+
+                <li class="nav-item  @GetActive("signUp", NavLinkMatch.All)">
+                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.SignUpPage); }" @onclick:preventDefault>SignUp</a>
+                </li>
+            }
         </ul>
     </div>
 </nav>

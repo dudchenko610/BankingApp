@@ -11,6 +11,8 @@ namespace BankingApp.UI.Shared.Header
         private INavigationWrapper _navigationWrapper { get; set; }
         [Inject]
         private ILoaderService _loaderService { get; set; }
+        [Inject]
+        private IAuthenticationService _authenticationService { get; set; }
 
         public Header()
         {

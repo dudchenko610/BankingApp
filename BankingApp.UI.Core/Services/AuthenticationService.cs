@@ -7,14 +7,12 @@ namespace BankingApp.UI.Core.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IHttpService _httpService;
         private readonly INavigationWrapper _navigationWrapper;
         private readonly ILocalStorageService _localStorageService;        
         public User User { get; private set; }
         
-        public AuthenticationService(IHttpService httpService, INavigationWrapper navigationWrapper, ILocalStorageService localStorageService)
+        public AuthenticationService(INavigationWrapper navigationWrapper, ILocalStorageService localStorageService)
         {
-            _httpService = httpService;
             _navigationWrapper = navigationWrapper;
             _localStorageService = localStorageService;
         }
