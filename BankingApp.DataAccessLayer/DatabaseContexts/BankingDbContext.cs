@@ -17,7 +17,7 @@ namespace BankingApp.DataAccessLayer.DatabaseContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //  modelBuilder.Entity<User>().Property(p => p.Id).UseSqlServerIdentityColumn();
+
             modelBuilder.Entity<MonthlyPayment>()
                .HasOne(dhi => dhi.Deposit)
                .WithMany(dh => dh.MonthlyPayments)

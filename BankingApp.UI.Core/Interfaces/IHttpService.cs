@@ -5,7 +5,7 @@ namespace BankingApp.UI.Core.Interfaces
 {
     public interface IHttpService
     {
-        Task<T> Get<T>(string uri);
-        Task<T> Post<T>(string uri, object value);
+        Task<T> GetAsync<T>(string uri);
+        Task<T> PostAsync<T>(string uri, object value);
     }
 }
