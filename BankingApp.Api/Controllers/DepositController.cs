@@ -5,6 +5,7 @@ using static BankingApp.Shared.Constants;
 using BankingApp.ViewModels.Banking.Deposit;
 using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankingApp.Api.Controllers
 {
@@ -20,6 +21,7 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route(Routes.Deposit.Calculate)]
         public async Task<IActionResult> Calculate(CalculateDepositView requestDepositeData)
         {
@@ -35,6 +37,7 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route(Routes.Deposit.GetAll)]
         public async Task<IActionResult> GetAll(int pageNumber, int pageSize)
         {
@@ -50,6 +53,7 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route(Routes.Deposit.GetById)]
         public async Task<IActionResult> GetById(int depositeHistoryId)
         {

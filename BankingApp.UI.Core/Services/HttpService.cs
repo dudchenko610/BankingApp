@@ -18,16 +18,19 @@ namespace BankingApp.UI.Core.Services
         private readonly HttpClient _httpClient;
         private readonly INavigationWrapper _navigationWrapper;
         private readonly ILocalStorageService _localStorageService;
+        private readonly IAuthenticationService _authenticationService;
 
         public HttpService(
             HttpClient httpClient,
             INavigationWrapper navigationWrapper,
-            ILocalStorageService localStorageService
+            ILocalStorageService localStorageService,
+            IAuthenticationService authenticationService
         )
         {
             _httpClient = httpClient;
             _navigationWrapper = navigationWrapper;
             _localStorageService = localStorageService;
+            _authenticationService = authenticationService;
         }
 
         public async Task<T> GetAsync<T>(string uri)
@@ -56,7 +59,7 @@ namespace BankingApp.UI.Core.Services
             // auto logout on 401 response
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                _navigationWrapper.NavigateTo("logout");
+                await _authenticationService.LogoutAsync();
                 return default;
             }
 

@@ -10,5 +10,8 @@ namespace BankingApp.UI.Core.Routes
         public const string HistoryPage = "/history";
         public const string DetailsPage = "/details";
         public const string NotificationPage = "/notification";
+        public const string SignUpPage = "/signUp";
+        public const string SignInPage = "/signIn";
+
     }
 }
