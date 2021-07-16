@@ -1,5 +1,8 @@
 ﻿using BankingApp.UI.Core.Attributes;
+using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Account;
+using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
 
 namespace BankingApp.UI.Pages.SignInPage
 {
@@ -8,14 +11,17 @@ namespace BankingApp.UI.Pages.SignInPage
     {
         private SignInAuthenticationView _signInView;
 
+        [Inject]
+        private IAuthenticationService _authenticationService { get; set; }
+
         public SignInPage()
         {
             _signInView = new SignInAuthenticationView();
         }
 
-        private void OnFormSubmit()
-        { 
-        
+        private async Task OnFormSubmitAsync()
+        {
+            await _authenticationService.SignInAsync(_signInView);
         }
     }
 }

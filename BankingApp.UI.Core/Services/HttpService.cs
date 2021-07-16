@@ -33,31 +33,34 @@ namespace BankingApp.UI.Core.Services
             _authenticationService = authenticationService;
         }
 
-        public async Task<T> GetAsync<T>(string uri)
+        public async Task<T> GetAsync<T>(string uri, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
             return await SendRequestAsync<T>(request);
         }
 
-        public async Task<T> PostAsync<T>(string uri, object value)
+        public async Task<T> PostAsync<T>(string uri, object value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
-            return await SendRequestAsync<T>(request);
+            return await SendRequestAsync<T>(request, authorized);
         }
 
-        private async Task<T> SendRequestAsync<T>(HttpRequestMessage request)
+        private async Task<T> SendRequestAsync<T>(HttpRequestMessage request, bool authorized = true)
         {
-            // add jwt auth header if user is logged in and request is to the api url
-            var user = await _localStorageService.GetItem<User>("user");
-            var isApiUrl = !request.RequestUri.IsAbsoluteUri;
-            if (user != null && isApiUrl)
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.RefreshToken);
-
+            if (authorized)
+            {
+                // add jwt auth header if user is logged in and request is to the api url
+                var user = await _localStorageService.GetItem<User>("user");
+                var isApiUrl = !request.RequestUri.IsAbsoluteUri;
+                if (user != null && isApiUrl)
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.RefreshToken);
+            }
+            
             using var response = await _httpClient.SendAsync(request);
 
             // auto logout on 401 response
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            if (authorized && response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await _authenticationService.LogoutAsync();
                 return default;

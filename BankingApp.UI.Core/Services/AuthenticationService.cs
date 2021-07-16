@@ -8,13 +8,17 @@ namespace BankingApp.UI.Core.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly INavigationWrapper _navigationWrapper;
-        private readonly ILocalStorageService _localStorageService;        
+        private readonly ILocalStorageService _localStorageService;
+        private readonly IHttpService _httpService;
         public User User { get; private set; }
         
-        public AuthenticationService(INavigationWrapper navigationWrapper, ILocalStorageService localStorageService)
+        public AuthenticationService(INavigationWrapper navigationWrapper, 
+            ILocalStorageService localStorageService,
+            IHttpService httpService)
         {
             _navigationWrapper = navigationWrapper;
             _localStorageService = localStorageService;
+            _httpService = httpService;
         }
 
         public async Task InitializeAsync()
@@ -22,17 +26,17 @@ namespace BankingApp.UI.Core.Services
             User = await _localStorageService.GetItem<User>("user");
         }
 
-        public Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
+        public async Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<TokensView> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)
+        public async Task<TokensView> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView)
+        public async Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView)
         {
             throw new System.NotImplementedException();
         }
