@@ -4,14 +4,16 @@ using BankingApp.DataAccessLayer.DatabaseContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankingApp.DataAccessLayer.Migrations
 {
     [DbContext(typeof(BankingDbContext))]
-    partial class BankingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210716065930_UserWiredWithDeposit")]
+    partial class UserWiredWithDeposit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,7 +282,7 @@ namespace BankingApp.DataAccessLayer.Migrations
             modelBuilder.Entity("BankingApp.Entities.Entities.Deposit", b =>
                 {
                     b.HasOne("BankingApp.Entities.Entities.User", "User")
-                        .WithMany("Deposits")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -353,11 +355,6 @@ namespace BankingApp.DataAccessLayer.Migrations
             modelBuilder.Entity("BankingApp.Entities.Entities.Deposit", b =>
                 {
                     b.Navigation("MonthlyPayments");
-                });
-
-            modelBuilder.Entity("BankingApp.Entities.Entities.User", b =>
-                {
-                    b.Navigation("Deposits");
                 });
 #pragma warning restore 612, 618
         }

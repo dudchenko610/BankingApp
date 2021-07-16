@@ -4,14 +4,16 @@ using BankingApp.DataAccessLayer.DatabaseContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankingApp.DataAccessLayer.Migrations
 {
     [DbContext(typeof(BankingDbContext))]
-    partial class BankingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210715160336_UserIdentityAdded")]
+    partial class UserIdentityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,12 +43,7 @@ namespace BankingApp.DataAccessLayer.Migrations
                     b.Property<float>("Percents")
                         .HasColumnType("real");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Deposits");
                 });
@@ -277,17 +274,6 @@ namespace BankingApp.DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BankingApp.Entities.Entities.Deposit", b =>
-                {
-                    b.HasOne("BankingApp.Entities.Entities.User", "User")
-                        .WithMany("Deposits")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("BankingApp.Entities.Entities.MonthlyPayment", b =>
                 {
                     b.HasOne("BankingApp.Entities.Entities.Deposit", "Deposit")
@@ -353,11 +339,6 @@ namespace BankingApp.DataAccessLayer.Migrations
             modelBuilder.Entity("BankingApp.Entities.Entities.Deposit", b =>
                 {
                     b.Navigation("MonthlyPayments");
-                });
-
-            modelBuilder.Entity("BankingApp.Entities.Entities.User", b =>
-                {
-                    b.Navigation("Deposits");
                 });
 #pragma warning restore 612, 618
         }
