@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BankingApp.Api.Validators.Banking;
 using BankingApp.ViewModels.Banking.Deposit;
+using BankingApp.ViewModels.Banking.Account;
 
 namespace BankingApp.Api
 {
@@ -23,7 +24,10 @@ namespace BankingApp.Api
         {
             services.AddControllers().AddFluentValidation();
             BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
+
             services.AddTransient<IValidator<CalculateDepositView>, CalculateDepositeViewValidator>();
+            services.AddTransient<IValidator<SignInAuthenticationView>, SignInAccountViewValidator>();
+            services.AddTransient<IValidator<SignUpAuthenticationView>, SignUpAccountViewValidator>();
 
             services.AddCors(options =>
             {

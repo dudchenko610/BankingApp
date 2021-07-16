@@ -20,7 +20,12 @@ namespace BankingApp.UI
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
             ConfigureServices(builder.Services);
-            await builder.Build().RunAsync();
+
+            var host = builder.Build();
+            var authenticationService = host.Services.GetRequiredService<IAuthenticationService>();
+            await authenticationService.InitializeAsync();
+
+            await host.RunAsync();
         }
 
         public static void ConfigureServices(IServiceCollection services)
@@ -28,6 +33,9 @@ namespace BankingApp.UI
             services.AddSingleton<ILoaderService, LoaderService>();
             services.AddScoped<IDepositService, DepositService>();
             services.AddScoped<INavigationWrapper, NavigationWrapper>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<ILocalStorageService, LocalStorageService>();
+            services.AddScoped<IHttpService, HttpService>();
         }
     }
 }

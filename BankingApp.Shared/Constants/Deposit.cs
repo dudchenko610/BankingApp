@@ -19,17 +19,38 @@ namespace BankingApp.Shared
                 public const string IncorrectPageNumberFormat = "Page number should be integer, bigger than one number";
                 public const string IncorrectPageSizeFormat = "Page size should be positive integer number, bigger than one number";
             }
+
+            public static class Account
+            {
+                public const string EmailRequired = "Email is required";
+                public const string InvalidEmailFormat = "Invalid email format";
+                public const string PasswordEmpty = "Password is empty";
+                public const string PasswordLength = "Password is short";
+                public const string PasswordUppercaseLetter = "Password must contain at least one upper case letter";
+                public const string PasswordLowercaseLetter = "Password must contain at least one lowercase case letter";
+                public const string PasswordDigit = "Password must contain at least one digit";
+                public const string PasswordSpecialCharacter = "Password must contain at least one special character";
+            }
         }
 
         public static class Routes
         {
-            public static class Banking
+            public static class Deposit
             {
-                public const string DepositRoute = "api/deposit";
+                public const string Route = "api/deposit";
 
                 public const string Calculate = "calculateDeposit";
                 public const string GetAll = "getAll";
                 public const string GetById = "getById";
+            }
+
+            public static class Authentication
+            {
+                public const string Route = "api/authentication";
+
+                public const string SignUp = "signUp";
+                public const string SignIn = "signIn";
+                public const string ConfirmEmail = "confirmEmail";
             }
         }
 

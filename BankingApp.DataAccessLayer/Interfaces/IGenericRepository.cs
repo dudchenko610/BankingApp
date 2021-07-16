@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BankingApp.DataAccessLayer.Interfaces
 {
-    public interface IGenericRepository<TEntity> where TEntity : BaseEntity
+    public interface IGenericRepository<TEntity> where TEntity : class, IBaseEntity
     {
         public Task<int> AddAsync(TEntity item);
         public Task UpdateAsync(TEntity item);

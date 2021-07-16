@@ -1,0 +1,26 @@
+﻿@page "/signIn"
+
+<div class="container shadow p-3 mb-5 bg-white rounded w-50 mt-3">
+    <h2 class="d-flex justify-content-center">Type your login data</h2>
+    <EditForm Model="@_signInView" OnValidSubmit="async () => { await OnFormSubmitAsync(); }">
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <InputText @bind-Value="_signInView.Email"
+                         id="email"
+                         placeholder="email"
+                         class="form-control" />
+            <ValidationMessage For="@(() => _signInView.Email)" />
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <InputText @bind-Value="_signInView.Password"
+                         id="password"
+                         placeholder="password"
+                         class="form-control" />
+            <ValidationMessage For="@(() => _signInView.Password)" />
+        </div>
+        <button type="submit" disabled="@(!context.Validate() || !context.IsModified())" class="btn btn-primary btn-block">Sign In</button>
+    </EditForm>
+</div>

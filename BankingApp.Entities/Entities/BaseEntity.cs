@@ -2,7 +2,7 @@
 
 namespace BankingApp.Entities.Entities
 {
-    public class BaseEntity
+    public class BaseEntity : IBaseEntity
     {
         [Key]
         public int Id { get; set; }
