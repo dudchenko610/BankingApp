@@ -6,6 +6,9 @@ namespace BankingApp.UI.Shared.Header
 {
     public partial class Header
     {
+        private const string DisabledClass = "disabled";
+        private const string ActiveClass = "active";
+
         private string _navLinksDisabledClass;
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
@@ -16,14 +19,14 @@ namespace BankingApp.UI.Shared.Header
 
         public Header()
         {
-            _navLinksDisabledClass = "";
+            _navLinksDisabledClass = string.Empty;
         }
 
         protected override void OnInitialized()
         {
             _navigationWrapper.LocationChanged += (s, e) => StateHasChanged();
             _loaderService.OnLoaderSwitch += (show) => {
-                _navLinksDisabledClass = show ? "disabled" : "";
+                _navLinksDisabledClass = show ? DisabledClass : string.Empty;
                 StateHasChanged();
             };
         }
@@ -40,7 +43,7 @@ namespace BankingApp.UI.Shared.Header
 
         private string GetActive(string href, NavLinkMatch navLinkMatch = NavLinkMatch.Prefix)
         {
-            return IsActive(href, navLinkMatch) ? "active" : "";
+            return IsActive(href, navLinkMatch) ? ActiveClass : string.Empty;
         }
     }
 }

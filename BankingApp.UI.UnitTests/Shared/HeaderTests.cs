@@ -28,8 +28,6 @@ namespace BankingApp.UI.UnitTests.Shared
         public void Header_UserClicksUrlLink_LinkGetsActiveState()
         {
             var headerComponent = RenderComponent<Header>();
-
-            headerComponent.Find("li").ClassList.Should().NotContain("active");
             headerComponent.Find("a").Click();
             headerComponent.Find("li").ClassList.Should().Contain("active");
         }

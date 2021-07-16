@@ -1,7 +1,9 @@
 ﻿using BankingApp.DataAccessLayer.Interfaces;
+using BankingApp.DataAccessLayer.Models;
 using BankingApp.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BankingApp.DataAccessLayer.Repositories
@@ -30,7 +32,7 @@ namespace BankingApp.DataAccessLayer.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IList<TEntity>> GetAsync()
+        public async Task<IList<TEntity>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }
@@ -61,6 +63,17 @@ namespace BankingApp.DataAccessLayer.Repositories
         public async Task<int> GetCountAsync()
         {
             return await _dbSet.CountAsync();
+        }
+
+        public async Task<PaginationModel<TEntity>> GetAllAsync(int skip, int take)
+        {
+            var items = await _dbSet.Skip(skip).Take(take).ToListAsync();
+            var paginationModel = new PaginationModel<TEntity>
+            {
+                Items = items,
+                TotalCount = await _dbSet.CountAsync()
+            };
+            return paginationModel;
         }
     }
 }
