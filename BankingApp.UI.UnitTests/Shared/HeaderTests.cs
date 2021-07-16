@@ -29,7 +29,6 @@ namespace BankingApp.UI.UnitTests.Shared
         {
             var headerComponent = RenderComponent<Header>();
 
-            headerComponent.Find("li").ClassList.Should().NotContain("active");
             headerComponent.Find("a").Click();
             headerComponent.Find("li").ClassList.Should().Contain("active");
         }

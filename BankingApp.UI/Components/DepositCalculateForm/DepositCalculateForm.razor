@@ -12,9 +12,9 @@
         <div class="mb-3">
             <label for="depositeSum" class="form-label">Deposite Sum</label>
             <InputNumber @bind-Value="_requestModel.DepositSum"
-                         id="depositeSum"
+                         id="depositSum"
                          placeholder="deposite sum"
-                         type="number" step=".01"
+                         type="number"
                          class="form-control" />
             <ValidationMessage For="@(() => _requestModel.DepositSum)" />
         </div>

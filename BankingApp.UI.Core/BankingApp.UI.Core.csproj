@@ -6,10 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.JSInterop" Version="5.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BankingApp.Entities\BankingApp.Entities.csproj" />
     <ProjectReference Include="..\BankingApp.Shared\BankingApp.Shared.csproj" />
     <ProjectReference Include="..\BankingApp.ViewModels\BankingApp.ViewModels.csproj" />
   </ItemGroup>

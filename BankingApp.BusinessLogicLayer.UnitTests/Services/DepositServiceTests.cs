@@ -14,6 +14,7 @@ using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.Shared.Extensions;
 using BankingApp.ViewModels.Pagination;
+using BankingApp.DataAccessLayer.Models;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
@@ -50,7 +51,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             await CalculateTestForFormulaLogicAsync(inputServiceModel, validMonthlyPayments);
         }
-
+        
         [Test]
         public async Task Calculate_ValidDataPasses_MonthCountEqualsToMonthlyPaymentsCount()
         {
@@ -79,7 +80,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var depositRepositoryMock = new Mock<IDepositRepository>();
             depositRepositoryMock
-                .Setup(x => x.GetDepositsPagedAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(depositsResponseOfRepository);
             DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
 
@@ -90,13 +91,13 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 .BeOfType<PagedDataView<DepositGetAllDepositViewItem>>()
                 .Which.Items.Should().NotBeNull();
 
-            depositsResponseOfRepository.Deposits
+            depositsResponseOfRepository.Items
                 .Should().BeEquivalentTo(resPagedDeposits.Items,
                     options => options.ExcludingMissingMembers().Excluding(x => x.CalculationFormula));
 
-            for (int i = 0; i < depositsResponseOfRepository.Deposits.Count; i++)
+            for (int i = 0; i < depositsResponseOfRepository.Items.Count; i++)
             {
-                ((DepositCalculationFormulaEnumView)depositsResponseOfRepository.Deposits[i].CalculationFormula).GetDisplayValue()
+                ((DepositCalculationFormulaEnumView)depositsResponseOfRepository.Items[i].CalculationFormula).GetDisplayValue()
                 .Should().Be(resPagedDeposits.Items[i].CalculationFormula);
             }
         }
@@ -109,7 +110,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var depositRepositoryMock = new Mock<IDepositRepository>();
             depositRepositoryMock
-                .Setup(x => x.GetDepositsPagedAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(depositsResponseOfRepository);
             DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
             
@@ -125,7 +126,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var depositRepositoryMock = new Mock<IDepositRepository>();
             depositRepositoryMock
-                .Setup(x => x.GetDepositsPagedAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(depositsResponseOfRepository);
             DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
 
@@ -256,31 +257,33 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private (IList<Deposit> Deposits, int TotalCount) GetValidDepositsAndTotalCount()
+        private PaginationModel<Deposit> GetValidDepositsAndTotalCount()
         {
-            return (new List<Deposit>
+            return new PaginationModel<Deposit>
             {
-                new Deposit {
-                    Id = 1,
-                    DepositSum = 100,
-                    CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
-                    Percents = 2.45f
+                Items = new List<Deposit>
+                {
+                    new Deposit {
+                        Id = 1,
+                        DepositSum = 100,
+                        CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
+                        Percents = 2.45f
+                    },
+                    new Deposit {
+                        Id = 2,
+                        DepositSum = 200,
+                        CalculationFormula = Entities.Enums.CalculationFormulaEnum.CompoundInterest,
+                        Percents = 5
+                    },
+                    new Deposit {
+                        Id = 3,
+                        DepositSum = 300,
+                        CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
+                        Percents = 6
+                    }
                 },
-                new Deposit {
-                    Id = 2,
-                    DepositSum = 200,
-                    CalculationFormula = Entities.Enums.CalculationFormulaEnum.CompoundInterest,
-                    Percents = 5
-                },
-                new Deposit {
-                    Id = 3,
-                    DepositSum = 300,
-                    CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
-                    Percents = 6
-                }
-            }, 
-            
-            5);
+                TotalCount = 5
+            };
         }
 
         private Deposit GetValidDepositWithMonthlyPaymentItems()
