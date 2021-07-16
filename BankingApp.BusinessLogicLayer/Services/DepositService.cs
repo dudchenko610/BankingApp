@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.DataAccessLayer.Interfaces;
+using BankingApp.DataAccessLayer.Models;
 using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Deposit;
@@ -94,15 +95,15 @@ namespace BankingApp.BusinessLogicLayer.Services
             if (pageSize < 1)
                 throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
 
-            (IList<Deposit> Deposits, int TotalCount)
-                = await _depositRepository.GetDepositsPagedAsync((pageNumber - 1) * pageSize, pageSize);
+            PaginationModel<Deposit> depositsAndTotalCount
+                = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize);
 
             var pagedResponse = new PagedDataView<DepositGetAllDepositViewItem>
             {
-                Items = _mapper.Map<IList<Deposit>, IList<DepositGetAllDepositViewItem>>(Deposits),
+                Items = _mapper.Map<IList<Deposit>, IList<DepositGetAllDepositViewItem>>(depositsAndTotalCount.Items),
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalItems = TotalCount
+                TotalItems = depositsAndTotalCount.TotalCount
             };
 
             return pagedResponse;

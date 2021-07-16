@@ -5,8 +5,10 @@ namespace BankingApp.UI.Components.PaginationSwitcher
 {
     public partial class PaginationSwitcher
     {
+        private const string DisabledClass = "disabled";
+        private const string ActiveClass = "active";
+
         private int _pageOffset;
-        private int _selectedPage;
 
         private string _prevDisabledClass;
         private string _nextDisabledClass;
@@ -22,27 +24,24 @@ namespace BankingApp.UI.Components.PaginationSwitcher
         [Parameter]
         public EventCallback<int> OnPageClick { get; set; }
 
-        
         public PaginationSwitcher()
         {
             _pageOffset = 0;
-            _prevDisabledClass = "";
-            _nextDisabledClass = "";
+            _prevDisabledClass = string.Empty;
+            _nextDisabledClass = string.Empty;
 
-            _1DisabledClass = "";
-            _2DisabledClass = "";
-            _3DisabledClass = "";
+            _1DisabledClass = string.Empty;
+            _2DisabledClass = string.Empty;
+            _3DisabledClass = string.Empty;
         }
 
         protected override void OnInitialized()
         {
-            if (PageCount <= 0)
-            {
-                PageCount = 10;
-            }
+            if (PageCount <= 1)
+                PageCount = 1;
 
+            CurrentPage = CurrentPage < 1 || CurrentPage > PageCount ? 1 : CurrentPage;
             _pageOffset = CurrentPage - 2;
-            _selectedPage = CurrentPage < 1 || CurrentPage > PageCount ? 1 : CurrentPage;
             
             RecalculateConstraints();
             StateHasChanged();
@@ -51,43 +50,43 @@ namespace BankingApp.UI.Components.PaginationSwitcher
 
         private void RecalculateConstraints()
         {
-            _prevDisabledClass = "";
-            _nextDisabledClass = "";
-            _1DisabledClass = "";
-            _2DisabledClass = "";
-            _3DisabledClass = "";
+            _prevDisabledClass = string.Empty;
+            _nextDisabledClass = string.Empty;
+            _1DisabledClass = string.Empty;
+            _2DisabledClass = string.Empty;
+            _3DisabledClass = string.Empty;
 
             switch (PageCount)
             {
                 case 1:
-                    _2DisabledClass = "disabled";
-                    _3DisabledClass = "disabled";
-                    _prevDisabledClass = "disabled";
-                    _nextDisabledClass = "disabled";
+                    _2DisabledClass = DisabledClass;
+                    _3DisabledClass = DisabledClass;
+                    _prevDisabledClass = DisabledClass;
+                    _nextDisabledClass = DisabledClass;
                     _pageOffset = 0;
                     return;
                 case 2:
-                    _3DisabledClass = "disabled";
-                    _prevDisabledClass = "disabled";
-                    _nextDisabledClass = "disabled";
+                    _3DisabledClass = DisabledClass;
+                    _prevDisabledClass = DisabledClass;
+                    _nextDisabledClass = DisabledClass;
                     _pageOffset = 0;
                     return;
                 case 3:
-                    _prevDisabledClass = "disabled";
-                    _nextDisabledClass = "disabled";
+                    _prevDisabledClass = DisabledClass;
+                    _nextDisabledClass = DisabledClass;
                     _pageOffset = 0;
                     return;
             }
 
             if (_pageOffset <= 0)
             {
-                _prevDisabledClass = "disabled";
+                _prevDisabledClass = DisabledClass;
                 _pageOffset = 0;
             }
 
             if ((_pageOffset + 3) >= PageCount) 
             {
-                _nextDisabledClass = "disabled";
+                _nextDisabledClass = DisabledClass;
                 _pageOffset = PageCount - 3;
             }
         }
@@ -106,13 +105,13 @@ namespace BankingApp.UI.Components.PaginationSwitcher
         private string IsButtonActive(int i)
         {
             int checking = _pageOffset + i + 1;
-            return checking == _selectedPage ? "active" : "";
+            return checking == CurrentPage ? ActiveClass : string.Empty;
         }
 
         private void OnPageSelected(int i)
         {
-            _selectedPage = _pageOffset + i + 1;
-            OnPageClick.InvokeAsync(_selectedPage);
+            CurrentPage = _pageOffset + i + 1;
+            OnPageClick.InvokeAsync(CurrentPage);
         }
     }
 }

@@ -20,7 +20,6 @@ namespace BankingApp.UI
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
             ConfigureServices(builder.Services);
-
             await builder.Build().RunAsync();
         }
 
