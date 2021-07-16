@@ -1,12 +1,10 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Deposit;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
 namespace BankingApp.UI.Pages.DetailsPage
 {
-    [Authorize]
     public partial class DetailsPage
     {
         private GetByIdDepositView _responseDepositView;

@@ -11,8 +11,6 @@ namespace BankingApp.Entities.Entities
             MonthlyPayments = new List<MonthlyPayment>();
         }
 
-        public int UserId { get; set; }
-        public virtual User User { get; set; }
         public CalculationFormulaEnum CalculationFormula { get; set; }
         public decimal DepositSum { get; set; }
         public int MonthsCount { get; set; }

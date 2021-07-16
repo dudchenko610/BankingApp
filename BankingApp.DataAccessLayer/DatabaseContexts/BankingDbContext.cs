@@ -1,11 +1,9 @@
 ﻿using BankingApp.Entities.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.DataAccessLayer.DatabaseContexts
 {
-    public class BankingDbContext : IdentityDbContext<User, IdentityRole<int>, int>
+    public class BankingDbContext : DbContext
     {
         public DbSet<Deposit> Deposits { get; set; }
         public DbSet<MonthlyPayment> MonthlyPayments { get; set; }
@@ -16,8 +14,6 @@ namespace BankingApp.DataAccessLayer.DatabaseContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<MonthlyPayment>()
                .HasOne(dhi => dhi.Deposit)
                .WithMany(dh => dh.MonthlyPayments)

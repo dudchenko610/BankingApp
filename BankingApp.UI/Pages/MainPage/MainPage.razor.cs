@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using BankingApp.UI.Core.Routes;
 using BankingApp.ViewModels.Banking.Deposit;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BankingApp.UI.Pages.MainPage
 {
-    [Authorize]
     public partial class MainPage
     {
         [Inject]

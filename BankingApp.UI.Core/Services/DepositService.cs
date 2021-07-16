@@ -2,37 +2,55 @@
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Pagination;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BankingApp.UI.Core.Services
 {
     public class DepositService : IDepositService
     {
-        private readonly IHttpService _httpService;
+        private readonly HttpClient _httpClient;
 
-        public DepositService(IHttpService httpService)
+        public DepositService(HttpClient httpClient)
         {
-            _httpService = httpService;
+            _httpClient = httpClient;
         }
 
         public async Task<int> CalculateAsync(CalculateDepositView reqDeposite)
         {
-            int depositId = await _httpService.PostAsync<int>($"{Constants.Routes.Deposit.Route}/{Constants.Routes.Deposit.Calculate}", reqDeposite);
-            return depositId;
+            var serializedDepositeRequest = JsonConvert.SerializeObject(reqDeposite);
+
+            var requestContent = new StringContent(serializedDepositeRequest, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"{Constants.Routes.Banking.DepositRoute}/{Constants.Routes.Banking.Calculate}", requestContent);
+
+            var serializedResponse = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<int>(serializedResponse);
+
+            return responseObject;
         }
 
         public async Task<PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
         {
-            var pagedDataView = await _httpService
-                .GetAsync<PagedDataView<DepositGetAllDepositViewItem>>($"{Constants.Routes.Deposit.Route}/{Constants.Routes.Deposit.GetAll}?pageNumber={pageNumber}&pageSize={pageSize}");
-            return pagedDataView;
+            var response = await _httpClient
+                .GetAsync($"{Constants.Routes.Banking.DepositRoute}/{Constants.Routes.Banking.GetAll}?pageNumber={pageNumber}&pageSize={pageSize}");
+
+            var serializedResponse = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<PagedDataView<DepositGetAllDepositViewItem>>(serializedResponse);
+
+            return responseObject;
         }
 
         public async Task<GetByIdDepositView> GetByIdAsync(int depositeHistoryId)
         {
-            var depositViewWithMonthyPaymentList = await _httpService
-                .GetAsync<GetByIdDepositView>($"{Constants.Routes.Deposit.Route}/{Constants.Routes.Deposit.GetById}?depositeHistoryId={depositeHistoryId}");
-            return depositViewWithMonthyPaymentList;
+            var response = await _httpClient
+                .GetAsync($"{Constants.Routes.Banking.DepositRoute}/{Constants.Routes.Banking.GetById}?depositeHistoryId={depositeHistoryId}");
+
+            var serializedResponse = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<GetByIdDepositView>(serializedResponse);
+
+            return responseObject;
         }
     }
 }

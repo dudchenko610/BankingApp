@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BankingApp.DataAccessLayer.Repositories
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IBaseEntity
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         protected DbContext _context;
         protected DbSet<TEntity> _dbSet;
