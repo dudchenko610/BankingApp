@@ -24,7 +24,7 @@ namespace BankingApp.UI.UnitTests.Components
                 )
             );
 
-            depositeCalculateForm.Find("input[id=depositeSum]").Change(ValidDepositeSum.ToString());
+            depositeCalculateForm.Find("input[id=depositSum]").Change(ValidDepositeSum.ToString());
             depositeCalculateForm.Find("input[id=monthCount]").Change(ValidMonthsCount.ToString());
             depositeCalculateForm.Find("input[id=percents]").Change(ValidPercents.ToString());
             depositeCalculateForm.Find("form").Submit();
@@ -42,7 +42,7 @@ namespace BankingApp.UI.UnitTests.Components
 
             var depositeCalculateForm = RenderComponent<DepositCalculateForm>();
 
-            depositeCalculateForm.Find("input[id=depositeSum]").Change(InvalidDepositeSum.ToString());
+            depositeCalculateForm.Find("input[id=depositSum]").Change(InvalidDepositeSum.ToString());
             depositeCalculateForm.Find("input[id=monthCount]").Change(ValidMonthsCount.ToString());
             depositeCalculateForm.Find("input[id=percents]").Change(ValidPercents.ToString());
             depositeCalculateForm.Render();
@@ -54,11 +54,11 @@ namespace BankingApp.UI.UnitTests.Components
         [Fact]
         public void DepositCalculateForm_UserTypesDepositeSumWithMoreThanTwoDecimalPlaces_RenderTreeContainsIncorrectPriceFormatMessage()
         {
-            const string InvalidDepositeSum = "33,454";
+            const decimal InvalidDepositeSum = 95.589m;
 
             var depositeCalculateForm = RenderComponent<DepositCalculateForm>();
 
-            depositeCalculateForm.Find("input[id=depositeSum]").Change(InvalidDepositeSum);
+            depositeCalculateForm.Find("input[id=depositSum]").Change(InvalidDepositeSum.ToString());
             depositeCalculateForm.Find("input[id=monthCount]").Change(ValidMonthsCount.ToString());
             depositeCalculateForm.Find("input[id=percents]").Change(ValidPercents.ToString());
             depositeCalculateForm.Render();
@@ -74,7 +74,7 @@ namespace BankingApp.UI.UnitTests.Components
 
             var depositeCalculateForm = RenderComponent<DepositCalculateForm>();
 
-            depositeCalculateForm.Find("input[id=depositeSum]").Change(ValidDepositeSum.ToString());
+            depositeCalculateForm.Find("input[id=depositSum]").Change(ValidDepositeSum.ToString());
             depositeCalculateForm.Find("input[id=monthCount]").Change(ValidMonthsCount.ToString());
             depositeCalculateForm.Find("input[id=percents]").Change(InvalidPercents.ToString());
             depositeCalculateForm.Render();
@@ -90,7 +90,7 @@ namespace BankingApp.UI.UnitTests.Components
 
             var depositeCalculateForm = RenderComponent<DepositCalculateForm>();
 
-            depositeCalculateForm.Find("input[id=depositeSum]").Change(ValidDepositeSum.ToString());
+            depositeCalculateForm.Find("input[id=depositSum]").Change(ValidDepositeSum.ToString());
             depositeCalculateForm.Find("input[id=monthCount]").Change(ValidMonthsCount.ToString());
             depositeCalculateForm.Find("input[id=percents]").Change(InvalidPercents.ToString());
             depositeCalculateForm.Render();
@@ -106,7 +106,7 @@ namespace BankingApp.UI.UnitTests.Components
 
             var depositeCalculateForm = RenderComponent<DepositCalculateForm>();
 
-            depositeCalculateForm.Find("input[id=depositeSum]").Change(ValidDepositeSum.ToString());
+            depositeCalculateForm.Find("input[id=depositSum]").Change(ValidDepositeSum.ToString());
             depositeCalculateForm.Find("input[id=monthCount]").Change(ValidMonthsCount.ToString());
             depositeCalculateForm.Find("input[id=percents]").Change(InvalidPercents.ToString());
             depositeCalculateForm.Render();
@@ -122,7 +122,7 @@ namespace BankingApp.UI.UnitTests.Components
 
             var depositeCalculateForm = RenderComponent<DepositCalculateForm>();
 
-            depositeCalculateForm.Find("input[id=depositeSum]").Change(ValidDepositeSum.ToString());
+            depositeCalculateForm.Find("input[id=depositSum]").Change(ValidDepositeSum.ToString());
             depositeCalculateForm.Find("input[id=monthCount]").Change(InvalidMonthCount.ToString());
             depositeCalculateForm.Find("input[id=percents]").Change(ValidPercents.ToString());
             depositeCalculateForm.Render();

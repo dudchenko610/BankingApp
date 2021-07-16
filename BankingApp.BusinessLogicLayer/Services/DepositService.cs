@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.DataAccessLayer.Interfaces;
+using BankingApp.DataAccessLayer.Models;
 using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Enums;
+using BankingApp.ViewModels.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -56,16 +58,6 @@ namespace BankingApp.BusinessLogicLayer.Services
             return depositWithItemsView;
         }
 
-        public async Task<GetAllDepositView> GetAllAsync()
-        {
-            IList<Deposit> depositFromDb = await _depositRepository.GetAsync();
-
-            var response = new GetAllDepositView();
-            response.DepositItems = _mapper.Map<IList<Deposit>, IList<DepositGetAllDepositViewItem>>(depositFromDb);
-
-            return response;
-        }
-
         private CalculationFormula GetCalculationFormula(CalculateDepositView reqDepositeCalcInfo)
         {
             switch (reqDepositeCalcInfo.CalculationFormula)
@@ -93,6 +85,28 @@ namespace BankingApp.BusinessLogicLayer.Services
             decimal monthSum = reqDepositCalcInfo.DepositSum * (decimal)Math.Pow(1.0 + percentsDevidedBy1200, monthNumber);
             float percents = (float)decimal.Round(((monthSum - reqDepositCalcInfo.DepositSum) / reqDepositCalcInfo.DepositSum) * 100.0m, 2);
             return (monthSum, percents);
+        }
+
+        public async Task<PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
+        {
+            if (pageNumber < 1)
+                throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
+
+            if (pageSize < 1)
+                throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
+
+            PaginationModel<Deposit> depositsAndTotalCount
+                = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize);
+
+            var pagedResponse = new PagedDataView<DepositGetAllDepositViewItem>
+            {
+                Items = _mapper.Map<IList<Deposit>, IList<DepositGetAllDepositViewItem>>(depositsAndTotalCount.Items),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = depositsAndTotalCount.TotalCount
+            };
+
+            return pagedResponse;
         }
     }
 }

@@ -4,6 +4,7 @@ using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
+using FluentAssertions;
 
 namespace BankingApp.UI.UnitTests.Shared
 {
@@ -28,11 +29,10 @@ namespace BankingApp.UI.UnitTests.Shared
         {
             var headerComponent = RenderComponent<Header>();
 
-            Assert.Contains(headerComponent.Find("li").ClassList, i => i != "active");
             headerComponent.Find("a").Click();
-            Assert.Contains(headerComponent.Find("li").ClassList, i => i == "active");
+            headerComponent.Find("li").ClassList.Should().Contain("active");
         }
-        
+
         [Fact]
         public void Header_UserClicksUrlLink_AppSwitchesToAnotherRoute()
         { 

@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BankingApp.ViewModels.Banking.Deposit
 {
-    public class GetAllDepositView
-    {
-        public IList<DepositGetAllDepositViewItem> DepositItems { get; set; }
-
-        public GetAllDepositView()
-        {
-            DepositItems = new List<DepositGetAllDepositViewItem>();
-        }
-    }
-
     public class DepositGetAllDepositViewItem
     {
         public int Id { get; set; }

@@ -1,6 +1,7 @@
 ﻿using BankingApp.Shared;
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Deposit;
+using BankingApp.ViewModels.Pagination;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
@@ -30,12 +31,13 @@ namespace BankingApp.UI.Core.Services
             return responseObject;
         }
 
-        public async Task<GetAllDepositView> GetAllAsync()
+        public async Task<PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
         {
-            var response = await _httpClient.GetAsync($"{Constants.Routes.Banking.DepositRoute}/{Constants.Routes.Banking.GetAll}");
+            var response = await _httpClient
+                .GetAsync($"{Constants.Routes.Banking.DepositRoute}/{Constants.Routes.Banking.GetAll}?pageNumber={pageNumber}&pageSize={pageSize}");
 
             var serializedResponse = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<GetAllDepositView>(serializedResponse);
+            var responseObject = JsonConvert.DeserializeObject<PagedDataView<DepositGetAllDepositViewItem>>(serializedResponse);
 
             return responseObject;
         }

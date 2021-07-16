@@ -6,6 +6,6 @@ namespace BankingApp.DataAccessLayer.Interfaces
 {
     public interface IDepositRepository : IGenericRepository<Deposit>
     {
-        Task<Deposit> GetDepositWithItemsByIdAsync(int depositeHistoryId);
+        Task<Deposit> GetDepositWithItemsByIdAsync(int depositId);
     }
 }

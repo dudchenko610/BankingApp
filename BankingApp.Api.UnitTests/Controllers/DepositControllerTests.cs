@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using NUnit.Framework;
 using BankingApp.ViewModels.Banking.Deposit;
+using BankingApp.ViewModels.Pagination;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {
@@ -16,6 +17,8 @@ namespace BankingApp.Api.UnitTests.Controllers
     public class DepositControllerTests
     {
         private const int DepositeServiceCalculateReturnValue = 1;
+        private const int ValidPageNumber = 1;
+        private const int ValidPageSize = 1;
 
         [Test]
         public async Task Calculate_СorrectInputData_ReturnsOkResultAndBankingServiceReceivesValidModel()
@@ -71,22 +74,46 @@ namespace BankingApp.Api.UnitTests.Controllers
         [Test]
         public async Task GetAll_CallGetAllMethod_ReturnsNotNullModelWithNotNullMemberList()
         {
-            var getAllDepositViewResponseFromService = GetValidGetAllDepositViewList();
+            var getPagedAllDepositViewItemResponseFromService = GetValidPagedGetAllDepositViewItemList();
             var depositServiceMock = new Mock<IDepositService>();
             depositServiceMock
-                .Setup(x => x.GetAllAsync())
-                .ReturnsAsync(getAllDepositViewResponseFromService);
+                .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(getPagedAllDepositViewItemResponseFromService);
 
             var depositController = new DepositController(depositServiceMock.Object);
 
-            var controllerResult = await depositController.GetAll();
+            var controllerResult = await depositController.GetAll(ValidPageNumber, ValidPageSize);
             var okResult = controllerResult as ObjectResult;
 
             var resultOfOkObjectResultValidation = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
-            resultOfOkObjectResultValidation.Which.Value.Should().BeOfType<GetAllDepositView>();
+            resultOfOkObjectResultValidation.Which.Value.Should().BeOfType<PagedDataView<DepositGetAllDepositViewItem>>();
             resultOfOkObjectResultValidation.Which.StatusCode.Should().Be(StatusCodes.Status200OK);
 
-            okResult.Value.Should().NotBeNull().And.BeEquivalentTo(getAllDepositViewResponseFromService);
+            okResult.Value.Should().NotBeNull().And.BeEquivalentTo(getPagedAllDepositViewItemResponseFromService);
+        }
+
+        [Test]
+        public async Task GetAll_CallGetAllMethod_PassesValidParametersToService()
+        {
+            int passedPageNumber = -1;
+            int passedPageSize = -1;
+
+            var depositServiceMock = new Mock<IDepositService>();
+            depositServiceMock
+                .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .Callback(
+                    (int pageNumber, int pageSize) => 
+                    {
+                        passedPageNumber = pageNumber;
+                        passedPageSize = pageSize;
+                    }
+                );
+
+            var depositController = new DepositController(depositServiceMock.Object);
+            await depositController.GetAll(ValidPageNumber, ValidPageSize);
+
+            passedPageNumber.Should().Be(ValidPageNumber);
+            passedPageSize.Should().Be(ValidPageSize);
         }
 
         private CalculateDepositView GetValidCalculateDepositView()
@@ -100,11 +127,11 @@ namespace BankingApp.Api.UnitTests.Controllers
             };
         }
 
-        private GetAllDepositView GetValidGetAllDepositViewList()
+        private PagedDataView<DepositGetAllDepositViewItem> GetValidPagedGetAllDepositViewItemList()
         {
-            return new GetAllDepositView
+            return new PagedDataView<DepositGetAllDepositViewItem>
             {
-                DepositItems =
+                Items = new List<DepositGetAllDepositViewItem>
                 {
                     new DepositGetAllDepositViewItem
                     {
@@ -132,8 +159,11 @@ namespace BankingApp.Api.UnitTests.Controllers
                         MonthsCount = 2,
                         CalсulationDateTime = System.DateTime.Now,
                         CalculationFormula = "some formula"
-                    },
-                }
+                    }
+                },
+                PageNumber = 1,
+                PageSize = 1,
+                TotalItems = 3
             };
         }
 

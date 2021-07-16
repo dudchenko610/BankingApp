@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Components.Routing;
+﻿using Microsoft.AspNetCore.Components.Routing;
 using System;
 
 namespace BankingApp.UI.Core.Interfaces
