@@ -5,9 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BankingApp.UI.Shared.AppRouteView
 {
@@ -22,15 +19,20 @@ namespace BankingApp.UI.Shared.AppRouteView
         protected override void Render(RenderTreeBuilder builder)
         {
             bool authorize = Attribute.GetCustomAttribute(RouteData.PageType, typeof(AuthorizeAttribute)) != null;
+            bool unauthorized = Attribute.GetCustomAttribute(RouteData.PageType, typeof(UnauthorizedAttribute)) != null;
+
             if (authorize && _authenticationService.User == null)
             {
                 _navigationWrapper.NavigateTo(Routes.SignInPage);
-            }
-            else
+                return;
+            } 
+            if (unauthorized && _authenticationService.User != null)
             {
-                bool unauthorized = Attribute.GetCustomAttribute(RouteData.PageType, typeof(UnauthorizedAttribute)) != null;
-                base.Render(builder);
+                _navigationWrapper.NavigateTo(Routes.MainPage);
+                return;
             }
+
+            base.Render(builder);
         }
     }
 }
