@@ -1,4 +1,5 @@
 ﻿using BankingApp.Entities.Entities;
+using BankingApp.Shared;
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Account;
 using System.Threading.Tasks;
@@ -28,7 +29,8 @@ namespace BankingApp.UI.Core.Services
 
         public async Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
-            throw new System.NotImplementedException();
+            await _httpService.PostAsync<string>($"{Constants.Routes.Deposit.Route}/{Constants.Routes.Deposit.Calculate}", signUpAccountView, false);
+
         }
 
         public async Task<TokensView> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)

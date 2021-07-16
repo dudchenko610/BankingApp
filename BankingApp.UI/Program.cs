@@ -34,8 +34,8 @@ namespace BankingApp.UI
             services.AddScoped<IDepositService, DepositService>();
             services.AddScoped<INavigationWrapper, NavigationWrapper>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IHttpService, HttpService>();
             services.AddScoped<ILocalStorageService, LocalStorageService>();
+            services.AddScoped<IHttpService, HttpService>();
         }
     }
 }
