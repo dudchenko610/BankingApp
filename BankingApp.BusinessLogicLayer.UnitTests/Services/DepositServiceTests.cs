@@ -80,7 +80,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var depositRepositoryMock = new Mock<IDepositRepository>();
             depositRepositoryMock
-                .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+              .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(depositsResponseOfRepository);
             DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object);
 
@@ -91,7 +91,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 .BeOfType<PagedDataView<DepositGetAllDepositViewItem>>()
                 .Which.Items.Should().NotBeNull();
 
-            depositsResponseOfRepository.Items
+             depositsResponseOfRepository.Items
                 .Should().BeEquivalentTo(resPagedDeposits.Items,
                     options => options.ExcludingMissingMembers().Excluding(x => x.CalculationFormula));
 
@@ -282,7 +282,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                         Percents = 6
                     }
                 },
-                TotalCount = 5
+              TotalCount = 5
             };
         }
 

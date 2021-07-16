@@ -21,5 +21,11 @@ namespace BankingApp.DataAccessLayer.Repositories
                 .FirstOrDefaultAsync(dep => dep.Id == depositeHistoryId);
             return depositeHistory;
         }
+
+        public async Task<(IList<Deposit> Deposits, int TotalCount)> GetDepositsPagedAsync(int skip, int take)
+        {
+            var deposits = await _dbSet.Skip(skip).Take(take).ToListAsync();
+            return (deposits, await _dbSet.CountAsync());
+        }
     }
 }
