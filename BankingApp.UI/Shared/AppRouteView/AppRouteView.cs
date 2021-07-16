@@ -1,4 +1,5 @@
-﻿using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Attributes;
+using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Core.Routes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -27,6 +28,7 @@ namespace BankingApp.UI.Shared.AppRouteView
             }
             else
             {
+                bool unauthorized = Attribute.GetCustomAttribute(RouteData.PageType, typeof(UnauthorizedAttribute)) != null;
                 base.Render(builder);
             }
         }
