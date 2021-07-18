@@ -1,6 +1,6 @@
 ﻿using BankingApp.Shared;
 using BankingApp.Shared.Extensions;
-using BankingApp.ViewModels.Banking.Account;
+using BankingApp.ViewModels.Banking.Authentication;
 using FluentValidation;
 
 namespace BankingApp.Api.Validators.Banking
@@ -10,8 +10,8 @@ namespace BankingApp.Api.Validators.Banking
         public SignInAccountViewValidator()
         {
             RuleFor(x => x.Email)
-                .NotEmpty().WithMessage(Constants.Errors.Account.EmailRequired)
-                .EmailAddress().WithMessage(Constants.Errors.Account.InvalidEmailFormat);
+                .NotEmpty().WithMessage(Constants.Errors.Authentication.EmailRequired)
+                .EmailAddress().WithMessage(Constants.Errors.Authentication.InvalidEmailFormat);
             RuleFor(x => x.Password).Password();
         }
     }

@@ -1,5 +1,4 @@
-﻿
-namespace BankingApp.ViewModels.Banking.Account
+﻿namespace BankingApp.ViewModels.Banking.Authentication
 {
     public class SignUpAuthenticationView
     {

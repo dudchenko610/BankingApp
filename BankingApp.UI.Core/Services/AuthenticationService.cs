@@ -2,6 +2,7 @@
 using BankingApp.Shared;
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Account;
+using BankingApp.ViewModels.Banking.Authentication;
 using System.Threading.Tasks;
 
 namespace BankingApp.UI.Core.Services
@@ -29,8 +30,8 @@ namespace BankingApp.UI.Core.Services
 
         public async Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
-            await _httpService.PostAsync<string>($"{Constants.Routes.Deposit.Route}/{Constants.Routes.Deposit.Calculate}", signUpAccountView, false);
-
+            string notification = await _httpService.PostAsync<string>($"{Constants.Routes.Deposit.Route}/{Constants.Routes.Deposit.Calculate}", signUpAccountView, false);
+            _navigationWrapper.NavigateTo($"{Routes.Routes.NotificationPage}?message={notification}");
         }
 
         public async Task<TokensView> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)

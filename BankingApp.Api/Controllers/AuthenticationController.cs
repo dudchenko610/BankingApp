@@ -1,10 +1,8 @@
 ﻿using BankingApp.BusinessLogicLayer.Interfaces;
-using BankingApp.ViewModels.Banking.Account;
+using BankingApp.ViewModels.Banking.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;
 

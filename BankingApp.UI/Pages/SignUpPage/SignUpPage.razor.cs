@@ -1,6 +1,6 @@
 ﻿using BankingApp.UI.Core.Attributes;
 using BankingApp.UI.Core.Interfaces;
-using BankingApp.ViewModels.Banking.Account;
+using BankingApp.ViewModels.Banking.Authentication;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 

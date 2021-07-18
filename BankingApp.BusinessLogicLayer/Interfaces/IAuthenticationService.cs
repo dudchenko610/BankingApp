@@ -1,4 +1,5 @@
 ﻿using BankingApp.ViewModels.Banking.Account;
+using BankingApp.ViewModels.Banking.Authentication;
 using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Interfaces

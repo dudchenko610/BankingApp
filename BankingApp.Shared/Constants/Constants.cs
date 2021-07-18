@@ -20,7 +20,7 @@ namespace BankingApp.Shared
                 public const string IncorrectPageSizeFormat = "Page size should be positive integer number, bigger than one number";
             }
 
-            public static class Account
+            public static class Authentication
             {
                 public const string EmailRequired = "Email is required";
                 public const string InvalidEmailFormat = "Invalid email format";
@@ -30,6 +30,9 @@ namespace BankingApp.Shared
                 public const string PasswordLowercaseLetter = "Password must contain at least one lowercase case letter";
                 public const string PasswordDigit = "Password must contain at least one digit";
                 public const string PasswordSpecialCharacter = "Password must contain at least one special character";
+
+                public const string UserAlreadyExists = "User with such email already exists";
+                public const string UerWasNotRegistered = "Unexpected error happened. User was not registered, try again!";
             }
         }
 
@@ -60,6 +63,11 @@ namespace BankingApp.Shared
             public const int PageSizeElements = 2;
             public const string PagesNumberUrlParam = "pageNumber";
             public const string PageSizeUrlParam = "pageSize";
+        }
+        
+        public static class Notifications
+        {
+            public const string ConfirmEmail = "To confirm email, you need to click a link in sent message on your mailbox";
         }
     }
 }

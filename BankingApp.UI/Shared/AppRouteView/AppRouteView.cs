@@ -12,7 +12,6 @@ namespace BankingApp.UI.Shared.AppRouteView
     {
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
-
         [Inject]
         private IAuthenticationService _authenticationService { get; set; }
 

@@ -3,6 +3,7 @@ using BankingApp.Entities.Entities;
 using BankingApp.ViewModels.Enums;
 using BankingApp.Shared.Extensions;
 using BankingApp.ViewModels.Banking.Deposit;
+using BankingApp.ViewModels.Banking.Authentication;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {
@@ -22,6 +23,9 @@ namespace BankingApp.BusinessLogicLayer.Mapper
                     model => model.MapFrom(c => ((DepositCalculationFormulaEnumView)c.CalculationFormula).GetDisplayValue()));
        
             CreateMap<MonthlyPayment, MonthlyPaymentGetByIdDepositViewItem>();
+
+            CreateMap<SignUpAuthenticationView, User>()
+                .ForMember(x => x.UserName, model => model.MapFrom(c => c.Nickname));
         }
     }
 }

@@ -19,7 +19,10 @@ namespace BankingApp.DataAccessLayer
                 builder.UseSqlServer(connection, x => x.MigrationsAssembly("BankingApp.DataAccessLayer"))
             );
 
-            services.AddIdentity<User, IdentityRole<int>>()
+            services.AddIdentity<User, IdentityRole<int>>(options =>
+                {
+                    options.User.RequireUniqueEmail = true;
+                })
                 .AddEntityFrameworkStores<BankingDbContext>()
                 .AddDefaultTokenProviders();
 

@@ -7,12 +7,12 @@ namespace BankingApp.Shared.Extensions
         public static IRuleBuilder<T, string> Password<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength = 14)
         {
             var options = ruleBuilder
-                .NotEmpty().WithMessage(Constants.Errors.Account.PasswordEmpty)
-                .MinimumLength(minimumLength).WithMessage(Constants.Errors.Account.PasswordLength)
-                .Matches("[A-Z]").WithMessage(Constants.Errors.Account.PasswordUppercaseLetter)
-                .Matches("[a-z]").WithMessage(Constants.Errors.Account.PasswordLowercaseLetter)
-                .Matches("[0-9]").WithMessage(Constants.Errors.Account.PasswordDigit)
-                .Matches("[^a-zA-Z0-9]").WithMessage(Constants.Errors.Account.PasswordSpecialCharacter);
+                .NotEmpty().WithMessage(Constants.Errors.Authentication.PasswordEmpty)
+                .MinimumLength(minimumLength).WithMessage(Constants.Errors.Authentication.PasswordLength)
+                .Matches("[A-Z]").WithMessage(Constants.Errors.Authentication.PasswordUppercaseLetter)
+                .Matches("[a-z]").WithMessage(Constants.Errors.Authentication.PasswordLowercaseLetter)
+                .Matches("[0-9]").WithMessage(Constants.Errors.Authentication.PasswordDigit)
+                .Matches("[^a-zA-Z0-9]").WithMessage(Constants.Errors.Authentication.PasswordSpecialCharacter);
             return options;
         }
     }
