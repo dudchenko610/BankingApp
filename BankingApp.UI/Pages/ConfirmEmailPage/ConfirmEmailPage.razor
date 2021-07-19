@@ -1,5 +1,5 @@
-﻿<h3>ConfirmEmailPage</h3>
+﻿@page "/confirmEmail/{email}/{code}"
 
-@code {
-
-}
+<div class="container shadow p-3 mb-5 bg-white rounded w-50 mt-3">
+    <button @onclick="async () => { await OnClickConfirmEmailAsync(); }" class="btn d-flex justify-content-center">To confirm your email, click the button</button>
+</div>

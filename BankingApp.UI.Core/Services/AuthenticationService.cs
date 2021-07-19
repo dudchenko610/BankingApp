@@ -3,6 +3,7 @@ using BankingApp.Shared;
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Account;
 using BankingApp.ViewModels.Banking.Authentication;
+using Blazored.Toast.Services;
 using System.Threading.Tasks;
 
 namespace BankingApp.UI.Core.Services
@@ -12,15 +13,19 @@ namespace BankingApp.UI.Core.Services
         private readonly INavigationWrapper _navigationWrapper;
         private readonly ILocalStorageService _localStorageService;
         private readonly IHttpService _httpService;
+        private readonly IToastService _toastService;
+
         public User User { get; private set; }
         
         public AuthenticationService(INavigationWrapper navigationWrapper, 
             ILocalStorageService localStorageService,
-            IHttpService httpService)
+            IHttpService httpService,
+            IToastService toastService)
         {
             _navigationWrapper = navigationWrapper;
             _localStorageService = localStorageService;
             _httpService = httpService;
+            _toastService = toastService;
         }
 
         public async Task InitializeAsync()
@@ -30,8 +35,8 @@ namespace BankingApp.UI.Core.Services
 
         public async Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
-            string notification = await _httpService.PostAsync<string>($"{Constants.Routes.Deposit.Route}/{Constants.Routes.Deposit.Calculate}", signUpAccountView, false);
-            _navigationWrapper.NavigateTo($"{Routes.Routes.NotificationPage}?message={notification}");
+            await _httpService.PostAsync<object>($"{Constants.Routes.Authentication.Route}/{Constants.Routes.Authentication.SignUp}", signUpAccountView, false);
+            _toastService.ShowSuccess(Notifications.Notifications.ConfirmYourEmail);
         }
 
         public async Task<TokensView> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)

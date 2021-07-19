@@ -1,4 +1,5 @@
 ﻿using BankingApp.BusinessLogicLayer.Interfaces;
+using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,10 +27,15 @@ namespace BankingApp.Api.Controllers
             try
             {
                 await _authenticationService.SignUpAsync(signUpAccountView);
+                Console.WriteLine("SEND OK");
+
                 return Ok();
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine("FINISHED");
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
@@ -55,8 +61,8 @@ namespace BankingApp.Api.Controllers
         {
             try
             {
-                var tokensView = await _authenticationService.ConfirmEmailAsync(confirmEmailAccountView);
-                return Ok(tokensView);
+                await _authenticationService.ConfirmEmailAsync(confirmEmailAccountView);
+                return Ok();
             }
             catch (Exception e)
             {

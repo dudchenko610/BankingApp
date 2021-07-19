@@ -8,6 +8,6 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
     {
         Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView);
         Task SignUpAsync(SignUpAuthenticationView signUpAccountView);
-        Task<TokensView> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView);
+        Task ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView);
     }
 }

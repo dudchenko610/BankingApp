@@ -1,5 +1,6 @@
 ﻿using BankingApp.Entities.Entities;
 using BankingApp.UI.Core.Interfaces;
+using Blazored.Toast.Services;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -18,29 +19,52 @@ namespace BankingApp.UI.Core.Services
         private readonly HttpClient _httpClient;
         private readonly INavigationWrapper _navigationWrapper;
         private readonly ILocalStorageService _localStorageService;
+        private readonly IToastService _toastService;
 
         public HttpService(
             HttpClient httpClient,
             INavigationWrapper navigationWrapper,
-            ILocalStorageService localStorageService
+            ILocalStorageService localStorageService,
+            IToastService toastService
         )
         {
             _httpClient = httpClient;
             _navigationWrapper = navigationWrapper;
             _localStorageService = localStorageService;
+            _toastService = toastService;
         }
 
         public async Task<T> GetAsync<T>(string uri, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
-            return await SendRequestAsync<T>(request);
+
+            try
+            {
+                return await SendRequestAsync<T>(request, authorized);
+            }
+            catch
+            {
+                _toastService.ShowError("Unexpected error happened, try later!");
+                return default;
+            }
         }
 
         public async Task<T> PostAsync<T>(string uri, object value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
-            return await SendRequestAsync<T>(request, authorized);
+            try
+            {
+                return await SendRequestAsync<T>(request, authorized);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                _toastService.ShowError("Unexpected error happened, try later!");
+                return default;
+            }
         }
 
         private async Task<T> SendRequestAsync<T>(HttpRequestMessage request, bool authorized = true)
@@ -53,7 +77,7 @@ namespace BankingApp.UI.Core.Services
                 if (user != null && isApiUrl)
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.RefreshToken);
             }
-            
+
             using var response = await _httpClient.SendAsync(request);
 
             // auto logout on 401 response
@@ -63,11 +87,10 @@ namespace BankingApp.UI.Core.Services
                 return default;
             }
 
-            // throw exception on error response
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
-                _navigationWrapper.NavigateTo($"{Routes.Routes.NotificationPage}?message={errorMessage}");
+                _toastService.ShowError(errorMessage);
                 return default;
             }
 

@@ -1,6 +1,7 @@
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Core.Services;
 using BankingApp.UI.Core.Wrappers;
+using Blazored.Toast;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -36,6 +37,8 @@ namespace BankingApp.UI
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ILocalStorageService, LocalStorageService>();
             services.AddScoped<IHttpService, HttpService>();
+
+            services.AddBlazoredToast();
         }
     }
 }

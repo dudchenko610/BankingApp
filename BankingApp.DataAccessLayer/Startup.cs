@@ -3,7 +3,6 @@ using BankingApp.DataAccessLayer.Interfaces;
 using BankingApp.DataAccessLayer.Repositories;
 using BankingApp.Entities.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +20,7 @@ namespace BankingApp.DataAccessLayer
 
             services.AddIdentity<User, IdentityRole<int>>(options =>
                 {
+                    options.Password.RequireNonAlphanumeric = false;
                     options.User.RequireUniqueEmail = true;
                 })
                 .AddEntityFrameworkStores<BankingDbContext>()

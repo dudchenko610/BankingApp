@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using BankingApp.Api.Validators.Banking;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Banking.Authentication;
+using BankingApp.Shared.Options;
 
 namespace BankingApp.Api
 {
@@ -45,8 +46,10 @@ namespace BankingApp.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseRouting();
             app.UseCors();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
