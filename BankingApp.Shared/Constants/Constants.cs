@@ -43,7 +43,9 @@ namespace BankingApp.Shared
                 public const string UserWasNotFound = "User was not found";
                 public const string EmailWasNotConfirmed = "Email was not confirmed";
                 public const string EmailWasNotDelivered = "Email, was not delivered";
+                public const string InvalidPassword = "Password is invalid";
 
+                public const string SignInPlease = "Time expired, sign in please again!";
             }
         }
 
@@ -80,6 +82,7 @@ namespace BankingApp.Shared
         {
             public const string EmailConfig = "emailConfig";
             public const string ClientConfig = "clientConfig";
+            public const string JwtConfig = "jwtConfig";
         }
     
         public static class Email
@@ -91,6 +94,24 @@ namespace BankingApp.Shared
             public const string ConfirmRegistration = "Click this link for confirm registration:";
             public const string OpenTagLink = "<a href='";
             public const string CloseTagLink = "'>link</a>";
+        }
+
+        public static class Password
+        {
+            public const string PasswordValidSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            public const int PasswordLength = 14;
+            public const int MinPasswordLength = 14;
+        }
+
+        public static class Authentication
+        {
+            public const string MyApp = "MyApp";
+            public const string RefreshToken = "RefreshToken";
+            public const string Bearer = "Bearer";
+            public const string Token = "Token";
+            public const string AccessTokenName = "access_token";
+            public const string RefreshTokenName = "refresh_token";
+            public const string AuthorizationName = "Authorization";
         }
     }
 }

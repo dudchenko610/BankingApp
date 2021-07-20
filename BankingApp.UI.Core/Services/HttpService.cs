@@ -11,6 +11,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using BankingApp.ViewModels.Banking.Account;
 
 namespace BankingApp.UI.Core.Services
 {
@@ -44,7 +45,7 @@ namespace BankingApp.UI.Core.Services
             }
             catch
             {
-                _toastService.ShowError("Unexpected error happened, try later!");
+                _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
                 return default;
             }
         }
@@ -62,7 +63,7 @@ namespace BankingApp.UI.Core.Services
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _toastService.ShowError("Unexpected error happened, try later!");
+                _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
                 return default;
             }
         }
@@ -72,10 +73,10 @@ namespace BankingApp.UI.Core.Services
             if (authorized)
             {
                 // add jwt auth header if user is logged in and request is to the api url
-                var user = await _localStorageService.GetItem<User>("user");
+                var tokensView = await _localStorageService.GetItem<TokensView>(Constants.Constants.Authentication.TokensView);
                 var isApiUrl = !request.RequestUri.IsAbsoluteUri;
-                if (user != null && isApiUrl)
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.RefreshToken);
+                if (tokensView != null && isApiUrl)
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokensView.AccessToken);
             }
 
             using var response = await _httpClient.SendAsync(request);
@@ -83,7 +84,7 @@ namespace BankingApp.UI.Core.Services
             // auto logout on 401 response
             if (authorized && response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                _navigationWrapper.NavigateTo(Routes.Routes.LogoutPage);
+                _navigationWrapper.NavigateTo(Constants.Constants.Routes.LogoutPage);
                 return default;
             }
 
@@ -93,14 +94,14 @@ namespace BankingApp.UI.Core.Services
                 _toastService.ShowError(errorMessage);
                 return default;
             }
-
+            
             try
             {
                 return await response.Content.ReadFromJsonAsync<T>();
             }
             catch  // object is not deserializable, but everything is ok!
             {
-                return default;
+                return (T)new object();
             }
         }
     }

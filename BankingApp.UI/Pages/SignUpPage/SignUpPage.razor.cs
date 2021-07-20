@@ -1,9 +1,10 @@
 ﻿using BankingApp.UI.Core.Attributes;
 using BankingApp.UI.Core.Interfaces;
-using BankingApp.UI.Core.Routes;
 using BankingApp.ViewModels.Banking.Authentication;
+using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
+using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.SignUpPage
 {
@@ -13,9 +14,14 @@ namespace BankingApp.UI.Pages.SignUpPage
         private SignUpAuthenticationView _signUpView;
 
         [Inject]
-        private IAuthenticationService _authenticationService { get; set; }
+        private IAuthenticationService _authenticationService { get; set; } 
+        [Inject]
+        private INavigationWrapper _navigationWrapper { get; set; }
         [Inject]
         private ILoaderService _loaderService { get; set; }
+        [Inject]
+        private IToastService _toastService { get; set; }
+
 
         public SignUpPage()
         {
@@ -25,7 +31,12 @@ namespace BankingApp.UI.Pages.SignUpPage
         private async Task OnFormSubmitAsync()
         {
             _loaderService.SwitchOn();
-            await _authenticationService.SignUpAsync(_signUpView);
+            if (await _authenticationService.SignUpAsync(_signUpView))
+            {
+                _toastService.ShowSuccess(Notifications.ConfirmYourEmail);
+                _navigationWrapper.NavigateTo(Routes.SignInPage);
+            }
+
             _loaderService.SwitchOff();
         }
     }

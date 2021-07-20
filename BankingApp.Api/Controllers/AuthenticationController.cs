@@ -27,15 +27,10 @@ namespace BankingApp.Api.Controllers
             try
             {
                 await _authenticationService.SignUpAsync(signUpAccountView);
-                Console.WriteLine("SEND OK");
-
                 return Ok();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                Console.WriteLine("FINISHED");
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }

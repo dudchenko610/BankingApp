@@ -1,10 +1,10 @@
-﻿using BankingApp.Entities.Entities;
-using BankingApp.Shared;
+﻿using BankingApp.Shared;
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Account;
 using BankingApp.ViewModels.Banking.Authentication;
-using Blazored.Toast.Services;
+using System;
 using System.Threading.Tasks;
+using static BankingApp.Shared.Constants;
 
 namespace BankingApp.UI.Core.Services
 {
@@ -13,47 +13,46 @@ namespace BankingApp.UI.Core.Services
         private readonly INavigationWrapper _navigationWrapper;
         private readonly ILocalStorageService _localStorageService;
         private readonly IHttpService _httpService;
-        private readonly IToastService _toastService;
 
-        public User User { get; private set; }
+        public TokensView TokensView { get; private set; }
         
         public AuthenticationService(INavigationWrapper navigationWrapper, 
             ILocalStorageService localStorageService,
-            IHttpService httpService,
-            IToastService toastService)
+            IHttpService httpService)
         {
             _navigationWrapper = navigationWrapper;
             _localStorageService = localStorageService;
             _httpService = httpService;
-            _toastService = toastService;
         }
 
         public async Task InitializeAsync()
         {
-            User = await _localStorageService.GetItem<User>("user");
+            TokensView = await _localStorageService.GetItem<TokensView>(Constants.Constants.Authentication.TokensView);
         }
 
-        public async Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
+        public async Task<bool> SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
-            await _httpService.PostAsync<object>($"{Constants.Routes.Authentication.Route}/{Constants.Routes.Authentication.SignUp}", signUpAccountView, false);
-            _toastService.ShowSuccess(Notifications.Notifications.ConfirmYourEmail);
+            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.SignUp}", signUpAccountView, false) != null;
         }
 
-        public async Task<TokensView> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)
+        public async Task<bool> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)
         {
-            throw new System.NotImplementedException();
+            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ConfirmEmail}", confirmEmailAccountView, false) != null;
         }
 
-        public async Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView)
+        public async Task<bool> SignInAsync(SignInAuthenticationView signInAccountView)
         {
-            throw new System.NotImplementedException();
+            var tokensView = await _httpService.PostAsync<TokensView>($"{Routes.Authentication.Route}/{Routes.Authentication.SignIn}", signInAccountView, false);
+            await _localStorageService.SetItem(Constants.Constants.Authentication.TokensView, tokensView);
+            TokensView = tokensView;
+            return tokensView != null;
         }
 
         public async Task LogoutAsync()
         {
-            User = null;
-            await _localStorageService.RemoveItem("user");
-            _navigationWrapper.NavigateTo(Routes.Routes.SignInPage);
+            TokensView = null;
+            await _localStorageService.RemoveItem(Constants.Constants.Authentication.TokensView);
+            _navigationWrapper.NavigateTo(Constants.Constants.Routes.SignInPage);
         }
     }
 }

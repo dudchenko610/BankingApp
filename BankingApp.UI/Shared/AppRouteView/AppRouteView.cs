@@ -1,10 +1,10 @@
 ﻿using BankingApp.UI.Core.Attributes;
 using BankingApp.UI.Core.Interfaces;
-using BankingApp.UI.Core.Routes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
+using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Shared.AppRouteView
 {
@@ -20,12 +20,12 @@ namespace BankingApp.UI.Shared.AppRouteView
             bool authorize = Attribute.GetCustomAttribute(RouteData.PageType, typeof(AuthorizeAttribute)) != null;
             bool unauthorized = Attribute.GetCustomAttribute(RouteData.PageType, typeof(UnauthorizedAttribute)) != null;
 
-            if (authorize && _authenticationService.User == null)
+            if (authorize && _authenticationService.TokensView == null)
             {
                 _navigationWrapper.NavigateTo(Routes.SignInPage);
                 return;
             } 
-            if (unauthorized && _authenticationService.User != null)
+            if (unauthorized && _authenticationService.TokensView != null)
             {
                 _navigationWrapper.NavigateTo(Routes.MainPage);
                 return;

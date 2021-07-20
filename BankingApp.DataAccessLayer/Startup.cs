@@ -21,10 +21,11 @@ namespace BankingApp.DataAccessLayer
             services.AddIdentity<User, IdentityRole<int>>(options =>
                 {
                     options.Password.RequireNonAlphanumeric = false;
+                    options.SignIn.RequireConfirmedEmail = true;
                     options.User.RequireUniqueEmail = true;
                 })
                 .AddEntityFrameworkStores<BankingDbContext>()
-                .AddDefaultTokenProviders();
+                .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
             services.AddScoped<RoleManager<IdentityRole<int>>>();
 

@@ -20,16 +20,19 @@ namespace BankingApp.BusinessLogicLayer.Services
         private readonly UserManager<User> _userManager;
         private readonly IEmailProvider _emailProvider;
         private readonly IMapper _mapper;
+        private readonly IJwtProvider _jwtProvider;
         private readonly ClientConnectionOptions _clientConnectionOptions;
 
         public AuthenticationService(UserManager<User> userManager,
             IEmailProvider emailProvider,
             IMapper mapper,
+            IJwtProvider jwtProvider,
             IOptions<ClientConnectionOptions> clientConnectionOptions)
         {
             _userManager = userManager;
             _emailProvider = emailProvider;
             _mapper = mapper;
+            _jwtProvider = jwtProvider;
             _clientConnectionOptions = clientConnectionOptions.Value;
         }
 
@@ -56,7 +59,32 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         public async Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView)
         {
-            throw new System.NotImplementedException();
+            var user = await _userManager.FindByEmailAsync(signInAccountView.Email);
+
+            if (user is null)
+            {
+                throw new Exception(Constants.Errors.Authentication.UserWasNotFound);
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                throw new Exception(Constants.Errors.Authentication.EmailWasNotConfirmed);
+            }
+
+            if (!await _userManager.CheckPasswordAsync(user, signInAccountView.Password))
+            {
+                throw new Exception(Constants.Errors.Authentication.InvalidPassword);
+            }
+
+            var claims = await _jwtProvider.GetUserClaimsAsync(user.Email);
+            string accessToken = _jwtProvider.GenerateAccessToken(claims);
+
+            var tokens = new TokensView
+            {
+                AccessToken = accessToken
+            };
+
+            return tokens;
         }
 
         public async Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
@@ -73,11 +101,21 @@ namespace BankingApp.BusinessLogicLayer.Services
 
             if (!result.Succeeded)
             {
+                await _userManager.DeleteAsync(user);
                 string errors = string.Join("\n", result.Errors.Select(x => x.Description).ToList());
                 throw new Exception(errors);
             }
 
-            string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            string code = null;
+            try
+            {
+                code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            }
+            catch (Exception e)
+            {
+                await _userManager.DeleteAsync(user);
+                throw new Exception(e.Message);
+            }
 
             byte[] tokenGenerateBytes = Encoding.UTF8.GetBytes(code);
             string tokenCode = WebEncoders.Base64UrlEncode(tokenGenerateBytes);
@@ -85,8 +123,6 @@ namespace BankingApp.BusinessLogicLayer.Services
             var callbackUrl = new StringBuilder();
             callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.Path}");
             callbackUrl.Append($"{Constants.Email.ParamEmail}{signUpAccountView.Email}{Constants.Email.ParamCode}{tokenCode}");
-
-            Console.WriteLine("Send email to " + signUpAccountView.Email);
 
             if (!await _emailProvider.SendEmailAsync(signUpAccountView.Email, Constants.Email.ConfirmEmail, 
                 $"{Constants.Email.ConfirmRegistration} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}"))

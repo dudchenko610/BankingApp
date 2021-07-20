@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
 
-            @if (_authenticationService.User is not null)
+            @if (_authenticationService.TokensView is not null)
             {
                 <li class="nav-item  @GetActive("", NavLinkMatch.All)">
                     <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.MainPage); }" @onclick:preventDefault>MainPage</a>

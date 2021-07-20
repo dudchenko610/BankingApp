@@ -9,9 +9,8 @@ namespace BankingApp.ViewModels.Banking.Authentication
         [DataType(DataType.EmailAddress, ErrorMessage = Constants.Errors.Authentication.EmailRequired)]
         [EmailAddress]
         public string Email { get; set; }
-        [Required(ErrorMessage = Constants.Errors.Authentication.PasswordIsRequired)]
-        [MinLength(14, ErrorMessage = Constants.Errors.Authentication.PasswordLength)]
-        [RegularExpression(@"([A-Z])([a-z])([0-9])([^a-zA-Z0-9])", ErrorMessage = Constants.Errors.Authentication.PasswordIsNotHardEnough)]
+        [MinLength(14, ErrorMessage = Constants.Errors.Authentication.PasswordIsTooShort)]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{14,}$", ErrorMessage = Constants.Errors.Authentication.PasswordIsNotHardEnough)]
         public string Password { get; set; }
     }
 }

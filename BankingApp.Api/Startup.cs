@@ -9,6 +9,11 @@ using BankingApp.Api.Validators.Banking;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Banking.Authentication;
 using BankingApp.Shared.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
 
 namespace BankingApp.Api
 {
@@ -23,8 +28,9 @@ namespace BankingApp.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation();
             BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
+
+            services.AddControllers().AddFluentValidation();
 
             services.AddTransient<IValidator<CalculateDepositView>, CalculateDepositeViewValidator>();
             services.AddTransient<IValidator<SignInAuthenticationView>, SignInAccountViewValidator>();

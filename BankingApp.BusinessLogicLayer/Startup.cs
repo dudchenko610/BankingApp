@@ -3,10 +3,17 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.BusinessLogicLayer.Mapper;
 using BankingApp.BusinessLogicLayer.Providers;
 using BankingApp.BusinessLogicLayer.Services;
+using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.Shared.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace BankingApp.BusinessLogicLayer
 {
@@ -19,9 +26,35 @@ namespace BankingApp.BusinessLogicLayer
             services.AddTransient<IDepositService, DepositService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
+            services.AddTransient<IJwtProvider, JwtProvider>();
 
             services.Configure<EmailConnectionOptions>(configuration.GetSection(Constants.AppSettings.EmailConfig));
             services.Configure<ClientConnectionOptions>(configuration.GetSection(Constants.AppSettings.ClientConfig));
+            services.Configure<JwtConnectionOptions>(configuration.GetSection(Constants.AppSettings.JwtConfig));
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                })
+            .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ClockSkew = TimeSpan.FromMinutes(0),
+                        ValidateIssuer = true,
+                        ValidIssuer = configuration["jwtConfig:Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = configuration["jwtConfig:Audience"],
+                        ValidateLifetime = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["jwtConfig:SecretKey"])),
+                        ValidateIssuerSigningKey = true,
+                    };
+                });
 
             var mapperConfig = new MapperConfiguration(config =>
             {

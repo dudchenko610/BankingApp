@@ -1,9 +1,9 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
-using BankingApp.UI.Core.Routes;
 using BankingApp.ViewModels.Banking.Deposit;
 using Microsoft.AspNetCore.Authorization;
+using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.MainPage
 {

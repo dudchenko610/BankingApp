@@ -20,10 +20,6 @@ namespace BankingApp.BusinessLogicLayer.Providers
 
         public async Task<bool> SendEmailAsync(string mailTo, string caption, string textMessage)
         {
-            Console.WriteLine(_emailConnectionOptions.Password);
-            Console.WriteLine(_emailConnectionOptions.MailAddress);
-            Console.WriteLine(_emailConnectionOptions.Port);
-
             try
             {
                 var mail = new MailMessage();
@@ -42,7 +38,7 @@ namespace BankingApp.BusinessLogicLayer.Providers
                 await client.SendMailAsync(mail);
                 mail.Dispose();
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
