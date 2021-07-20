@@ -94,7 +94,14 @@ namespace BankingApp.UI.Core.Services
                 return default;
             }
 
-            return await response.Content.ReadFromJsonAsync<T>();
+            try
+            {
+                return await response.Content.ReadFromJsonAsync<T>();
+            }
+            catch  // object is not deserializable, but everything is ok!
+            {
+                return default;
+            }
         }
     }
 }
