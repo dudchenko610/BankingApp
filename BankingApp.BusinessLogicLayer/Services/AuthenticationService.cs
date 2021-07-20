@@ -21,19 +21,25 @@ namespace BankingApp.BusinessLogicLayer.Services
         private readonly IEmailProvider _emailProvider;
         private readonly IMapper _mapper;
         private readonly IJwtProvider _jwtProvider;
+        private readonly IUserService _userService;
+        private readonly IGeneratePasswordProvider _generatePasswordProvider;
         private readonly ClientConnectionOptions _clientConnectionOptions;
 
         public AuthenticationService(UserManager<User> userManager,
             IEmailProvider emailProvider,
             IMapper mapper,
             IJwtProvider jwtProvider,
-            IOptions<ClientConnectionOptions> clientConnectionOptions)
+            IUserService userService,
+            IOptions<ClientConnectionOptions> clientConnectionOptions,
+            IGeneratePasswordProvider generatePasswordProvider)
         {
             _userManager = userManager;
             _emailProvider = emailProvider;
             _mapper = mapper;
             _jwtProvider = jwtProvider;
+            _userService = userService;
             _clientConnectionOptions = clientConnectionOptions.Value;
+            _generatePasswordProvider = generatePasswordProvider;
         }
 
         public async Task ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailView)
@@ -130,6 +136,31 @@ namespace BankingApp.BusinessLogicLayer.Services
                 await _userManager.DeleteAsync(user);
                 throw new Exception(Constants.Errors.Authentication.UerWasNotRegistered);
             }
+        }
+
+        public async Task ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordAuthenticationView)
+        {
+            if (string.IsNullOrWhiteSpace(resetPasswordAuthenticationView.Email))
+            {
+                throw new Exception(Constants.Errors.Authentication.EmailIsRequired);
+            }
+
+            var user = await _userService.GetUserByEmailAsync(resetPasswordAuthenticationView.Email);
+
+            if (user is null)
+            {
+                throw new Exception(Constants.Errors.Authentication.UserWasNotFound);
+            }
+
+            string passwordReset = _generatePasswordProvider.GeneratePassword();
+
+            await _userManager.RemovePasswordAsync(user);
+            await _userManager.AddPasswordAsync(user, passwordReset);
+
+            await _userManager.UpdateAsync(user);
+
+            await _emailProvider.SendEmailAsync(resetPasswordAuthenticationView.Email, Constants.Email.PasswordReset,
+                $"{Constants.Email.NewPassword}: {passwordReset}");
         }
     }
 }

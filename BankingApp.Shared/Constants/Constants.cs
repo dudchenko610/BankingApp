@@ -12,6 +12,7 @@ namespace BankingApp.Shared
                 public const string IncorrectPercentNumber = "Percent should be positive fractional value in range of [1; 100] with two decimal places";
 
                 public const string IncorrectDepositeHistoryId = "DepositeHistoryId should be integer, bigger than one number";
+                public const string DepositDoesNotBelongsToYou = "This deposit does not belongs to your account";
             }
 
             public static class Page
@@ -67,6 +68,7 @@ namespace BankingApp.Shared
                 public const string SignUp = "signUp";
                 public const string SignIn = "signIn";
                 public const string ConfirmEmail = "confirmEmail";
+                public const string ResetPassword = "resetPassword";
             }
         }
 
@@ -91,6 +93,8 @@ namespace BankingApp.Shared
             public const string ParamCode = "&code=";
             public const string ClientSMTP = "smtp.gmail.com";
             public const string ConfirmEmail = "Confirm your email";
+            public const string PasswordReset = "Password reset";
+            public const string NewPassword = "New password";
             public const string ConfirmRegistration = "Click this link for confirm registration:";
             public const string OpenTagLink = "<a href='";
             public const string CloseTagLink = "'>link</a>";

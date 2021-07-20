@@ -54,5 +54,10 @@ namespace BankingApp.UI.Core.Services
             await _localStorageService.RemoveItem(Constants.Constants.Authentication.TokensView);
             _navigationWrapper.NavigateTo(Constants.Constants.Routes.SignInPage);
         }
+
+        public async Task<bool> ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordAuthenticationView)
+        {
+            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ResetPassword}", resetPasswordAuthenticationView, false) != null;
+        }
     }
 }

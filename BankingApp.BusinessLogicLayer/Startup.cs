@@ -3,11 +3,10 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.BusinessLogicLayer.Mapper;
 using BankingApp.BusinessLogicLayer.Providers;
 using BankingApp.BusinessLogicLayer.Services;
-using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -23,10 +22,13 @@ namespace BankingApp.BusinessLogicLayer
         {
             DataAccessLayer.Startup.Initialize(services, configuration);
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IDepositService, DepositService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IJwtProvider, JwtProvider>();
+            services.AddSingleton<IGeneratePasswordProvider, GeneratePasswordProvider>();
 
             services.Configure<EmailConnectionOptions>(configuration.GetSection(Constants.AppSettings.EmailConfig));
             services.Configure<ClientConnectionOptions>(configuration.GetSection(Constants.AppSettings.ClientConfig));

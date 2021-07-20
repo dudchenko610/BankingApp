@@ -17,13 +17,15 @@ namespace BankingApp.BusinessLogicLayer.Services
     {
         private readonly IMapper _mapper;
         private readonly IDepositRepository _depositRepository;
+        private readonly IUserService _userService;
 
         private delegate (decimal MonthSum, float Percents) CalculationFormula(int monthNumber, CalculateDepositView reqDepositeCalcInfo);
 
-        public DepositService(IMapper mapper, IDepositRepository depositeHistoryRepository)
+        public DepositService(IMapper mapper, IDepositRepository depositeHistoryRepository, IUserService userService)
         {
             _mapper = mapper;
             _depositRepository = depositeHistoryRepository;
+            _userService = userService;
         }
 
         public async Task<int> CalculateAsync(CalculateDepositView requestDepositCalcInfo)
@@ -43,7 +45,8 @@ namespace BankingApp.BusinessLogicLayer.Services
                     Percents = res.Percents
                 });
             }
-            
+            depositModel.UserId = _userService.GetSignedInUserId();
+
             int savedId = await _depositRepository.AddAsync(depositModel);
             return savedId;
         }
@@ -52,7 +55,15 @@ namespace BankingApp.BusinessLogicLayer.Services
         {
             var depositWithItems = await _depositRepository.GetDepositWithItemsByIdAsync(depositeHistoryId);
             if (depositWithItems == null)
+            { 
                 throw new Exception(Constants.Errors.Deposit.IncorrectDepositeHistoryId);
+            }
+
+            int userId = _userService.GetSignedInUserId();
+            if (depositWithItems.UserId != userId)
+            {
+                throw new Exception(Constants.Errors.Deposit.DepositDoesNotBelongsToYou);
+            }
 
             var depositWithItemsView = _mapper.Map<Deposit, GetByIdDepositView>(depositWithItems);
             return depositWithItemsView;
@@ -95,8 +106,10 @@ namespace BankingApp.BusinessLogicLayer.Services
             if (pageSize < 1)
                 throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
 
+            int userId = _userService.GetSignedInUserId();
+
             PaginationModel<Deposit> depositsAndTotalCount
-                = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize);
+                = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize, userId);
 
             var pagedResponse = new PagedDataView<DepositGetAllDepositViewItem>
             {

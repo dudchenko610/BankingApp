@@ -1,17 +1,15 @@
-﻿using BankingApp.UI.Core.Attributes;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Authentication;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using static BankingApp.UI.Core.Constants.Constants;
 
-namespace BankingApp.UI.Pages.SignInPage
+namespace BankingApp.UI.Pages.ResetPasswordPage
 {
-    [Unauthorized]
-    public partial class SignInPage
+    public partial class ResetPasswordPage
     {
-        private SignInAuthenticationView _signInView;
+        private ResetPasswordAuthenticationView _resetPasswordView;
 
         [Inject]
         private IAuthenticationService _authenticationService { get; set; }
@@ -22,26 +20,20 @@ namespace BankingApp.UI.Pages.SignInPage
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
 
-        public SignInPage()
+        public ResetPasswordPage()
         {
-            _signInView = new SignInAuthenticationView();
+            _resetPasswordView = new ResetPasswordAuthenticationView();
         }
-
         private async Task OnFormSubmitAsync()
         {
             _loaderService.SwitchOn();
-            if (await _authenticationService.SignInAsync(_signInView))
+            if (await _authenticationService.ResetPasswordAsync(_resetPasswordView))
             {
-                _toastService.ShowSuccess(Notifications.SignInSuccess);
-                _navigationWrapper.NavigateTo(Routes.MainPage);
+                _toastService.ShowSuccess(Notifications.PasswordResetSuccessfully);
+                _navigationWrapper.NavigateTo(Routes.SignInPage);
             }
 
             _loaderService.SwitchOff();
-        }
-
-        private void OnForgotButton()
-        {
-            _navigationWrapper.NavigateTo(Routes.ResetPasswordPage);
         }
     }
 }
