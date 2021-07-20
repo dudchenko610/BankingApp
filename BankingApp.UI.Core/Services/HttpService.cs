@@ -91,7 +91,14 @@ namespace BankingApp.UI.Core.Services
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
-                _toastService.ShowError(errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
+                }
+                else 
+                {
+                    _toastService.ShowError(errorMessage);
+                }
                 return default;
             }
             

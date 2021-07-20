@@ -1,8 +1,6 @@
-﻿using BankingApp.Shared;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Account;
 using BankingApp.ViewModels.Banking.Authentication;
-using System;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;
 
@@ -54,10 +52,15 @@ namespace BankingApp.UI.Core.Services
             await _localStorageService.RemoveItem(Constants.Constants.Authentication.TokensView);
             _navigationWrapper.NavigateTo(Constants.Constants.Routes.SignInPage);
         }
-
+        
         public async Task<bool> ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordAuthenticationView)
         {
             return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ResetPassword}", resetPasswordAuthenticationView, false) != null;
+        }
+
+        public async Task<bool> ForgotPasswordAsync(ForgotPasswordAuthenticationView forgotPasswordAuthenticationView)
+        {
+            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ForgotPassword}", forgotPasswordAuthenticationView, false) != null;
         }
     }
 }

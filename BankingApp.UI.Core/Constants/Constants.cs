@@ -9,7 +9,8 @@ namespace BankingApp.UI.Core.Constants
             public const string UnexpectedError = "Unexpected error happened, try later!";
             public const string EmailSuccessfullyConfirmed = "Email was successully confirmed, please login now";
             public const string SignInSuccess = "You are signed in!";
-            public const string PasswordResetSuccessfully = "Password was reset successfully, your new password was sent to email";
+            public const string PasswordResetSuccessfully = "Password was reset successfully, sign in using new password";
+            public const string PasswordResetEmailSent = "Reset link was sent to your mailbox";
         }
 
         public static class Routes
@@ -22,6 +23,7 @@ namespace BankingApp.UI.Core.Constants
             public const string SignInPage = "/signIn";
             public const string LogoutPage = "/logout";
             public const string ResetPasswordPage = "/resetPassword";
+            public const string ForgotPasswordPage = "/forgotPassword";
         }
 
         public static class Authentication

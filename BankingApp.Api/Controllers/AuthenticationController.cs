@@ -67,11 +67,26 @@ namespace BankingApp.Api.Controllers
 
         [HttpPost]
         [Route(Routes.Authentication.ResetPassword)]
-        public async Task<IActionResult> ResetPassword(ResetPasswordAuthenticationView forgotPasswordAuthenticationView)
+        public async Task<IActionResult> ResetPassword(ResetPasswordAuthenticationView resetPasswordAuthenticationView)
         {
             try
             {
-                await _authenticationService.ResetPasswordAsync(forgotPasswordAuthenticationView);
+                await _authenticationService.ResetPasswordAsync(resetPasswordAuthenticationView);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route(Routes.Authentication.ForgotPassword)]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordAuthenticationView forgotPasswordAuthenticationView)
+        {
+            try
+            {
+                await _authenticationService.ForgotPasswordAsync(forgotPasswordAuthenticationView);
                 return Ok();
             }
             catch (Exception e)

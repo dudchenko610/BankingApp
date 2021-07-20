@@ -9,6 +9,7 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
         Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView);
         Task SignUpAsync(SignUpAuthenticationView signUpAccountView);
         Task ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView);
+        Task ForgotPasswordAsync(ForgotPasswordAuthenticationView forgotPasswordAuthenticationView);
         Task ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordAuthenticationView);
     }
 }

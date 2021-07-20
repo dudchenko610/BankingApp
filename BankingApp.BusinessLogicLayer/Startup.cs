@@ -28,7 +28,6 @@ namespace BankingApp.BusinessLogicLayer
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IJwtProvider, JwtProvider>();
-            services.AddSingleton<IGeneratePasswordProvider, GeneratePasswordProvider>();
 
             services.Configure<EmailConnectionOptions>(configuration.GetSection(Constants.AppSettings.EmailConfig));
             services.Configure<ClientConnectionOptions>(configuration.GetSection(Constants.AppSettings.ClientConfig));

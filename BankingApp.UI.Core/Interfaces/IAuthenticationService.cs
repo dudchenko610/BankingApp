@@ -13,6 +13,7 @@ namespace BankingApp.UI.Core.Interfaces
         Task<bool> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView);
         Task<bool> SignInAsync(SignInAuthenticationView signInAccountView);
         Task<bool> ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordAuthenticationView);
+        Task<bool> ForgotPasswordAsync(ForgotPasswordAuthenticationView forgotPasswordAuthenticationView);
         Task LogoutAsync();
     }
 }

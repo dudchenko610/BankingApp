@@ -26,7 +26,6 @@ namespace BankingApp.Shared
                 public const string NicknameIsRequired = "Nickname is required";
                 public const string EmailIsRequired = "Email is required";
                 public const string PasswordIsRequired = "Password is required";
-
                 public const string NicknameLengthIsTooLong = "Nickname name should be less or equal than 12";
                 public const string EmailRequired = "Email is required";
                 public const string InvalidEmailFormat = "Invalid email format";
@@ -40,13 +39,14 @@ namespace BankingApp.Shared
                 public const string PasswordSpecialCharacter = "Password must contain at least one special character";
                 public const string ConfirmPasswordShouldMatchPassword = "Confirm password should match password";
                 public const string UserAlreadyExists = "User with such email already exists";
-                public const string UerWasNotRegistered = "Unexpected error happened. User was not registered, try again!";
+                public const string UserWasNotRegistered = "Unexpected error happened. User was not registered, try again!";
                 public const string UserWasNotFound = "User was not found";
                 public const string EmailWasNotConfirmed = "Email was not confirmed";
                 public const string EmailWasNotDelivered = "Email, was not delivered";
                 public const string InvalidPassword = "Password is invalid";
-
                 public const string SignInPlease = "Time expired, sign in please again!";
+                public const string ErrorWhileSendingMessage = "While sending message error occurred, try latter!";
+
             }
         }
 
@@ -68,6 +68,7 @@ namespace BankingApp.Shared
                 public const string SignUp = "signUp";
                 public const string SignIn = "signIn";
                 public const string ConfirmEmail = "confirmEmail";
+                public const string ForgotPassword = "forgotPassword";
                 public const string ResetPassword = "resetPassword";
             }
         }
@@ -93,8 +94,7 @@ namespace BankingApp.Shared
             public const string ParamCode = "&code=";
             public const string ClientSMTP = "smtp.gmail.com";
             public const string ConfirmEmail = "Confirm your email";
-            public const string PasswordReset = "Password reset";
-            public const string NewPassword = "New password";
+            
             public const string ConfirmRegistration = "Click this link for confirm registration:";
             public const string OpenTagLink = "<a href='";
             public const string CloseTagLink = "'>link</a>";
@@ -105,6 +105,8 @@ namespace BankingApp.Shared
             public const string PasswordValidSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             public const int PasswordLength = 14;
             public const int MinPasswordLength = 14;
+            public const string PasswordReset = "To reset your password click the link: ";
+            public const string PasswordResetHeader = "Reset password";
         }
 
         public static class Authentication
