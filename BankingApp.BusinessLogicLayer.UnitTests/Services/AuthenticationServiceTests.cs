@@ -13,6 +13,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
@@ -20,6 +21,8 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
     [TestFixture]
     public class AuthenticationServiceTests
     {
+        private const string ValidAccessToken = "this_is_very_secret_token";
+
         private IUserStore<User> _userStore;
         private UserManager<User> _userManager;
         private IEmailProvider _emailProvider;
@@ -49,6 +52,8 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             // jwt provider
             var jwtProviderMock = new Mock<IJwtProvider>();
+            jwtProviderMock.Setup(x => x.GetUserClaimsAsync(It.IsAny<string>())).ReturnsAsync(new List<Claim>());
+            jwtProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<List<Claim>>())).Returns(ValidAccessToken);
             _jwtProvider = jwtProviderMock.Object;
 
             // user service
@@ -117,6 +122,68 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.EmailWasNotConfirmed);
         }
 
+        [Test]
+        public async Task SignIn_PassedValidSignInView_ReturnsValidTokensView()
+        {
+            var validUser = GetValidUser();
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+            userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validSignInview = GetValidSignInView();
+            var tokensView = await authenticationService.SignInAsync(validSignInview);
+
+            tokensView.Should().NotBeNull().And.BeOfType<TokensView>().Which.AccessToken.Should().Be(ValidAccessToken);
+        }
+
+        [Test]
+        public void SignIn_UserManagerFindByEmailAsyncReturnsNull_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validSignInView = GetValidSignInView();
+            FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.UserWasNotFound);
+        }
+
+        [Test]
+        public void SignIn_FoundUserHasNotEmailConfirmed_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var userWithEmailNotConfirmed = GetUserWithEmailNotConfirmed();
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(userWithEmailNotConfirmed);
+            userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validSignInView = GetValidSignInView();
+            FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.EmailWasNotConfirmed);
+        }
+
+        [Test]
+        public void SignIn_CheckPasswordFailed_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var validUser = GetValidUser();
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+            userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(false);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validSignInView = GetValidSignInView();
+            FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.InvalidPassword);
+        }
+
         private ConfirmEmailAuthenticationView GetConfirmEmailViewWithEmptyEmail()
         {
             return new ConfirmEmailAuthenticationView
@@ -153,6 +220,27 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 UserName = "Me",
                 EmailConfirmed = true,
                 Deposits = new List<Deposit>()
+            };
+        }
+
+        private User GetUserWithEmailNotConfirmed()
+        {
+            return new User
+            {
+                Id = 1,
+                Email = "a@a.com",
+                UserName = "Me",
+                EmailConfirmed = false,
+                Deposits = new List<Deposit>()
+            };
+        }
+
+        private SignInAuthenticationView GetValidSignInView()
+        {
+            return new SignInAuthenticationView
+            {
+                Email = "rusland610@gmail.com",
+                Password = "qwerty12345AAA"
             };
         }
     }
