@@ -84,6 +84,7 @@ namespace BankingApp.UI.Core.Services
             // auto logout on 401 response
             if (authorized && response.StatusCode == HttpStatusCode.Unauthorized)
             {
+                _toastService.ShowError(Constants.Constants.Notifications.Unauthorized);
                 _navigationWrapper.NavigateTo(Constants.Constants.Routes.LogoutPage);
                 return default;
             }

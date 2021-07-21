@@ -7,6 +7,7 @@ namespace BankingApp.UI.Core.Constants
         {
             public const string ConfirmYourEmail = "To confirm email, you need to click a link in sent message on your mailbox";
             public const string UnexpectedError = "Unexpected error happened, try later!";
+            public const string Unauthorized = "Your sign in session expired, sign in again please";
             public const string EmailSuccessfullyConfirmed = "Email was successully confirmed, please login now";
             public const string SignInSuccess = "You are signed in!";
             public const string PasswordResetSuccessfully = "Password was reset successfully, sign in using new password";

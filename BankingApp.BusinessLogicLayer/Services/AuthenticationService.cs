@@ -12,6 +12,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BankingApp.BusinessLogicLayer.Services
 {
@@ -152,9 +153,7 @@ namespace BankingApp.BusinessLogicLayer.Services
 
             var callbackUrl = new StringBuilder();
             callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ResetPath}");
-            callbackUrl.Append($"{Constants.Email.ParamEmail}{resetPasswordAuthenticationView.Email}{Constants.Email.ParamCode}{code}");
-
-            Console.WriteLine(code);
+            callbackUrl.Append($"{Constants.Email.ParamEmail}{resetPasswordAuthenticationView.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(code)}");
 
             if (!await _emailProvider.SendEmailAsync(resetPasswordAuthenticationView.Email, Constants.Password.PasswordResetHeader,
                 $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}"))
@@ -170,11 +169,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             {
                 throw new Exception(Constants.Errors.Authentication.UserWasNotFound);
             }
-
-            Console.WriteLine(resetPasswordView.Email);
-            Console.WriteLine(resetPasswordView.Code);
-            Console.WriteLine(resetPasswordView.Password);
-
+            
             var result = await _userManager.ResetPasswordAsync(user, resetPasswordView.Code, resetPasswordView.Password);
             if (!result.Succeeded)
             {

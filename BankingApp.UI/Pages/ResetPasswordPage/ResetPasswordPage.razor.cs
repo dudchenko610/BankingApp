@@ -39,7 +39,7 @@ namespace BankingApp.UI.Pages.ResetPasswordPage
             }
             if (queryStrings.TryGetValue("code", out var code))
             {
-                _resetPasswordView.Code = code.ToString().Replace(" ", "+");
+                _resetPasswordView.Code = code;
             }  
 
             _loaderService.SwitchOn();
