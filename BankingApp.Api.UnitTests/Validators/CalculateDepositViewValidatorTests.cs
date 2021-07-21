@@ -1,14 +1,14 @@
-﻿using BankingApp.Api.Validators.Banking;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 using FluentAssertions;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Deposit;
+using BankingApp.Api.Validators;
 
 namespace BankingApp.Api.UnitTests.Validators
 {
     [TestFixture]
-    public class RequestCalculateDepositeBankingViewValidatorTests
+    public class CalculateDepositViewValidatorTests
     {
         private CalculateDepositeViewValidator _validator;
 

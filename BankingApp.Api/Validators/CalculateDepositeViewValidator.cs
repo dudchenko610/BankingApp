@@ -2,7 +2,7 @@
 using BankingApp.ViewModels.Banking.Deposit;
 using FluentValidation;
 
-namespace BankingApp.Api.Validators.Banking
+namespace BankingApp.Api.Validators
 {
     public class CalculateDepositeViewValidator : AbstractValidator<CalculateDepositView>
     {

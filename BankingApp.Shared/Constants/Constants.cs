@@ -27,11 +27,9 @@ namespace BankingApp.Shared
                 public const string EmailIsRequired = "Email is required";
                 public const string PasswordIsRequired = "Password is required";
                 public const string NicknameLengthIsTooLong = "Nickname name should be less or equal than 12";
-                public const string EmailRequired = "Email is required";
                 public const string InvalidEmailFormat = "Invalid email format";
                 public const string PasswordIsNotHardEnough = "Password is not hard enough";
                 public const string PasswordEmpty = "Password is empty";
-                public const string PasswordLength = "Password is short";
                 public const string PasswordUppercaseLetter = "Password must contain at least one upper case letter";
                 public const string PasswordLowercaseLetter = "Password must contain at least one lowercase case letter";
                 public const string PasswordDigit = "Password must contain at least one digit";

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BankingApp.Api.Validators.Banking;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Banking.Authentication;
 using BankingApp.Shared.Options;
@@ -14,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using BankingApp.Api.Validators;
 
 namespace BankingApp.Api
 {
@@ -33,8 +33,10 @@ namespace BankingApp.Api
             services.AddControllers().AddFluentValidation();
 
             services.AddTransient<IValidator<CalculateDepositView>, CalculateDepositeViewValidator>();
-            services.AddTransient<IValidator<SignInAuthenticationView>, SignInAccountViewValidator>();
-            services.AddTransient<IValidator<SignUpAuthenticationView>, SignUpAccountViewValidator>();
+            services.AddTransient<IValidator<SignInAuthenticationView>, SignInAuthenticationViewValidator>();
+            services.AddTransient<IValidator<SignUpAuthenticationView>, SignUpAuthenticationViewValidator>();
+            services.AddTransient<IValidator<ResetPasswordAuthenticationView>, ResetPasswordAuthenticationViewValidator>();
+            services.AddTransient<IValidator<ForgotPasswordAuthenticationView>, ForgotPasswordAuthenticationViewValidator>();
 
             services.AddCors(options =>
             {
