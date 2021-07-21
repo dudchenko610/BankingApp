@@ -22,6 +22,8 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
     public class AuthenticationServiceTests
     {
         private const string ValidAccessToken = "this_is_very_secret_token";
+        private const string ValidPasswordResetCode = "this_is_very_secret_password_reset_code";
+        private const string ValidEmailConfirmationCode = "this_is_very_secret_email_confirmation_code";
 
         private IUserStore<User> _userStore;
         private UserManager<User> _userManager;
@@ -184,6 +186,109 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.InvalidPassword);
         }
 
+        [Test]
+        public async Task SignUp_PassedValidSignUpView_SendEmailAsyncOfEmailProviderGetsCalledWithCorrespondingEmailParameter()
+        {
+            string emailPassedToSendEmailMethod = null;
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+            userManagerMock.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            userManagerMock.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<User>())).ReturnsAsync(ValidPasswordResetCode);
+
+            var emailProviderMock = new Mock<IEmailProvider>();
+            emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true)
+                .Callback((string emailTo, string caption, string textMessage) => { emailPassedToSendEmailMethod = emailTo; });
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validSignUpView = GetValidSignUpView();
+            await authenticationService.SignUpAsync(validSignUpView);
+
+            emailPassedToSendEmailMethod.Should().NotBeNull().And.Be(validSignUpView.Email);
+        }
+
+        [Test]
+        public void SignUp_PassedValidSignUpViewButUserWithSuchEmailAlreadyExists_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var validUser = GetValidUser();
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validSignUpView = GetValidSignUpView();
+            FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView))
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.UserAlreadyExists);
+        }
+
+        [Test]
+        public void SignUp_PassedValidSignUpViewButCreateAsyncDoesNotSuccesses_ThrowsExceptionAndDeleteAsyncShouldBeCalled()
+        {
+            User userToDelete = null;
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User)null);
+            userManagerMock.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(new IdentityResult());
+            userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success)
+                .Callback((User user) => { userToDelete = user; });
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validSignUpView = GetValidSignUpView();
+            FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView)).Should().Throw<Exception>();
+
+            userToDelete.Should().NotBeNull().And.BeEquivalentTo(validSignUpView, options => options.ExcludingMissingMembers());
+        }
+
+        [Test]
+        public void SignUp_PassedValidSignUpViewButGenerateEmailConfirmationTokenAsyncThrowsException_ThrowsExceptionAndDeleteAsyncShouldBeCalled()
+        {
+            User userToDelete = null;
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User)null);
+            userManagerMock.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            userManagerMock.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<User>()))
+                .Callback((User user) => { throw new Exception(); });
+            userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success)
+                .Callback((User user) => { userToDelete = user; });
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validSignUpView = GetValidSignUpView();
+            FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView)).Should().Throw<Exception>();
+
+            userToDelete.Should().NotBeNull().And.BeEquivalentTo(validSignUpView, options => options.ExcludingMissingMembers());
+        }
+
+        [Test]
+        public void SignUp_PassedValidSignUpViewButSendEmailAsyncReturnsFalse_ThrowsExceptionAndDeleteAsyncShouldBeCalled()
+        {
+            User userToDelete = null;
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User)null);
+            userManagerMock.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            userManagerMock.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<User>())).ReturnsAsync(ValidEmailConfirmationCode);
+            userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success)
+                .Callback((User user) => { userToDelete = user; });
+
+            var emailProviderMock = new Mock<IEmailProvider>();
+            emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validSignUpView = GetValidSignUpView();
+            FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView)).Should()
+                .Throw<Exception>().WithMessage(Constants.Errors.Authentication.UserWasNotRegistered);
+
+            userToDelete.Should().NotBeNull().And.BeEquivalentTo(validSignUpView, options => options.ExcludingMissingMembers());
+        }
+
+
+
         private ConfirmEmailAuthenticationView GetConfirmEmailViewWithEmptyEmail()
         {
             return new ConfirmEmailAuthenticationView
@@ -241,6 +346,17 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             {
                 Email = "rusland610@gmail.com",
                 Password = "qwerty12345AAA"
+            };
+        }
+
+        private SignUpAuthenticationView GetValidSignUpView()
+        {
+            return new SignUpAuthenticationView
+            {
+                Email = "rusland610@gmail.com",
+                Nickname = "Bobik",
+                Password = "qwerty12345AAA",
+                ConfirmPassword = "qwerty12345AAA"
             };
         }
     }
