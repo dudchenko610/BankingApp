@@ -11,7 +11,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BankingApp.ViewModels.Banking.Account;
+using BankingApp.ViewModels.Banking.Authentication;
 
 namespace BankingApp.UI.Core.Services
 {

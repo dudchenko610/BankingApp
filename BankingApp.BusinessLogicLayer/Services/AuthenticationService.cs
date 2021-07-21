@@ -3,7 +3,6 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.Shared.Options;
-using BankingApp.ViewModels.Banking.Account;
 using BankingApp.ViewModels.Banking.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;

@@ -1,5 +1,4 @@
 ﻿using BankingApp.UI.Core.Interfaces;
-using BankingApp.ViewModels.Banking.Account;
 using BankingApp.ViewModels.Banking.Authentication;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;

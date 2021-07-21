@@ -21,7 +21,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         private const int ValidPageSize = 1;
 
         [Test]
-        public async Task Calculate_СorrectInputData_ReturnsOkResultAndBankingServiceReceivesValidModel()
+        public async Task Calculate_СorrectInputData_ReturnsOkObjectResultWithBankingServiceReceivesValidModel()
         {
             var validCalculateDepositViw = GetValidCalculateDepositView();
             CalculateDepositView inputModelOfCalculateDepositeMethod = null;
@@ -45,7 +45,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task GetById_ValidDepositIdPassed_ReturnsValidResultFromService()
+        public async Task GetById_ValidDepositIdPassed_ReturnsOkObjectResultWithGetByIdDepositView()
         {
             const int DepositeHistoryId = 1;
 
