@@ -1,5 +1,6 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Authentication;
+using Blazored.LocalStorage;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;
 
@@ -24,7 +25,7 @@ namespace BankingApp.UI.Core.Services
 
         public async Task InitializeAsync()
         {
-            TokensView = await _localStorageService.GetItem<TokensView>(Constants.Constants.Authentication.TokensView);
+            TokensView = await _localStorageService.GetItemAsync<TokensView>(Constants.Constants.Authentication.TokensView);
         }
 
         public async Task<bool> SignUpAsync(SignUpAuthenticationView signUpAccountView)
@@ -40,7 +41,7 @@ namespace BankingApp.UI.Core.Services
         public async Task<bool> SignInAsync(SignInAuthenticationView signInAccountView)
         {
             var tokensView = await _httpService.PostAsync<TokensView>($"{Routes.Authentication.Route}/{Routes.Authentication.SignIn}", signInAccountView, false);
-            await _localStorageService.SetItem(Constants.Constants.Authentication.TokensView, tokensView);
+            await _localStorageService.SetItemAsync(Constants.Constants.Authentication.TokensView, tokensView);
             TokensView = tokensView;
             return tokensView != null;
         }
@@ -48,7 +49,7 @@ namespace BankingApp.UI.Core.Services
         public async Task LogoutAsync()
         {
             TokensView = null;
-            await _localStorageService.RemoveItem(Constants.Constants.Authentication.TokensView);
+            await _localStorageService.RemoveItemAsync(Constants.Constants.Authentication.TokensView);
             _navigationWrapper.NavigateTo(Constants.Constants.Routes.SignInPage);
         }
         

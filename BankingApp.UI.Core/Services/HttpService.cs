@@ -1,9 +1,7 @@
 ﻿using BankingApp.Entities.Entities;
 using BankingApp.UI.Core.Interfaces;
 using Blazored.Toast.Services;
-using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -12,6 +10,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using BankingApp.ViewModels.Banking.Authentication;
+using Blazored.LocalStorage;
 
 namespace BankingApp.UI.Core.Services
 {
@@ -73,7 +72,7 @@ namespace BankingApp.UI.Core.Services
             if (authorized)
             {
                 // add jwt auth header if user is logged in and request is to the api url
-                var tokensView = await _localStorageService.GetItem<TokensView>(Constants.Constants.Authentication.TokensView);
+                var tokensView = await _localStorageService.GetItemAsync<TokensView>(Constants.Constants.Authentication.TokensView);
                 var isApiUrl = !request.RequestUri.IsAbsoluteUri;
                 if (tokensView != null && isApiUrl)
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokensView.AccessToken);
