@@ -1,5 +1,4 @@
-﻿using BankingApp.Shared;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Pagination;
 using System.Threading.Tasks;
@@ -29,10 +28,10 @@ namespace BankingApp.UI.Core.Services
             return pagedDataView;
         }
 
-        public async Task<GetByIdDepositView> GetByIdAsync(int depositeHistoryId)
+        public async Task<GetByIdDepositView> GetByIdAsync(int depositId)
         {
             var depositViewWithMonthyPaymentList = await _httpService
-                .GetAsync<GetByIdDepositView>($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositeHistoryId={depositeHistoryId}");
+                .GetAsync<GetByIdDepositView>($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositeHistoryId={depositId}");
             return depositViewWithMonthyPaymentList;
         }
     }
