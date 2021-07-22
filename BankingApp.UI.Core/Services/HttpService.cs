@@ -57,11 +57,8 @@ namespace BankingApp.UI.Core.Services
             {
                 return await SendRequestAsync<T>(request, authorized);
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-
                 _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
                 return default;
             }
@@ -101,14 +98,14 @@ namespace BankingApp.UI.Core.Services
                 }
                 return default;
             }
-            
+
             try
             {
                 return await response.Content.ReadFromJsonAsync<T>();
             }
             catch  // object is not deserializable, but everything is ok!
             {
-                return (T)new object();
+                return JsonSerializer.Deserialize<T>("{}");
             }
         }
     }

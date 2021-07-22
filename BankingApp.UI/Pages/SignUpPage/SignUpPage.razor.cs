@@ -20,7 +20,6 @@ namespace BankingApp.UI.Pages.SignUpPage
         [Inject]
         private IToastService _toastService { get; set; }
 
-
         public SignUpPage()
         {
             _signUpView = new SignUpAuthenticationView();
