@@ -19,7 +19,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         private const int ValidDepositId = 1;
 
         [Fact]
-        public async Task CalculateAsync_PassValidModel_CallsPostAsyncWithCorrespondingParameters()
+        public async Task Calculate_PassValidModel_CallsPostAsyncWithCorrespondingParameters()
         {
             var validCalculateView = GetValidCalculateView();
             object depositViewPassedToHttpService = null;
