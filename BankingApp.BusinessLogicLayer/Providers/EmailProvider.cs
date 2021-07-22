@@ -3,12 +3,14 @@ using BankingApp.Shared;
 using BankingApp.Shared.Options;
 using Microsoft.Extensions.Options;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Providers
 {
+    [ExcludeFromCodeCoverage]
     public class EmailProvider : IEmailProvider
     {
         private readonly EmailConnectionOptions _emailConnectionOptions;
