@@ -287,7 +287,121 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userToDelete.Should().NotBeNull().And.BeEquivalentTo(validSignUpView, options => options.ExcludingMissingMembers());
         }
 
+        [Test]
+        public async Task ForgotPassword_PassedValidForgotPasswordView_SendEmailAsyncOfEmailProviderGetsCalledWithCorrespondingEmailParameter()
+        {
+            var validUser = GetValidUser();
+            string emailPassedToSendEmailMethod = null;
 
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<User>())).ReturnsAsync(ValidPasswordResetCode);
+
+            var emailProviderMock = new Mock<IEmailProvider>();
+            emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true)
+                .Callback((string emailTo, string caption, string textMessage) => { emailPassedToSendEmailMethod = emailTo; });
+
+            var userServiceMock = new Mock<IUserService>();
+            userServiceMock.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtProvider, userServiceMock.Object, _clientConnectionOptions);
+
+            var validForgotPasswordView = GetValidForgotPasswordView();
+            await authenticationService.ForgotPasswordAsync(validForgotPasswordView);
+
+            emailPassedToSendEmailMethod.Should().NotBeNull().And.Be(validForgotPasswordView.Email);
+        }
+
+        [Test]
+        public void ForgotPassword_PassedForgotPasswordViewWithEmptyEmail_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var authenticationService = new AuthenticationService(_userManager, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var forgotPasswordViewWithEmptyEmail = GetForgotPasswordViewWithEmptyEmail();
+            FluentActions.Awaiting(() => authenticationService.ForgotPasswordAsync(forgotPasswordViewWithEmptyEmail))
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.EmailIsRequired);
+        }
+
+        [Test]
+        public void ForgotPassword_PassedValidForgotPasswordViewButThereIsNoUserWithSuchEmail_ReturnsFromMethodAndNoExceptionsWereThrown()
+        {
+            var validUser = GetValidUser();
+
+            var userServiceMock = new Mock<IUserService>();
+            userServiceMock.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+
+            var authenticationService = new AuthenticationService(_userManager, _emailProvider, _mapper, _jwtProvider, userServiceMock.Object, _clientConnectionOptions);
+
+            var validForgotPasswordView = GetValidForgotPasswordView();
+            FluentActions.Awaiting(() => authenticationService.ForgotPasswordAsync(validForgotPasswordView)).Should().NotThrow<Exception>();
+        }
+
+        [Test]
+        public void ForgotPassword_PassedValidForgotPasswordViewButMessageWereNotSent_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var validUser = GetValidUser();
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<User>())).ReturnsAsync(ValidPasswordResetCode);
+
+            var emailProviderMock = new Mock<IEmailProvider>();
+            emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
+
+            var userServiceMock = new Mock<IUserService>();
+            userServiceMock.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtProvider, userServiceMock.Object, _clientConnectionOptions);
+
+            var validForgotPasswordView = GetValidForgotPasswordView();
+            FluentActions.Awaiting(() => authenticationService.ForgotPasswordAsync(validForgotPasswordView))
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.ErrorWhileSendingMessage);
+        }
+
+        [Test]
+        public void ResetPassword_PassedValidResetPasswordView_CallsResetPasswordAsyncAndDoesNotThrowsExceptions()
+        {
+            var validUser = GetValidUser();
+            User userPassedToResetPasswordAsync = null;
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+            userManagerMock.Setup(x => x.ResetPasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success)
+                .Callback((User user, string code, string password) => { userPassedToResetPasswordAsync = user;  });
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validResetPasswordView = GetValidResetPasswordView();
+            FluentActions.Awaiting(() => authenticationService.ResetPasswordAsync(validResetPasswordView)).Should().NotThrow<Exception>();
+
+            userPassedToResetPasswordAsync.Should().NotBeNull().And.BeEquivalentTo(validUser);
+        }
+
+        [Test]
+        public void ResetPassword_PassedValidResetPasswordViewButThereIsNoUserWithSuchEmail_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validResetPasswordView = GetValidResetPasswordView();
+            FluentActions.Awaiting(() => authenticationService.ResetPasswordAsync(validResetPasswordView)).Should()
+                .Throw<Exception>().WithMessage(Constants.Errors.Authentication.UserWasNotFound);
+        }
+
+        [Test]
+        public void ResetPassword_PassedValidResetPasswordViewButResetPasswordAsyncFails_ThrowsException()
+        {
+            var validUser = GetValidUser();
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+            userManagerMock.Setup(x => x.ResetPasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new IdentityResult());
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validResetPasswordView = GetValidResetPasswordView();
+            FluentActions.Awaiting(() => authenticationService.ResetPasswordAsync(validResetPasswordView)).Should().Throw<Exception>();
+        }
 
         private ConfirmEmailAuthenticationView GetConfirmEmailViewWithEmptyEmail()
         {
@@ -355,6 +469,33 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             {
                 Email = "rusland610@gmail.com",
                 Nickname = "Bobik",
+                Password = "qwerty12345AAA",
+                ConfirmPassword = "qwerty12345AAA"
+            };
+        }
+
+        private ForgotPasswordAuthenticationView GetValidForgotPasswordView()
+        {
+            return new ForgotPasswordAuthenticationView
+            {
+                Email = "rusland610@gmail.com"
+            };
+        }
+
+        private ForgotPasswordAuthenticationView GetForgotPasswordViewWithEmptyEmail()
+        {
+            return new ForgotPasswordAuthenticationView
+            {
+                Email = ""
+            };
+        }
+
+        private ResetPasswordAuthenticationView GetValidResetPasswordView()
+        {
+            return new ResetPasswordAuthenticationView
+            { 
+                Email = "rusland610@gmail.com",
+                Code = "code_goes_here",
                 Password = "qwerty12345AAA",
                 ConfirmPassword = "qwerty12345AAA"
             };
