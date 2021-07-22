@@ -1,7 +1,6 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Pagination;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.HistoryPage
 {
-    [Authorize]
     public partial class HistoryPage
     {
         private static readonly int DepositesOnPage = 2;

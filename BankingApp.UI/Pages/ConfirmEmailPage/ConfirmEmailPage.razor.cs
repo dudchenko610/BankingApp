@@ -9,7 +9,6 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.ConfirmEmailPage
 {
-    [Unauthorized]
     public partial class ConfirmEmailPage
     {
         [Inject]

@@ -1,4 +1,5 @@
 ﻿@page "/details/{depositId:int}"
+@attribute [Authorize]
 
 <div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100 w-100">
 
@@ -19,7 +20,7 @@
 
             <div class="" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                    <MonthlyPaymentList MonthlyPaymentViewList ="_responseDepositView.MonthlyPaymentItems" />
+                    <MonthlyPaymentList MonthlyPaymentViewList="_responseDepositView.MonthlyPaymentItems" />
                 </div>
             </div>
         </div>

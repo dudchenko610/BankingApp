@@ -1,5 +1,4 @@
-﻿using BankingApp.UI.Core.Attributes;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Authentication;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
@@ -8,7 +7,6 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.SignUpPage
 {
-    [Unauthorized]
     public partial class SignUpPage
     {
         private SignUpAuthenticationView _signUpView;

@@ -1,4 +1,5 @@
 ﻿@page "/confirmEmail"
+@attribute [Unauthorized]
 
 <div class="container d-flex p-3 mb-5 bg-white rounded w-50 mt-3  justify-content-center">
     <button @onclick="async () => { await OnClickConfirmEmailAsync(); }" type="button" class="btn btn-secondary">To confirm your email, click the button</button>

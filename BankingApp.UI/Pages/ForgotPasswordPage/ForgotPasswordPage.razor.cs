@@ -9,7 +9,6 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.ForgotPasswordPage
 {
-    [Unauthorized]
     public partial class ForgotPasswordPage
     {
         private ForgotPasswordAuthenticationView _forgotPasswordView;

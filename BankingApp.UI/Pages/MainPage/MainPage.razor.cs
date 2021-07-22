@@ -2,12 +2,10 @@
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using BankingApp.ViewModels.Banking.Deposit;
-using Microsoft.AspNetCore.Authorization;
 using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.MainPage
 {
-    [Authorize]
     public partial class MainPage
     {
         [Inject]

@@ -1,5 +1,4 @@
-﻿using BankingApp.UI.Core.Attributes;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Authentication;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
@@ -9,7 +8,6 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.ResetPasswordPage
 {
-    [Unauthorized]
     public partial class ResetPasswordPage
     {
         private ResetPasswordAuthenticationView _resetPasswordView;
