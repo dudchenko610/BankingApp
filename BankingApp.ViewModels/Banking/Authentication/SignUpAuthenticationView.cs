@@ -9,7 +9,7 @@ namespace BankingApp.ViewModels.Banking.Authentication
         [StringLength(12, ErrorMessage = Constants.Errors.Authentication.NicknameLengthIsTooLong)]
         public string Nickname { get; set; }
         [Required(ErrorMessage = Constants.Errors.Authentication.EmailIsRequired)]
-        [DataType(DataType.EmailAddress, ErrorMessage = Constants.Errors.Authentication.EmailIsRequired)]
+        [DataType(DataType.EmailAddress, ErrorMessage = Constants.Errors.Authentication.EmailFormatIncorrect)]
         [EmailAddress]
         public string Email { get; set; }
         [MinLength(14, ErrorMessage = Constants.Errors.Authentication.PasswordIsTooShort)]
