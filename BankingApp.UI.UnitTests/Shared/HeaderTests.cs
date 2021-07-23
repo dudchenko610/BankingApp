@@ -13,6 +13,10 @@ namespace BankingApp.UI.UnitTests.Shared
         private readonly Mock<INavigationWrapper> _navWrapperMock;
         public HeaderTests()
         {
+            var authenticationServiceMock = new Mock<IAuthenticationService>();
+            authenticationServiceMock.SetupGet(x => x.TokensView).Returns(new ViewModels.Banking.Authentication.TokensView());
+            Services.AddSingleton(authenticationServiceMock.Object);
+
             var loaderServiceMock = new Mock<ILoaderService>();
             loaderServiceMock.Setup(x => x.SwitchOn());
             loaderServiceMock.Setup(x => x.SwitchOff());

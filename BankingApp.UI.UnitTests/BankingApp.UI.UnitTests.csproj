@@ -25,8 +25,4 @@
     <ProjectReference Include="..\BankingApp.UI\BankingApp.UI.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\" />
-  </ItemGroup>
-
 </Project>
