@@ -6,7 +6,7 @@ namespace BankingApp.ViewModels.Banking.Authentication
     public class SignInAuthenticationView
     {
         [Required(ErrorMessage = Constants.Errors.Authentication.EmailIsRequired)]
-        [DataType(DataType.EmailAddress, ErrorMessage = Constants.Errors.Authentication.EmailIsRequired)]
+        [DataType(DataType.EmailAddress, ErrorMessage = Constants.Errors.Authentication.EmailFormatIncorrect)]
         [EmailAddress]
         public string Email { get; set; }
         [MinLength(14, ErrorMessage = Constants.Errors.Authentication.PasswordIsTooShort)]

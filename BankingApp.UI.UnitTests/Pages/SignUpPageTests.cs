@@ -71,13 +71,13 @@ namespace BankingApp.UI.UnitTests.Pages
             Services.AddSingleton(toastServiceMock.Object);
 
             var validSignUpView = GetValidSignUpView();
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
             switchOnCalled.Should().BeTrue();
             switchOffCalled.Should().BeTrue();
@@ -116,13 +116,13 @@ namespace BankingApp.UI.UnitTests.Pages
             Services.AddSingleton(toastServiceMock.Object);
 
             var validSignUpView = GetValidSignUpView();
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
             switchOnCalled.Should().BeTrue();
             switchOffCalled.Should().BeTrue();
@@ -140,15 +140,15 @@ namespace BankingApp.UI.UnitTests.Pages
             Services.AddSingleton(_toastService);
 
             var validSignUpView = GetValidSignUpView();
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
-            var validationErrorMessage = depositeCalculateForm.FindAll("div[class=validation-message]");
+            var validationErrorMessage = signUpForm.FindAll("div[class=validation-message]");
             validationErrorMessage.Should().BeEmpty();
         }
 
@@ -163,20 +163,20 @@ namespace BankingApp.UI.UnitTests.Pages
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Nickname = "";
 
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
-            var validationErrorMessage = depositeCalculateForm.Find("div[class=validation-message]").TextContent;
+            var validationErrorMessage = signUpForm.Find("div[class=validation-message]").TextContent;
             validationErrorMessage.Should().Be(Constants.Errors.Authentication.NicknameIsRequired);
         }
 
         [Fact]
-        public void SignUpPage_UserSubmitsDataWithTooLongNickanme_CorrespondingErrorMessageWasShown()
+        public void SignUpPage_UserSubmitsDataWithTooLongNickname_CorrespondingErrorMessageWasShown()
         {
             Services.AddSingleton(_authenticationService);
             Services.AddSingleton(_loaderService);
@@ -186,15 +186,15 @@ namespace BankingApp.UI.UnitTests.Pages
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Nickname = "123456789abcd";
 
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
-            var validationErrorMessage = depositeCalculateForm.Find("div[class=validation-message]").TextContent;
+            var validationErrorMessage = signUpForm.Find("div[class=validation-message]").TextContent;
             validationErrorMessage.Should().Be(Constants.Errors.Authentication.NicknameLengthIsTooLong);
         }
 
@@ -209,15 +209,15 @@ namespace BankingApp.UI.UnitTests.Pages
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Email = "";
 
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
-            var validationErrorMessage = depositeCalculateForm.Find("div[class=validation-message]").TextContent;
+            var validationErrorMessage = signUpForm.Find("div[class=validation-message]").TextContent;
             validationErrorMessage.Should().Be(Constants.Errors.Authentication.EmailIsRequired);
         }
 
@@ -232,15 +232,15 @@ namespace BankingApp.UI.UnitTests.Pages
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Email = "ksfdsfk";
 
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
-            var validationErrorMessage = depositeCalculateForm.Find("div[class=validation-message]").TextContent;
+            var validationErrorMessage = signUpForm.Find("div[class=validation-message]").TextContent;
             validationErrorMessage.Should().Be(Constants.Errors.Authentication.EmailFormatIncorrect);
         }
 
@@ -256,15 +256,15 @@ namespace BankingApp.UI.UnitTests.Pages
             validSignUpView.Password = "abc";
             validSignUpView.ConfirmPassword = "abc";
 
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
-            var validationErrorMessage = depositeCalculateForm.Find("div[class=validation-message]").TextContent;
+            var validationErrorMessage = signUpForm.Find("div[class=validation-message]").TextContent;
             validationErrorMessage.Should().Be(Constants.Errors.Authentication.PasswordIsTooShort);
         }
 
@@ -280,15 +280,15 @@ namespace BankingApp.UI.UnitTests.Pages
             validSignUpView.Password = "abcdAAABBBBBBCCCCCC";
             validSignUpView.ConfirmPassword = "abcdAAABBBBBBCCCCCC";
 
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
-            var validationErrorMessage = depositeCalculateForm.Find("div[class=validation-message]").TextContent;
+            var validationErrorMessage = signUpForm.Find("div[class=validation-message]").TextContent;
             validationErrorMessage.Should().Be(Constants.Errors.Authentication.PasswordIsNotHardEnough);
         }
 
@@ -304,15 +304,15 @@ namespace BankingApp.UI.UnitTests.Pages
             validSignUpView.Password = "abcdAAABBBBBBCCCCCC12345";
             validSignUpView.ConfirmPassword = "abcdAAABBBBBBCCCCCC1234";
 
-            var depositeCalculateForm = RenderComponent<SignUpPage>();
+            var signUpForm = RenderComponent<SignUpPage>();
 
-            depositeCalculateForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
-            depositeCalculateForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
-            depositeCalculateForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
-            depositeCalculateForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
-            depositeCalculateForm.Find("form").Submit();
+            signUpForm.Find("input[id=nickname]").Change(validSignUpView.Nickname.ToString());
+            signUpForm.Find("input[id=email]").Change(validSignUpView.Email.ToString());
+            signUpForm.Find("input[id=password]").Change(validSignUpView.Password.ToString());
+            signUpForm.Find("input[id=confirmPassword]").Change(validSignUpView.ConfirmPassword.ToString());
+            signUpForm.Find("form").Submit();
 
-            var validationErrorMessage = depositeCalculateForm.Find("div[class=validation-message]").TextContent;
+            var validationErrorMessage = signUpForm.Find("div[class=validation-message]").TextContent;
             validationErrorMessage.Should().Be(Constants.Errors.Authentication.ConfirmPasswordShouldMatchPassword);
         }
 
