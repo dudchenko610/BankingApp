@@ -1,5 +1,5 @@
 ﻿using BankingApp.DataAccessLayer.Models;
-using BankingApp.Entities.Entities;
+using BankingApp.Entities.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

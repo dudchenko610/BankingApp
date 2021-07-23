@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BankingApp.Entities.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace BankingApp.Entities.Entities
 {

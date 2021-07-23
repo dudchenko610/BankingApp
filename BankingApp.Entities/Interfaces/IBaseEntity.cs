@@ -1,5 +1,4 @@
-﻿
-namespace BankingApp.Entities.Entities
+﻿namespace BankingApp.Entities.Interfaces
 {
     public interface IBaseEntity
     {
