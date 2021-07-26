@@ -1,62 +1,62 @@
 ﻿using BankingApp.Api.Validators;
-using BankingApp.ViewModels.Banking.Authentication;
 using NUnit.Framework;
 using FluentAssertions;
+using BankingApp.ViewModels.Banking.Authentication;
 using BankingApp.Shared;
 
 namespace BankingApp.Api.UnitTests.Validators
 {
     [TestFixture]
-    public class ForgotPasswordAuthenticationViewValidatorTests
+    public class ConfirmEmailAuthenticationViewValidatorTests
     {
-        private ForgotPasswordAuthenticationViewValidator _validator;
+        private ConfirmEmailAuthenticationViewValidator _validator;
 
         [SetUp]
         public void SetUp()
         {
-            _validator = new ForgotPasswordAuthenticationViewValidator();
+            _validator = new ConfirmEmailAuthenticationViewValidator();
         }
 
         [Test]
-        public void Validate_ValidForgotPasswordView_NoErrorMessage()
+        public void Validate_ValidConfirmEmailView_NoErrorMessage()
         {
-            var validateResult = _validator.Validate(GetValidForgotPasswordView());
+            var validateResult = _validator.Validate(GetValidConfirmEmailView());
             validateResult.Errors.Should().BeEmpty();
         }
 
         [Test]
         public void Validate_EmailIsEmpty_ValidErrorMessage()
         {
-            var validateResult = _validator.Validate(GetForgotPasswordViewWithEmptyEmail());
+            var validateResult = _validator.Validate(GetConfirmEmailViewWithEmptyEmail());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.EmailIsRequired);
         }
 
         [Test]
         public void Validate_EmailInvalidFormat_ValidErrorMessage()
         {
-            var validateResult = _validator.Validate(GetForgotPasswordViewWithInvalidEmail());
+            var validateResult = _validator.Validate(GetConfirmEmailViewWithInvalidEmail());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.InvalidEmailFormat);
         }
 
-        private ForgotPasswordAuthenticationView GetValidForgotPasswordView()
+        private ConfirmEmailAuthenticationView GetValidConfirmEmailView()
         {
-            return new ForgotPasswordAuthenticationView
+            return new ConfirmEmailAuthenticationView
             {
                 Email = "rusland610@gmail.com"
             };
         }
 
-        private ForgotPasswordAuthenticationView GetForgotPasswordViewWithEmptyEmail()
+        private ConfirmEmailAuthenticationView GetConfirmEmailViewWithEmptyEmail()
         {
-            return new ForgotPasswordAuthenticationView
+            return new ConfirmEmailAuthenticationView
             {
                 Email = ""
             };
         }
 
-        private ForgotPasswordAuthenticationView GetForgotPasswordViewWithInvalidEmail()
+        private ConfirmEmailAuthenticationView GetConfirmEmailViewWithInvalidEmail()
         {
-            return new ForgotPasswordAuthenticationView
+            return new ConfirmEmailAuthenticationView
             {
                 Email = "fsdfsdfds"
             };

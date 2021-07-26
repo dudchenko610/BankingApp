@@ -90,25 +90,24 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ConfirmEmail_PassedEmailIsEmpty_ThrowsExceptionWithCorrespondingMessage()
+        public void ConfirmEmail_PassedValidModelButFindByEmailAsyncReturnsNull_ThrowsExceptionWithCorrespondingMessage()
         {
-            var authenticationService = new AuthenticationService(_userManager, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var validUser = GetValidUser();
 
-            FluentActions.Awaiting(() => authenticationService.ConfirmEmailAsync(GetConfirmEmailViewWithEmptyEmail()))
-                .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.UserWasNotFound);
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+            userManagerMock.Setup(x => x.ConfirmEmailAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+
+            var validConfirmEmailView = GetValidConfirmEmailView();
+
+            FluentActions.Awaiting(() => authenticationService.ConfirmEmailAsync(validConfirmEmailView))
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.UserWasNotFound);
         }
 
         [Test]
-        public void ConfirmEmail_PassedCodeIsEmpty_ThrowsExceptionWithCorrespondingMessage()
-        {
-            var authenticationService = new AuthenticationService(_userManager, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
-
-            FluentActions.Awaiting(() => authenticationService.ConfirmEmailAsync(GetConfirmEmailViewWithEmptyCode()))
-                .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.UserWasNotFound);
-        }
-
-        [Test]
-        public void ConfirmEmail_PassedValidModelConfirmEmailReturnsNotSuccessIdentityResponse_ThrowsExceptionWithCorrespondingMessage()
+        public void ConfirmEmail_PassedValidModelButConfirmEmailReturnsNotSuccessIdentityResponse_ThrowsExceptionWithCorrespondingMessage()
         {
             var validUser = GetValidUser();
 
@@ -151,7 +150,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var validSignInView = GetValidSignInView();
             FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
-               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.UserWasNotFound);
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.InvalidNicknameOrPassword);
         }
 
         [Test]
@@ -167,7 +166,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var validSignInView = GetValidSignInView();
             FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
-               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.EmailWasNotConfirmed);
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.InvalidNicknameOrPassword);
         }
 
         [Test]
@@ -183,7 +182,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var validSignInView = GetValidSignInView();
             FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
-               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.InvalidPassword);
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.InvalidNicknameOrPassword);
         }
 
         [Test]

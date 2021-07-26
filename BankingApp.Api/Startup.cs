@@ -37,6 +37,7 @@ namespace BankingApp.Api
             services.AddTransient<IValidator<SignUpAuthenticationView>, SignUpAuthenticationViewValidator>();
             services.AddTransient<IValidator<ResetPasswordAuthenticationView>, ResetPasswordAuthenticationViewValidator>();
             services.AddTransient<IValidator<ForgotPasswordAuthenticationView>, ForgotPasswordAuthenticationViewValidator>();
+            services.AddTransient<IValidator<ConfirmEmailAuthenticationView>, ConfirmEmailAuthenticationViewValidator>();
 
             services.AddCors(options =>
             {

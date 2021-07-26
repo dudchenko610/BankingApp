@@ -23,6 +23,7 @@ namespace BankingApp.Shared
 
             public static class Authentication
             {
+                public const string InvalidNicknameOrPassword = "Invalid nickname or password";
                 public const string NicknameIsRequired = "Nickname is required";
                 public const string EmailIsRequired = "Email is required";
                 public const string EmailFormatIncorrect = "The Email field is not a valid e-mail address.";

@@ -41,12 +41,12 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         public async Task ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailView)
         {
-            if (string.IsNullOrWhiteSpace(confirmEmailView.Email) || string.IsNullOrWhiteSpace(confirmEmailView.Code))
+            var user = await _userManager.FindByEmailAsync(confirmEmailView.Email);
+
+            if (user is null)
             {
                 throw new Exception(Constants.Errors.Authentication.UserWasNotFound);
             }
-
-            var user = await _userManager.FindByEmailAsync(confirmEmailView.Email);
 
             byte[] codeDecodeBytes = WebEncoders.Base64UrlDecode(confirmEmailView.Code);
             string codeDecoded = Encoding.UTF8.GetString(codeDecodeBytes);
@@ -64,19 +64,9 @@ namespace BankingApp.BusinessLogicLayer.Services
         {
             var user = await _userManager.FindByEmailAsync(signInAccountView.Email);
 
-            if (user is null)
+            if (user is null || !user.EmailConfirmed || !await _userManager.CheckPasswordAsync(user, signInAccountView.Password))
             {
-                throw new Exception(Constants.Errors.Authentication.UserWasNotFound);
-            }
-
-            if (!user.EmailConfirmed)
-            {
-                throw new Exception(Constants.Errors.Authentication.EmailWasNotConfirmed);
-            }
-
-            if (!await _userManager.CheckPasswordAsync(user, signInAccountView.Password))
-            {
-                throw new Exception(Constants.Errors.Authentication.InvalidPassword);
+                throw new Exception(Constants.Errors.Authentication.InvalidNicknameOrPassword);
             }
 
             var claims = await _jwtProvider.GetUserClaimsAsync(user.Email);
