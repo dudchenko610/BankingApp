@@ -6,5 +6,6 @@ namespace BankingApp.Entities.Entities
     public class User : IdentityUser<int>
     {
         public virtual IList<Deposit> Deposits { get; set; }
+        public bool IsBlocked { get; set; }
     }
 }

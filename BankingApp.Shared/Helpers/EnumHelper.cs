@@ -22,5 +22,10 @@ namespace BankingApp.Shared.Helpers
         {
             return typeof(T).GetFields(BindingFlags.Static | BindingFlags.Public).Select(fi => fi.Name).ToList();
         }
+
+        public static IEnumerable<T> GetValues<T>()
+        {
+            return Enum.GetValues(typeof(T)).Cast<T>();
+        }
     }
 }

@@ -86,6 +86,7 @@ namespace BankingApp.Shared
             public const string EmailConfig = "emailConfig";
             public const string ClientConfig = "clientConfig";
             public const string JwtConfig = "jwtConfig";
+            public const string AdminCredentials = "adminCredentials";
         }
     
         public static class Email

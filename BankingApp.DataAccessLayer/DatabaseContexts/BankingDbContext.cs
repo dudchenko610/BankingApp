@@ -18,9 +18,8 @@ namespace BankingApp.DataAccessLayer.DatabaseContexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<MonthlyPayment>()
-               .HasOne(dhi => dhi.Deposit)
-               .WithMany(dh => dh.MonthlyPayments)
+            modelBuilder.Entity<MonthlyPayment>().HasOne(x => x.Deposit)
+               .WithMany(x => x.MonthlyPayments)
                .OnDelete(DeleteBehavior.Cascade);
         }
     }
