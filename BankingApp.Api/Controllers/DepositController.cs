@@ -32,8 +32,6 @@ namespace BankingApp.Api.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
