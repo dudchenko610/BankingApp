@@ -11,6 +11,6 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
         Task<User> GetUserByEmailAsync(string email);
         int GetSignedInUserId();
         Task<PagedDataView<UserGetAllAdminViewItem>> GetAllAsync(int pageNumber, int pageSize);
-        Task BlockUserAsync(BlockUserAdminView blockUserAdminView);
+        Task BlockAsync(BlockUserAdminView blockUserAdminView);
     }
 }

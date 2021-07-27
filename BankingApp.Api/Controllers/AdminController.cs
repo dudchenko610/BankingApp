@@ -44,7 +44,7 @@ namespace BankingApp.Api.Controllers
         {
             try
             {
-                await _userService.BlockUserAsync(blockUserAdminView);
+                await _userService.BlockAsync(blockUserAdminView);
                 return Ok();
             }
             catch (Exception e)

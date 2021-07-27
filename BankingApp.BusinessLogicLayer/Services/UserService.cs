@@ -30,9 +30,9 @@ namespace BankingApp.BusinessLogicLayer.Services
             _mapper = mapper;
         }
 
-        public async Task BlockUserAsync(BlockUserAdminView blockUserAdminView)
+        public async Task BlockAsync(BlockUserAdminView blockUserAdminView)
         {
-            await _userRepository.BlockUserAsync(blockUserAdminView.UserId, blockUserAdminView.Block);
+            await _userRepository.BlockAsync(blockUserAdminView.UserId, blockUserAdminView.Block);
         }
 
         public async Task<PagedDataView<UserGetAllAdminViewItem>> GetAllAsync(int pageNumber, int pageSize)

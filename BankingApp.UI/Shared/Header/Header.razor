@@ -21,7 +21,7 @@
                 @if (_authenticationService.IsAdmin)
                 {
                     <li class="nav-item  @GetActive("users", NavLinkMatch.All)">
-                        <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="async () => { _navigationWrapper.NavigateTo(Routes.UsersPage);  }" @onclick:preventDefault>Users</a>
+                        <a class="nav-link @_navLinksDisabledClass" href="#" @onclick='async () => { _navigationWrapper.NavigateTo(Routes.UsersPage + "/1");  }' @onclick:preventDefault>Users</a>
                     </li>
                 }
 

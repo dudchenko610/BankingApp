@@ -12,7 +12,7 @@ namespace BankingApp.DataAccessLayer.Repositories
         {
         }
 
-        public async Task BlockUserAsync(int userId, bool block)
+        public async Task BlockAsync(int userId, bool block)
         {
             var user = await _dbSet.FirstOrDefaultAsync(x => x.Id == userId);
             user.IsBlocked = block;

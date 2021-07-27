@@ -10,7 +10,7 @@ namespace BankingApp.UI.Pages.HistoryPage
 {
     public partial class HistoryPage
     {
-        private static readonly int DepositesOnPage = 2;
+        private static readonly int DepositsOnPage = 2;
 
         private int _totalPageCount;
         private PagedDataView<DepositGetAllDepositViewItem> _pagedDeposits;
@@ -59,13 +59,13 @@ namespace BankingApp.UI.Pages.HistoryPage
             }
 
             _loaderService.SwitchOn();
-            _pagedDeposits = await _depositService.GetAllAsync(Page, DepositesOnPage);
+            _pagedDeposits = await _depositService.GetAllAsync(Page, DepositsOnPage);
             _loaderService.SwitchOff();
 
             if (_pagedDeposits.Items.Count == 0)
                 return;
 
-            _totalPageCount = (int)Math.Ceiling(_pagedDeposits.TotalItems / ((double)DepositesOnPage));
+            _totalPageCount = (int)Math.Ceiling(_pagedDeposits.TotalItems / ((double)DepositsOnPage));
 
             if (Page > _totalPageCount || Page < 1)
                 _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/1");

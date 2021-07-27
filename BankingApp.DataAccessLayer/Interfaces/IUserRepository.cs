@@ -5,6 +5,6 @@ namespace BankingApp.DataAccessLayer.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        Task BlockUserAsync(int userId, bool block);
+        Task BlockAsync(int userId, bool block);
     }
 }

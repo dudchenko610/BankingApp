@@ -37,6 +37,7 @@ namespace BankingApp.UI
             services.AddScoped<INavigationWrapper, NavigationWrapper>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IHttpService, HttpService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddBlazoredToast();
             services.AddBlazoredLocalStorage();

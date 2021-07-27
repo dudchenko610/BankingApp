@@ -1,6 +1,64 @@
 ﻿@using BankingApp.Shared;
 
-@page "/users"
+@page "/users/{page:int}"
 @attribute [Authorize(Roles = Constants.Roles.Admin)]
 
-<h3>Hi, Admin!</h3>
+<div class="container d-flex align-items-center justify-content-center flex-column mt-3 h-100 w-100">
+    @if (_pagedUsers is not null && _pagedUsers.Items.Any())
+    {
+        <div class="d-flex align-items-center justify-content-center flex-column w-100">
+            <div class="w-100">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nickname</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Blocked</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < _pagedUsers.Items.Count; i++)
+                        {
+                            var element = _pagedUsers.Items[i];
+
+                            @if (Page == 1 && i == 0 || !element.IsEmailConfirmed)
+                            {
+                                <tr class="table-active">
+                                    <th scope="row">@(i + 1)</th>
+                                    <td>@element.Nickname</td>
+                                    <td>@element.Email</td>
+                                    <td>
+                                        <input disabled="disabled" type="checkbox" @bind="@element.IsBlocked">
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <th scope="row">@(i + 1)</th>
+                                    <td>@element.Nickname</td>
+                                    <td>@element.Email</td>
+                                    <td>
+                                        <input type="checkbox" checked="@element.IsBlocked" @onchange="eventArgs => { Console.WriteLine(eventArgs.Value); }" >
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4">
+                <PaginationSwitcher PageCount="_totalPageCount" CurrentPage="Page" OnPageClick="@OnPageClicked" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            <h6>User list is empty !</h6>
+        </div>
+    }
+</div>
+
