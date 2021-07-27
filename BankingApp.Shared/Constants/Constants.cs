@@ -48,6 +48,8 @@ namespace BankingApp.Shared
                 public const string ErrorWhileSendingMessage = "While sending message error occurred, try latter!";
                 public const string UserShouldBelongToOneRole = "User cannot belong to more or less than one role";
                 public const string ClientUserWasNotAddedToAdminRole = "Client user was not added to admin role";
+                public const string UserIsBlocked = "Your account was blocked by admin";
+                public const string ErrorWhileResetPaswword = "Error happened while resetting password, try later";
             }
 
             public static class SeedData

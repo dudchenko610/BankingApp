@@ -12,6 +12,11 @@ namespace BankingApp.UI.Core.Constants
             public const string SignInSuccess = "You are signed in!";
             public const string PasswordResetSuccessfully = "Password was reset successfully, sign in using new password";
             public const string PasswordResetEmailSent = "Reset link was sent to your mailbox";
+
+            public const string UserSuccessfullyBlocked = "User successfully blocked";
+            public const string UserSuccessfullyUnblocked = "User successfully unblocked";
+            public const string ErrorWhileBlockingUser = "Error while blocking user";
+            public const string ErrorWhileUnblockingUser = "Error while unblocking user";
         }
 
         public static class Routes

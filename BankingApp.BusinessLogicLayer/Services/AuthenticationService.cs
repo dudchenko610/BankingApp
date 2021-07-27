@@ -70,6 +70,11 @@ namespace BankingApp.BusinessLogicLayer.Services
                 throw new Exception(Constants.Errors.Authentication.InvalidNicknameOrPassword);
             }
 
+            if (user.IsBlocked)
+            {
+                throw new Exception(Constants.Errors.Authentication.UserIsBlocked);
+            }
+
             var claims = await _jwtProvider.GetUserClaimsAsync(user.Email);
             string accessToken = _jwtProvider.GenerateAccessToken(claims);
 
@@ -143,7 +148,12 @@ namespace BankingApp.BusinessLogicLayer.Services
             var user = await _userService.GetUserByEmailAsync(resetPasswordAuthenticationView.Email);
             if (user is null)
             {
-                return; // we don't want to show lack of our user in this particular case
+                throw new Exception(Constants.Errors.Authentication.ErrorWhileResetPaswword); // we don't want to show lack of our user in this particular case
+            }
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles.Contains(RolesEnum.Admin.ToString()))
+            {
+                throw new Exception(Constants.Errors.Authentication.ErrorWhileResetPaswword); // we don't want to show lack of our user in this particular case
             }
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);

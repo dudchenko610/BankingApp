@@ -25,7 +25,7 @@
                             @if (Page == 1 && i == 0 || !element.IsEmailConfirmed)
                             {
                                 <tr class="table-active">
-                                    <th scope="row">@(i + 1)</th>
+                                    <th scope="row">@((Page - 1) * UsersOnPage + (i + 1))</th>
                                     <td>@element.Nickname</td>
                                     <td>@element.Email</td>
                                     <td>
@@ -36,11 +36,11 @@
                             else
                             {
                                 <tr>
-                                    <th scope="row">@(i + 1)</th>
+                                    <th scope="row">@((Page - 1) * UsersOnPage + (i + 1))</th>
                                     <td>@element.Nickname</td>
                                     <td>@element.Email</td>
                                     <td>
-                                        <input type="checkbox" checked="@element.IsBlocked" @onchange="eventArgs => { Console.WriteLine(eventArgs.Value); }" >
+                                        <input type="checkbox" checked="@element.IsBlocked" @onchange="async eventArgs => { await BlockUserAsync(element.Id, (bool) eventArgs.Value); }" >
                                     </td>
                                 </tr>
                             }
