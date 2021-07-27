@@ -1,1 +1,6 @@
-﻿
+﻿@using BankingApp.Shared;
+
+@page "/users"
+@attribute [Authorize(Roles = Constants.Roles.Admin)]
+
+<h3>Hi, Admin!</h3>

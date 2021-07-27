@@ -1,6 +1,6 @@
 ﻿
 <div class="container shadow p-3 mb-5 bg-white rounded w-50">
-    <h2 class="d-flex justify-content-center">Calculate your deposite</h2>
+    <h2 class="d-flex justify-content-center">Calculate your deposit</h2>
     <EditForm Model="@_requestModel" OnValidSubmit="SubmitForm">
         <DataAnnotationsValidator />
 
@@ -35,6 +35,6 @@
             <ValidationMessage For="@(() => _requestModel.Percents)" />
 
         </div>
-        <button type="submit" disabled="@(!context.Validate() || !context.IsModified())" class="btn btn-primary btn-block">Calculate Deposite</button>
+        <button type="submit" disabled="@(!context.Validate() || !context.IsModified())" class="btn btn-primary btn-block">Calculate Deposit</button>
     </EditForm>
 </div>

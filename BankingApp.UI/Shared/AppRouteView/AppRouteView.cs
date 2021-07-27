@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
+using System.Linq;
 using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Shared.AppRouteView
@@ -17,15 +18,28 @@ namespace BankingApp.UI.Shared.AppRouteView
 
         protected override void Render(RenderTreeBuilder builder)
         {
-            bool authorize = Attribute.GetCustomAttribute(RouteData.PageType, typeof(AuthorizeAttribute)) != null;
-            bool unauthorized = Attribute.GetCustomAttribute(RouteData.PageType, typeof(UnauthorizedAttribute)) != null;
+            AuthorizeAttribute authAttribute = (AuthorizeAttribute) Attribute.GetCustomAttribute(RouteData.PageType, typeof(AuthorizeAttribute));
+            UnauthorizedAttribute unauthAttribute = (UnauthorizedAttribute)Attribute.GetCustomAttribute(RouteData.PageType, typeof(UnauthorizedAttribute));
 
-            if (authorize && _authenticationService.TokensView == null)
+            if (authAttribute is not null)
             {
-                _navigationWrapper.NavigateTo(Routes.SignInPage);
-                return;
+                if (_authenticationService.TokensView is null)
+                {
+                    _navigationWrapper.NavigateTo(Routes.SignInPage);
+                    return;
+                }
+
+                var allowedPageRoles = authAttribute.Roles is null ? new string[0] : authAttribute.Roles.Split(','); // if empty - all roles allowed
+                var userRoles = _authenticationService.GetRoles();
+
+                if (allowedPageRoles.Any() && !allowedPageRoles.Intersect(userRoles).Any())
+                {
+                    _navigationWrapper.NavigateTo(Routes.MainPage);
+                    return;
+                }
             } 
-            if (unauthorized && _authenticationService.TokensView != null)
+
+            if (unauthAttribute is not null && _authenticationService.TokensView is not null)
             {
                 _navigationWrapper.NavigateTo(Routes.MainPage);
                 return;

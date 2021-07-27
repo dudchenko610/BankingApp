@@ -25,6 +25,7 @@ namespace BankingApp.UI.Core.Constants
             public const string LogoutPage = "/logout";
             public const string ResetPasswordPage = "/resetPassword";
             public const string ForgotPasswordPage = "/forgotPassword";
+            public const string UsersPage = "/users";
         }
 
         public static class Authentication

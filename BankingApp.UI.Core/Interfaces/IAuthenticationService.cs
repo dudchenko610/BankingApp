@@ -1,4 +1,5 @@
 ﻿using BankingApp.ViewModels.Banking.Authentication;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BankingApp.UI.Core.Interfaces
@@ -14,5 +15,6 @@ namespace BankingApp.UI.Core.Interfaces
         Task<bool> ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordAuthenticationView);
         Task<bool> ForgotPasswordAsync(ForgotPasswordAuthenticationView forgotPasswordAuthenticationView);
         Task LogoutAsync();
+        IList<string> GetRoles();
     }
 }

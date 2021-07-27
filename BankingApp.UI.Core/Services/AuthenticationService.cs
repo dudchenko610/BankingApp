@@ -2,6 +2,7 @@
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Authentication;
 using Blazored.LocalStorage;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -15,10 +16,16 @@ namespace BankingApp.UI.Core.Services
         private readonly ILocalStorageService _localStorageService;
         private readonly IHttpService _httpService;
 
-        private bool _isAdmin;
+        private IList<Claim> _claims;
 
         public TokensView TokensView { get; private set; }
-        public bool IsAdmin { get { return _isAdmin; } }
+        public bool IsAdmin 
+        { 
+            get 
+            {
+                return _claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultRoleClaimType && x.Value == Roles.Admin.ToString()) != null;
+            } 
+        }
 
         public AuthenticationService(INavigationWrapper navigationWrapper, 
             ILocalStorageService localStorageService,
@@ -28,13 +35,13 @@ namespace BankingApp.UI.Core.Services
             _localStorageService = localStorageService;
             _httpService = httpService;
 
-            _isAdmin = false;
+            _claims = new List<Claim>();
         }
 
         public async Task InitializeAsync()
         {
             TokensView = await _localStorageService.GetItemAsync<TokensView>(Constants.Constants.Authentication.TokensView);
-            FindAdminRoleClaim();
+            ExtractClaimsFromToken();
         }
 
         public async Task<bool> SignUpAsync(SignUpAuthenticationView signUpAccountView)
@@ -52,7 +59,7 @@ namespace BankingApp.UI.Core.Services
             var tokensView = await _httpService.PostAsync<TokensView>($"{Routes.Authentication.Route}/{Routes.Authentication.SignIn}", signInAccountView, false);
             await _localStorageService.SetItemAsync(Constants.Constants.Authentication.TokensView, tokensView);
             TokensView = tokensView;
-            FindAdminRoleClaim();
+            ExtractClaimsFromToken();
             return tokensView != null;
         }
 
@@ -73,17 +80,21 @@ namespace BankingApp.UI.Core.Services
             return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ForgotPassword}", forgotPasswordAuthenticationView, false) != null;
         }
 
-        private void FindAdminRoleClaim()
+        public IList<string> GetRoles()
+        {
+            return _claims.Where(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Select(x => x.Value).ToList();
+        }
+
+        private void ExtractClaimsFromToken()
         {
             if (TokensView == null)
             {
-                _isAdmin = false;
-                return;
+                _claims = new List<Claim>();
             }
-            var claimsList = JwtDecodeHelper.ParseClaimsFromJwt(TokensView.AccessToken);
-            var adminRoleClaim = claimsList.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultRoleClaimType && x.Value == Roles.Admin);
-
-            _isAdmin = adminRoleClaim != null ? true : false;
+            else
+            {
+                _claims = JwtDecodeHelper.ParseClaimsFromJwt(TokensView.AccessToken).ToList();
+            }
         }
     }
 }
