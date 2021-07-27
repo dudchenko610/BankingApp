@@ -1,7 +1,15 @@
-﻿using BankingApp.BusinessLogicLayer.Interfaces;
+﻿using AutoMapper;
+using BankingApp.BusinessLogicLayer.Interfaces;
+using BankingApp.DataAccessLayer.Interfaces;
+using BankingApp.DataAccessLayer.Models;
 using BankingApp.Entities.Entities;
+using BankingApp.Shared;
+using BankingApp.ViewModels.Banking.Admin;
+using BankingApp.ViewModels.Pagination;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
@@ -11,11 +19,42 @@ namespace BankingApp.BusinessLogicLayer.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<User> _userManager;
-        
-        public UserService(IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+
+        public UserService(IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, IUserRepository userRepository, IMapper mapper)
         {
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
+            _userRepository = userRepository;
+            _mapper = mapper;
+        }
+
+        public async Task BlockUserAsync(BlockUserAdminView blockUserAdminView)
+        {
+            await _userRepository.BlockUserAsync(blockUserAdminView.UserId, blockUserAdminView.Block);
+        }
+
+        public async Task<PagedDataView<UserGetAllAdminViewItem>> GetAllAsync(int pageNumber, int pageSize)
+        {
+            if (pageNumber < 1)
+                throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
+
+            if (pageSize < 1)
+                throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
+
+            PaginationModel<User> usersAndTotalCount
+                = await _userRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize);
+
+            var pagedResponse = new PagedDataView<UserGetAllAdminViewItem>
+            {
+                Items = _mapper.Map<IList<User>, IList<UserGetAllAdminViewItem>>(usersAndTotalCount.Items),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = usersAndTotalCount.TotalCount
+            };
+
+            return pagedResponse;
         }
 
         public async Task<User> GetSignedInUserAsync()

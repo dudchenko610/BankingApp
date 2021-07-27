@@ -34,6 +34,7 @@ namespace BankingApp.DataAccessLayer
 
             services.AddScoped<RoleManager<IdentityRole<int>>>();
             services.AddTransient<IDepositRepository, DepositRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IDataSeederService, DataSeederService>();
 
             using (var context = services.BuildServiceProvider().GetService<BankingDbContext>())

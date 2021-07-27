@@ -46,7 +46,12 @@ namespace BankingApp.Shared
                 public const string InvalidPassword = "Password is invalid";
                 public const string SignInPlease = "Time expired, sign in please again!";
                 public const string ErrorWhileSendingMessage = "While sending message error occurred, try latter!";
+            }
 
+            public static class SeedData
+            { 
+                public const string AdminUserWasNotCreated = "Admin user was not created";
+                public const string AdminUserWasNotAddedToAdminRole = "Admin user was not added to admin role";
             }
         }
 
@@ -70,6 +75,14 @@ namespace BankingApp.Shared
                 public const string ConfirmEmail = "confirmEmail";
                 public const string ForgotPassword = "forgotPassword";
                 public const string ResetPassword = "resetPassword";
+            }
+
+            public static class Admin
+            {
+                public const string Route = "api/admin";
+
+                public const string GetAll = "getAll";
+                public const string BlockUser = "blockUserw";
             }
         }
 

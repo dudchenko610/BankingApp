@@ -2,6 +2,7 @@
 using BankingApp.DataAccessLayer.Interfaces;
 using BankingApp.Entities.Entities;
 using BankingApp.Entities.Enums;
+using BankingApp.Shared;
 using BankingApp.Shared.Helpers;
 using BankingApp.Shared.Options;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +27,12 @@ namespace BankingApp.DataAccessLayer.Services
 
         public async Task SeedDataAsync()
         {
+            await SeedRolesAsync();
+            await SeedAdminUserAsync();
+        }
+
+        private async Task SeedRolesAsync()
+        {
             var enumRolesList = EnumHelper.GetValues<RolesEnum>().Select(x => new IdentityRole<int> { Name = x.ToString().ToLower() });
             var rolesInDb = _dbContext.Roles.ToList();
 
@@ -42,7 +49,10 @@ namespace BankingApp.DataAccessLayer.Services
             }
 
             await _dbContext.SaveChangesAsync();
+        }
 
+        private async Task SeedAdminUserAsync()
+        {
             if (await _userManager.FindByEmailAsync(_adminCredentials.Email) is null)
             {
                 var adminUser = new User
@@ -52,8 +62,17 @@ namespace BankingApp.DataAccessLayer.Services
                     EmailConfirmed = true
                 };
 
-                await _userManager.CreateAsync(adminUser, _adminCredentials.Password);
-                await _userManager.AddToRoleAsync(adminUser, RolesEnum.Admin.ToString().ToLower());
+                var result = await _userManager.CreateAsync(adminUser, _adminCredentials.Password);
+                if (!result.Succeeded)
+                {
+                    throw new System.Exception(Constants.Errors.SeedData.AdminUserWasNotCreated);
+                }
+
+                result = await _userManager.AddToRoleAsync(adminUser, RolesEnum.Admin.ToString().ToLower());
+                if (!result.Succeeded)
+                {
+                    throw new System.Exception(Constants.Errors.SeedData.AdminUserWasNotAddedToAdminRole);
+                }
             }
         }
     }

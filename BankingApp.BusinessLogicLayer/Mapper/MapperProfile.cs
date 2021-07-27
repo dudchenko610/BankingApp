@@ -4,6 +4,7 @@ using BankingApp.ViewModels.Enums;
 using BankingApp.Shared.Extensions;
 using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Banking.Authentication;
+using BankingApp.ViewModels.Banking.Admin;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {
@@ -26,6 +27,10 @@ namespace BankingApp.BusinessLogicLayer.Mapper
 
             CreateMap<SignUpAuthenticationView, User>()
                 .ForMember(x => x.UserName, model => model.MapFrom(c => c.Nickname));
+
+            CreateMap<User, UserGetAllAdminViewItem>()
+                .ForMember(x => x.Nickname, model => model.MapFrom(c => c.UserName))
+                .ForMember(x => x.IsEmailConfirmed, model => model.MapFrom(c => c.EmailConfirmed));
         }
     }
 }
