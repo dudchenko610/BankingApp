@@ -133,5 +133,11 @@ namespace BankingApp.Shared
             public const string RefreshTokenName = "refresh_token";
             public const string AuthorizationName = "Authorization";
         }
+
+        public static class Roles
+        {
+            public const string Admin = "admin";
+            public const string Client = "client";
+        }
     }
 }

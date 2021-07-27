@@ -1,5 +1,7 @@
 ﻿using BankingApp.BusinessLogicLayer.Interfaces;
+using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Admin;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,20 +14,21 @@ namespace BankingApp.Api.Controllers
     [ApiController]
     public class AdminController : Controller
     {
-        private readonly IAdminService _adminService;
+        private readonly IUserService _userService;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IUserService userService)
         {
-            _adminService = adminService;
+            _userService = userService;
         }
 
         [HttpGet]
+        [Authorize(Roles = Constants.Roles.Admin)]
         [Route(Routes.Admin.GetAll)]
         public async Task<IActionResult> GetAll(int pageNumber, int pageSize)
         {
             try
             {
-                var getAllAdminView = await _adminService.GetAllAsync(pageNumber, pageSize);
+                var getAllAdminView = await _userService.GetAllAsync(pageNumber, pageSize);
                 return Ok(getAllAdminView);
             }
             catch (Exception e)
@@ -35,12 +38,13 @@ namespace BankingApp.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Constants.Roles.Admin)]
         [Route(Routes.Admin.BlockUser)]
         public async Task<IActionResult> BlockUser(BlockUserAdminView blockUserAdminView)
         {
             try
             {
-                await _adminService.BlockUserAsync(blockUserAdminView);
+                await _userService.BlockUserAsync(blockUserAdminView);
                 return Ok();
             }
             catch (Exception e)
