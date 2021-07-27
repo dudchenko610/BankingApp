@@ -20,15 +20,15 @@ namespace BankingApp.BusinessLogicLayer.Providers
             _emailConnectionOptions = emailConnectionOptions.Value;
         }
 
-        public async Task<bool> SendEmailAsync(string mailTo, string caption, string textMessage)
+        public async Task<bool> SendEmailAsync(string mailTo, string subject, string messageBody)
         {
             try
             {
                 var mail = new MailMessage();
                 mail.From = new MailAddress(_emailConnectionOptions.MailAddress);
                 mail.To.Add(new MailAddress(mailTo));
-                mail.Subject = caption;
-                mail.Body = textMessage;
+                mail.Subject = subject;
+                mail.Body = messageBody;
 
                 var client = new SmtpClient();
 
@@ -39,12 +39,12 @@ namespace BankingApp.BusinessLogicLayer.Providers
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 await client.SendMailAsync(mail);
                 mail.Dispose();
+                return true;
             }
             catch
             {
                 return false;
             }
-            return true;
         }
     }
 }

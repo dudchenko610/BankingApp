@@ -73,7 +73,7 @@ namespace BankingApp.BusinessLogicLayer.Providers
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
             };
 
-            new ClaimsIdentity(claims, Constants.Authentication.Token);
+        //    new ClaimsIdentity(claims, Constants.Authentication.Token);
 
             return claims;
         }

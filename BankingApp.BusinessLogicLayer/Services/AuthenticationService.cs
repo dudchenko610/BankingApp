@@ -156,14 +156,15 @@ namespace BankingApp.BusinessLogicLayer.Services
                 throw new Exception(Constants.Errors.Authentication.ErrorWhileResetPaswword); // we don't want to show lack of our user in this particular case
             }
 
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             var callbackUrl = new StringBuilder();
             callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ResetPath}");
-            callbackUrl.Append($"{Constants.Email.ParamEmail}{resetPasswordAuthenticationView.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(code)}");
+            callbackUrl.Append($"{Constants.Email.ParamEmail}{resetPasswordAuthenticationView.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(resetPasswordToken)}");
 
-            if (!await _emailProvider.SendEmailAsync(resetPasswordAuthenticationView.Email, Constants.Password.PasswordResetHeader,
-                $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}"))
+            var emailBody = $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
+
+            if (!await _emailProvider.SendEmailAsync(resetPasswordAuthenticationView.Email, Constants.Password.PasswordResetHeader, emailBody))
             {
                 throw new Exception(Constants.Errors.Authentication.ErrorWhileSendingMessage);
             }
@@ -182,6 +183,61 @@ namespace BankingApp.BusinessLogicLayer.Services
             {
                 string errors = string.Join("\n", result.Errors.Select(x => x.Description).ToList());
                 throw new Exception(errors);
+            }
+        }
+
+
+        private async Task CheckForUserExistenceAsync(SignUpAuthenticationView signUpAccountView)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(signUpAccountView.Email);
+
+            if (existingUser != null)
+            {
+                throw new Exception(Constants.Errors.Authentication.UserAlreadyExists);
+            }
+        }
+
+        private async Task<User> CreateUserAsync(SignUpAuthenticationView signUpAccountView)
+        {
+            var user = _mapper.Map<User>(signUpAccountView);
+            var result = await _userManager.CreateAsync(user, signUpAccountView.Password);
+
+            if (!result.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+                string errors = string.Join("\n", result.Errors.Select(x => x.Description).ToList());
+                throw new Exception(errors);
+            }
+
+            return user;
+        }
+
+        private async Task SendEmailWithConfirmationTokenAsync(User user)
+        {
+            string confirmationToken = null;
+            try
+            {
+                confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            }
+            catch (Exception e)
+            {
+                await _userManager.DeleteAsync(user);
+                throw e;
+            }
+
+            byte[] tokenGenerateBytes = Encoding.UTF8.GetBytes(confirmationToken);
+            string tokenCode = WebEncoders.Base64UrlEncode(tokenGenerateBytes);
+
+            var callbackUrl = new StringBuilder();
+            callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ConfirmPath}");
+            callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{tokenCode}");
+
+            var confirmEmailLink = $"{Constants.Email.ConfirmRegistration} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
+
+            if (!await _emailProvider.SendEmailAsync(user.Email, Constants.Email.ConfirmEmail, confirmEmailLink))
+            {
+                await _userManager.DeleteAsync(user);
+                throw new Exception(Constants.Errors.Authentication.UserWasNotRegistered);
             }
         }
     }
