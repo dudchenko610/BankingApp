@@ -1,5 +1,4 @@
-﻿using BankingApp.Entities.Entities;
-using BankingApp.ViewModels.Banking.Authentication;
+﻿using BankingApp.ViewModels.Banking.Authentication;
 using System.Threading.Tasks;
 
 namespace BankingApp.UI.Core.Interfaces
@@ -7,6 +6,7 @@ namespace BankingApp.UI.Core.Interfaces
     public interface IAuthenticationService
     {
         TokensView TokensView { get; }
+        bool IsAdmin { get; }
         Task InitializeAsync();
         Task<bool> SignUpAsync(SignUpAuthenticationView signUpAccountView);
         Task<bool> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView);

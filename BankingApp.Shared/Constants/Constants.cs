@@ -46,6 +46,8 @@ namespace BankingApp.Shared
                 public const string InvalidPassword = "Password is invalid";
                 public const string SignInPlease = "Time expired, sign in please again!";
                 public const string ErrorWhileSendingMessage = "While sending message error occurred, try latter!";
+                public const string UserShouldBelongToOneRole = "User cannot belong to more or less than one role";
+                public const string ClientUserWasNotAddedToAdminRole = "Client user was not added to admin role";
             }
 
             public static class SeedData

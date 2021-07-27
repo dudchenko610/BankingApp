@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
+using BankingApp.DataAccessLayer.Interfaces;
+using AutoMapper;
+using BankingApp.BusinessLogicLayer.Mapper;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
@@ -18,6 +21,8 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         private const string InvalidUserId = "dds_123ds";
 
         private UserManager<User> _userManager;
+        private IUserRepository _userRepository;
+        private IMapper _mapper;
 
         [SetUp]
         public void SetUp()
@@ -30,13 +35,19 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
 
             _userManager = userManagerMock.Object;
+
+            var mapperConfig = new MapperConfiguration(config => { config.AddProfile(new MapperProfile()); });
+            _mapper = mapperConfig.CreateMapper();
+
+            var userRepositoryMock = new Mock<IUserRepository>();
+            _userRepository = userRepositoryMock.Object;
         }
 
         [Test]
         public async Task GetSignedInUser_ValidHttpContextAccessorInjected_ReturnsValidUser()
         {
             var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager);
+            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
 
             var signedInUser = await userService.GetSignedInUserAsync();
             var userReturnedByUserManager = GetValidUser();
@@ -53,7 +64,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             const int MinusOne = -1;
 
             var validHttpContextAccessor = GetMockedHttpContextAccessor(InvalidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager);
+            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
 
             int userId = userService.GetSignedInUserId();
             userId.Should().Be(MinusOne);
@@ -63,7 +74,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         public void GetSignedInUserId_ValidHttpContextAccessorInjected_ReturnsValidId()
         {
             var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager);
+            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
 
             int userId = userService.GetSignedInUserId();
             userId.Should().Be(int.Parse(ValidUserId));
@@ -75,7 +86,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             const string ValidEmail = "a@a.com";
 
             var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager);
+            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
 
             var userByEmail = await userService.GetUserByEmailAsync(ValidEmail);
             var userReturnedByUserManager = GetValidUser();
@@ -96,7 +107,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var userManagerMock = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
 
-            var userService = new UserService(validHttpContextAccessor, userManagerMock.Object);
+            var userService = new UserService(validHttpContextAccessor, userManagerMock.Object, _userRepository, _mapper);
             var userByEmail = await userService.GetUserByEmailAsync(InvalidEmail);
             userByEmail.Should().BeNull();
         }

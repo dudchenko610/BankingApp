@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
+using static BankingApp.Shared.Extensions.LinqExtensions;
 
 namespace BankingApp.DataAccessLayer.Services
 {
@@ -17,12 +18,14 @@ namespace BankingApp.DataAccessLayer.Services
         private readonly BankingDbContext _dbContext;
         private readonly AdminCredentialsOptions _adminCredentials;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
          
-        public DataSeederService(BankingDbContext dbContext, IOptions<AdminCredentialsOptions> adminCredentialsOptions, UserManager<User> userManager)
+        public DataSeederService(BankingDbContext dbContext, IOptions<AdminCredentialsOptions> adminCredentialsOptions, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
             _dbContext = dbContext;
             _adminCredentials = adminCredentialsOptions.Value;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task SeedDataAsync()
@@ -33,22 +36,26 @@ namespace BankingApp.DataAccessLayer.Services
 
         private async Task SeedRolesAsync()
         {
-            var enumRolesList = EnumHelper.GetValues<RolesEnum>().Select(x => new IdentityRole<int> { Name = x.ToString().ToLower() });
+            var enumRolesList = EnumHelper.GetValues<RolesEnum>().Select(x => new IdentityRole<int> { Name = x.ToString() });
             var rolesInDb = _dbContext.Roles.ToList();
 
-            var rolesToDelete = rolesInDb.Except(enumRolesList);
-            var rolesToAdd = enumRolesList.Except(rolesInDb);
+            var rolesToDelete = rolesInDb.Except(enumRolesList, x => x.Name, y => y.Name);
+            var rolesToAdd = enumRolesList.Except(rolesInDb, x => x.Name, y => y.Name);
 
             if (rolesToAdd.Any())
             {
-                await _dbContext.Roles.AddRangeAsync(rolesToAdd);
+                foreach (var role in rolesToAdd)
+                {
+                    await _roleManager.CreateAsync(role);
+                }
             }
             if (rolesToDelete.Any())
             {
-                _dbContext.Roles.RemoveRange(rolesToDelete);
+                foreach (var role in rolesToDelete)
+                {
+                    await _roleManager.DeleteAsync(role);
+                }
             }
-
-            await _dbContext.SaveChangesAsync();
         }
 
         private async Task SeedAdminUserAsync()
@@ -68,7 +75,7 @@ namespace BankingApp.DataAccessLayer.Services
                     throw new System.Exception(Constants.Errors.SeedData.AdminUserWasNotCreated);
                 }
 
-                result = await _userManager.AddToRoleAsync(adminUser, RolesEnum.Admin.ToString().ToLower());
+                result = await _userManager.AddToRoleAsync(adminUser, RolesEnum.Admin.ToString());
                 if (!result.Succeeded)
                 {
                     throw new System.Exception(Constants.Errors.SeedData.AdminUserWasNotAddedToAdminRole);

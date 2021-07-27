@@ -58,15 +58,25 @@ namespace BankingApp.BusinessLogicLayer.Providers
             }
 
             var user = await _userManager.FindByEmailAsync(email);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Count != 1)
+            {
+                throw new Exception(Constants.Errors.Authentication.UserShouldBelongToOneRole);
+            }
+
+            var role = roles[0];
 
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Email, email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
             };
 
             new ClaimsIdentity(claims, Constants.Authentication.Token);
+
             return claims;
         }
 

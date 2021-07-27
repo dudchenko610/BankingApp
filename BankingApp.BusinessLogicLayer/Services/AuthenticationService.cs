@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.Entities.Entities;
+using BankingApp.Entities.Enums;
 using BankingApp.Shared;
 using BankingApp.Shared.Options;
 using BankingApp.ViewModels.Banking.Authentication;
@@ -97,6 +98,13 @@ namespace BankingApp.BusinessLogicLayer.Services
                 await _userManager.DeleteAsync(user);
                 string errors = string.Join("\n", result.Errors.Select(x => x.Description).ToList());
                 throw new Exception(errors);
+            }
+
+            result = await _userManager.AddToRoleAsync(user, RolesEnum.Client.ToString());
+            if (!result.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+                throw new System.Exception(Constants.Errors.Authentication.ClientUserWasNotAddedToAdminRole);
             }
 
             string code = null;

@@ -21,6 +21,13 @@
                 <li class="nav-item  @GetActive("logout", NavLinkMatch.All)">
                     <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="async () => { await _authenticationService.LogoutAsync(); }" @onclick:preventDefault>Logout</a>
                 </li>
+
+                @if (_authenticationService.IsAdmin)
+                { 
+                    <li class="nav-item  @GetActive("users", NavLinkMatch.All)">
+                        <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="async () => {  }" @onclick:preventDefault>Users</a>
+                    </li>
+                }
             }
             else
             {
