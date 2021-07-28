@@ -3,6 +3,7 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.DataAccessLayer.Interfaces;
 using BankingApp.DataAccessLayer.Models;
 using BankingApp.Entities.Entities;
+using BankingApp.Entities.Enums;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Admin;
 using BankingApp.ViewModels.ViewModels.Pagination;
@@ -32,6 +33,7 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         public async Task BlockAsync(BlockUserAdminView blockUserAdminView)
         {
+            await CheckUserForAdminRole();
             await _userRepository.BlockAsync(blockUserAdminView.UserId, blockUserAdminView.Block);
         }
 
@@ -73,6 +75,18 @@ namespace BankingApp.BusinessLogicLayer.Services
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
+        }
+
+        private async Task CheckUserForAdminRole()
+        {
+            var userId = GetSignedInUserId();
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var roleNames = await _userManager.GetRolesAsync(user);
+
+            if (roleNames.Contains(RolesEnum.Admin.ToString()))
+            {
+                throw new Exception(Constants.Errors.Admin.UnableToBlockUser);
+            }
         }
     }
 }

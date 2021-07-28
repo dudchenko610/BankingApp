@@ -61,6 +61,7 @@ namespace BankingApp.Shared
             public static class Admin
             {
                 public const string UserIdOutOfRange = "User id should be greater than 0";
+                public const string UnableToBlockUser = "Unable to block user";
             }
         }
 

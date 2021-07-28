@@ -15,7 +15,7 @@ namespace BankingApp.UI.Pages.MainPage
         [Inject]
         private ILoaderService _loaderService { get; set; }
         
-        protected async Task OnDepositeFormSubmit(CalculateDepositView reqModel)
+        protected async Task OnDepositFormSubmit(CalculateDepositView reqModel)
         {
             _loaderService.SwitchOn();
             int depositeHistoryId = await _depositeService.CalculateAsync(reqModel);

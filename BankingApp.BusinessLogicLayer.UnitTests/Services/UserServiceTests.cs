@@ -108,6 +108,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         public async Task Block_ValidBlockUserViewPassed_CallsBlockAsyncOfUserRepository()
         {
             var validBlockUserView = GetValidBlockUserView();
+            var validUser = GetValidUser();
 
             int userId = -1;
             bool block = false;
@@ -118,14 +119,38 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userRepositoryMock.Setup(x => x.BlockAsync(It.IsAny<int>(), It.IsAny<bool>()))
                 .Callback((int _userId, bool _block) => { userId = _userId; block = _block; });
 
-            var userService = new UserService(validHttpContextAccessor, _userManager, userRepositoryMock.Object, _mapper);
-            await userService.BlockAsync(validBlockUserView);
+            var store = new Mock<IUserStore<User>>();
+            var userManagerMock = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(validUser);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+            userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(new List<string>());
 
+            var userService = new UserService(validHttpContextAccessor, userManagerMock.Object, userRepositoryMock.Object, _mapper);
+            await userService.BlockAsync(validBlockUserView);
 
             userId.Should().Be(validBlockUserView.UserId);
             block.Should().Be(validBlockUserView.Block);
         }
 
+        [Test]
+        public void Block_ValidBlockUserViewPassedButSignedInUserHasAdminRole_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var validBlockUserView = GetValidBlockUserView();
+            var validUser = GetValidUser();
+
+            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
+
+            var store = new Mock<IUserStore<User>>();
+            var userManagerMock = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(validUser);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+            userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(GetListOfRoleNamesWithAdminRole());
+
+            var userService = new UserService(validHttpContextAccessor, userManagerMock.Object, _userRepository, _mapper);
+
+            FluentActions.Awaiting(() => userService.BlockAsync(validBlockUserView))
+                .Should().Throw<Exception>().WithMessage(Constants.Errors.Admin.UnableToBlockUser);
+        }
 
         [Test]
         public async Task GetAllAsync_CallGetAllMethodPassingValidParameters_ReturnsNotNullModelContainingCorrectlyMappedList()
@@ -259,6 +284,14 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                     }
                 },
                 TotalCount = 5
+            };
+        }
+
+        private IList<string> GetListOfRoleNamesWithAdminRole()
+        {
+            return new List<string>
+            {
+                Constants.Roles.Admin
             };
         }
     }

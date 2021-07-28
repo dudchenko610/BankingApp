@@ -8,45 +8,7 @@
     {
         <div class="d-flex align-items-center justify-content-center flex-column w-100">
             <div class="w-100">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nickname</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Blocked</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < _pagedUsers.Items.Count; i++)
-                        {
-                            var element = _pagedUsers.Items[i];
-
-                            @if (Page == 1 && i == 0 || !element.IsEmailConfirmed)
-                            {
-                                <tr class="table-active">
-                                    <th scope="row">@((Page - 1) * UsersOnPage + (i + 1))</th>
-                                    <td>@element.Nickname</td>
-                                    <td>@element.Email</td>
-                                    <td>
-                                        <input disabled="disabled" type="checkbox" @bind="@element.IsBlocked">
-                                    </td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <th scope="row">@((Page - 1) * UsersOnPage + (i + 1))</th>
-                                    <td>@element.Nickname</td>
-                                    <td>@element.Email</td>
-                                    <td>
-                                        <input type="checkbox" checked="@element.IsBlocked" @onchange="async eventArgs => { await BlockUserAsync(element.Id, (bool) eventArgs.Value); }" >
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
+               <UserTable Page="Page" UsersOnPage="UsersOnPage" UsersViewList="_pagedUsers.Items" OnBlockUserClick="async (args)=> await BlockUserAsync(args.Item1, args.Item2)" />
             </div>
 
             <div class="mt-4">
