@@ -3,7 +3,7 @@ using Xunit;
 using FluentAssertions;
 using BankingApp.UI.Components.DepositCalculateForm;
 using BankingApp.Shared;
-using BankingApp.ViewModels.Banking.Deposit;
+using BankingApp.ViewModels.ViewModels.Deposit;
 
 namespace BankingApp.UI.UnitTests.Components
 {

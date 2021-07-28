@@ -1,5 +1,5 @@
 ﻿using BankingApp.UI.Core.Interfaces;
-using BankingApp.ViewModels.Banking.Authentication;
+using BankingApp.ViewModels.ViewModels.Authentication;
 using Blazored.LocalStorage;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;

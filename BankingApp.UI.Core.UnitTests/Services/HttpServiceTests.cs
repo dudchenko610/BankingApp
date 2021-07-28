@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
-using BankingApp.ViewModels.Banking.Authentication;
+using BankingApp.ViewModels.ViewModels.Authentication;
 
 namespace BankingApp.UI.Core.UnitTests.Services
 {

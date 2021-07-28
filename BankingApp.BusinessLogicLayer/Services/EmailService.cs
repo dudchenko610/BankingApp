@@ -8,27 +8,27 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace BankingApp.BusinessLogicLayer.Providers
+namespace BankingApp.BusinessLogicLayer.Services
 {
     [ExcludeFromCodeCoverage]
-    public class EmailProvider : IEmailProvider
+    public class EmailService : IEmailService
     {
         private readonly EmailConnectionOptions _emailConnectionOptions;
 
-        public EmailProvider(IOptions<EmailConnectionOptions> emailConnectionOptions)
+        public EmailService(IOptions<EmailConnectionOptions> emailConnectionOptions)
         {
             _emailConnectionOptions = emailConnectionOptions.Value;
         }
 
-        public async Task<bool> SendEmailAsync(string mailTo, string caption, string textMessage)
+        public async Task<bool> SendEmailAsync(string mailTo, string subject, string messageBody)
         {
             try
             {
                 var mail = new MailMessage();
                 mail.From = new MailAddress(_emailConnectionOptions.MailAddress);
                 mail.To.Add(new MailAddress(mailTo));
-                mail.Subject = caption;
-                mail.Body = textMessage;
+                mail.Subject = subject;
+                mail.Body = messageBody;
 
                 var client = new SmtpClient();
 

@@ -1,6 +1,5 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Core.Services;
-using BankingApp.ViewModels.Banking.Authentication;
 using Blazored.LocalStorage;
 using Bunit;
 using Moq;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using static BankingApp.Shared.Constants;
+using BankingApp.ViewModels.ViewModels.Authentication;
 
 namespace BankingApp.UI.Core.UnitTests.Services
 {

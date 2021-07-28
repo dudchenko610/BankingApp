@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using BankingApp.Shared;
-using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.Api.Validators;
+using BankingApp.ViewModels.ViewModels.Deposit;
 
 namespace BankingApp.Api.UnitTests.Validators
 {

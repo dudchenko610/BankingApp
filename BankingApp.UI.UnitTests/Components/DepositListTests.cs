@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Xunit;
 using FluentAssertions;
 using Bunit;
-using BankingApp.ViewModels.Banking.Deposit;
 using System.Linq;
+using BankingApp.ViewModels.ViewModels.Deposit;
 
 namespace BankingApp.UI.UnitTests.Components
 {

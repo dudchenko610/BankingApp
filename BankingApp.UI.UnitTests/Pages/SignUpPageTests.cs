@@ -1,6 +1,5 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.UI.Pages.SignUpPage;
-using BankingApp.ViewModels.Banking.Authentication;
 using Blazored.Toast.Services;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +8,7 @@ using Xunit;
 using FluentAssertions;
 using static BankingApp.UI.Core.Constants.Constants;
 using BankingApp.Shared;
+using BankingApp.ViewModels.ViewModels.Authentication;
 
 namespace BankingApp.UI.UnitTests.Pages
 {

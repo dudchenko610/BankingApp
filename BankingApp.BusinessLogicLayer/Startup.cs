@@ -1,7 +1,6 @@
 using AutoMapper;
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.BusinessLogicLayer.Mapper;
-using BankingApp.BusinessLogicLayer.Providers;
 using BankingApp.BusinessLogicLayer.Services;
 using BankingApp.Shared;
 using BankingApp.Shared.Options;
@@ -26,8 +25,8 @@ namespace BankingApp.BusinessLogicLayer
             services.AddTransient<IDepositService, DepositService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IEmailProvider, EmailProvider>();
-            services.AddTransient<IJwtProvider, JwtProvider>();
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IJwtService, JwtService>();
 
             services.Configure<EmailConnectionOptions>(configuration.GetSection(Constants.AppSettings.EmailConfig));
             services.Configure<ClientConnectionOptions>(configuration.GetSection(Constants.AppSettings.ClientConfig));

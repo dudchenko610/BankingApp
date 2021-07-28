@@ -1,7 +1,7 @@
 ﻿using BankingApp.Shared;
 using System.ComponentModel.DataAnnotations;
 
-namespace BankingApp.ViewModels.Banking.Authentication
+namespace BankingApp.ViewModels.ViewModels.Authentication
 {
     public class ForgotPasswordAuthenticationView
     {

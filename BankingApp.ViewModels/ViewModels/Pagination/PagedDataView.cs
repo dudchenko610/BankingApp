@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BankingApp.ViewModels.Pagination
+namespace BankingApp.ViewModels.ViewModels.Pagination
 {
     public class PagedDataView<T> where T : class
     {

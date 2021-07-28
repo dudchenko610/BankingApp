@@ -1,5 +1,5 @@
 ﻿using BankingApp.Entities.Entities;
-using BankingApp.ViewModels.Banking.Authentication;
+using BankingApp.ViewModels.ViewModels.Authentication;
 using System.Threading.Tasks;
 
 namespace BankingApp.UI.Core.Interfaces

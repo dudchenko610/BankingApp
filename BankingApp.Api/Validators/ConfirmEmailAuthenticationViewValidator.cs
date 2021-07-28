@@ -1,5 +1,5 @@
 ﻿using BankingApp.Shared;
-using BankingApp.ViewModels.Banking.Authentication;
+using BankingApp.ViewModels.ViewModels.Authentication;
 using FluentValidation;
 
 namespace BankingApp.Api.Validators

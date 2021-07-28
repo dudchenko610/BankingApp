@@ -1,5 +1,4 @@
-﻿
-using BankingApp.BusinessLogicLayer.Interfaces;
+﻿using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.Shared.Options;
@@ -11,19 +10,18 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BankingApp.BusinessLogicLayer.Providers
+namespace BankingApp.BusinessLogicLayer.Services
 {
     [ExcludeFromCodeCoverage]
-    public class JwtProvider : IJwtProvider
+    public class JwtService : IJwtService
     {
         private readonly JwtConnectionOptions _jwtConnectionOptions;
         private readonly UserManager<User> _userManager;
 
-        public JwtProvider(IOptions<JwtConnectionOptions> jwtConnectionOptions, UserManager<User> userManager)
+        public JwtService(IOptions<JwtConnectionOptions> jwtConnectionOptions, UserManager<User> userManager)
         {
             _jwtConnectionOptions = jwtConnectionOptions.Value;
             _userManager = userManager;

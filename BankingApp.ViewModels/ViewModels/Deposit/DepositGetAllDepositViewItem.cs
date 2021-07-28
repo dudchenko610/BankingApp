@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BankingApp.ViewModels.Banking.Deposit
+namespace BankingApp.ViewModels.ViewModels.Deposit
 {
     public class DepositGetAllDepositViewItem
     {
