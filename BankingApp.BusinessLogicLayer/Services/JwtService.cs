@@ -42,12 +42,6 @@ namespace BankingApp.BusinessLogicLayer.Services
             return accessToken;
         }
 
-        public SymmetricSecurityKey GetSymmetricSecurityKey()
-        {
-            var symetricKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtConnectionOptions.SecretKey));
-            return symetricKey;
-        }
-
         public async Task<IEnumerable<Claim>> GetUserClaimsAsync(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -64,33 +58,13 @@ namespace BankingApp.BusinessLogicLayer.Services
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName)
             };
 
-            new ClaimsIdentity(claims, Constants.Authentication.Token);
             return claims;
         }
 
-        public ClaimsPrincipal ValidateToken(string token)
+        private SymmetricSecurityKey GetSymmetricSecurityKey()
         {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = GetSymmetricSecurityKey(),
-                ValidateLifetime = false
-            };
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            ClaimsPrincipal principal;
-            try
-            {
-                principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            }
-            catch
-            {
-                throw new Exception(Constants.Errors.Authentication.SignInPlease);
-            }
-
-            return principal;
+            var symetricKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtConnectionOptions.SecretKey));
+            return symetricKey;
         }
     }
 }

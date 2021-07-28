@@ -9,7 +9,5 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
     {
         Task<IEnumerable<Claim>> GetUserClaimsAsync(string email);
         string GenerateAccessToken(IEnumerable<Claim> claims);
-        SymmetricSecurityKey GetSymmetricSecurityKey();
-        ClaimsPrincipal ValidateToken(string token);
     }
 }
