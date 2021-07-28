@@ -33,7 +33,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         [Fact]
         public async Task Initialize_CallMethod_CallsGetItemAsyncOfLocalStorageService()
         {
-            var validTokensView = GetValidTokensView();
+            var validTokensView = GetValidTokensViewWithAdminRole();
             string accesTokenKey = null;
 
             var localStorageMock = new Mock<ILocalStorageService>();
@@ -98,7 +98,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         public async Task SignIn_PassValidParameter_CallsPostAsyncOfHttpServiceAndSetItemAsyncOfLocalStorageAsync()
         {
             var validSignInView = GetValidSignInView();
-            var validTokenItems = GetValidTokensView();
+            var validTokenItems = GetValidTokensViewWithAdminRole();
 
             string passedUrl = null;
             object signInView = null;
@@ -205,6 +205,68 @@ namespace BankingApp.UI.Core.UnitTests.Services
             execResult.Should().BeTrue();
         }
 
+        [Fact]
+        public async Task GetRoles_AdminUserWasRegistered_ReturnsListWithCorrespondingRole()
+        {
+            var validTokensView = GetValidTokensViewWithAdminRole();
+
+            var localStorageMock = new Mock<ILocalStorageService>();
+            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+                .ReturnsAsync(validTokensView);
+
+            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, _httpService);
+            await authenticationService.InitializeAsync();
+
+            var roleNames = authenticationService.GetRoles();
+            roleNames.Should().Contain(BankingApp.Shared.Constants.Roles.Admin);
+        }
+
+        [Fact]
+        public async Task GetRoles_ClientUserWasRegistered_ReturnsListWithCorrespondingRole()
+        {
+            var validTokensView = GetValidTokensViewWithClientRole();
+
+            var localStorageMock = new Mock<ILocalStorageService>();
+            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+                .ReturnsAsync(validTokensView);
+
+            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, _httpService);
+            await authenticationService.InitializeAsync();
+
+            var roleNames = authenticationService.GetRoles();
+            roleNames.Should().Contain(BankingApp.Shared.Constants.Roles.Client);
+        }
+
+        [Fact]
+        public async Task IsAdmin_ClientUserWasRegisteredAsClient_PropertyReturnsFalseValue()
+        {
+            var validTokensView = GetValidTokensViewWithClientRole();
+
+            var localStorageMock = new Mock<ILocalStorageService>();
+            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+                .ReturnsAsync(validTokensView);
+
+            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, _httpService);
+            await authenticationService.InitializeAsync();
+
+            authenticationService.IsAdmin.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task IsAdmin_ClientUserWasRegisteredAsAdmin_PropertyReturnsTrueValue()
+        {
+            var validTokensView = GetValidTokensViewWithAdminRole();
+
+            var localStorageMock = new Mock<ILocalStorageService>();
+            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+                .ReturnsAsync(validTokensView);
+
+            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, _httpService);
+            await authenticationService.InitializeAsync();
+
+            authenticationService.IsAdmin.Should().BeTrue();
+        }
+
         private ForgotPasswordAuthenticationView GetValidForgotPasswordView()
         {
             return new ForgotPasswordAuthenticationView
@@ -253,11 +315,19 @@ namespace BankingApp.UI.Core.UnitTests.Services
             };
         }
 
-        private TokensView GetValidTokensView()
+        private TokensView GetValidTokensViewWithAdminRole()
         {
             return new TokensView
             {
                 AccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InIuZHVkY2hlbmtvQHN0dWRlbnQua2hhaS5lZHUiLCJzdWIiOiI4IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6IkNyYXp5QWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsIm5iZiI6MTYyNzQ2NjAxMiwiZXhwIjoxNjI3NDczMjEyLCJpc3MiOiJNeUF1dGhTZXJ2ZXIiLCJhdWQiOiJNeUF1dGhDbGllbnQifQ.dwhWpXpQForywt_3_mbbeUw6KGyW-iP4CYvyE1H2cMk"
+            };
+        }
+
+        private TokensView GetValidTokensViewWithClientRole()
+        {
+            return new TokensView
+            {
+                AccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJ1c2xhbmQ2MTBAZ21haWwuY29tIiwic3ViIjoiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJCb2JpayIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsIm5iZiI6MTYyNzQ4MDI1NSwiZXhwIjoxNjI3NDg3NDU1LCJpc3MiOiJNeUF1dGhTZXJ2ZXIiLCJhdWQiOiJNeUF1dGhDbGllbnQifQ.1srjTt8bRDqe7Nn4C0GVaFO7MDpxWFOls-vEiZfzat8"
             };
         }
     }

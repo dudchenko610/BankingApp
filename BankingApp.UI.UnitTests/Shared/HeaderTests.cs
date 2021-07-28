@@ -6,32 +6,37 @@ using Moq;
 using Xunit;
 using FluentAssertions;
 using BankingApp.ViewModels.ViewModels.Authentication;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BankingApp.UI.UnitTests.Shared
 {
     public class HeaderTests : TestContext
     {
         private readonly Mock<INavigationWrapper> _navWrapperMock;
+        private readonly Mock<IAuthenticationService> _authenticationServiceMock;
+        private readonly Mock<ILoaderService> _loaderServiceMock;
         public HeaderTests()
         {
-            var authenticationServiceMock = new Mock<IAuthenticationService>();
-            authenticationServiceMock.SetupGet(x => x.TokensView).Returns(new TokensView());
-            Services.AddSingleton(authenticationServiceMock.Object);
+            _authenticationServiceMock = new Mock<IAuthenticationService>();
+            _authenticationServiceMock.SetupGet(x => x.TokensView).Returns(GetValidTokensView());
 
-            var loaderServiceMock = new Mock<ILoaderService>();
-            loaderServiceMock.Setup(x => x.SwitchOn());
-            loaderServiceMock.Setup(x => x.SwitchOff());
-            Services.AddSingleton(loaderServiceMock.Object);
+            _loaderServiceMock = new Mock<ILoaderService>();
+            _loaderServiceMock.Setup(x => x.SwitchOn());
+            _loaderServiceMock.Setup(x => x.SwitchOff());
 
             _navWrapperMock = new Mock<INavigationWrapper>();
             _navWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Verifiable();
             _navWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns("");
-            Services.AddSingleton(_navWrapperMock.Object);
         }
 
         [Fact]
         public void Header_UserClicksUrlLink_LinkGetsActiveState()
         {
+            Services.AddSingleton(_authenticationServiceMock.Object);
+            Services.AddSingleton(_loaderServiceMock.Object);
+            Services.AddSingleton(_navWrapperMock.Object);
+
             var headerComponent = RenderComponent<Header>();
             headerComponent.Find("a").Click();
             headerComponent.Find("li").ClassList.Should().Contain("active");
@@ -39,11 +44,106 @@ namespace BankingApp.UI.UnitTests.Shared
 
         [Fact]
         public void Header_UserClicksUrlLink_AppSwitchesToAnotherRoute()
-        { 
+        {
+            Services.AddSingleton(_authenticationServiceMock.Object);
+            Services.AddSingleton(_loaderServiceMock.Object);
+            Services.AddSingleton(_navWrapperMock.Object);
+
             var mainLayoutComp = RenderComponent<Header>();
             mainLayoutComp.Find("a").Click();
 
             _navWrapperMock.Verify(mock => mock.NavigateTo(It.IsAny<string>(), false), Times.AtLeastOnce);
+        }
+
+        [Fact]
+        public void HeaderUserIsLoggedAsClient_HeaderContainsCorrespondingLinks()
+        {
+            var validTokensView = GetValidTokensView();
+
+            var authenticationServiceMock = new Mock<IAuthenticationService>();
+            authenticationServiceMock.SetupGet(x => x.TokensView).Returns(GetValidTokensView());
+
+            Services.AddSingleton(authenticationServiceMock.Object);
+            Services.AddSingleton(_loaderServiceMock.Object);
+            Services.AddSingleton(_navWrapperMock.Object);
+
+            var mainLayoutComp = RenderComponent<Header>();
+            var headerLinks = mainLayoutComp.FindAll("a").Select(x => x.TextContent);
+
+            headerLinks.Should().BeEquivalentTo(GetClientHeaderLinks());
+        }
+
+        [Fact]
+        public void HeaderUserIsNotLogged_HeaderContainsCorrespondingLinks()
+        {
+            var authenticationServiceMock = new Mock<IAuthenticationService>();
+            authenticationServiceMock.SetupGet(x => x.TokensView).Returns((TokensView) null);
+
+            Services.AddSingleton(authenticationServiceMock.Object);
+            Services.AddSingleton(_loaderServiceMock.Object);
+            Services.AddSingleton(_navWrapperMock.Object);
+
+            var mainLayoutComp = RenderComponent<Header>();
+            var headerLinks = mainLayoutComp.FindAll("a").Select(x => x.TextContent);
+
+            headerLinks.Should().BeEquivalentTo(GetUnauthorizedHeaderLinks());
+        }
+
+        [Fact]
+        public void HeaderUserIsLoggedAsAdmin_HeaderContainsCorrespondingLinks()
+        {
+            var validTokensView = GetValidTokensView();
+
+            var authenticationServiceMock = new Mock<IAuthenticationService>();
+            authenticationServiceMock.SetupGet(x => x.TokensView).Returns(validTokensView);
+            authenticationServiceMock.SetupGet(x => x.IsAdmin).Returns(true);
+
+            Services.AddSingleton(authenticationServiceMock.Object);
+            Services.AddSingleton(_loaderServiceMock.Object);
+            Services.AddSingleton(_navWrapperMock.Object);
+
+            var mainLayoutComp = RenderComponent<Header>();
+            var headerLinks = mainLayoutComp.FindAll("a").Select(x => x.TextContent);
+
+            headerLinks.Should().BeEquivalentTo(GetAdminHeaderLinks());
+        }
+
+        private TokensView GetValidTokensView()
+        {
+            return new TokensView
+            {
+                AccessToken = "this_is_my_token"
+            };
+        }
+
+        private IList<string> GetClientHeaderLinks()
+        { 
+            return new List<string>()
+            {
+                "MainPage",
+                "History",
+                "Logout"
+            };
+        }
+
+        private IList<string> GetUnauthorizedHeaderLinks()
+        {
+            return new List<string>()
+            {
+                "SignIn",
+                "SignUp"
+            };
+        }
+
+        private IList<string> GetAdminHeaderLinks()
+        {
+            return new List<string>()
+            {
+                "MainPage",
+                "History",
+                "Users",
+                "Logout"
+            };
         }
     }
 }
