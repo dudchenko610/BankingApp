@@ -18,11 +18,6 @@ namespace BankingApp.BusinessLogicLayer.Services
             _userManager = userManager;
         }
 
-        public async Task<User> GetSignedInUserAsync()
-        {
-            return await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-        }
-
         public int GetSignedInUserId()
         {
             var userIdTextRepresentation = _httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sub).Value;
