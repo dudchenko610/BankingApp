@@ -15,11 +15,11 @@ namespace BankingApp.DataAccessLayer.Repositories
         { 
         }
 
-        public async Task<Deposit> GetDepositWithItemsByIdAsync(int depositeHistoryId)
+        public async Task<Deposit> GetDepositWithItemsByIdAsync(int depositId)
         {
             var depositeHistory = await _dbSet
                 .Include(dep => dep.MonthlyPayments)
-                .FirstOrDefaultAsync(dep => dep.Id == depositeHistoryId);
+                .FirstOrDefaultAsync(dep => dep.Id == depositId);
             return depositeHistory;
         }
 

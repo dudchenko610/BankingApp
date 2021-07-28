@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using BankingApp.BusinessLogicLayer.Interfaces;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;
-using BankingApp.ViewModels.Banking.Deposit;
 using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using BankingApp.ViewModels.ViewModels.Deposit;
 
 namespace BankingApp.Api.Controllers
 {

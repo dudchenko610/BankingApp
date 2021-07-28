@@ -1,5 +1,4 @@
 ﻿using BankingApp.UI.Core.Interfaces;
-using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.ViewModels.Enums;
 using Bunit;
 using Moq;
@@ -8,9 +7,10 @@ using Xunit;
 using FluentAssertions;
 using BankingApp.UI.Core.Services;
 using static BankingApp.Shared.Constants;
-using BankingApp.ViewModels.Pagination;
 using System.Collections.Generic;
 using BankingApp.Shared.Extensions;
+using BankingApp.ViewModels.ViewModels.Deposit;
+using BankingApp.ViewModels.ViewModels.Pagination;
 
 namespace BankingApp.UI.Core.UnitTests.Services
 {

@@ -1,6 +1,6 @@
 ﻿using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.Shared;
-using BankingApp.ViewModels.Banking.Authentication;
+using BankingApp.ViewModels.ViewModels.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

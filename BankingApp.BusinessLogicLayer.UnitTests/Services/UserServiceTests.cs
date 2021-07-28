@@ -44,21 +44,6 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task GetSignedInUser_ValidHttpContextAccessorInjected_ReturnsValidUser()
-        {
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
-
-            var signedInUser = await userService.GetSignedInUserAsync();
-            var userReturnedByUserManager = GetValidUser();
-
-            signedInUser.Id.Should().Be(userReturnedByUserManager.Id);
-            signedInUser.Email.Should().Be(userReturnedByUserManager.Email);
-            signedInUser.UserName.Should().Be(userReturnedByUserManager.UserName);
-            signedInUser.Deposits.Should().BeEquivalentTo(userReturnedByUserManager.Deposits);
-        }
-
-        [Test]
         public void GetSignedInUserId_InvalidHttpContextAccessorInjected_ReturnsMinusOne()
         {
             const int MinusOne = -1;

@@ -7,7 +7,6 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
 {
     public interface IUserService
     {
-        Task<User> GetSignedInUserAsync();
         Task<User> GetUserByEmailAsync(string email);
         int GetSignedInUserId();
         Task<PagedDataView<UserGetAllAdminViewItem>> GetAllAsync(int pageNumber, int pageSize);

@@ -13,15 +13,15 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BankingApp.BusinessLogicLayer.Providers
+namespace BankingApp.BusinessLogicLayer.Services
 {
     [ExcludeFromCodeCoverage]
-    public class JwtProvider : IJwtProvider
+    public class JwtService : IJwtService
     {
         private readonly JwtConnectionOptions _jwtConnectionOptions;
         private readonly UserManager<User> _userManager;
 
-        public JwtProvider(IOptions<JwtConnectionOptions> jwtConnectionOptions, UserManager<User> userManager)
+        public JwtService(IOptions<JwtConnectionOptions> jwtConnectionOptions, UserManager<User> userManager)
         {
             _jwtConnectionOptions = jwtConnectionOptions.Value;
             _userManager = userManager;
@@ -40,12 +40,6 @@ namespace BankingApp.BusinessLogicLayer.Providers
             string accessToken = new JwtSecurityTokenHandler().WriteToken(token);
 
             return accessToken;
-        }
-
-        public SymmetricSecurityKey GetSymmetricSecurityKey()
-        {
-            var symetricKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtConnectionOptions.SecretKey));
-            return symetricKey;
         }
 
         public async Task<IEnumerable<Claim>> GetUserClaimsAsync(string email)
@@ -73,34 +67,13 @@ namespace BankingApp.BusinessLogicLayer.Providers
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
             };
 
-        //    new ClaimsIdentity(claims, Constants.Authentication.Token);
-
             return claims;
         }
 
-        public ClaimsPrincipal ValidateToken(string token)
+        private SymmetricSecurityKey GetSymmetricSecurityKey()
         {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = GetSymmetricSecurityKey(),
-                ValidateLifetime = false
-            };
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            ClaimsPrincipal principal;
-            try
-            {
-                principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            }
-            catch
-            {
-                throw new Exception(Constants.Errors.Authentication.SignInPlease);
-            }
-
-            return principal;
+            var symetricKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtConnectionOptions.SecretKey));
+            return symetricKey;
         }
     }
 }

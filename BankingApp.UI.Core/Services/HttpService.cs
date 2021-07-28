@@ -7,8 +7,8 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BankingApp.ViewModels.Banking.Authentication;
 using Blazored.LocalStorage;
+using BankingApp.ViewModels.ViewModels.Authentication;
 
 namespace BankingApp.UI.Core.Services
 {

@@ -1,4 +1,4 @@
-﻿namespace BankingApp.ViewModels.Banking.Authentication
+﻿namespace BankingApp.ViewModels.ViewModels.Authentication
 {
     public class ConfirmEmailAuthenticationView
     {

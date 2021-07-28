@@ -8,8 +8,8 @@ using BankingApp.ViewModels.Enums;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using NUnit.Framework;
-using BankingApp.ViewModels.Banking.Deposit;
-using BankingApp.ViewModels.Pagination;
+using BankingApp.ViewModels.ViewModels.Deposit;
+using BankingApp.ViewModels.ViewModels.Pagination;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {

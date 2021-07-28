@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BankingApp.ViewModels.Banking.Deposit;
-using BankingApp.ViewModels.Banking.Authentication;
 using BankingApp.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using BankingApp.Api.Validators;
+using BankingApp.ViewModels.ViewModels.Authentication;
+using BankingApp.ViewModels.ViewModels.Deposit;
 
 namespace BankingApp.Api
 {

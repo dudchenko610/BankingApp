@@ -1,8 +1,8 @@
 ﻿using BankingApp.Api.Validators;
 using NUnit.Framework;
 using FluentAssertions;
-using BankingApp.ViewModels.Banking.Authentication;
 using BankingApp.Shared;
+using BankingApp.ViewModels.ViewModels.Authentication;
 
 namespace BankingApp.Api.UnitTests.Validators
 {

@@ -2,7 +2,7 @@
 
 namespace BankingApp.BusinessLogicLayer.Interfaces
 {
-    public interface IEmailProvider
+    public interface IEmailService
     {
         Task<bool> SendEmailAsync(string mailTo, string subject, string messageBody);
     }

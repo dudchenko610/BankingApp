@@ -1,8 +1,8 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
-using BankingApp.ViewModels.Banking.Deposit;
 using static BankingApp.UI.Core.Constants.Constants;
+using BankingApp.ViewModels.ViewModels.Deposit;
 
 namespace BankingApp.UI.Pages.MainPage
 {

@@ -11,11 +11,11 @@ using BankingApp.DataAccessLayer.Interfaces;
 using System.Collections.Generic;
 using System;
 using BankingApp.Shared;
-using BankingApp.ViewModels.Banking.Deposit;
 using BankingApp.Shared.Extensions;
-using BankingApp.ViewModels.Pagination;
 using BankingApp.DataAccessLayer.Models;
 using BankingApp.BusinessLogicLayer.Interfaces;
+using BankingApp.ViewModels.ViewModels.Deposit;
+using BankingApp.ViewModels.ViewModels.Pagination;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {

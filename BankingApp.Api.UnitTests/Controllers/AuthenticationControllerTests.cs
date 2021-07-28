@@ -1,6 +1,5 @@
 ﻿using BankingApp.Api.Controllers;
 using BankingApp.BusinessLogicLayer.Interfaces;
-using BankingApp.ViewModels.Banking.Authentication;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using BankingApp.ViewModels.ViewModels.Authentication;
 
 namespace BankingApp.Api.UnitTests.Controllers
 {

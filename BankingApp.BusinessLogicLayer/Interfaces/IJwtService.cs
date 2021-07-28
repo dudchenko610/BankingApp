@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Interfaces
 {
-    public interface IJwtProvider
+    public interface IJwtService
     {
         Task<IEnumerable<Claim>> GetUserClaimsAsync(string email);
         string GenerateAccessToken(IEnumerable<Claim> claims);
-        SymmetricSecurityKey GetSymmetricSecurityKey();
-        ClaimsPrincipal ValidateToken(string token);
     }
 }

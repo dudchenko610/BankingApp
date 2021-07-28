@@ -8,14 +8,14 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace BankingApp.BusinessLogicLayer.Providers
+namespace BankingApp.BusinessLogicLayer.Services
 {
     [ExcludeFromCodeCoverage]
-    public class EmailProvider : IEmailProvider
+    public class EmailService : IEmailService
     {
         private readonly EmailConnectionOptions _emailConnectionOptions;
 
-        public EmailProvider(IOptions<EmailConnectionOptions> emailConnectionOptions)
+        public EmailService(IOptions<EmailConnectionOptions> emailConnectionOptions)
         {
             _emailConnectionOptions = emailConnectionOptions.Value;
         }
