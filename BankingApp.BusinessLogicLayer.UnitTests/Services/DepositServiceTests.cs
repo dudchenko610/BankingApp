@@ -95,7 +95,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             resPagedDeposits
                 .Should().NotBeNull().And
-                .BeOfType<PagedDataView<DepositGetAllDepositViewItem>>()
+                .BeOfType<ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>>()
                 .Which.Items.Should().NotBeNull();
 
              depositsResponseOfRepository.Items
@@ -290,9 +290,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private PaginationModel<Deposit> GetValidDepositsAndTotalCount()
+        private DataAccessLayer.Models.PagedDataView<Deposit> GetValidDepositsAndTotalCount()
         {
-            return new PaginationModel<Deposit>
+            return new DataAccessLayer.Models.PagedDataView<Deposit>
             {
                 Items = new List<Deposit>
                 {

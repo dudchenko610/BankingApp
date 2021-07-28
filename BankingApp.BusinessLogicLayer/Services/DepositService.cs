@@ -98,7 +98,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             return (monthSum, percents);
         }
 
-        public async Task<PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
         {
             if (pageNumber < 1)
                 throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
@@ -108,10 +108,10 @@ namespace BankingApp.BusinessLogicLayer.Services
 
             int userId = _userService.GetSignedInUserId();
 
-            PaginationModel<Deposit> depositsAndTotalCount
+            DataAccessLayer.Models.PagedDataView<Deposit> depositsAndTotalCount
                 = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize, userId);
 
-            var pagedResponse = new PagedDataView<DepositGetAllDepositViewItem>
+            var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>
             {
                 Items = _mapper.Map<IList<Deposit>, IList<DepositGetAllDepositViewItem>>(depositsAndTotalCount.Items),
                 PageNumber = pageNumber,

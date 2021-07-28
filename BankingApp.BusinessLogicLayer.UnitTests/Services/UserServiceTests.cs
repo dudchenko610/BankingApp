@@ -11,12 +11,19 @@ using FluentAssertions;
 using BankingApp.DataAccessLayer.Interfaces;
 using AutoMapper;
 using BankingApp.BusinessLogicLayer.Mapper;
+using BankingApp.ViewModels.Banking.Admin;
+using BankingApp.DataAccessLayer.Models;
+using System;
+using BankingApp.Shared;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
     [TestFixture]
     public class UserServiceTests
     {
+        private const int ValidPageNumber = 1;
+        private const int ValidPageSize = 1;
+
         private const string ValidUserId = "1";
         private const string InvalidUserId = "dds_123ds";
 
@@ -97,6 +104,79 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userByEmail.Should().BeNull();
         }
 
+        [Test]
+        public async Task Block_ValidBlockUserViewPassed_CallsBlockAsyncOfUserRepository()
+        {
+            var validBlockUserView = GetValidBlockUserView();
+
+            int userId = -1;
+            bool block = false;
+
+            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
+           
+            var userRepositoryMock = new Mock<IUserRepository>();
+            userRepositoryMock.Setup(x => x.BlockAsync(It.IsAny<int>(), It.IsAny<bool>()))
+                .Callback((int _userId, bool _block) => { userId = _userId; block = _block; });
+
+            var userService = new UserService(validHttpContextAccessor, _userManager, userRepositoryMock.Object, _mapper);
+            await userService.BlockAsync(validBlockUserView);
+
+
+            userId.Should().Be(validBlockUserView.UserId);
+            block.Should().Be(validBlockUserView.Block);
+        }
+
+
+        [Test]
+        public async Task GetAllAsync_CallGetAllMethodPassingValidParameters_ReturnsNotNullModelContainingCorrectlyMappedList()
+        {
+            var validPagedDataView = GetValidPagedDataViewWithUserGetAllViewItems();
+            var validPagedUsers = GetValidPagedDataViewWithUsers();
+
+            var userRepositoryMock = new Mock<IUserRepository>();
+            userRepositoryMock
+              .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .ReturnsAsync(validPagedUsers);
+
+            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
+            var userService = new UserService(validHttpContextAccessor, _userManager, userRepositoryMock.Object, _mapper);
+
+            var resPagedGetAllViewItems = await userService.GetAllAsync(ValidPageNumber, ValidPageSize);
+
+            resPagedGetAllViewItems
+                .Should().NotBeNull().And
+                .BeOfType<ViewModels.ViewModels.Pagination.PagedDataView<UserGetAllAdminViewItem>>()
+                .Which.Items.Should().NotBeNull();
+
+            validPagedUsers.Items
+               .Should().BeEquivalentTo(resPagedGetAllViewItems.Items,
+                   options => options.ExcludingMissingMembers());
+        }
+
+        [Test]
+        public void GetAllAsync_CallGetAllMethodPassingInvalidPageNumber_ThrowsExceptionWithCorrespondingMessage()
+        {
+            const int InvalidPageNumber = -1;
+
+            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
+            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
+
+            FluentActions.Awaiting(() => userService.GetAllAsync(InvalidPageNumber, ValidPageSize))
+                .Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageNumberFormat);
+        }
+
+        [Test]
+        public void GetAllAsync_CallGetAllMethodPassingInvalidPageSize_ThrowsExceptionWithCorrespondingMessage()
+        {
+            const int InvalidPageSize = -1;
+
+            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
+            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
+
+            FluentActions.Awaiting(() => userService.GetAllAsync(ValidPageNumber, InvalidPageSize))
+                .Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageSizeFormat);
+        }
+
         private User GetValidUser()
         {
             return new User
@@ -121,6 +201,65 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContextMock.Object);
 
             return httpContextAccessorMock.Object;
+        }
+
+        private BlockUserAdminView GetValidBlockUserView()
+        {
+            return new BlockUserAdminView
+            {
+                UserId = 1,
+                Block = true
+            };
+        }
+
+        private PagedDataView<UserGetAllAdminViewItem> GetValidPagedDataViewWithUserGetAllViewItems()
+        {
+            return new PagedDataView<UserGetAllAdminViewItem>
+            {
+                Items = new List<UserGetAllAdminViewItem>
+                {
+                    new UserGetAllAdminViewItem {
+                        Id = 1,
+                        Nickname = "aaa",
+                        Email = "a@a.com",
+                        IsEmailConfirmed = true,
+                        IsBlocked = false
+                    },
+                    new UserGetAllAdminViewItem {
+                        Id = 2,
+                        Nickname = "bbb",
+                        Email = "b@b.com",
+                        IsEmailConfirmed = true,
+                        IsBlocked = false
+                    }
+                },
+                TotalCount = 5
+            };
+        }
+
+        private PagedDataView<User> GetValidPagedDataViewWithUsers()
+        {
+            return new PagedDataView<User>
+            {
+                Items = new List<User>
+                {
+                    new User {
+                        Id = 1,
+                        UserName = "aaa",
+                        Email = "a@a.com",
+                        EmailConfirmed = true,
+                        IsBlocked = false
+                    },
+                    new User {
+                        Id = 2,
+                        UserName = "bbb",
+                        Email = "b@b.com",
+                        EmailConfirmed = true,
+                        IsBlocked = false
+                    }
+                },
+                TotalCount = 5
+            };
         }
     }
 }

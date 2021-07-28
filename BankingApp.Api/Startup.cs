@@ -14,6 +14,7 @@ using System.Text;
 using BankingApp.Api.Validators;
 using BankingApp.ViewModels.ViewModels.Authentication;
 using BankingApp.ViewModels.ViewModels.Deposit;
+using BankingApp.ViewModels.Banking.Admin;
 
 namespace BankingApp.Api
 {
@@ -38,6 +39,7 @@ namespace BankingApp.Api
             services.AddTransient<IValidator<ResetPasswordAuthenticationView>, ResetPasswordAuthenticationViewValidator>();
             services.AddTransient<IValidator<ForgotPasswordAuthenticationView>, ForgotPasswordAuthenticationViewValidator>();
             services.AddTransient<IValidator<ConfirmEmailAuthenticationView>, ConfirmEmailAuthenticationViewValidator>();
+            services.AddTransient<IValidator<BlockUserAdminView>, BlockUserAdminViewValidator>();
 
             services.AddCors(options =>
             {

@@ -35,7 +35,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             await _userRepository.BlockAsync(blockUserAdminView.UserId, blockUserAdminView.Block);
         }
 
-        public async Task<PagedDataView<UserGetAllAdminViewItem>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<ViewModels.ViewModels.Pagination.PagedDataView<UserGetAllAdminViewItem>> GetAllAsync(int pageNumber, int pageSize)
         {
             if (pageNumber < 1)
                 throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
@@ -43,10 +43,10 @@ namespace BankingApp.BusinessLogicLayer.Services
             if (pageSize < 1)
                 throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
 
-            PaginationModel<User> usersAndTotalCount
+            DataAccessLayer.Models.PagedDataView<User> usersAndTotalCount
                 = await _userRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize);
 
-            var pagedResponse = new PagedDataView<UserGetAllAdminViewItem>
+            var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<UserGetAllAdminViewItem>
             {
                 Items = _mapper.Map<IList<User>, IList<UserGetAllAdminViewItem>>(usersAndTotalCount.Items),
                 PageNumber = pageNumber,
@@ -55,11 +55,6 @@ namespace BankingApp.BusinessLogicLayer.Services
             };
 
             return pagedResponse;
-        }
-
-        public async Task<User> GetSignedInUserAsync()
-        {
-            return await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
         }
 
         public int GetSignedInUserId()

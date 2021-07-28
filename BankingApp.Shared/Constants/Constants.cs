@@ -57,6 +57,11 @@ namespace BankingApp.Shared
                 public const string AdminUserWasNotCreated = "Admin user was not created";
                 public const string AdminUserWasNotAddedToAdminRole = "Admin user was not added to admin role";
             }
+
+            public static class Admin
+            {
+                public const string UserIdOutOfRange = "User id should be greater than 0";
+            }
         }
 
         public static class Routes

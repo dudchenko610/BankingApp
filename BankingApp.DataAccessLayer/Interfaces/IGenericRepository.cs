@@ -11,7 +11,7 @@ namespace BankingApp.DataAccessLayer.Interfaces
         public Task UpdateAsync(TEntity item);
         public Task RemoveAsync(TEntity item);
         public Task<IList<TEntity>> GetAllAsync();
-        public Task<PaginationModel<TEntity>> GetAllAsync(int skip, int take);
+        public Task<PagedDataView<TEntity>> GetAllAsync(int skip, int take);
         public Task<TEntity> GetByIdAsync(int id);
         public Task AddRangeAsync(IList<TEntity> item);
         public Task RemoveRangeAsync(IList<TEntity> items);
