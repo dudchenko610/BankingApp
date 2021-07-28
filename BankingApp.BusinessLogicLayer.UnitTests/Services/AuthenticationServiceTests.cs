@@ -27,9 +27,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
         private IUserStore<User> _userStore;
         private UserManager<User> _userManager;
-        private IEmailService _emailProvider;
+        private IEmailService _emailService;
         private IMapper _mapper;
-        private IJwtService _jwtProvider;
+        private IJwtService _jwtService;
         private IUserService _userService;
         private IOptions<ClientConnectionOptions> _clientConnectionOptions;
 
@@ -50,13 +50,13 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             // email provider
             var emailProvider = new Mock<IEmailService>();
-            _emailProvider = emailProvider.Object;
+            _emailService = emailProvider.Object;
 
             // jwt provider
             var jwtProviderMock = new Mock<IJwtService>();
             jwtProviderMock.Setup(x => x.GetUserClaimsAsync(It.IsAny<string>())).ReturnsAsync(new List<Claim>());
             jwtProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<List<Claim>>())).Returns(ValidAccessToken);
-            _jwtProvider = jwtProviderMock.Object;
+            _jwtService = jwtProviderMock.Object;
 
             // user service
             var userServiceMock = new Mock<IUserService>();
@@ -81,7 +81,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 .Callback((User user) => { inputOfUserManagerUpdateAsync = user; })
                 .ReturnsAsync(IdentityResult.Success);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validConfirmEmailView = GetValidConfirmEmailView();
             await authenticationService.ConfirmEmailAsync(validConfirmEmailView);
@@ -98,7 +98,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
             userManagerMock.Setup(x => x.ConfirmEmailAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validConfirmEmailView = GetValidConfirmEmailView();
 
@@ -115,7 +115,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
             userManagerMock.Setup(x => x.ConfirmEmailAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(new IdentityResult());
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validConfirmEmailView = GetValidConfirmEmailView();
 
@@ -132,7 +132,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
             userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignInview = GetValidSignInView();
             var tokensView = await authenticationService.SignInAsync(validSignInview);
@@ -146,7 +146,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignInView = GetValidSignInView();
             FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
@@ -162,11 +162,27 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(userWithEmailNotConfirmed);
             userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignInView = GetValidSignInView();
             FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
                .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.InvalidNicknameOrPassword);
+        }
+
+        [Test]
+        public void SignIn_FoundUserIsBlocked_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var blockedUser = GetBlockedUser();
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(blockedUser);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
+
+            var validSignInView = GetValidSignInView();
+            FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.UserIsBlocked);
         }
 
         [Test]
@@ -178,7 +194,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
             userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(false);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignInView = GetValidSignInView();
             FluentActions.Awaiting(() => authenticationService.SignInAsync(validSignInView))
@@ -200,7 +216,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true)
                 .Callback((string emailTo, string caption, string textMessage) => { emailPassedToSendEmailMethod = emailTo; });
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignUpView = GetValidSignUpView();
             await authenticationService.SignUpAsync(validSignUpView);
@@ -216,7 +232,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignUpView = GetValidSignUpView();
             FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView))
@@ -234,7 +250,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success)
                 .Callback((User user) => { userToDelete = user; });
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignUpView = GetValidSignUpView();
             FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView)).Should().Throw<Exception>();
@@ -254,10 +270,11 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success)
                 .Callback((User user) => { userToDelete = user; });
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignUpView = GetValidSignUpView();
-            FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView)).Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.ClientUserWasNotAddedToAdminRole);
+            FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView)).Should().Throw<Exception>()
+                .WithMessage(Constants.Errors.Authentication.ClientUserWasNotAddedToClientRole);
 
             userToDelete.Should().NotBeNull().And.BeEquivalentTo(validSignUpView, options => options.ExcludingMissingMembers());
         }
@@ -276,7 +293,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success)
                 .Callback((User user) => { userToDelete = user; });
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignUpView = GetValidSignUpView();
             FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView)).Should().Throw<Exception>();
@@ -300,7 +317,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var emailProviderMock = new Mock<IEmailService>();
             emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validSignUpView = GetValidSignUpView();
             FluentActions.Awaiting(() => authenticationService.SignUpAsync(validSignUpView)).Should()
@@ -317,6 +334,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
             userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<User>())).ReturnsAsync(ValidPasswordResetCode);
+            userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(GetRolesWithClientRole());
 
             var emailProviderMock = new Mock<IEmailService>();
             emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true)
@@ -325,7 +343,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var userServiceMock = new Mock<IUserService>();
             userServiceMock.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtProvider, userServiceMock.Object, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtService, userServiceMock.Object, _clientConnectionOptions);
 
             var validForgotPasswordView = GetValidForgotPasswordView();
             await authenticationService.ForgotPasswordAsync(validForgotPasswordView);
@@ -341,10 +359,30 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var userServiceMock = new Mock<IUserService>();
             userServiceMock.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
 
-            var authenticationService = new AuthenticationService(_userManager, _emailProvider, _mapper, _jwtProvider, userServiceMock.Object, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(_userManager, _emailService, _mapper, _jwtService, userServiceMock.Object, _clientConnectionOptions);
 
             var validForgotPasswordView = GetValidForgotPasswordView();
-            FluentActions.Awaiting(() => authenticationService.ForgotPasswordAsync(validForgotPasswordView)).Should().NotThrow<Exception>();
+            FluentActions.Awaiting(() => authenticationService.ForgotPasswordAsync(validForgotPasswordView)).Should().Throw<Exception>()
+                .WithMessage(Constants.Errors.Authentication.ErrorWhileSendingMessage);
+        }
+
+        [Test]
+        public void ForgotPassword_PassedValidForgotPasswordViewButUserIsOfAdminRole_ThrowsExceptionWithCorrespondingMessage()
+        {
+            var validUser = GetValidUser();
+            var rolesListWithAdmin = GetRolesWithAdminRole();
+
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(rolesListWithAdmin);
+
+            var userServiceMock = new Mock<IUserService>();
+            userServiceMock.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, userServiceMock.Object, _clientConnectionOptions);
+
+            var validForgotPasswordView = GetValidForgotPasswordView();
+            FluentActions.Awaiting(() => authenticationService.ForgotPasswordAsync(validForgotPasswordView))
+               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.EmailWasNotDelivered);
         }
 
         [Test]
@@ -354,6 +392,8 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
             userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<User>())).ReturnsAsync(ValidPasswordResetCode);
+            userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(GetRolesWithClientRole());
+            
 
             var emailProviderMock = new Mock<IEmailService>();
             emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
@@ -361,7 +401,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var userServiceMock = new Mock<IUserService>();
             userServiceMock.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtProvider, userServiceMock.Object, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtService, userServiceMock.Object, _clientConnectionOptions);
 
             var validForgotPasswordView = GetValidForgotPasswordView();
             FluentActions.Awaiting(() => authenticationService.ForgotPasswordAsync(validForgotPasswordView))
@@ -379,7 +419,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.ResetPasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success)
                 .Callback((User user, string code, string password) => { userPassedToResetPasswordAsync = user;  });
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validResetPasswordView = GetValidResetPasswordView();
             FluentActions.Awaiting(() => authenticationService.ResetPasswordAsync(validResetPasswordView)).Should().NotThrow<Exception>();
@@ -393,7 +433,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validResetPasswordView = GetValidResetPasswordView();
             FluentActions.Awaiting(() => authenticationService.ResetPasswordAsync(validResetPasswordView)).Should()
@@ -409,7 +449,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
             userManagerMock.Setup(x => x.ResetPasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new IdentityResult());
 
-            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailProvider, _mapper, _jwtProvider, _userService, _clientConnectionOptions);
+            var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, _userService, _clientConnectionOptions);
 
             var validResetPasswordView = GetValidResetPasswordView();
             FluentActions.Awaiting(() => authenticationService.ResetPasswordAsync(validResetPasswordView)).Should().Throw<Exception>();
@@ -466,6 +506,19 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
+        private User GetBlockedUser()
+        {
+            return new User
+            {
+                Id = 1,
+                Email = "rusland610@gmail.com",
+                UserName = "Me",
+                EmailConfirmed = true,
+                Deposits = new List<Deposit>(),
+                IsBlocked = true
+            };
+        }
+
         private SignInAuthenticationView GetValidSignInView()
         {
             return new SignInAuthenticationView
@@ -490,7 +543,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         {
             return new ForgotPasswordAuthenticationView
             {
-                Email = "rusland610@gmail.com"
+                Email = "a@a.com"
             };
         }
 
@@ -510,6 +563,22 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
                 Code = "code_goes_here",
                 Password = "qwerty12345AAA",
                 ConfirmPassword = "qwerty12345AAA"
+            };
+        }
+
+        private IList<string> GetRolesWithAdminRole()
+        {
+            return new List<string>
+            {
+                Constants.Roles.Admin
+            };
+        }
+
+        private IList<string> GetRolesWithClientRole()
+        {
+            return new List<string>
+            {
+                Constants.Roles.Client
             };
         }
     }

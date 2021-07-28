@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 using FluentAssertions;
+using BankingApp.ViewModels.ViewModels.Authentication;
 
 namespace BankingApp.UI.UnitTests.Shared
 {
@@ -14,7 +15,7 @@ namespace BankingApp.UI.UnitTests.Shared
         public HeaderTests()
         {
             var authenticationServiceMock = new Mock<IAuthenticationService>();
-            authenticationServiceMock.SetupGet(x => x.TokensView).Returns(new ViewModels.Banking.Authentication.TokensView());
+            authenticationServiceMock.SetupGet(x => x.TokensView).Returns(new TokensView());
             Services.AddSingleton(authenticationServiceMock.Object);
 
             var loaderServiceMock = new Mock<ILoaderService>();

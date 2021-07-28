@@ -94,6 +94,13 @@ namespace BankingApp.BusinessLogicLayer.Services
                 throw new Exception(errors);
             }
 
+            result = await _userManager.AddToRoleAsync(user, RolesEnum.Admin.ToString());
+            if (!result.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+                throw new Exception(Constants.Errors.Authentication.ClientUserWasNotAddedToClientRole);
+            }
+
             return user;
         }
 
@@ -133,6 +140,11 @@ namespace BankingApp.BusinessLogicLayer.Services
             if (user is null || !user.EmailConfirmed || !await _userManager.CheckPasswordAsync(user, signInAccountView.Password))
             {
                 throw new Exception(Constants.Errors.Authentication.InvalidNicknameOrPassword);
+            }
+
+            if (user.IsBlocked)
+            {
+                throw new Exception(Constants.Errors.Authentication.UserIsBlocked);
             }
 
             return user;
@@ -185,29 +197,10 @@ namespace BankingApp.BusinessLogicLayer.Services
                 throw new Exception(Constants.Errors.Authentication.ErrorWhileSendingMessage);
             }
 
-            return user;
-        }
-
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var callbackUrl = new StringBuilder();
-            callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ResetPath}");
-            callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(resetPasswordToken)}");
-
-            var messageBody = $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
-
-            if (!await _emailProvider.SendEmailAsync(user.Email, Constants.Password.PasswordResetHeader, messageBody))
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles.Contains(RolesEnum.Admin.ToString()))
             {
-                throw new Exception(Constants.Errors.Authentication.ErrorWhileSendingMessage);
-            }
-        }
-
-        private async Task<User> CheckUserForExistenceAsync(ResetPasswordAuthenticationView resetPasswordView)
-        {
-            var user = await _userManager.FindByEmailAsync(resetPasswordView.Email);
-            if (user == null)
-            {
-                throw new Exception(Constants.Errors.Authentication.UserWasNotFound);
+                throw new Exception(Constants.Errors.Authentication.EmailWasNotDelivered);
             }
 
             return user;
@@ -223,59 +216,32 @@ namespace BankingApp.BusinessLogicLayer.Services
             }
         }
 
-
-        private async Task CheckForUserExistenceAsync(SignUpAuthenticationView signUpAccountView)
+        private async Task<User> CheckUserForExistenceAsync(ResetPasswordAuthenticationView resetPasswordView)
         {
-            var existingUser = await _userManager.FindByEmailAsync(signUpAccountView.Email);
-
-            if (existingUser != null)
+            var user = await _userManager.FindByEmailAsync(resetPasswordView.Email);
+            if (user == null)
             {
-                throw new Exception(Constants.Errors.Authentication.UserAlreadyExists);
-            }
-        }
-
-        private async Task<User> CreateUserAsync(SignUpAuthenticationView signUpAccountView)
-        {
-            var user = _mapper.Map<User>(signUpAccountView);
-            var result = await _userManager.CreateAsync(user, signUpAccountView.Password);
-
-            if (!result.Succeeded)
-            {
-                await _userManager.DeleteAsync(user);
-                string errors = string.Join("\n", result.Errors.Select(x => x.Description).ToList());
-                throw new Exception(errors);
+                throw new Exception(Constants.Errors.Authentication.UserWasNotFound);
             }
 
             return user;
         }
 
-        private async Task SendEmailWithConfirmationTokenAsync(User user)
+        private async Task SendEmailResetPasswordAsync(User user)
         {
-            string confirmationToken = null;
-            try
-            {
-                confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            }
-            catch (Exception e)
-            {
-                await _userManager.DeleteAsync(user);
-                throw e;
-            }
-
-            byte[] tokenGenerateBytes = Encoding.UTF8.GetBytes(confirmationToken);
-            string tokenCode = WebEncoders.Base64UrlEncode(tokenGenerateBytes);
+            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             var callbackUrl = new StringBuilder();
-            callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ConfirmPath}");
-            callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{tokenCode}");
+            callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ResetPath}");
+            callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(resetPasswordToken)}");
 
-            var confirmEmailLink = $"{Constants.Email.ConfirmRegistration} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
+            var messageBody = $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
 
-            if (!await _emailProvider.SendEmailAsync(user.Email, Constants.Email.ConfirmEmail, confirmEmailLink))
+            if (!await _emailProvider.SendEmailAsync(user.Email, Constants.Password.PasswordResetHeader, messageBody))
             {
-                await _userManager.DeleteAsync(user);
-                throw new Exception(Constants.Errors.Authentication.UserWasNotRegistered);
+                throw new Exception(Constants.Errors.Authentication.ErrorWhileSendingMessage);
             }
         }
     }
 }
+

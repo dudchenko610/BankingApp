@@ -1,6 +1,6 @@
 ﻿using BankingApp.UI.Core.Attributes;
 using BankingApp.UI.Core.Interfaces;
-using BankingApp.ViewModels.Banking.Authentication;
+using BankingApp.ViewModels.ViewModels.Authentication;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;

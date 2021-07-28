@@ -257,7 +257,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             return new TokensView
             {
-                AccessToken = "access_token"
+                AccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InIuZHVkY2hlbmtvQHN0dWRlbnQua2hhaS5lZHUiLCJzdWIiOiI4IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6IkNyYXp5QWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsIm5iZiI6MTYyNzQ2NjAxMiwiZXhwIjoxNjI3NDczMjEyLCJpc3MiOiJNeUF1dGhTZXJ2ZXIiLCJhdWQiOiJNeUF1dGhDbGllbnQifQ.dwhWpXpQForywt_3_mbbeUw6KGyW-iP4CYvyE1H2cMk"
             };
         }
     }

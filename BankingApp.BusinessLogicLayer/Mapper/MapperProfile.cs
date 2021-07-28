@@ -4,6 +4,7 @@ using BankingApp.ViewModels.Enums;
 using BankingApp.Shared.Extensions;
 using BankingApp.ViewModels.ViewModels.Authentication;
 using BankingApp.ViewModels.ViewModels.Deposit;
+using BankingApp.ViewModels.Banking.Admin;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {

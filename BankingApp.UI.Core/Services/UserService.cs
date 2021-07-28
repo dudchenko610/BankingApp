@@ -1,6 +1,6 @@
 ﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.Banking.Admin;
-using BankingApp.ViewModels.Pagination;
+using BankingApp.ViewModels.ViewModels.Pagination;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;
 

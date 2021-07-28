@@ -1,5 +1,5 @@
 ﻿using BankingApp.ViewModels.Banking.Admin;
-using BankingApp.ViewModels.Pagination;
+using BankingApp.ViewModels.ViewModels.Pagination;
 using System.Threading.Tasks;
 
 namespace BankingApp.UI.Core.Interfaces

@@ -62,7 +62,7 @@ namespace BankingApp.UI.Pages.HistoryPage
             _pagedDeposits = await _depositService.GetAllAsync(Page, DepositsOnPage);
             _loaderService.SwitchOff();
 
-            if (_pagedDeposits.Items.Count == 0)
+            if (_pagedDeposits is null || _pagedDeposits.Items.Count == 0)
                 return;
 
             _totalPageCount = (int)Math.Ceiling(_pagedDeposits.TotalItems / ((double)DepositsOnPage));

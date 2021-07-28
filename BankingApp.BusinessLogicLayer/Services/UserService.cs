@@ -5,7 +5,7 @@ using BankingApp.DataAccessLayer.Models;
 using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Admin;
-using BankingApp.ViewModels.Pagination;
+using BankingApp.ViewModels.ViewModels.Pagination;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -55,6 +55,11 @@ namespace BankingApp.BusinessLogicLayer.Services
             };
 
             return pagedResponse;
+        }
+
+        public async Task<User> GetSignedInUserAsync()
+        {
+            return await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
         }
 
         public int GetSignedInUserId()
