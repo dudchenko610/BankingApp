@@ -15,11 +15,11 @@ namespace BankingApp.UI.UnitTests.Components
         {
             var monthlyPaymentGetByIdDepositViewItemList = GetValidMonthlyPaymentGetByIdDepositViewItemList();
 
-            var depositeHistoryItemList = RenderComponent<MonthlyPaymentList>(parameters => parameters
+            var depositHistoryItemList = RenderComponent<MonthlyPaymentList>(parameters => parameters
                 .Add(p => p.MonthlyPaymentViewList, monthlyPaymentGetByIdDepositViewItemList)
             );
 
-            depositeHistoryItemList.FindAll("li[class=list-group-item]").Count.Should().Be(monthlyPaymentGetByIdDepositViewItemList.Count);
+            depositHistoryItemList.FindAll("li[class=list-group-item]").Count.Should().Be(monthlyPaymentGetByIdDepositViewItemList.Count);
         }
 
         [Fact]

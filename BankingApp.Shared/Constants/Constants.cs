@@ -54,7 +54,6 @@ namespace BankingApp.Shared
             public static class Deposit
             {
                 public const string Route = "api/deposit";
-
                 public const string Calculate = "calculateDeposit";
                 public const string GetAll = "getAll";
                 public const string GetById = "getById";
@@ -63,7 +62,6 @@ namespace BankingApp.Shared
             public static class Authentication
             {
                 public const string Route = "api/authentication";
-
                 public const string SignUp = "signUp";
                 public const string SignIn = "signIn";
                 public const string ConfirmEmail = "confirmEmail";

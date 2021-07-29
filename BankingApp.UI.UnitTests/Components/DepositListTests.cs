@@ -45,18 +45,18 @@ namespace BankingApp.UI.UnitTests.Components
         [Fact]
         public void DepositList_UserClicksHistoryItem_EventTriggers()
         {
-            int depositeHistoryId = -1;
+            int depositHistoryId = -1;
             var depositGetAllDepositViewItems = GetValidDepositGetAllDepositViewItemList();
 
-            var depositeHistoryList = RenderComponent<DepositList>(parameters => parameters
+            var depositHistoryList = RenderComponent<DepositList>(parameters => parameters
                 .Add(p => p.DepositViewList, depositGetAllDepositViewItems)
                 .Add(p => p.OnDepositItemClicked,
-                    (id) => { depositeHistoryId = id; }
+                    (id) => { depositHistoryId = id; }
                 )
             );
 
-            depositeHistoryList.Find("button.btn").Click();
-            depositeHistoryId.Should().NotBe(-1);
+            depositHistoryList.Find("button.btn").Click();
+            depositHistoryId.Should().NotBe(-1);
         }
 
         private IList<DepositGetAllDepositViewItem> GetValidDepositGetAllDepositViewItemList()

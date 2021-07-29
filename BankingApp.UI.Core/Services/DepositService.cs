@@ -15,9 +15,9 @@ namespace BankingApp.UI.Core.Services
             _httpService = httpService;
         }
 
-        public async Task<int> CalculateAsync(CalculateDepositView reqDeposite)
+        public async Task<int> CalculateAsync(CalculateDepositView calculateDepositView)
         {
-            int depositId = await _httpService.PostAsync<int>($"{Routes.Deposit.Route}/{Routes.Deposit.Calculate}", reqDeposite);
+            int depositId = await _httpService.PostAsync<int>($"{Routes.Deposit.Route}/{Routes.Deposit.Calculate}", calculateDepositView);
             return depositId;
         }
 
