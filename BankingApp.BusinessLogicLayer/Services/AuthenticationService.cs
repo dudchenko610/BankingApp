@@ -110,7 +110,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             string tokenCode = WebEncoders.Base64UrlEncode(tokenGenerateBytes);
 
             var callbackUrl = new StringBuilder();
-            callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ConfirmPath}");
+            callbackUrl.Append($"{_clientConnectionOptions.Url}{_clientConnectionOptions.ConfirmPath}");
             callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{tokenCode}");
 
             var messageBody = $"{Constants.Email.ConfirmRegistration} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
@@ -178,7 +178,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             var callbackUrl = new StringBuilder();
-            callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ResetPath}");
+            callbackUrl.Append($"{_clientConnectionOptions.Url}{_clientConnectionOptions.ResetPath}");
             callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(resetPasswordToken)}");
 
             var messageBody = $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
