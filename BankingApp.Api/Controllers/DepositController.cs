@@ -22,11 +22,11 @@ namespace BankingApp.Api.Controllers
         [HttpPost]
         [Authorize]
         [Route(Routes.Deposit.Calculate)]
-        public async Task<IActionResult> Calculate(CalculateDepositView requestDepositeData)
+        public async Task<IActionResult> Calculate(CalculateDepositView calculateDepositView)
         {
             try
             {
-                var id = await _depositService.CalculateAsync(requestDepositeData);
+                var id = await _depositService.CalculateAsync(calculateDepositView);
                 return Ok(id);
             }
             catch (Exception e)
@@ -58,9 +58,9 @@ namespace BankingApp.Api.Controllers
         {
             try
             {
-                var responseCalculationHistoryViewItem
+                var getByIdDepositView
                     = await _depositService.GetByIdAsync(depositId);
-                return Ok(responseCalculationHistoryViewItem);
+                return Ok(getByIdDepositView);
             }
             catch (Exception e)
             {

@@ -56,7 +56,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             var depositWithItems = await _depositRepository.GetDepositWithItemsByIdAsync(depositId);
             if (depositWithItems == null)
             { 
-                throw new Exception(Constants.Errors.Deposit.IncorrectDepositeHistoryId);
+                throw new Exception(Constants.Errors.Deposit.IncorrectDepositHistoryId);
             }
 
             int userId = _userService.GetSignedInUserId();

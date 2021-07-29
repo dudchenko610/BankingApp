@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankingApp.Entities\BankingApp.Entities.csproj" />
+    <ProjectReference Include="..\BankingApp.Shared\BankingApp.Shared.csproj" />
   </ItemGroup>
 
 </Project>

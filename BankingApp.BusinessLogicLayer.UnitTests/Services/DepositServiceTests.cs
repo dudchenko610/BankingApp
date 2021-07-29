@@ -206,7 +206,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object, _userService);
 
             FluentActions.Awaiting(() => depositService.GetByIdAsync(InvalidDepositeHistoryId))
-                .Should().Throw<Exception>().WithMessage(Constants.Errors.Deposit.IncorrectDepositeHistoryId);
+                .Should().Throw<Exception>().WithMessage(Constants.Errors.Deposit.IncorrectDepositHistoryId);
         }
 
         private async Task CalculateTestForFormulaLogicAsync(CalculateDepositView calculateDepositView, IList<MonthlyPayment> monthlyPayments)

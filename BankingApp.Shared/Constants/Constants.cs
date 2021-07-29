@@ -11,7 +11,7 @@ namespace BankingApp.Shared
                 public const string IncorrectMonthFormat = "Months number should be a positive non-zero integer value";
                 public const string IncorrectPercentNumber = "Percent should be positive fractional value in a range of [1; 100] with two decimal places";
 
-                public const string IncorrectDepositeHistoryId = "DepositHistoryId should be an integer, bigger than one number";
+                public const string IncorrectDepositHistoryId = "Id of deposit should be an integer, bigger than one number";
                 public const string DepositDoesNotExistsOrYouHaveNoAccess = "This deposit does not exist or you have no access to it";
             }
 
@@ -82,9 +82,10 @@ namespace BankingApp.Shared
         
         public static class AppSettings
         {
-            public const string EmailConfig = "emailConfig";
-            public const string ClientConfig = "clientConfig";
-            public const string JwtConfig = "jwtConfig";
+            public const string EmailConfiguration = "EmailConfiguration";
+            public const string ClientConfiguration = "ClientConfiguration";
+            public const string JwtConfiguration = "JwtConfiguration";
+            public const string SqlServerConnection = "SQLServerConnection";
         }
     
         public static class Email
@@ -116,6 +117,11 @@ namespace BankingApp.Shared
             public const string AccessTokenName = "access_token";
             public const string RefreshTokenName = "refresh_token";
             public const string AuthorizationName = "Authorization";
+        }
+
+        public static class Assembly
+        { 
+            public const string DataAccessLayer = "BankingApp.DataAccessLayer";
         }
     }
 }
