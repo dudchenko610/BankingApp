@@ -18,6 +18,7 @@
             <label for="password" class="form-label">Password</label>
             <InputText @bind-Value="_signInView.Password"
                        id="password"
+                       type="password"
                        placeholder="password"
                        class="form-control" />
             <ValidationMessage For="@(() => _signInView.Password)" />
