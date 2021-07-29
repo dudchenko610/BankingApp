@@ -26,6 +26,7 @@ namespace BankingApp.UI.Shared.AppRouteView
                 if (_authenticationService.TokensView is null)
                 {
                     _navigationWrapper.NavigateTo(Routes.SignInPage);
+
                     return;
                 }
 
@@ -35,6 +36,7 @@ namespace BankingApp.UI.Shared.AppRouteView
                 if (allowedPageRoles.Any() && !allowedPageRoles.Intersect(userRoles).Any())
                 {
                     _navigationWrapper.NavigateTo(Routes.MainPage);
+
                     return;
                 }
             } 
@@ -42,6 +44,7 @@ namespace BankingApp.UI.Shared.AppRouteView
             if (unauthAttribute is not null && _authenticationService.TokensView is not null)
             {
                 _navigationWrapper.NavigateTo(Routes.MainPage);
+
                 return;
             }
 

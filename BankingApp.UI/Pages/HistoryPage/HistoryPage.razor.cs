@@ -55,6 +55,7 @@ namespace BankingApp.UI.Pages.HistoryPage
             if (Page < 1)
             {
                 _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/1");
+
                 return;
             }
 
@@ -63,12 +64,16 @@ namespace BankingApp.UI.Pages.HistoryPage
             _loaderService.SwitchOff();
 
             if (_pagedDeposits is null || _pagedDeposits.Items.Count == 0)
+            {
                 return;
+            }
 
             _totalPageCount = (int)Math.Ceiling(_pagedDeposits.TotalItems / ((double)DepositsOnPage));
 
             if (Page > _totalPageCount || Page < 1)
+            { 
                 _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/1");
+            }
         }
     }
 }

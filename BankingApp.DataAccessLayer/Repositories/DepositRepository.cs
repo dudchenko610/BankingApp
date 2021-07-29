@@ -3,7 +3,6 @@ using BankingApp.DataAccessLayer.Interfaces;
 using BankingApp.DataAccessLayer.Models;
 using BankingApp.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +19,7 @@ namespace BankingApp.DataAccessLayer.Repositories
             var depositeHistory = await _dbSet
                 .Include(dep => dep.MonthlyPayments)
                 .FirstOrDefaultAsync(dep => dep.Id == depositId);
+
             return depositeHistory;
         }
 
@@ -31,6 +31,7 @@ namespace BankingApp.DataAccessLayer.Repositories
                 Items = deposits,
                 TotalCount = await _dbSet.CountAsync()
             };
+
             return paginationModel;
         }
     }

@@ -48,24 +48,28 @@ namespace BankingApp.BusinessLogicLayer.Services
             depositModel.UserId = _userService.GetSignedInUserId();
 
             int savedId = await _depositRepository.AddAsync(depositModel);
+
             return savedId;
         }
 
         public async Task<GetByIdDepositView> GetByIdAsync(int depositId)
         {
             var depositWithItems = await _depositRepository.GetDepositWithItemsByIdAsync(depositId);
+
             if (depositWithItems == null)
             { 
                 throw new Exception(Constants.Errors.Deposit.IncorrectDepositeHistoryId);
             }
 
             int userId = _userService.GetSignedInUserId();
+
             if (depositWithItems.UserId != userId)
             {
                 throw new Exception(Constants.Errors.Deposit.DepositDoesNotBelongsToYou);
             }
 
             var depositWithItemsView = _mapper.Map<Deposit, GetByIdDepositView>(depositWithItems);
+
             return depositWithItemsView;
         }
 
@@ -86,6 +90,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             float percentsDevidedBy1200 = (float) calculateDepositView.Percents / 1200.0f;
             decimal monthSum = calculateDepositView.DepositSum * (decimal)(1.0f + monthNumber * percentsDevidedBy1200);
             float percents = (float) decimal.Round((decimal)(monthNumber / 12.0f) * calculateDepositView.Percents, 2);
+
             return (monthSum, percents);
         }
 
@@ -95,16 +100,21 @@ namespace BankingApp.BusinessLogicLayer.Services
             float percentsDevidedBy1200 = (float) calculateDepositView.Percents / 1200.0f;
             decimal monthSum = calculateDepositView.DepositSum * (decimal)Math.Pow(1.0 + percentsDevidedBy1200, monthNumber);
             float percents = (float)decimal.Round(((monthSum - calculateDepositView.DepositSum) / calculateDepositView.DepositSum) * 100.0m, 2);
+
             return (monthSum, percents);
         }
 
         public async Task<ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
         {
             if (pageNumber < 1)
+            {
                 throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
+            }
 
             if (pageSize < 1)
+            { 
                 throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
+            }
 
             int userId = _userService.GetSignedInUserId();
 

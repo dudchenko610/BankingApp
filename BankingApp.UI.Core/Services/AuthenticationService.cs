@@ -60,6 +60,7 @@ namespace BankingApp.UI.Core.Services
             await _localStorageService.SetItemAsync(Constants.Constants.Authentication.TokensView, tokensView);
             TokensView = tokensView;
             ExtractClaimsFromToken();
+
             return tokensView != null;
         }
 

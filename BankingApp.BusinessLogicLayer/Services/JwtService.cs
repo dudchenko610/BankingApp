@@ -73,6 +73,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         private SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             var symetricKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtConnectionOptions.SecretKey));
+            
             return symetricKey;
         }
     }

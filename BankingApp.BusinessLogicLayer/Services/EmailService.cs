@@ -31,7 +31,6 @@ namespace BankingApp.BusinessLogicLayer.Services
                 mail.Body = messageBody;
 
                 var client = new SmtpClient();
-
                 client.Host = Constants.Email.ClientSMTP;
                 client.Port = Convert.ToInt32(_emailConnectionOptions.Port);
                 client.EnableSsl = true;
@@ -39,6 +38,7 @@ namespace BankingApp.BusinessLogicLayer.Services
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 await client.SendMailAsync(mail);
                 mail.Dispose();
+
                 return true;
             }
             catch

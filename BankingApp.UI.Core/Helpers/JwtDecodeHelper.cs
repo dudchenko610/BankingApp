@@ -13,6 +13,7 @@ namespace BankingApp.UI.Core.Helpers
             var payload = jwt.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+
             return keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
         }
 
@@ -23,6 +24,7 @@ namespace BankingApp.UI.Core.Helpers
                 case 2: base64 += "=="; break;
                 case 3: base64 += "="; break;
             }
+
             return Convert.FromBase64String(base64);
         }
     }

@@ -24,6 +24,7 @@ namespace BankingApp.UI.Core.Services
         {
             var pagedDataView = await _httpService
                .GetAsync<PagedDataView<UserGetAllAdminViewItem>>($"{Routes.Admin.Route}/{Routes.Admin.GetAll}?pageNumber={pageNumber}&pageSize={pageSize}");
+
             return pagedDataView;
         }
     }

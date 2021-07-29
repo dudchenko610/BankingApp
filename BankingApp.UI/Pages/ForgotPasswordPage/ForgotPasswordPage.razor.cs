@@ -30,6 +30,7 @@ namespace BankingApp.UI.Pages.ForgotPasswordPage
         private async Task OnFormSubmitAsync()
         {
             _loaderService.SwitchOn();
+
             if (await _authenticationService.ForgotPasswordAsync(_forgotPasswordView))
             {
                 _toastService.ShowSuccess(Notifications.PasswordResetEmailSent);

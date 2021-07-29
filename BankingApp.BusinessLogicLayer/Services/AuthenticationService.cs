@@ -50,6 +50,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         {
             var user = await CheckUserForExistenceAsync(signInAccountView);
             var tokensView = await GenerateTokensAsync(user);
+
             return tokensView;
         }
 
@@ -91,13 +92,16 @@ namespace BankingApp.BusinessLogicLayer.Services
             {
                 await _userManager.DeleteAsync(user);
                 string errors = string.Join("\n", result.Errors.Select(x => x.Description).ToList());
+
                 throw new Exception(errors);
             }
 
             result = await _userManager.AddToRoleAsync(user, RolesEnum.Admin.ToString());
+
             if (!result.Succeeded)
             {
                 await _userManager.DeleteAsync(user);
+
                 throw new Exception(Constants.Errors.Authentication.ClientUserWasNotAddedToClientRole);
             }
 
@@ -107,6 +111,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         private async Task SendEmailConfirmationMessageAsync(User user)
         {
             string emailConfirmationToken = null;
+
             try
             {
                 emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -114,6 +119,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             catch (Exception e)
             {
                 await _userManager.DeleteAsync(user);
+
                 throw new Exception(e.Message);
             }
 
@@ -129,6 +135,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             if (!await _emailProvider.SendEmailAsync(user.Email, Constants.Email.ConfirmEmail, messageBody))
             {
                 await _userManager.DeleteAsync(user);
+
                 throw new Exception(Constants.Errors.Authentication.UserWasNotRegistered);
             }
         }
@@ -181,6 +188,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             string codeDecoded = Encoding.UTF8.GetString(codeDecodeBytes);
 
             var result = await _userManager.ConfirmEmailAsync(user, codeDecoded);
+
             if (!result.Succeeded)
             {
                 throw new Exception(Constants.Errors.Authentication.EmailWasNotConfirmed);
@@ -192,12 +200,14 @@ namespace BankingApp.BusinessLogicLayer.Services
         private async Task<User> CheckUserForExistenceAsync(ForgotPasswordAuthenticationView resetPasswordAuthenticationView)
         {
             var user = await _userService.GetUserByEmailAsync(resetPasswordAuthenticationView.Email);
+
             if (user is null)
             {
                 throw new Exception(Constants.Errors.Authentication.ErrorWhileSendingMessage);
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
+
             if (userRoles.Contains(RolesEnum.Admin.ToString()))
             {
                 throw new Exception(Constants.Errors.Authentication.EmailWasNotDelivered);
@@ -209,9 +219,11 @@ namespace BankingApp.BusinessLogicLayer.Services
         private async Task ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordView, User user)
         {
             var result = await _userManager.ResetPasswordAsync(user, resetPasswordView.Code, resetPasswordView.Password);
+
             if (!result.Succeeded)
             {
                 string errors = string.Join("\n", result.Errors.Select(x => x.Description).ToList());
+
                 throw new Exception(errors);
             }
         }
@@ -219,6 +231,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         private async Task<User> CheckUserForExistenceAsync(ResetPasswordAuthenticationView resetPasswordView)
         {
             var user = await _userManager.FindByEmailAsync(resetPasswordView.Email);
+
             if (user == null)
             {
                 throw new Exception(Constants.Errors.Authentication.UserWasNotFound);

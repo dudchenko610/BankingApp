@@ -28,11 +28,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 var id = await _depositService.CalculateAsync(requestDepositeData);
+
                 return Ok(id);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -44,11 +45,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 var pagedDepositResponse = await _depositService.GetAllAsync(pageNumber, pageSize);
+
                 return Ok(pagedDepositResponse);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -61,11 +63,12 @@ namespace BankingApp.Api.Controllers
             {
                 var responseCalculationHistoryViewItem
                     = await _depositService.GetByIdAsync(depositeHistoryId);
+
                 return Ok(responseCalculationHistoryViewItem);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
     }

@@ -57,6 +57,7 @@ namespace BankingApp.UI.Pages.UsersPage
             };
 
             _loaderService.SwitchOn();
+
             if (await _userService.BlockAsync(blockUserView))
             {
                 _loaderService.SwitchOff();
@@ -75,6 +76,7 @@ namespace BankingApp.UI.Pages.UsersPage
             if (Page < 1)
             {
                 _navigationWrapper.NavigateTo($"{Routes.UsersPage}/1");
+
                 return;
             }
 
@@ -83,12 +85,16 @@ namespace BankingApp.UI.Pages.UsersPage
             _loaderService.SwitchOff();
 
             if (_pagedUsers.Items.Count == 0)
+            {
                 return;
+            }
 
-            _totalPageCount = (int)Math.Ceiling(_pagedUsers.TotalItems / ((double) UsersOnPage));
+            _totalPageCount = (int)Math.Ceiling(_pagedUsers.TotalItems / ((double)UsersOnPage));
 
             if (Page > _totalPageCount || Page < 1)
+            { 
                 _navigationWrapper.NavigateTo($"{Routes.UsersPage}/1");
+            }
         }
     }
 }

@@ -28,6 +28,7 @@ namespace BankingApp.UI.Pages.SignUpPage
         private async Task OnFormSubmitAsync()
         {
             _loaderService.SwitchOn();
+
             if (await _authenticationService.SignUpAsync(_signUpView))
             {
                 _toastService.ShowSuccess(Notifications.ConfirmYourEmail);

@@ -36,7 +36,9 @@ namespace BankingApp.UI.Shared.Header
             var relativePath = _navigationWrapper.ToBaseRelativePath(_navigationWrapper.Uri).ToLower();
 
             if (relativePath.Contains("/"))
+            { 
                 relativePath = relativePath.Split("/")[0];
+            }
 
             return navLinkMatch == NavLinkMatch.All ? relativePath == href.ToLower() : relativePath.StartsWith(href.ToLower());
         }

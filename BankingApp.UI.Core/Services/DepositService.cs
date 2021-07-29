@@ -18,6 +18,7 @@ namespace BankingApp.UI.Core.Services
         public async Task<int> CalculateAsync(CalculateDepositView reqDeposite)
         {
             int depositId = await _httpService.PostAsync<int>($"{Routes.Deposit.Route}/{Routes.Deposit.Calculate}", reqDeposite);
+
             return depositId;
         }
 
@@ -25,6 +26,7 @@ namespace BankingApp.UI.Core.Services
         {
             var pagedDataView = await _httpService
                 .GetAsync<PagedDataView<DepositGetAllDepositViewItem>>($"{Routes.Deposit.Route}/{Routes.Deposit.GetAll}?pageNumber={pageNumber}&pageSize={pageSize}");
+
             return pagedDataView;
         }
 
@@ -32,6 +34,7 @@ namespace BankingApp.UI.Core.Services
         {
             var depositViewWithMonthyPaymentList = await _httpService
                 .GetAsync<GetByIdDepositView>($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositeHistoryId={depositId}");
+
             return depositViewWithMonthyPaymentList;
         }
     }

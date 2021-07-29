@@ -21,6 +21,7 @@ namespace BankingApp.UI.Components.InputSelectEnum
 
             // Add an option element per enum value
             var enumType = GetEnumType();
+
             foreach (TEnum value in Enum.GetValues(enumType))
             {
                 builder.OpenElement(5, "option");
@@ -39,6 +40,7 @@ namespace BankingApp.UI.Components.InputSelectEnum
             {
                 result = parsedValue;
                 validationErrorMessage = null;
+
                 return true;
             }
 
@@ -46,10 +48,12 @@ namespace BankingApp.UI.Components.InputSelectEnum
             if (string.IsNullOrEmpty(value))
             {
                 var nullableType = Nullable.GetUnderlyingType(typeof(TEnum));
+
                 if (nullableType != null)
                 {
                     result = default;
                     validationErrorMessage = null;
+
                     return true;
                 }
             }
@@ -57,6 +61,7 @@ namespace BankingApp.UI.Components.InputSelectEnum
             // The value is invalid => set the error message
             result = default;
             validationErrorMessage = $"The {FieldIdentifier.FieldName} field is not valid.";
+
             return false;
         }
 
@@ -68,8 +73,11 @@ namespace BankingApp.UI.Components.InputSelectEnum
             // Read the Display attribute name
             var member = value.GetType().GetMember(value.ToString())[0];
             var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
+
             if (displayAttribute != null)
+            {
                 return displayAttribute.GetName();
+            }
 
             // Require the NuGet package Humanizer.Core
             return value.ToString();
@@ -81,8 +89,11 @@ namespace BankingApp.UI.Components.InputSelectEnum
         private Type GetEnumType()
         {
             var nullableType = Nullable.GetUnderlyingType(typeof(TEnum));
+
             if (nullableType != null)
+            { 
                 return nullableType;
+            }
 
             return typeof(TEnum);
         }

@@ -29,18 +29,20 @@ namespace BankingApp.UI.Pages.ResetPasswordPage
         private async Task OnFormSubmitAsync()
         {
             var uri = _navigationWrapper.ToAbsoluteUri(_navigationWrapper.Uri);
-
             var queryStrings = QueryHelpers.ParseQuery(uri.Query);
+
             if (queryStrings.TryGetValue("email", out var email))
             {
                 _resetPasswordView.Email = email;
             }
+
             if (queryStrings.TryGetValue("code", out var code))
             {
                 _resetPasswordView.Code = code;
             }  
 
             _loaderService.SwitchOn();
+
             if (await _authenticationService.ResetPasswordAsync(_resetPasswordView))
             {
                 _toastService.ShowSuccess(Notifications.PasswordResetSuccessfully);

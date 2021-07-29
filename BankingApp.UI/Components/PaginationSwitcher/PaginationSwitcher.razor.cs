@@ -38,7 +38,9 @@ namespace BankingApp.UI.Components.PaginationSwitcher
         protected override void OnInitialized()
         {
             if (PageCount <= 1)
+            {
                 PageCount = 1;
+            }
 
             CurrentPage = CurrentPage < 1 || CurrentPage > PageCount ? 1 : CurrentPage;
             _pageOffset = CurrentPage - 2;
@@ -105,6 +107,7 @@ namespace BankingApp.UI.Components.PaginationSwitcher
         private string IsButtonActive(int i)
         {
             int checking = _pageOffset + i + 1;
+
             return checking == CurrentPage ? ActiveClass : string.Empty;
         }
 

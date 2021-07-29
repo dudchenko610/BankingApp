@@ -49,6 +49,7 @@ namespace BankingApp.DataAccessLayer.Services
                     await _roleManager.CreateAsync(role);
                 }
             }
+
             if (rolesToDelete.Any())
             {
                 foreach (var role in rolesToDelete)
@@ -70,12 +71,14 @@ namespace BankingApp.DataAccessLayer.Services
                 };
 
                 var result = await _userManager.CreateAsync(adminUser, _adminCredentials.Password);
+
                 if (!result.Succeeded)
                 {
                     throw new System.Exception(Constants.Errors.SeedData.AdminUserWasNotCreated);
                 }
 
                 result = await _userManager.AddToRoleAsync(adminUser, RolesEnum.Admin.ToString());
+
                 if (!result.Succeeded)
                 {
                     throw new System.Exception(Constants.Errors.SeedData.AdminUserWasNotAddedToAdminRole);

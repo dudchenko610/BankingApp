@@ -29,11 +29,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 var getAllAdminView = await _userService.GetAllAsync(pageNumber, pageSize);
+
                 return Ok(getAllAdminView);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -45,11 +46,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 await _userService.BlockAsync(blockUserAdminView);
+
                 return Ok();
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
     }

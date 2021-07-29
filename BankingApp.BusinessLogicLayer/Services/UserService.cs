@@ -40,10 +40,14 @@ namespace BankingApp.BusinessLogicLayer.Services
         public async Task<ViewModels.ViewModels.Pagination.PagedDataView<UserGetAllAdminViewItem>> GetAllAsync(int pageNumber, int pageSize)
         {
             if (pageNumber < 1)
+            { 
                 throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
+            }
 
             if (pageSize < 1)
+            { 
                 throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
+            }
 
             DataAccessLayer.Models.PagedDataView<User> usersAndTotalCount
                 = await _userRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize);
@@ -62,6 +66,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         public int GetSignedInUserId()
         {
             var userIdTextRepresentation = _httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sub).Value;
+
             try
             {
                 return int.Parse(userIdTextRepresentation);

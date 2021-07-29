@@ -43,6 +43,7 @@ namespace BankingApp.UI.Core.Services
             catch
             {
                 _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
+
                 return default;
             }
         }
@@ -58,6 +59,7 @@ namespace BankingApp.UI.Core.Services
             catch
             {
                 _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
+
                 return default;
             }
         }
@@ -69,8 +71,11 @@ namespace BankingApp.UI.Core.Services
                 // add jwt auth header if user is logged in and request is to the api url
                 var tokensView = await _localStorageService.GetItemAsync<TokensView>(Constants.Constants.Authentication.TokensView);
                 var isApiUrl = !request.RequestUri.IsAbsoluteUri;
+
                 if (tokensView != null && isApiUrl)
+                { 
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokensView.AccessToken);
+                }
             }
 
             using var response = await _httpClient.SendAsync(request);
@@ -80,12 +85,14 @@ namespace BankingApp.UI.Core.Services
             {
                 _toastService.ShowError(Constants.Constants.Notifications.Unauthorized);
                 _navigationWrapper.NavigateTo(Constants.Constants.Routes.LogoutPage);
+
                 return default;
             }
 
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
+
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
@@ -94,6 +101,7 @@ namespace BankingApp.UI.Core.Services
                 {
                     _toastService.ShowError(errorMessage);
                 }
+
                 return default;
             }
 

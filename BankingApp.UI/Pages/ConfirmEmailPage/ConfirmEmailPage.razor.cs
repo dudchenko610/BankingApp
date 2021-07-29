@@ -26,10 +26,12 @@ namespace BankingApp.UI.Pages.ConfirmEmailPage
             var uri = _navigationWrapper.ToAbsoluteUri(_navigationWrapper.Uri);
 
             var queryStrings = QueryHelpers.ParseQuery(uri.Query);
+
             if (queryStrings.TryGetValue("email", out var email))
             {
                 confirmEmailView.Email= email;
             }
+
             if (queryStrings.TryGetValue("code", out var code))
             {
                 confirmEmailView.Code = code;
@@ -42,6 +44,7 @@ namespace BankingApp.UI.Pages.ConfirmEmailPage
                 _toastService.ShowSuccess(Notifications.EmailSuccessfullyConfirmed);
                 _navigationWrapper.NavigateTo(Routes.SignInPage);
             }
+
             _loaderService.SwitchOff();
         }
     }

@@ -27,11 +27,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 await _authenticationService.SignUpAsync(signUpAccountView);
+
                 return Ok();
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -42,11 +43,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 var tokensView = await _authenticationService.SignInAsync(signInAccountView);
+
                 return Ok(tokensView);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -57,11 +59,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 await _authenticationService.ConfirmEmailAsync(confirmEmailAccountView);
+
                 return Ok();
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -72,11 +75,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 await _authenticationService.ResetPasswordAsync(resetPasswordAuthenticationView);
+
                 return Ok();
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -87,11 +91,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 await _authenticationService.ForgotPasswordAsync(forgotPasswordAuthenticationView);
+
                 return Ok();
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
     }

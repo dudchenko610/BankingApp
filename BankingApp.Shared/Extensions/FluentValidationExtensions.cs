@@ -12,6 +12,7 @@ namespace BankingApp.Shared.Extensions
                 .Matches("[A-Z]").WithMessage(Constants.Errors.Authentication.PasswordUppercaseLetter)
                 .Matches("[a-z]").WithMessage(Constants.Errors.Authentication.PasswordLowercaseLetter)
                 .Matches("[0-9]").WithMessage(Constants.Errors.Authentication.PasswordDigit);
+
             return options;
         }
     }

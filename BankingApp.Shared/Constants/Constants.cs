@@ -70,7 +70,6 @@ namespace BankingApp.Shared
             public static class Deposit
             {
                 public const string Route = "api/deposit";
-
                 public const string Calculate = "calculateDeposit";
                 public const string GetAll = "getAll";
                 public const string GetById = "getById";
@@ -79,7 +78,6 @@ namespace BankingApp.Shared
             public static class Authentication
             {
                 public const string Route = "api/authentication";
-
                 public const string SignUp = "signUp";
                 public const string SignIn = "signIn";
                 public const string ConfirmEmail = "confirmEmail";
@@ -90,7 +88,6 @@ namespace BankingApp.Shared
             public static class Admin
             {
                 public const string Route = "api/admin";
-
                 public const string GetAll = "getAll";
                 public const string BlockUser = "blockUserw";
             }
@@ -118,7 +115,6 @@ namespace BankingApp.Shared
             public const string ParamCode = "&code=";
             public const string ClientSMTP = "smtp.gmail.com";
             public const string ConfirmEmail = "Confirm your email";
-            
             public const string ConfirmRegistration = "Click this link for confirm registration:";
             public const string OpenTagLink = "<a href='";
             public const string CloseTagLink = "'>link</a>";
