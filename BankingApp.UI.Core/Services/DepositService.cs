@@ -31,7 +31,7 @@ namespace BankingApp.UI.Core.Services
         public async Task<GetByIdDepositView> GetByIdAsync(int depositId)
         {
             var depositViewWithMonthyPaymentList = await _httpService
-                .GetAsync<GetByIdDepositView>($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositeHistoryId={depositId}");
+                .GetAsync<GetByIdDepositView>($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositId={depositId}");
             return depositViewWithMonthyPaymentList;
         }
     }
