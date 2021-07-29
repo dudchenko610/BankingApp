@@ -11,14 +11,14 @@ namespace BankingApp.Shared
                 public const string IncorrectMonthFormat = "Months number should be a positive non-zero integer value";
                 public const string IncorrectPercentNumber = "Percent should be positive fractional value in a range of [1; 100] with two decimal places";
 
-                public const string IncorrectDepositHistoryId = "Id of deposit should be an integer, bigger than one number";
+                public const string IncorrectDepositHistoryId = "Id of deposit should be an integer, bigger than 1";
                 public const string DepositDoesNotExistsOrYouHaveNoAccess = "This deposit does not exist or you have no access to it";
             }
 
             public static class Page
             {
-                public const string IncorrectPageNumberFormat = "The page number should be an integer, bigger than one number";
-                public const string IncorrectPageSizeFormat = "Page size should be a positive integer number, bigger than one number";
+                public const string IncorrectPageNumberFormat = "The page number should be an integer, bigger than 1";
+                public const string IncorrectPageSizeFormat = "Page size should be a positive integer number, bigger than 1";
             }
 
             public static class Authentication

@@ -29,7 +29,6 @@ namespace BankingApp.DataAccessLayer
                 .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
             services.AddScoped<RoleManager<IdentityRole<int>>>();
-
             services.AddTransient<IDepositRepository, DepositRepository>();
         }
     }
