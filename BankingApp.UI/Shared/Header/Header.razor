@@ -1,7 +1,7 @@
 ﻿<nav class="navbar navbar-expand navbar-dark bg-dark">
     <label class="navbar-brand" href="/">BankingApp</label>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -11,25 +11,25 @@
             @if (_authenticationService.TokensView is not null)
             {
                 <li class="nav-item  @GetActive("", NavLinkMatch.All)">
-                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.MainPage); }" @onclick:preventDefault>MainPage</a>
+                    <a class="nav-link pointer-cursor not-copyable @_navLinksDisabledClass" @onclick="() => { _navigationWrapper.NavigateTo(Routes.MainPage); }" @onclick:preventDefault>MainPage</a>
                 </li>
 
                 <li class="nav-item  @GetActive("history", NavLinkMatch.All)">
-                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick='() => { _navigationWrapper.NavigateTo(Routes.HistoryPage + "/1"); }' @onclick:preventDefault>History</a>
+                    <a class="nav-link pointer-cursor not-copyable @_navLinksDisabledClass" @onclick='() => { _navigationWrapper.NavigateTo(Routes.HistoryPage); }' @onclick:preventDefault>History</a>
                 </li>
 
                 <li class="nav-item  @GetActive("logout", NavLinkMatch.All)">
-                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="async () => { await _authenticationService.LogoutAsync(); }" @onclick:preventDefault>Logout</a>
+                    <a class="nav-link pointer-cursor not-copyable @_navLinksDisabledClass" @onclick="async () => { await _authenticationService.LogoutAsync(); }" @onclick:preventDefault>Logout</a>
                 </li>
             }
             else
             {
                 <li class="nav-item  @GetActive("signIn", NavLinkMatch.All)">
-                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.SignInPage); }" @onclick:preventDefault>SignIn</a>
+                    <a class="nav-link pointer-cursor not-copyable @_navLinksDisabledClass" @onclick="() => { _navigationWrapper.NavigateTo(Routes.SignInPage); }" @onclick:preventDefault>SignIn</a>
                 </li>
 
                 <li class="nav-item  @GetActive("signUp", NavLinkMatch.All)">
-                    <a class="nav-link @_navLinksDisabledClass" href="#" @onclick="() => { _navigationWrapper.NavigateTo(Routes.SignUpPage); }" @onclick:preventDefault>SignUp</a>
+                    <a class="nav-link pointer-cursor not-copyable @_navLinksDisabledClass" @onclick="() => { _navigationWrapper.NavigateTo(Routes.SignUpPage); }" @onclick:preventDefault>SignUp</a>
                 </li>
             }
         </ul>
