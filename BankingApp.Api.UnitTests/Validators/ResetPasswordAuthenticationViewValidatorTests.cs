@@ -27,7 +27,7 @@ namespace BankingApp.Api.UnitTests.Validators
         public void Validate_PasswordIsEmpty_ValidErrorMessage()
         {
             var validateResult = _validator.Validate(GetResetPasswordViewWithEmptyPassword());
-            validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordEmpty);
+            validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordRequired);
         }
 
         [Test]

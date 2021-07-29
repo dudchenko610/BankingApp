@@ -28,10 +28,10 @@ namespace BankingApp.Shared
                 public const string EmailIsRequired = "Email is required";
                 public const string EmailFormatIncorrect = "The Email field is not a valid e-mail address";
                 public const string PasswordIsRequired = "Password is required";
-                public const string NicknameLengthIsTooLong = "Nickname name should be less or equal than 12";
+                public const string NicknameLengthIsTooLong = "Nickname name should be less or equal than 12 characters";
                 public const string InvalidEmailFormat = "Invalid email format";
-                public const string PasswordIsNotHardEnough = "Password is not hard enough";
-                public const string PasswordEmpty = "Password is empty";
+                public const string PasswordIsNotHardEnough = "Password is not strong enough";
+                public const string PasswordRequired = "Password is required";
                 public const string PasswordUppercaseLetter = "Password must contain at least one upper case letter";
                 public const string PasswordLowercaseLetter = "Password must contain at least one lowercase case letter";
                 public const string PasswordDigit = "Password must contain at least one digit";
@@ -45,7 +45,7 @@ namespace BankingApp.Shared
                 public const string EmailWasNotDelivered = "The email was not delivered";
                 public const string InvalidPassword = "Password is invalid";
                 public const string SignInPlease = "Time expired, sign in please again";
-                public const string ErrorWhileSendingMessage = "While sending message error occurred, try later";
+                public const string ErrorWhileSendingMessage = "Error occurred while sending message, try later";
             }
         }
 
@@ -102,7 +102,6 @@ namespace BankingApp.Shared
         public static class Password
         {
             public const string PasswordValidSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-            public const int PasswordLength = 14;
             public const int MinPasswordLength = 14;
             public const string PasswordReset = "To reset your password click the ";
             public const string PasswordResetHeader = "Reset password";
