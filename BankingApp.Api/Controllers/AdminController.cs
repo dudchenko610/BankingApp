@@ -49,6 +49,7 @@ namespace BankingApp.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         /// <summary>
         /// Blocks user, available only for admin
         /// </summary>
