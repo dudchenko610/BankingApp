@@ -24,44 +24,55 @@ namespace BankingApp.Api.Controllers
         [Route(Routes.Authentication.SignUp)]
         public async Task<IActionResult> SignUp(SignUpAuthenticationView signUpAccountView)
         {
+
             try
             {
                 await _authenticationService.SignUpAsync(signUpAccountView);
+
                 return Ok();
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+
+                return BadRequest(e.Message);
             }
+
         }
 
         [HttpPost]
         [Route(Routes.Authentication.SignIn)]
         public async Task<IActionResult> SignIn(SignInAuthenticationView signInAccountView)
         {
+
             try
             {
                 var tokensView = await _authenticationService.SignInAsync(signInAccountView);
+
                 return Ok(tokensView);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+
+                return BadRequest(e.Message);
             }
+
         }
 
         [HttpPost]
         [Route(Routes.Authentication.ConfirmEmail)]
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailAuthenticationView confirmEmailAccountView)
         {
+
             try
             {
                 await _authenticationService.ConfirmEmailAsync(confirmEmailAccountView);
+
                 return Ok();
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+
+                return BadRequest(e.Message);
             }
         }
 
@@ -76,7 +87,7 @@ namespace BankingApp.Api.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -91,7 +102,7 @@ namespace BankingApp.Api.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
     }

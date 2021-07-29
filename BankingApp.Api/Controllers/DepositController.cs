@@ -3,7 +3,6 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;
 using System;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using BankingApp.ViewModels.ViewModels.Deposit;
 
@@ -32,7 +31,7 @@ namespace BankingApp.Api.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -48,24 +47,24 @@ namespace BankingApp.Api.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
         [HttpGet]
         [Authorize]
         [Route(Routes.Deposit.GetById)]
-        public async Task<IActionResult> GetById(int depositeHistoryId)
+        public async Task<IActionResult> GetById(int depositId)
         {
             try
             {
                 var responseCalculationHistoryViewItem
-                    = await _depositService.GetByIdAsync(depositeHistoryId);
+                    = await _depositService.GetByIdAsync(depositId);
                 return Ok(responseCalculationHistoryViewItem);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
     }

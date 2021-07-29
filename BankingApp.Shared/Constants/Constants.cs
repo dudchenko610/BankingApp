@@ -7,18 +7,18 @@ namespace BankingApp.Shared
         {
             public static class Deposit
             {
-                public const string IncorrectPriceFormat = "Price can't have more than 2 decimal places";
-                public const string IncorrectMonthFormat = "Months number should be positive non-zero integer value";
-                public const string IncorrectPercentNumber = "Percent should be positive fractional value in range of [1; 100] with two decimal places";
+                public const string IncorrectPriceFormat = "The price can't have more than 2 decimal places";
+                public const string IncorrectMonthFormat = "Months number should be a positive non-zero integer value";
+                public const string IncorrectPercentNumber = "Percent should be positive fractional value in a range of [1; 100] with two decimal places";
 
-                public const string IncorrectDepositeHistoryId = "DepositeHistoryId should be integer, bigger than one number";
-                public const string DepositDoesNotBelongsToYou = "This deposit does not belongs to your account";
+                public const string IncorrectDepositeHistoryId = "DepositHistoryId should be an integer, bigger than one number";
+                public const string DepositDoesNotExistsOrYouHaveNoAccess = "This deposit does not exist or you have no access to it";
             }
 
             public static class Page
             {
-                public const string IncorrectPageNumberFormat = "Page number should be integer, bigger than one number";
-                public const string IncorrectPageSizeFormat = "Page size should be positive integer number, bigger than one number";
+                public const string IncorrectPageNumberFormat = "The page number should be an integer, bigger than one number";
+                public const string IncorrectPageSizeFormat = "Page size should be a positive integer number, bigger than one number";
             }
 
             public static class Authentication
@@ -26,7 +26,7 @@ namespace BankingApp.Shared
                 public const string InvalidNicknameOrPassword = "Invalid nickname or password";
                 public const string NicknameIsRequired = "Nickname is required";
                 public const string EmailIsRequired = "Email is required";
-                public const string EmailFormatIncorrect = "The Email field is not a valid e-mail address.";
+                public const string EmailFormatIncorrect = "The Email field is not a valid e-mail address";
                 public const string PasswordIsRequired = "Password is required";
                 public const string NicknameLengthIsTooLong = "Nickname name should be less or equal than 12";
                 public const string InvalidEmailFormat = "Invalid email format";
@@ -37,16 +37,15 @@ namespace BankingApp.Shared
                 public const string PasswordDigit = "Password must contain at least one digit";
                 public const string PasswordIsTooShort = "Password must be longer than 14 symbols";
                 public const string PasswordSpecialCharacter = "Password must contain at least one special character";
-                public const string ConfirmPasswordShouldMatchPassword = "Confirm password should match password";
+                public const string ConfirmPasswordShouldMatchPassword = "Confirm password should match the password";
                 public const string UserAlreadyExists = "User with such email already exists";
-                public const string UserWasNotRegistered = "Unexpected error happened. User was not registered, try again!";
-                public const string UserWasNotFound = "User was not found";
-                public const string EmailWasNotConfirmed = "Email was not confirmed";
-                public const string EmailWasNotDelivered = "Email, was not delivered";
+                public const string UserWasNotRegistered = "An unexpected error happened. The user was not registered, try again";
+                public const string UserWasNotFound = "The user was not found";
+                public const string EmailWasNotConfirmed = "The email was not confirmed";
+                public const string EmailWasNotDelivered = "The email was not delivered";
                 public const string InvalidPassword = "Password is invalid";
-                public const string SignInPlease = "Time expired, sign in please again!";
-                public const string ErrorWhileSendingMessage = "While sending message error occurred, try latter!";
-
+                public const string SignInPlease = "Time expired, sign in please again";
+                public const string ErrorWhileSendingMessage = "While sending message error occurred, try later";
             }
         }
 

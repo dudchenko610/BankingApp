@@ -20,6 +20,7 @@ namespace BankingApp.DataAccessLayer.Repositories
             var depositeHistory = await _dbSet
                 .Include(dep => dep.MonthlyPayments)
                 .FirstOrDefaultAsync(dep => dep.Id == depositId);
+
             return depositeHistory;
         }
 

@@ -62,7 +62,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             int userId = _userService.GetSignedInUserId();
             if (depositWithItems.UserId != userId)
             {
-                throw new Exception(Constants.Errors.Deposit.DepositDoesNotBelongsToYou);
+                throw new Exception(Constants.Errors.Deposit.DepositDoesNotExistsOrYouHaveNoAccess);
             }
 
             var depositWithItemsView = _mapper.Map<Deposit, GetByIdDepositView>(depositWithItems);
