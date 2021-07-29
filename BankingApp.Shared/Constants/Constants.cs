@@ -93,10 +93,9 @@ namespace BankingApp.Shared
             public const string ParamCode = "&code=";
             public const string ClientSMTP = "smtp.gmail.com";
             public const string ConfirmEmail = "Confirm your email";
-            
-            public const string ConfirmRegistration = "Click this link for confirm registration:";
-            public const string OpenTagLink = "<a href='";
-            public const string CloseTagLink = "'>link</a>";
+            public const string ConfirmRegistration = "To confirm registration click the ";
+            public const string OpenTagLink = "<a href=\"";
+            public const string CloseTagLink = "\">link</a>";
         }
 
         public static class Password
@@ -104,7 +103,7 @@ namespace BankingApp.Shared
             public const string PasswordValidSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             public const int PasswordLength = 14;
             public const int MinPasswordLength = 14;
-            public const string PasswordReset = "To reset your password click the link: ";
+            public const string PasswordReset = "To reset your password click the ";
             public const string PasswordResetHeader = "Reset password";
         }
 
