@@ -5,8 +5,14 @@ using FluentValidation;
 
 namespace BankingApp.Api.Validators
 {
+    /// <summary>
+    /// Validates properties of <see cref="ResetPasswordAuthenticationView"/>.
+    /// </summary>
     public class ResetPasswordAuthenticationViewValidator : AbstractValidator<ResetPasswordAuthenticationView>
     {
+        /// <summary>
+        /// Assigns rules for validating properties of <see cref="ResetPasswordAuthenticationView"/>
+        /// </summary>
         public ResetPasswordAuthenticationViewValidator()
         {
             RuleFor(x => x.Password).Password();

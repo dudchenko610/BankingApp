@@ -5,8 +5,14 @@ using FluentValidation;
 
 namespace BankingApp.Api.Validators
 {
+    /// <summary>
+    /// Validates properties of <see cref="SignInAuthenticationView"/>.
+    /// </summary>
     public class SignInAuthenticationViewValidator : AbstractValidator<SignInAuthenticationView>
     {
+        /// <summary>
+        /// Assigns rules for validating properties of <see cref="SignInAuthenticationView"/>
+        /// </summary>
         public SignInAuthenticationViewValidator()
         {
             RuleFor(x => x.Email)

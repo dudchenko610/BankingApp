@@ -4,8 +4,14 @@ using FluentValidation;
 
 namespace BankingApp.Api.Validators
 {
+    /// <summary>
+    /// Validates properties of <see cref="CalculateDepositView"/>.
+    /// </summary>
     public class CalculateDepositeViewValidator : AbstractValidator<CalculateDepositView>
     {
+        /// <summary>
+        /// Assigns rules for validating properties of <see cref="CalculateDepositView"/>
+        /// </summary>
         public CalculateDepositeViewValidator()
         {
             RuleFor(d => d.Percents).InclusiveBetween(1, 100).WithMessage(Constants.Errors.Deposit.IncorrectPercentNumber);

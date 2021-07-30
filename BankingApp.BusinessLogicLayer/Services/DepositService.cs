@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.DataAccessLayer.Interfaces;
-using BankingApp.DataAccessLayer.Models;
 using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Enums;
 using BankingApp.ViewModels.ViewModels.Deposit;
-using BankingApp.ViewModels.ViewModels.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
