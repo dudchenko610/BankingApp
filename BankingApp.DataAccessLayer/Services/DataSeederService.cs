@@ -13,13 +13,23 @@ using static BankingApp.Shared.Extensions.LinqExtensions;
 
 namespace BankingApp.DataAccessLayer.Services
 {
+    /// <summary>
+    /// Initializes database with initial data.
+    /// </summary>
     public class DataSeederService : IDataSeederService
     {
         private readonly BankingDbContext _dbContext;
         private readonly AdminCredentialsOptions _adminCredentials;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
-         
+
+        /// <summary>
+        /// Creates instance of <see cref="DataSeederService"/>.
+        /// </summary>
+        /// <param name="dbContext">Gives access to database.</param>
+        /// <param name="adminCredentialsOptions">Contains view model with admin credential options mapped from appsettings.</param>
+        /// <param name="userManager">Allows make operations with users using ASP NET Identity.</param>
+        /// <param name="roleManager">Allows make operations with user roles using ASP NET Identity.</param>
         public DataSeederService(BankingDbContext dbContext, IOptions<AdminCredentialsOptions> adminCredentialsOptions, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
             _dbContext = dbContext;
@@ -28,6 +38,9 @@ namespace BankingApp.DataAccessLayer.Services
             _roleManager = roleManager;
         }
 
+        /// <summary>
+        /// Seeds roles and admin user into corresponding database tables.
+        /// </summary>
         public async Task SeedDataAsync()
         {
             await SeedRolesAsync();

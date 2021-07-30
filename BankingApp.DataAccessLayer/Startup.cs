@@ -12,8 +12,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BankingApp.DataAccessLayer
 {
+    /// <summary>
+    /// Contains configuration for data access layer services.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Configures DI container for data access layer services.
+        /// </summary>
+        /// <param name="services">Used to connect services with dependency injection container.</param>
+        /// <param name="configuration">Gives access to appsetting files.</param>
         public static void Initialize(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AdminCredentialsOptions>(configuration.GetSection(Constants.AppSettings.AdminCredentials));

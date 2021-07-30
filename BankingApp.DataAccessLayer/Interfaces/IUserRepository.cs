@@ -13,7 +13,6 @@ namespace BankingApp.DataAccessLayer.Interfaces
         /// </summary>
         /// <param name="userId">Id of user to block / unblock.</param>
         /// <param name="block">Block operation type (block / unlock).</param>
-        /// <returns></returns>
         Task BlockAsync(int userId, bool block);
     }
 }

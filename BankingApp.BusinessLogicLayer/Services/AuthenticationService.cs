@@ -36,7 +36,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <param name="mapper">Allows to map models.</param>
         /// <param name="jwtProvider">Allows to generate access token.</param>
         /// <param name="userService">Allows to provide operations with users.</param>
-        /// <param name="clientConnectionOptions">Contains view model with client connection options mapped from appsettings</param>
+        /// <param name="clientConnectionOptions">Contains view model with client connection options mapped from appsettings.</param>
         public AuthenticationService(UserManager<User> userManager,
             IEmailService emailProvider,
             IMapper mapper,

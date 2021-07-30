@@ -41,7 +41,7 @@ namespace BankingApp.DataAccessLayer.Interfaces
         /// </summary>
         /// <param name="skip">Offset from begining of the table.</param>
         /// <param name="take">Number of entities to take.</param>
-        /// <returns></returns>
+        /// <returns>View model containing list of paged entities and total table size.</returns>
         public Task<PagedDataView<TEntity>> GetAllAsync(int skip, int take);
 
         /// <summary>
