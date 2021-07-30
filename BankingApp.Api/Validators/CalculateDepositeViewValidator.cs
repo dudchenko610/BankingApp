@@ -10,7 +10,7 @@ namespace BankingApp.Api.Validators
     public class CalculateDepositeViewValidator : AbstractValidator<CalculateDepositView>
     {
         /// <summary>
-        /// Assigns rules for validating properties of <see cref="CalculateDepositView"/>
+        /// Assigns rules for validating properties of <see cref="CalculateDepositView"/>.
         /// </summary>
         public CalculateDepositeViewValidator()
         {

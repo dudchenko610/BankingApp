@@ -11,7 +11,7 @@ namespace BankingApp.Api.Validators
     public class ResetPasswordAuthenticationViewValidator : AbstractValidator<ResetPasswordAuthenticationView>
     {
         /// <summary>
-        /// Assigns rules for validating properties of <see cref="ResetPasswordAuthenticationView"/>
+        /// Assigns rules for validating properties of <see cref="ResetPasswordAuthenticationView"/>.
         /// </summary>
         public ResetPasswordAuthenticationViewValidator()
         {

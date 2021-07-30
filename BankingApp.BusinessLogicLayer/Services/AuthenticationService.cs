@@ -16,6 +16,9 @@ using System.Web;
 
 namespace BankingApp.BusinessLogicLayer.Services
 {
+    /// <summary>
+    /// Allows the user to provide authentication operations with account.
+    /// </summary>
     public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<User> _userManager;
@@ -25,6 +28,15 @@ namespace BankingApp.BusinessLogicLayer.Services
         private readonly IUserService _userService;
         private readonly ClientConnectionOptions _clientConnectionOptions;
 
+        /// <summary>
+        /// Creates instance of <see cref="AuthenticationService"/>.
+        /// </summary>
+        /// <param name="userManager">Allows make operations with users using ASP NET Identity.</param>
+        /// <param name="emailProvider">Allows to send email messages.</param>
+        /// <param name="mapper">Allows to map models.</param>
+        /// <param name="jwtProvider">Allows to generate access token.</param>
+        /// <param name="userService">Allows to provide operations with users.</param>
+        /// <param name="clientConnectionOptions">Contains view model with client connection options mapped from appsettings</param>
         public AuthenticationService(UserManager<User> userManager,
             IEmailService emailProvider,
             IMapper mapper,
@@ -40,12 +52,23 @@ namespace BankingApp.BusinessLogicLayer.Services
             _clientConnectionOptions = clientConnectionOptions.Value;
         }
 
+        /// <summary>
+        /// Confirms user's email in system
+        /// </summary>
+        /// <exception cref="Exception">When user confirmation fails.</exception>
+        /// <param name="confirmEmailView">View model containing user's email and confirmation token.</param>
         public async Task ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailView)
         {
             var user = await CheckUserForExistenceAsync(confirmEmailView);
             await ConfirmUserEmailAsync(confirmEmailView, user);
         }
 
+        /// <summary>
+        /// Makes user logged in the system.
+        /// </summary>
+        /// <param name="signInAccountView">View model containing data needed to sign in user.</param>
+        /// <exception cref="Exception">If there is no such user or invalid credentials</exception>
+        /// <returns>View model containing access token.</returns>
         public async Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView)
         {
             var user = await CheckUserForExistenceAsync(signInAccountView);
@@ -54,6 +77,11 @@ namespace BankingApp.BusinessLogicLayer.Services
             return tokensView;
         }
 
+        /// <summary>
+        /// Makes user registered the system.
+        /// </summary>
+        /// <param name="signUpAccountView"></param>
+        /// <exception cref="Exception">When occurred error while creating user or sending email message.</exception>
         public async Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
             await CheckUserForExistenceAsync(signUpAccountView);
@@ -61,12 +89,22 @@ namespace BankingApp.BusinessLogicLayer.Services
             await SendEmailConfirmationMessageAsync(createdUser);
         }
 
+        /// <summary>
+        /// Provides user with ability to reset password.
+        /// </summary>
+        /// <param name="resetPasswordAuthenticationView">View model containing user's email.</param>
+        /// <exception cref="Exception">If there is no such user or email sending failed.</exception>
         public async Task ForgotPasswordAsync(ForgotPasswordAuthenticationView resetPasswordAuthenticationView)
         {
             var user = await CheckUserForExistenceAsync(resetPasswordAuthenticationView);
             await SendEmailResetPasswordAsync(user);
         }
 
+        /// <summary>
+        /// Replaces old password with new.
+        /// </summary>
+        /// <param name="resetPasswordView">View model containing email, reset password token and new password.</param>
+        /// <exception cref="Exception">If there is no such user or reset token is wrong.</exception>
         public async Task ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordView)
         {
             var user = await CheckUserForExistenceAsync(resetPasswordView);

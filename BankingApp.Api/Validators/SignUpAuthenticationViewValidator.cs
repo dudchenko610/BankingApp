@@ -11,7 +11,7 @@ namespace BankingApp.Api.Validators
     public class SignUpAuthenticationViewValidator : AbstractValidator<SignUpAuthenticationView>
     {
         /// <summary>
-        /// Assigns rules for validating properties of <see cref="SignUpAuthenticationView"/>
+        /// Assigns rules for validating properties of <see cref="SignUpAuthenticationView"/>.
         /// </summary>
         public SignUpAuthenticationViewValidator()
         {

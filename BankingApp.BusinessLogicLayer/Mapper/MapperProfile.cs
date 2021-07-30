@@ -8,8 +8,14 @@ using BankingApp.ViewModels.Banking.Admin;
 
 namespace BankingApp.BusinessLogicLayer.Mapper
 {
+    /// <summary>
+    /// Provides configuration for mapping view models into entities and vice versa.
+    /// </summary>
     public class MapperProfile : Profile
     {
+        /// <summary>
+        /// Assign rules for models mapping
+        /// </summary>
         public MapperProfile()
         {
             CreateMap<CalculateDepositView, Deposit>();

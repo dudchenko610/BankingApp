@@ -10,7 +10,7 @@ namespace BankingApp.Api.Validators
     public class ForgotPasswordAuthenticationViewValidator : AbstractValidator<ForgotPasswordAuthenticationView>
     {
         /// <summary>
-        /// Assigns rules for validating properties of <see cref="ForgotPasswordAuthenticationView"/>
+        /// Assigns rules for validating properties of <see cref="ForgotPasswordAuthenticationView"/>.
         /// </summary>
         public ForgotPasswordAuthenticationViewValidator()
         {

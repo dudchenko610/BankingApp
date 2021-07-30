@@ -13,12 +13,12 @@ using BankingApp.ViewModels.Banking.Admin;
 namespace BankingApp.Api
 {
     /// <summary>
-    /// Contains program configuration
+    /// Contains program configuration.
     /// </summary>
     public class Startup
     {
         /// <summary>
-        /// Gives access to appsetting files
+        /// Gives access to appsetting files.
         /// </summary>
         public IConfiguration Configuration { get; }
 
@@ -31,9 +31,9 @@ namespace BankingApp.Api
         }
 
         /// <summary>
-        /// Configures DI container
+        /// Configures DI container.
         /// </summary>
-        /// <param name="services">Used to connect services with dependency injection container</param>
+        /// <param name="services">Used to connect services with dependency injection container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
@@ -58,10 +58,10 @@ namespace BankingApp.Api
         }
 
         /// <summary>
-        /// Configures middlewares
+        /// Configures middlewares.
         /// </summary>
-        /// <param name="app">Used to connect middlewares to application's request pipeline</param>
-        /// <param name="env">Used to get information about the web hosting environment</param>
+        /// <param name="app">Used to connect middlewares to application's request pipeline.</param>
+        /// <param name="env">Used to get information about the web hosting environment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

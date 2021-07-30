@@ -10,7 +10,7 @@ namespace BankingApp.Api.Validators
     public class BlockUserAdminViewValidator : AbstractValidator<BlockUserAdminView>
     {
         /// <summary>
-        /// Assigns rules for validating properties of <see cref="BlockUserAdminView"/>
+        /// Assigns rules for validating properties of <see cref="BlockUserAdminView"/>.
         /// </summary>
         public BlockUserAdminViewValidator()
         {
