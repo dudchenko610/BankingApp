@@ -15,26 +15,39 @@ using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Services
 {
+    /// <summary>
+    /// Allows users to provide operations with their access token.
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public class JwtService : IJwtService
     {
-        private readonly JwtConnectionOptions _jwtConnectionOptions;
+        private readonly JwtOptions _jwtOptions;
         private readonly UserManager<User> _userManager;
 
-        public JwtService(IOptions<JwtConnectionOptions> jwtConnectionOptions, UserManager<User> userManager)
+        /// <summary>
+        /// Creates instance of <see cref="JwtService"/>
+        /// </summary>
+        /// <param name="jwtOptions">Contains view model with jwt options mapped from appsettings</param>
+        /// <param name="userManager">Allows make operations with users using ASP NET Identity.</param>
+        public JwtService(IOptions<JwtOptions> jwtOptions, UserManager<User> userManager)
         {
-            _jwtConnectionOptions = jwtConnectionOptions.Value;
+            _jwtOptions = jwtOptions.Value;
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Generates new access by given user's claims
+        /// </summary>
+        /// <param name="claims">User's claims</param>
+        /// <returns>Access token</returns>
         public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
             var token = new JwtSecurityToken(
-               issuer: _jwtConnectionOptions.Issuer,
-               audience: _jwtConnectionOptions.Audience,
+               issuer: _jwtOptions.Issuer,
+               audience: _jwtOptions.Audience,
                claims: claims,
                notBefore: DateTime.Now,
-               expires: DateTime.Now.AddMinutes(_jwtConnectionOptions.Lifetime),
+               expires: DateTime.Now.AddMinutes(_jwtOptions.Lifetime),
                signingCredentials: new SigningCredentials(GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
             );
             string accessToken = new JwtSecurityTokenHandler().WriteToken(token);
@@ -42,6 +55,12 @@ namespace BankingApp.BusinessLogicLayer.Services
             return accessToken;
         }
 
+        /// <summary>
+        /// Allows users to get their claims by email.
+        /// </summary>
+        /// <param name="email">User's email.</param>
+        /// <exception cref="Exception">If user has more or less than 1 role</exception>
+        /// <returns>Collection with created claims.</returns>
         public async Task<IEnumerable<Claim>> GetUserClaimsAsync(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -72,7 +91,7 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         private SymmetricSecurityKey GetSymmetricSecurityKey()
         {
-            var symetricKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtConnectionOptions.SecretKey));
+            var symetricKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.SecretKey));
             
             return symetricKey;
         }

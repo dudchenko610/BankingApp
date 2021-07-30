@@ -10,7 +10,7 @@ namespace BankingApp.Api.Validators
     public class ConfirmEmailAuthenticationViewValidator : AbstractValidator<ConfirmEmailAuthenticationView>
     {
         /// <summary>
-        /// Assigns rules for validating properties of <see cref="ConfirmEmailAuthenticationView"/>
+        /// Assigns rules for validating properties of <see cref="ConfirmEmailAuthenticationView"/>.
         /// </summary>
         public ConfirmEmailAuthenticationViewValidator()
         {

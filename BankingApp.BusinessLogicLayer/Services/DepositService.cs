@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Services
 {
+    /// <summary>
+    /// Allows the user to make deposit calculations and get the calculation history.
+    /// </summary>
     public class DepositService : IDepositService
     {
         private readonly IMapper _mapper;
@@ -19,13 +22,24 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         private delegate (decimal MonthSum, float Percents) CalculationFormula(int monthNumber, CalculateDepositView reqDepositeCalcInfo);
 
-        public DepositService(IMapper mapper, IDepositRepository depositeHistoryRepository, IUserService userService)
+        /// <summary>
+        /// Creates instance of <see cref="DepositService"/>.
+        /// </summary>
+        /// <param name="mapper">Allows to map models.</param>
+        /// <param name="depositRepository">Allows manipulate with deposits in storage.</param>
+        /// <param name="userService">Allows to provide operations with users.</param>
+        public DepositService(IMapper mapper, IDepositRepository depositRepository, IUserService userService)
         {
             _mapper = mapper;
-            _depositRepository = depositeHistoryRepository;
+            _depositRepository = depositRepository;
             _userService = userService;
         }
 
+        /// <summary>
+        /// Calculates deposit by passed input data.
+        /// </summary>
+        /// <param name="calculateDepositView">Contains input deposit data.</param>
+        /// <returns>Id of saved deposit.</returns>
         public async Task<int> CalculateAsync(CalculateDepositView calculateDepositView)
         {
             var depositModel = _mapper.Map<CalculateDepositView, Deposit>(calculateDepositView);
@@ -50,6 +64,12 @@ namespace BankingApp.BusinessLogicLayer.Services
             return savedId;
         }
 
+        /// <summary>
+        /// Allows to get information about deposit with monthly payments information.
+        /// </summary>
+        /// <param name="depositId">Id of deposit in storage.</param>
+        /// <exception cref="Exception">If there is no deposit with such id or fetched deposit belong to another user.</exception>
+        /// <returns>View model representing deposit.</returns>
         public async Task<GetByIdDepositView> GetByIdAsync(int depositId)
         {
             var depositWithItems = await _depositRepository.GetDepositWithItemsByIdAsync(depositId);
@@ -69,6 +89,41 @@ namespace BankingApp.BusinessLogicLayer.Services
             var depositWithItemsView = _mapper.Map<Deposit, GetByIdDepositView>(depositWithItems);
 
             return depositWithItemsView;
+        }
+
+        /// <summary>
+        /// Allows getting page of user's deposits.
+        /// </summary>
+        /// <param name="pageNumber">Requested page number.</param>
+        /// <param name="pageSize">How much elements contains single page.</param>
+        /// <exception cref="Exception">If some of the parameters or both are invalid</exception>
+        /// <returns>View model with data about all deposits in storage and deposits list for specified page.</returns>
+        public async Task<ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
+        {
+            if (pageNumber < 1)
+            {
+                throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
+            }
+
+            if (pageSize < 1)
+            {
+                throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
+            }
+
+            int userId = _userService.GetSignedInUserId();
+
+            DataAccessLayer.Models.PagedDataView<Deposit> depositsAndTotalCount
+                = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize, userId);
+
+            var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>
+            {
+                Items = _mapper.Map<IList<Deposit>, IList<DepositGetAllDepositViewItem>>(depositsAndTotalCount.Items),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = depositsAndTotalCount.TotalCount
+            };
+
+            return pagedResponse;
         }
 
         private CalculationFormula GetCalculationFormula(CalculateDepositView calculateDepositView)
@@ -100,34 +155,6 @@ namespace BankingApp.BusinessLogicLayer.Services
             float percents = (float)decimal.Round(((monthSum - calculateDepositView.DepositSum) / calculateDepositView.DepositSum) * 100.0m, 2);
 
             return (monthSum, percents);
-        }
-
-        public async Task<ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
-        {
-            if (pageNumber < 1)
-            {
-                throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
-            }
-
-            if (pageSize < 1)
-            { 
-                throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
-            }
-
-            int userId = _userService.GetSignedInUserId();
-
-            DataAccessLayer.Models.PagedDataView<Deposit> depositsAndTotalCount
-                = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize, userId);
-
-            var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>
-            {
-                Items = _mapper.Map<IList<Deposit>, IList<DepositGetAllDepositViewItem>>(depositsAndTotalCount.Items),
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalItems = depositsAndTotalCount.TotalCount
-            };
-
-            return pagedResponse;
         }
     }
 }

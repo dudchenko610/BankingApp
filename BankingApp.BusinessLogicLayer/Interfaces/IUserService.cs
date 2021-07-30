@@ -11,7 +11,7 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
     public interface IUserService
     {
         /// <summary>
-        /// Gets user by its id.
+        /// Gets user by its email.
         /// </summary>
         /// <param name="email">User's email.</param>
         /// <returns>Requested user.</returns>

@@ -15,8 +15,16 @@ using System.Text;
 
 namespace BankingApp.BusinessLogicLayer
 {
+    /// <summary>
+    /// Contains configuration for bussiness layer services.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Configures DI container for bussiness layer services.
+        /// </summary>
+        /// <param name="services">Used to connect services with dependency injection container.</param>
+        /// <param name="configuration">Gives access to appsetting files.</param>
         public static void Initialize(IServiceCollection services, IConfiguration configuration)
         {
             DataAccessLayer.Startup.Initialize(services, configuration);
@@ -30,7 +38,7 @@ namespace BankingApp.BusinessLogicLayer
 
             services.Configure<EmailConnectionOptions>(configuration.GetSection(Constants.AppSettings.EmailConfig));
             services.Configure<ClientConnectionOptions>(configuration.GetSection(Constants.AppSettings.ClientConfig));
-            services.Configure<JwtConnectionOptions>(configuration.GetSection(Constants.AppSettings.JwtConfig));
+            services.Configure<JwtOptions>(configuration.GetSection(Constants.AppSettings.JwtConfig));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services.AddAuthentication(options =>

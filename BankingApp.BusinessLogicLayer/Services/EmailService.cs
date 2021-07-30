@@ -10,16 +10,30 @@ using System.Threading.Tasks;
 
 namespace BankingApp.BusinessLogicLayer.Services
 {
+    /// <summary>
+    /// Allows the user to send email messages to the specified address.
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public class EmailService : IEmailService
     {
         private readonly EmailConnectionOptions _emailConnectionOptions;
 
+        /// <summary>
+        /// Creates instance of <see cref="EmailService"/>
+        /// </summary>
+        /// <param name="emailConnectionOptions">Contains view model with email connection options mapped from appsettings</param>
         public EmailService(IOptions<EmailConnectionOptions> emailConnectionOptions)
         {
             _emailConnectionOptions = emailConnectionOptions.Value;
         }
 
+        /// <summary>
+        /// Sends email to the specified address.
+        /// </summary>
+        /// <param name="mailTo">Email address of receiver.</param>
+        /// <param name="subject">Message header.</param>
+        /// <param name="messageBody">Message content.</param>
+        /// <returns>If sending message was succeed returns true, otherwise false.</returns>
         public async Task<bool> SendEmailAsync(string mailTo, string subject, string messageBody)
         {
             try

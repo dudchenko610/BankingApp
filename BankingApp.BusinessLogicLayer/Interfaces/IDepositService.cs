@@ -12,9 +12,9 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
         /// <summary>
         /// Calculates deposit by passed input data.
         /// </summary>
-        /// <param name="reqDepositeCalcInfo">Contains input deposit data.</param>
-        /// <returns>Id of saved calculation result.</returns>
-        Task<int> CalculateAsync(CalculateDepositView reqDepositeCalcInfo);
+        /// <param name="calculateDepositView">Contains input deposit data.</param>
+        /// <returns>Id of saved deposit.</returns>
+        Task<int> CalculateAsync(CalculateDepositView calculateDepositView);
 
         /// <summary>
         /// Allows getting page of user's deposit calculations.
@@ -25,7 +25,7 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
         Task<PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize);
 
         /// <summary>
-        /// Allows get information about deposit with monthly payments information.
+        /// Allows to get information about deposit with monthly payments information.
         /// </summary>
         /// <param name="depositId">Id of deposit in storage.</param>
         /// <returns>View model representing deposit.</returns>
