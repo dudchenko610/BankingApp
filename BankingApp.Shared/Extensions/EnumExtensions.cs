@@ -4,8 +4,16 @@ using System.Reflection;
 
 namespace BankingApp.Shared.Extensions
 {
+    /// <summary>
+    /// Custom enum extensions.
+    /// </summary>
     public static class EnumExtensions
     {
+        /// <summary>
+        /// Parses dispaly name of enum.
+        /// </summary>
+        /// <param name="value">Enum instance.</param>
+        /// <returns>Display name attached to enum item with <see cref="DisplayAttribute"/></returns>
         public static string GetDisplayValue(this Enum value)
         {
             var fieldInfo = value.GetType().GetField(value.ToString());

@@ -1,10 +1,19 @@
 ﻿
 namespace BankingApp.Shared
 {
+    /// <summary>
+    /// Shared application constants.
+    /// </summary>
     public static class Constants
     {
+        /// <summary>
+        /// Error message constants.
+        /// </summary>
         public static class Errors
         {
+            /// <summary>
+            /// Error messages fro deposit controller.
+            /// </summary>
             public static class Deposit
             {
                 public const string IncorrectPriceFormat = "Price can't have more than 2 decimal places";
@@ -15,12 +24,18 @@ namespace BankingApp.Shared
                 public const string DepositDoesNotBelongsToYou = "This deposit does not belongs to your account";
             }
 
+            /// <summary>
+            /// Error messages for paged data queuering.
+            /// </summary>
             public static class Page
             {
                 public const string IncorrectPageNumberFormat = "Page number should be integer, bigger than one number";
                 public const string IncorrectPageSizeFormat = "Page size should be positive integer number, bigger than one number";
             }
 
+            /// <summary>
+            /// Error messages for authentication controller.
+            /// </summary>
             public static class Authentication
             {
                 public const string InvalidNicknameOrPassword = "Invalid nickname or password";
@@ -52,12 +67,18 @@ namespace BankingApp.Shared
                 public const string ErrorWhileResetPaswword = "Error happened while resetting password, try later";
             }
 
+            /// <summary>
+            /// Error messages for data seeding.
+            /// </summary>
             public static class SeedData
             { 
                 public const string AdminUserWasNotCreated = "Admin user was not created";
                 public const string AdminUserWasNotAddedToAdminRole = "Admin user was not added to admin role";
             }
 
+            /// <summary>
+            /// Error messages for admin actions.
+            /// </summary>
             public static class Admin
             {
                 public const string UserIdOutOfRange = "User id should be greater than 0";
@@ -65,8 +86,14 @@ namespace BankingApp.Shared
             }
         }
 
+        /// <summary>
+        /// Controller endpoint routes.
+        /// </summary>
         public static class Routes
         {
+            /// <summary>
+            /// Deposit controller routes.
+            /// </summary>
             public static class Deposit
             {
                 public const string Route = "api/deposit";
@@ -75,6 +102,9 @@ namespace BankingApp.Shared
                 public const string GetById = "getById";
             }
 
+            /// <summary>
+            /// Authentication controller routes.
+            /// </summary>
             public static class Authentication
             {
                 public const string Route = "api/authentication";
@@ -85,6 +115,9 @@ namespace BankingApp.Shared
                 public const string ResetPassword = "resetPassword";
             }
 
+            /// <summary>
+            /// Admin controller routes.
+            /// </summary>
             public static class Admin
             {
                 public const string Route = "api/admin";
@@ -93,6 +126,9 @@ namespace BankingApp.Shared
             }
         }
 
+        /// <summary>
+        /// Constants for paged data queuering.
+        /// </summary>
         public static class Page
         {
             public const int PageNumber = 1;
@@ -101,6 +137,9 @@ namespace BankingApp.Shared
             public const string PageSizeUrlParam = "pageSize";
         }
         
+        /// <summary>
+        /// Constants for queuering data from appsetting file.
+        /// </summary>
         public static class AppSettings
         {
             public const string EmailConfig = "emailConfig";
@@ -109,6 +148,9 @@ namespace BankingApp.Shared
             public const string AdminCredentials = "adminCredentials";
         }
     
+        /// <summary>
+        /// Constants for sending email.
+        /// </summary>
         public static class Email
         {
             public const string ParamEmail = "?email=";
@@ -120,6 +162,9 @@ namespace BankingApp.Shared
             public const string CloseTagLink = "'>link</a>";
         }
 
+        /// <summary>
+        /// Constants for password related actions.
+        /// </summary>
         public static class Password
         {
             public const string PasswordValidSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -129,6 +174,9 @@ namespace BankingApp.Shared
             public const string PasswordResetHeader = "Reset password";
         }
 
+        /// <summary>
+        /// Constants for authentication related actions.
+        /// </summary>
         public static class Authentication
         {
             public const string MyApp = "MyApp";
@@ -140,6 +188,9 @@ namespace BankingApp.Shared
             public const string AuthorizationName = "Authorization";
         }
 
+        /// <summary>
+        /// User roles.
+        /// </summary>
         public static class Roles
         {
             public const string Admin = "Admin";
