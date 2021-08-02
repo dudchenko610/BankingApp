@@ -2,7 +2,6 @@
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Admin;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -29,11 +28,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 var getAllAdminView = await _userService.GetAllAsync(pageNumber, pageSize);
+
                 return Ok(getAllAdminView);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -45,11 +45,12 @@ namespace BankingApp.Api.Controllers
             try
             {
                 await _userService.BlockAsync(blockUserAdminView);
+
                 return Ok();
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
     }

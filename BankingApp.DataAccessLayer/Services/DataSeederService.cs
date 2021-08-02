@@ -49,6 +49,7 @@ namespace BankingApp.DataAccessLayer.Services
                     await _roleManager.CreateAsync(role);
                 }
             }
+
             if (rolesToDelete.Any())
             {
                 foreach (var role in rolesToDelete)

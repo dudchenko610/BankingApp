@@ -32,6 +32,7 @@ namespace BankingApp.DataAccessLayer.Repositories
                 Items = deposits,
                 TotalCount = await _dbSet.CountAsync()
             };
+
             return paginationModel;
         }
     }

@@ -33,7 +33,6 @@ namespace BankingApp.Api.Controllers
             }
             catch (Exception e)
             {
-
                 return BadRequest(e.Message);
             }
 
@@ -52,7 +51,6 @@ namespace BankingApp.Api.Controllers
             }
             catch (Exception e)
             {
-
                 return BadRequest(e.Message);
             }
 
@@ -71,7 +69,6 @@ namespace BankingApp.Api.Controllers
             }
             catch (Exception e)
             {
-
                 return BadRequest(e.Message);
             }
         }

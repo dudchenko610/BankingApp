@@ -33,7 +33,7 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         public async Task BlockAsync(BlockUserAdminView blockUserAdminView)
         {
-            await CheckUserForAdminRole();
+            await CheckUserForAdminRole(blockUserAdminView.UserId);
             await _userRepository.BlockAsync(blockUserAdminView.UserId, blockUserAdminView.Block);
         }
 
@@ -77,9 +77,8 @@ namespace BankingApp.BusinessLogicLayer.Services
             return await _userManager.FindByEmailAsync(email);
         }
 
-        private async Task CheckUserForAdminRole()
+        private async Task CheckUserForAdminRole(int userId)
         {
-            var userId = GetSignedInUserId();
             var user = await _userManager.FindByIdAsync(userId.ToString());
             var roleNames = await _userManager.GetRolesAsync(user);
 

@@ -34,7 +34,7 @@ namespace BankingApp.UI.Pages.UsersPage
 
         protected override async Task OnInitializedAsync()
         {
-            await UpdateUsersDataAsync();
+        //    await UpdateUsersDataAsync();
         }
 
         protected override async Task OnParametersSetAsync()
@@ -82,7 +82,7 @@ namespace BankingApp.UI.Pages.UsersPage
             _pagedUsers = await _userService.GetAllAsync(Page, UsersOnPage);
             _loaderService.SwitchOff();
 
-            if (_pagedUsers.Items.Count == 0)
+            if (_pagedUsers is null || _pagedUsers.Items.Count == 0)
                 return;
 
             _totalPageCount = (int)Math.Ceiling(_pagedUsers.TotalItems / ((double) UsersOnPage));

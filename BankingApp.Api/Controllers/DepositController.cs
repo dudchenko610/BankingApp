@@ -27,6 +27,7 @@ namespace BankingApp.Api.Controllers
             try
             {
                 var id = await _depositService.CalculateAsync(calculateDepositView);
+
                 return Ok(id);
             }
             catch (Exception e)
@@ -43,6 +44,7 @@ namespace BankingApp.Api.Controllers
             try
             {
                 var pagedDepositResponse = await _depositService.GetAllAsync(pageNumber, pageSize);
+
                 return Ok(pagedDepositResponse);
             }
             catch (Exception e)
@@ -58,8 +60,8 @@ namespace BankingApp.Api.Controllers
         {
             try
             {
-                var getByIdDepositView
-                    = await _depositService.GetByIdAsync(depositId);
+                var getByIdDepositView = await _depositService.GetByIdAsync(depositId);
+
                 return Ok(getByIdDepositView);
             }
             catch (Exception e)

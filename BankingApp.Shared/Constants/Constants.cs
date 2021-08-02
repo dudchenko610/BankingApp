@@ -90,7 +90,7 @@ namespace BankingApp.Shared
                 public const string Route = "api/admin";
 
                 public const string GetAll = "getAll";
-                public const string BlockUser = "blockUserw";
+                public const string BlockUser = "blockUser";
             }
         }
 
@@ -108,6 +108,7 @@ namespace BankingApp.Shared
             public const string ClientConfiguration = "ClientConfiguration";
             public const string JwtConfiguration = "JwtConfiguration";
             public const string SqlServerConnection = "SQLServerConnection";
+            public const string AdminCredentials = "AdminCredentials";
         }
     
         public static class Email

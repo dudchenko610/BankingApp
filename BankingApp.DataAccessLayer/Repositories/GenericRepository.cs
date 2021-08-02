@@ -23,6 +23,7 @@ namespace BankingApp.DataAccessLayer.Repositories
         {
             await _dbSet.AddAsync(item);
             await _context.SaveChangesAsync();
+
             return item.Id;
         }
 
@@ -73,6 +74,7 @@ namespace BankingApp.DataAccessLayer.Repositories
                 Items = items,
                 TotalCount = await _dbSet.CountAsync()
             };
+
             return paginationModel;
         }
     }

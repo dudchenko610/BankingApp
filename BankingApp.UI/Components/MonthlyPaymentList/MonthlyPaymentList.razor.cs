@@ -11,5 +11,10 @@ namespace BankingApp.UI.Components.MonthlyPaymentList
     {
         [Parameter]
         public IList<MonthlyPaymentGetByIdDepositViewItem> MonthlyPaymentViewList { get; set; }
+
+        protected override void OnParametersSet()
+        {
+            MonthlyPaymentViewList = MonthlyPaymentViewList.OrderBy(x => x.MonthNumber).ToList();
+        }
     }
 }
