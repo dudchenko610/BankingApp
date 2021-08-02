@@ -14,6 +14,8 @@ using System.Text;
 using BankingApp.Api.Validators;
 using BankingApp.ViewModels.ViewModels.Authentication;
 using BankingApp.ViewModels.ViewModels.Deposit;
+using Microsoft.Extensions.Options;
+using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Admin;
 
 namespace BankingApp.Api
@@ -41,10 +43,12 @@ namespace BankingApp.Api
             services.AddTransient<IValidator<ConfirmEmailAuthenticationView>, ConfirmEmailAuthenticationViewValidator>();
             services.AddTransient<IValidator<BlockUserAdminView>, BlockUserAdminViewValidator>();
 
+            var clientOptionServices = Configuration.GetSection(Constants.AppSettings.ClientConfiguration).Get<ClientConnectionOptions>();
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
-                builder.WithOrigins("https://localhost:44346")
+                builder.WithOrigins(clientOptionServices.Url)
                        .AllowAnyMethod()
                        .AllowAnyHeader());
             });

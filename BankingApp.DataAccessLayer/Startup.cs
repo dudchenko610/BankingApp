@@ -17,10 +17,9 @@ namespace BankingApp.DataAccessLayer
         public static void Initialize(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AdminCredentialsOptions>(configuration.GetSection(Constants.AppSettings.AdminCredentials));
-
-            string connection = configuration.GetConnectionString("SQLServerConnection");
+            string connection = configuration.GetConnectionString(Constants.AppSettings.SqlServerConnection);
             services.AddDbContext<BankingDbContext>(builder =>
-                builder.UseSqlServer(connection, x => x.MigrationsAssembly("BankingApp.DataAccessLayer"))
+                builder.UseSqlServer(connection, x => x.MigrationsAssembly(Constants.Assembly.DataAccessLayer))
             );
 
             services.AddIdentity<User, IdentityRole<int>>(options =>

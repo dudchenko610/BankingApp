@@ -56,13 +56,13 @@ namespace BankingApp.BusinessLogicLayer.Services
             var depositWithItems = await _depositRepository.GetDepositWithItemsByIdAsync(depositId);
             if (depositWithItems == null)
             { 
-                throw new Exception(Constants.Errors.Deposit.IncorrectDepositeHistoryId);
+                throw new Exception(Constants.Errors.Deposit.IncorrectDepositHistoryId);
             }
 
             int userId = _userService.GetSignedInUserId();
             if (depositWithItems.UserId != userId)
             {
-                throw new Exception(Constants.Errors.Deposit.DepositDoesNotBelongsToYou);
+                throw new Exception(Constants.Errors.Deposit.DepositDoesNotExistsOrYouHaveNoAccess);
             }
 
             var depositWithItemsView = _mapper.Map<Deposit, GetByIdDepositView>(depositWithItems);

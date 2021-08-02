@@ -58,10 +58,6 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             jwtProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<List<Claim>>())).Returns(ValidAccessToken);
             _jwtService = jwtProviderMock.Object;
 
-            // user service
-            var userServiceMock = new Mock<IUserService>();
-            _userService = userServiceMock.Object;
-
             // client connection options
             var clientConnectionOptionsMock = new Mock<IOptions<ClientConnectionOptions>>();
             clientConnectionOptionsMock.Setup(x => x.Value).Returns(new ClientConnectionOptions());
@@ -335,29 +331,28 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
             userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<User>())).ReturnsAsync(ValidPasswordResetCode);
             userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(GetRolesWithClientRole());
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
 
             var emailProviderMock = new Mock<IEmailService>();
             emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true)
                 .Callback((string emailTo, string caption, string textMessage) => { emailPassedToSendEmailMethod = emailTo; });
 
-            var userServiceMock = new Mock<IUserService>();
-            userServiceMock.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
 
             var authenticationService = new AuthenticationService(userManagerMock.Object, emailProviderMock.Object, _mapper, _jwtService, userServiceMock.Object, _clientConnectionOptions);
 
             var validForgotPasswordView = GetValidForgotPasswordView();
             await authenticationService.ForgotPasswordAsync(validForgotPasswordView);
 
-            emailPassedToSendEmailMethod.Should().NotBeNull().And.Be(validForgotPasswordView.Email);
+            emailPassedToSendEmailMethod.Should().NotBeNull().And.Be(validUser.Email);
         }
 
         [Test]
-        public void ForgotPassword_PassedValidForgotPasswordViewButThereIsNoUserWithSuchEmail_ReturnsFromMethodAndNoExceptionsWereThrown()
+        public void ForgotPassword_PassedValidForgotPasswordViewButThereIsNoUserWithSuchEmail_ThrowsExceptionWithCorrepondingException()
         {
             var validUser = GetValidUser();
 
-            var userServiceMock = new Mock<IUserService>();
-            userServiceMock.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+            var userManagerMock = new Mock<UserManager<User>>(_userStore, null, null, null, null, null, null, null, null);
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User)null);
 
             var authenticationService = new AuthenticationService(_userManager, _emailService, _mapper, _jwtService, userServiceMock.Object, _clientConnectionOptions);
 
@@ -381,8 +376,8 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var authenticationService = new AuthenticationService(userManagerMock.Object, _emailService, _mapper, _jwtService, userServiceMock.Object, _clientConnectionOptions);
 
             var validForgotPasswordView = GetValidForgotPasswordView();
-            FluentActions.Awaiting(() => authenticationService.ForgotPasswordAsync(validForgotPasswordView))
-               .Should().Throw<Exception>().WithMessage(Constants.Errors.Authentication.EmailWasNotDelivered);
+            FluentActions.Awaiting(() => authenticationService.ForgotPasswordAsync(validForgotPasswordView)).Should().Throw<Exception>()
+                .WithMessage(Constants.Errors.Authentication.ErrorWhileSendingMessage);
         }
 
         [Test]
@@ -394,6 +389,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<User>())).ReturnsAsync(ValidPasswordResetCode);
             userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(GetRolesWithClientRole());
             
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
 
             var emailProviderMock = new Mock<IEmailService>();
             emailProviderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);

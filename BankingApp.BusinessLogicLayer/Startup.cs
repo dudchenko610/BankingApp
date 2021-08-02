@@ -28,9 +28,9 @@ namespace BankingApp.BusinessLogicLayer
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IJwtService, JwtService>();
 
-            services.Configure<EmailConnectionOptions>(configuration.GetSection(Constants.AppSettings.EmailConfig));
-            services.Configure<ClientConnectionOptions>(configuration.GetSection(Constants.AppSettings.ClientConfig));
-            services.Configure<JwtConnectionOptions>(configuration.GetSection(Constants.AppSettings.JwtConfig));
+            services.Configure<EmailConnectionOptions>(configuration.GetSection(Constants.AppSettings.EmailConfiguration));
+            services.Configure<ClientConnectionOptions>(configuration.GetSection(Constants.AppSettings.ClientConfiguration));
+            services.Configure<JwtConnectionOptions>(configuration.GetSection(Constants.AppSettings.JwtConfiguration));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services.AddAuthentication(options =>

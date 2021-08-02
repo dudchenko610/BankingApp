@@ -29,6 +29,7 @@ namespace BankingApp.BusinessLogicLayer.Services
                 mail.To.Add(new MailAddress(mailTo));
                 mail.Subject = subject;
                 mail.Body = messageBody;
+                mail.IsBodyHtml = true;
 
                 var client = new SmtpClient();
 
