@@ -6,8 +6,16 @@ using System.Text.Json;
 
 namespace BankingApp.UI.Core.Helpers
 {
+    /// <summary>
+    /// Helps to get list of claims from access token.
+    /// </summary>
     public static class JwtDecodeHelper
     {
+        /// <summary>
+        /// Parses list of claims from access token.
+        /// </summary>
+        /// <param name="jwt">Access token.</param>
+        /// <returns>List of <see cref="Claim"/>s.</returns>
         public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
             var payload = jwt.Split('.')[1];

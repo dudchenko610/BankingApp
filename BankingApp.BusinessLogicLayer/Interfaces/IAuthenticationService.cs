@@ -30,7 +30,7 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
         /// <summary>
         /// Provides user with ability to reset password.
         /// </summary>
-        /// <param name="confirmEmailAccountView">View model containing user's email.</param>
+        /// <param name="forgotPasswordAuthenticationView">View model containing user's email.</param>
         Task ForgotPasswordAsync(ForgotPasswordAuthenticationView forgotPasswordAuthenticationView);
 
         /// <summary>

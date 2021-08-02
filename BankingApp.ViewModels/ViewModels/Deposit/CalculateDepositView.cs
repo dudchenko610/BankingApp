@@ -29,7 +29,7 @@ namespace BankingApp.ViewModels.ViewModels.Deposit
         public int MonthsCount { get; set; }
 
         /// <summary>
-        /// Percents.
+        /// Deposit percent.
         /// </summary>
         [Required]
         [RegularExpression(@"\A[0-9]{1,10}(?:[.,][0-9]{1,2})?\z", ErrorMessage = Constants.Errors.Deposit.IncorrectPercentNumber)]

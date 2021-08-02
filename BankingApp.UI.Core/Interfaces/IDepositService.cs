@@ -4,10 +4,31 @@ using System.Threading.Tasks;
 
 namespace BankingApp.UI.Core.Interfaces
 {
+    /// <summary>
+    /// Allows the user to make deposit calculations and get the calculation history.
+    /// </summary>
     public interface IDepositService
     {
-        public Task<int> CalculateAsync(CalculateDepositView reqDeposite);
+        /// <summary>
+        /// Calculates deposit by passed input data.
+        /// </summary>
+        /// <param name="calculateDepositView">Contains input deposit data.</param>
+        /// <returns>Id of saved deposit.</returns>
+        public Task<int> CalculateAsync(CalculateDepositView calculateDepositView);
+
+        /// <summary>
+        /// Allows getting page of user's deposit calculations.
+        /// </summary>
+        /// <param name="pageNumber">Requested page number.</param>
+        /// <param name="pageSize">How much elements contains single page.</param>
+        /// <returns>View model with data about all deposits in storage and deposits list for specified page.</returns>
         public Task<PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize);
-        public Task<GetByIdDepositView> GetByIdAsync(int depositeHistoryId);
+
+        /// <summary>
+        /// Allows to get information about deposit with monthly payments information.
+        /// </summary>
+        /// <param name="depositId">Id of deposit in storage.</param>
+        /// <returns>View model representing deposit.</returns>
+        public Task<GetByIdDepositView> GetByIdAsync(int depositId);
     }
 }

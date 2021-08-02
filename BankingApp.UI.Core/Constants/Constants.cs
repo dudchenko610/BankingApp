@@ -1,8 +1,14 @@
 ﻿
 namespace BankingApp.UI.Core.Constants
 {
+    /// <summary>
+    /// Client side constants.
+    /// </summary>
     public static class Constants
     {
+        /// <summary>
+        /// Notifications used to inform user about some event happened.s
+        /// </summary>
         public static class Notifications
         {
             public const string ConfirmYourEmail = "To confirm email, you need to click a link in sent message on your mailbox";
@@ -19,6 +25,9 @@ namespace BankingApp.UI.Core.Constants
             public const string ErrorWhileUnblockingUser = "Error while unblocking user";
         }
 
+        /// <summary>
+        /// Client side page routes.
+        /// </summary>
         public static class Routes
         {
             public const string MainPage = "/";
@@ -33,6 +42,9 @@ namespace BankingApp.UI.Core.Constants
             public const string UsersPage = "/users";
         }
 
+        /// <summary>
+        /// Keywords used by authentication system.
+        /// </summary>
         public static class Authentication
         {
             public const string TokensView = "tokens";

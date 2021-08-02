@@ -12,6 +12,9 @@ using BankingApp.ViewModels.ViewModels.Authentication;
 
 namespace BankingApp.UI.Core.Services
 {
+    /// <summary>
+    /// Used to simplify http requests usage.
+    /// </summary>
     public class HttpService : IHttpService
     {
         private readonly HttpClient _httpClient;
@@ -19,6 +22,13 @@ namespace BankingApp.UI.Core.Services
         private readonly ILocalStorageService _localStorageService;
         private readonly IToastService _toastService;
 
+        /// <summary>
+        /// Creates instance of <see cref="HttpService"/>
+        /// </summary>
+        /// <param name="httpClient">Allows send HTTP request to server.</param>
+        /// <param name="navigationWrapper">Allows to navigate the application routes.</param>
+        /// <param name="localStorageService">Allows to perform read / write operations with browser local storage.</param>
+        /// <param name="toastService">Allows to notificate user with message without blocking UI.</param>
         public HttpService(
             HttpClient httpClient,
             INavigationWrapper navigationWrapper,
@@ -32,6 +42,13 @@ namespace BankingApp.UI.Core.Services
             _toastService = toastService;
         }
 
+        /// <summary>
+        /// Sends GET request to specified address.
+        /// </summary>
+        /// <typeparam name="T">Data type of view model should be received.</typeparam>
+        /// <param name="uri">Url address.</param>
+        /// <param name="authorized">Indicates whether access token should be attached to HTTP request.</param>
+        /// <returns>Default value, if exception occured, otherwise, if nothing to return, it will be (T) new object().</returns>
         public async Task<T> GetAsync<T>(string uri, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -48,6 +65,14 @@ namespace BankingApp.UI.Core.Services
             }
         }
 
+        /// <summary>
+        /// Sends POST request to specified address.
+        /// </summary>
+        /// <typeparam name="T">Data type of view model should be received.</typeparam>
+        /// <param name="uri">Url address.</param>
+        /// <param name="value">Object to be serialized and sent as request body.</param>
+        /// <param name="authorized">Indicates whether access token should be attached to HTTP request.</param>
+        /// <returns>Default value, if exception occured, otherwise, if nothing to return, it will be (T) new object().</returns>
         public async Task<T> PostAsync<T>(string uri, object value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
