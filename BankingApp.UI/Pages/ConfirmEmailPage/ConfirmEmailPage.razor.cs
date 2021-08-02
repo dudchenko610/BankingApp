@@ -1,5 +1,4 @@
-﻿using BankingApp.UI.Core.Attributes;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.ViewModels.Authentication;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
@@ -9,6 +8,9 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.ConfirmEmailPage
 {
+    /// <summary>
+    /// Component renders confirm email button.
+    /// </summary>
     public partial class ConfirmEmailPage
     {
         [Inject]

@@ -9,6 +9,9 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Shared.AppRouteView
 {
+    /// <summary>
+    /// The component used to control if the specified page should be rendered with given authentication settings.
+    /// </summary>
     public class AppRouteView : RouteView
     {
         [Inject]

@@ -8,6 +8,9 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.ResetPasswordPage
 {
+    /// <summary>
+    /// Component renders reset password form.
+    /// </summary>
     public partial class ResetPasswordPage
     {
         private ResetPasswordAuthenticationView _resetPasswordView;
@@ -21,6 +24,9 @@ namespace BankingApp.UI.Pages.ResetPasswordPage
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
 
+        /// <summary>
+        /// Creates instance of <see cref="ResetPasswordPage"/>.
+        /// </summary>
         public ResetPasswordPage()
         {
             _resetPasswordView = new ResetPasswordAuthenticationView();

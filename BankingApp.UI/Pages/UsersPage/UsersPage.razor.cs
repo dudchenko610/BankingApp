@@ -9,6 +9,9 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.UsersPage
 {
+    /// <summary>
+    /// Component renders list of users.
+    /// </summary>
     public partial class UsersPage
     {
         private static readonly int UsersOnPage = 2;
@@ -24,9 +27,16 @@ namespace BankingApp.UI.Pages.UsersPage
         private INavigationWrapper _navigationWrapper { get; set; }
         [Inject]
         private IToastService _toastService { get; set; }
+
+        /// <summary>
+        /// Number of rendered page.
+        /// </summary>
         [Parameter]
         public int Page { get; set; }
 
+        /// <summary>
+        /// Creates instance of <see cref="UsersPage"/>.
+        /// </summary>
         public UsersPage()
         {
             _pagedUsers = null;

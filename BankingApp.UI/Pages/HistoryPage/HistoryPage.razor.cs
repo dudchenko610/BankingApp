@@ -8,6 +8,9 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.HistoryPage
 {
+    /// <summary>
+    /// Component renders list of deposit items.
+    /// </summary>
     public partial class HistoryPage
     {
         private static readonly int DepositsOnPage = 2;
@@ -21,9 +24,16 @@ namespace BankingApp.UI.Pages.HistoryPage
         private IDepositService _depositService { get; set; }
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
+
+        /// <summary>
+        /// Number of rendered page.
+        /// </summary>
         [Parameter]
         public int Page { get; set; }
 
+        /// <summary>
+        /// Creates instance of <see cref="HistoryPage"/>.
+        /// </summary>
         public HistoryPage()
         {
             _pagedDeposits = null;

@@ -1,14 +1,17 @@
 ﻿using BankingApp.ViewModels.ViewModels.Deposit;
 using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BankingApp.UI.Components.MonthlyPaymentList
 {
+    /// <summary>
+    /// Component rendered list of deposit monthly payments items.
+    /// </summary>
     public partial class MonthlyPaymentList
     {
+        /// <summary>
+        /// List of deposit monthly payments.
+        /// </summary>
         [Parameter]
         public IList<MonthlyPaymentGetByIdDepositViewItem> MonthlyPaymentViewList { get; set; }
     }

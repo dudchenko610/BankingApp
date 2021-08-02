@@ -8,6 +8,10 @@ using System.Reflection;
 
 namespace BankingApp.UI.Components.InputSelectEnum
 {
+    /// <summary>
+    /// Component renders html select elements that items are dispaly values of specified enum datatype.
+    /// </summary>
+    /// <typeparam name="TEnum">Enum datatype.</typeparam>
     public sealed class InputSelectEnum<TEnum> : InputBase<TEnum>
     {
         // Generate html when the component is rendered.

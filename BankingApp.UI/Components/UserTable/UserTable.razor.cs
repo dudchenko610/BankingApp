@@ -1,21 +1,35 @@
 ﻿using BankingApp.ViewModels.Banking.Admin;
 using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BankingApp.UI.Components.UserTable
 {
+    /// <summary>
+    /// Component renders tables of user items.
+    /// </summary>
     public partial class UserTable
     {
+        /// <summary>
+        /// Number of current page.
+        /// </summary>
         [Parameter]
         public int Page { get; set; } 
+
+        /// <summary>
+        /// Maximal number of users on page.
+        /// </summary>
         [Parameter]
         public int UsersOnPage { get; set; }
+
+        /// <summary>
+        /// List of users on current page.
+        /// </summary>
         [Parameter]
         public IList<UserGetAllAdminViewItem> UsersViewList { get; set; }
 
+        /// <summary>
+        /// Triggers when user clicks on checkbox to block / unblock user.
+        /// </summary>
         [Parameter]
         public EventCallback<(int, bool)> OnBlockUserClick { get; set; }
 

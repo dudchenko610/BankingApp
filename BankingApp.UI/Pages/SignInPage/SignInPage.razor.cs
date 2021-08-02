@@ -7,6 +7,9 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.SignInPage
 {
+    /// <summary>
+    /// Component renders sign in form.
+    /// </summary>
     public partial class SignInPage
     {
         private SignInAuthenticationView _signInView;
@@ -20,6 +23,9 @@ namespace BankingApp.UI.Pages.SignInPage
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
 
+        /// <summary>
+        /// Creates instance of <see cref="SignInPage"/>.
+        /// </summary>
         public SignInPage()
         {
             _signInView = new SignInAuthenticationView();

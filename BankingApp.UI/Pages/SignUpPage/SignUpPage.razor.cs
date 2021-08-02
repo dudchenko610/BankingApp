@@ -7,6 +7,9 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.SignUpPage
 {
+    /// <summary>
+    /// Component renders sign up form.
+    /// </summary>
     public partial class SignUpPage
     {
         private SignUpAuthenticationView _signUpView;
@@ -20,6 +23,9 @@ namespace BankingApp.UI.Pages.SignUpPage
         [Inject]
         private IToastService _toastService { get; set; }
 
+        /// <summary>
+        /// Creates instance of <see cref="SignUpPage"/>.
+        /// </summary>
         public SignUpPage()
         {
             _signUpView = new SignUpAuthenticationView();

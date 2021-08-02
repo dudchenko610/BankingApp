@@ -3,6 +3,9 @@ using System;
 
 namespace BankingApp.UI.Components.PaginationSwitcher
 {
+    /// <summary>
+    /// Component renders pagination switcher.
+    /// </summary>
     public partial class PaginationSwitcher
     {
         private const string DisabledClass = "disabled";
@@ -17,13 +20,27 @@ namespace BankingApp.UI.Components.PaginationSwitcher
         private string _2DisabledClass;
         private string _3DisabledClass;
 
+        /// <summary>
+        /// Maximal number of pages.
+        /// </summary>
         [Parameter]
         public int PageCount { get; set; }
+
+        /// <summary>
+        /// Number of page to be rendered.
+        /// </summary>
         [Parameter]
         public int CurrentPage { get; set; }
+
+        /// <summary>
+        /// Triggers when user switches to another page.
+        /// </summary>
         [Parameter]
         public EventCallback<int> OnPageClick { get; set; }
 
+        /// <summary>
+        /// Creates instance of <see cref="PaginationSwitcher"/>.
+        /// </summary>
         public PaginationSwitcher()
         {
             _pageOffset = 0;

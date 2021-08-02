@@ -11,8 +11,16 @@ using System.Threading.Tasks;
 
 namespace BankingApp.UI
 {
+    /// <summary>
+    /// Contains program configuration.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Application entry point.
+        /// </summary>
+        /// <param name="args">Command-line arguments.</param>
+        /// <returns></returns>
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -30,6 +38,10 @@ namespace BankingApp.UI
             await host.RunAsync();
         }
 
+        /// <summary>
+        /// Configures DI container.
+        /// </summary>
+        /// <param name="services">Specifies the contract for a collection of service descriptors.</param>
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ILoaderService, LoaderService>();

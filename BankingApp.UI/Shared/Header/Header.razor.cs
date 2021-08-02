@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Components.Routing;
 
 namespace BankingApp.UI.Shared.Header
 {
+    /// <summary>
+    /// Component renders links to help user navigate the app.
+    /// </summary>
     public partial class Header
     {
         private const string DisabledClass = "disabled";
@@ -17,6 +20,9 @@ namespace BankingApp.UI.Shared.Header
         [Inject]
         private IAuthenticationService _authenticationService { get; set; }
 
+        /// <summary>
+        /// Creates instance of <see cref="Header"/>.
+        /// </summary>
         public Header()
         {
             _navLinksDisabledClass = string.Empty;

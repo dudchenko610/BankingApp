@@ -1,6 +1,4 @@
-﻿
-using BankingApp.UI.Core.Attributes;
-using BankingApp.UI.Core.Interfaces;
+﻿using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.ViewModels.Authentication;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
@@ -9,6 +7,9 @@ using static BankingApp.UI.Core.Constants.Constants;
 
 namespace BankingApp.UI.Pages.ForgotPasswordPage
 {
+    /// <summary>
+    /// Component renders forgot password form.
+    /// </summary>
     public partial class ForgotPasswordPage
     {
         private ForgotPasswordAuthenticationView _forgotPasswordView;
@@ -22,6 +23,9 @@ namespace BankingApp.UI.Pages.ForgotPasswordPage
         [Inject]
         private INavigationWrapper _navigationWrapper { get; set; }
 
+        /// <summary>
+        /// Creates instance of <see cref="ForgotPasswordPage"/>.
+        /// </summary>
         public ForgotPasswordPage()
         {
             _forgotPasswordView = new ForgotPasswordAuthenticationView();

@@ -6,6 +6,9 @@ using BankingApp.ViewModels.ViewModels.Deposit;
 
 namespace BankingApp.UI.Pages.MainPage
 {
+    /// <summary>
+    /// Component renders add-deposit form.
+    /// </summary>
     public partial class MainPage
     {
         [Inject]
