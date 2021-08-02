@@ -204,17 +204,11 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         private async Task ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordView, User user)
         {
-            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var callbackUrl = new StringBuilder();
-            callbackUrl.Append($"{_clientConnectionOptions.Url}{_clientConnectionOptions.ResetPath}");
-            callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(resetPasswordToken)}");
-
-            var messageBody = $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
-
-            if (!await _emailProvider.SendEmailAsync(user.Email, Constants.Password.PasswordResetHeader, messageBody))
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordView.Code, resetPasswordView.Password);
+            if (!result.Succeeded)
             {
-                throw new Exception(Constants.Errors.Authentication.ErrorWhileSendingMessage);
+                string errors = string.Join("\n", result.Errors.Select(x => x.Description).ToList());
+                throw new Exception(errors);
             }
         }
     }

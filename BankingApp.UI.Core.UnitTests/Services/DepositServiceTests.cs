@@ -84,7 +84,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var getByIdDepositServiceResponse = await depositService.GetByIdAsync(ValidDepositId);
 
             getByIdDepositServiceResponse.Should().Be(getByIdHttpServiceResponse);
-            passedUrl.Should().Be($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositeHistoryId={ValidDepositId}");
+            passedUrl.Should().Be($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositId={ValidDepositId}");
         }
 
         private CalculateDepositView GetValidCalculateView()

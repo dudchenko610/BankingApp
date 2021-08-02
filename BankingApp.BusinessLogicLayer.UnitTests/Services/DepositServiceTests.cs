@@ -105,7 +105,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             for (int i = 0; i < depositsResponseOfRepository.Items.Count; i++)
             {
                 ((DepositCalculationFormulaEnumView)depositsResponseOfRepository.Items[i].CalculationFormula).GetDisplayValue()
-                .Should().Be(resPagedDeposits.Items[i].CalculationFormula);
+                    .Should().Be(resPagedDeposits.Items[i].CalculationFormula);
             }
         }
 

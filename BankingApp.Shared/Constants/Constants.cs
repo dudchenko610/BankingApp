@@ -26,7 +26,7 @@ namespace BankingApp.Shared
                 public const string InvalidNicknameOrPassword = "Invalid nickname or password";
                 public const string NicknameIsRequired = "Nickname is required";
                 public const string EmailIsRequired = "Email is required";
-                public const string EmailFormatIncorrect = "The Email field is not a valid e-mail address";
+                public const string EmailFormatIncorrect = "The Email field is not a valid e-mail address.";
                 public const string PasswordIsRequired = "Password is required";
                 public const string NicknameLengthIsTooLong = "Nickname name should be less or equal than 12 characters";
                 public const string InvalidEmailFormat = "Invalid email format";
