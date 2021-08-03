@@ -88,9 +88,8 @@ namespace BankingApp.UI.Core.Services
             else
             {
                 _claims = JwtDecodeHelper.ParseClaimsFromJwt(TokensView.AccessToken).ToList();
+                IsAdmin = _claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultRoleClaimType && x.Value == Roles.Admin.ToString()) != null;
             }
-
-            IsAdmin = _claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultRoleClaimType && x.Value == Roles.Admin.ToString()) != null;
         }
     }
 }
