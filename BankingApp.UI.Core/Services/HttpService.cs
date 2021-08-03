@@ -62,6 +62,36 @@ namespace BankingApp.UI.Core.Services
             }
         }
 
+        public async Task<bool> GetAsync(string uri, bool authorized = true)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+            try
+            {
+                return await SendRequestAsync<bool>(request, authorized);
+            }
+            catch
+            {
+                _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
+                return default;
+            }
+        }
+
+        public async Task<bool> PostAsync(string uri, object value, bool authorized = true)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
+            try
+            {
+                return await SendRequestAsync<bool>(request, authorized);
+            }
+            catch
+            {
+                _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
+                return default;
+            }
+        }
+
         private async Task<T> SendRequestAsync<T>(HttpRequestMessage request, bool authorized = true)
         {
             if (authorized)

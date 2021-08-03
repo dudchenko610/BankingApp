@@ -19,13 +19,7 @@ namespace BankingApp.UI.Core.Services
         private IList<Claim> _claims;
 
         public TokensView TokensView { get; private set; }
-        public bool IsAdmin 
-        { 
-            get 
-            {
-                return _claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultRoleClaimType && x.Value == Roles.Admin.ToString()) != null;
-            } 
-        }
+        public bool IsAdmin { get; private set; }
 
         public AuthenticationService(INavigationWrapper navigationWrapper, 
             ILocalStorageService localStorageService,
@@ -46,12 +40,12 @@ namespace BankingApp.UI.Core.Services
 
         public async Task<bool> SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.SignUp}", signUpAccountView, false) != null;
+            return await _httpService.PostAsync($"{Routes.Authentication.Route}/{Routes.Authentication.SignUp}", signUpAccountView, false);
         }
 
         public async Task<bool> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ConfirmEmail}", confirmEmailAccountView, false) != null;
+            return await _httpService.PostAsync($"{Routes.Authentication.Route}/{Routes.Authentication.ConfirmEmail}", confirmEmailAccountView, false);
         }
 
         public async Task<bool> SignInAsync(SignInAuthenticationView signInAccountView)
@@ -72,12 +66,12 @@ namespace BankingApp.UI.Core.Services
         
         public async Task<bool> ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordAuthenticationView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ResetPassword}", resetPasswordAuthenticationView, false) != null;
+            return await _httpService.PostAsync($"{Routes.Authentication.Route}/{Routes.Authentication.ResetPassword}", resetPasswordAuthenticationView, false);
         }
 
         public async Task<bool> ForgotPasswordAsync(ForgotPasswordAuthenticationView forgotPasswordAuthenticationView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ForgotPassword}", forgotPasswordAuthenticationView, false) != null;
+            return await _httpService.PostAsync($"{Routes.Authentication.Route}/{Routes.Authentication.ForgotPassword}", forgotPasswordAuthenticationView, false);
         }
 
         public IList<string> GetRoles()
@@ -95,6 +89,8 @@ namespace BankingApp.UI.Core.Services
             {
                 _claims = JwtDecodeHelper.ParseClaimsFromJwt(TokensView.AccessToken).ToList();
             }
+
+            IsAdmin = _claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultRoleClaimType && x.Value == Roles.Admin.ToString()) != null;
         }
     }
 }

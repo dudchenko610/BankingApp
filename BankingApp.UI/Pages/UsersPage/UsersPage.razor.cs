@@ -48,25 +48,22 @@ namespace BankingApp.UI.Pages.UsersPage
             _navigationWrapper.NavigateTo($"{Routes.UsersPage}/{page}");
         }
 
-        private async Task BlockUserAsync(int userId, bool blocked)
+        private async Task BlockUserAsync(int userId, bool toBlock)
         {
             var blockUserView = new BlockUserAdminView
             {
                 UserId = userId,
-                Block = blocked
+                Block = toBlock
             };
 
             _loaderService.SwitchOn();
-            if (await _userService.BlockAsync(blockUserView))
+            bool blockedResult = await _userService.BlockAsync(blockUserView);
+            _loaderService.SwitchOff();
+
+            if (blockedResult)
             {
-                _loaderService.SwitchOff();
-                _toastService.ShowSuccess(blocked ? Notifications.UserSuccessfullyBlocked : Notifications.UserSuccessfullyUnblocked);
+                _toastService.ShowSuccess(toBlock ? Notifications.UserSuccessfullyBlocked : Notifications.UserSuccessfullyUnblocked);
                 _navigationWrapper.NavigateTo($"{Routes.UsersPage}/{Page}");
-            }
-            else
-            {
-                _loaderService.SwitchOff();
-                _toastService.ShowSuccess(blocked ? Notifications.ErrorWhileBlockingUser : Notifications.ErrorWhileUnblockingUser);
             }
         }
 

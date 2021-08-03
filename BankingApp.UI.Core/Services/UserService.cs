@@ -17,7 +17,7 @@ namespace BankingApp.UI.Core.Services
 
         public async Task<bool> BlockAsync(BlockUserAdminView blockUserAdminView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Admin.Route}/{Routes.Admin.BlockUser}", blockUserAdminView) != null;
+            return await _httpService.PostAsync($"{Routes.Admin.Route}/{Routes.Admin.BlockUser}", blockUserAdminView);
         }
 
         public async Task<PagedDataView<UserGetAllAdminViewItem>> GetAllAsync(int pageNumber, int pageSize)
