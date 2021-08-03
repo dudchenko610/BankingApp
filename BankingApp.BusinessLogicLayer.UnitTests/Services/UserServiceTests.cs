@@ -237,9 +237,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private PagedDataView<UserGetAllAdminViewItem> GetValidPagedDataViewWithUserGetAllViewItems()
+        private PaginationModel<UserGetAllAdminViewItem> GetValidPagedDataViewWithUserGetAllViewItems()
         {
-            return new PagedDataView<UserGetAllAdminViewItem>
+            return new PaginationModel<UserGetAllAdminViewItem>
             {
                 Items = new List<UserGetAllAdminViewItem>
                 {
@@ -262,9 +262,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private PagedDataView<User> GetValidPagedDataViewWithUsers()
+        private PaginationModel<User> GetValidPagedDataViewWithUsers()
         {
-            return new PagedDataView<User>
+            return new PaginationModel<User>
             {
                 Items = new List<User>
                 {

@@ -66,10 +66,10 @@ namespace BankingApp.DataAccessLayer.Repositories
             return await _dbSet.CountAsync();
         }
 
-        public async Task<PagedDataView<TEntity>> GetAllAsync(int skip, int take)
+        public async Task<PaginationModel<TEntity>> GetAllAsync(int skip, int take)
         {
             var items = await _dbSet.Skip(skip).Take(take).ToListAsync();
-            var paginationModel = new PagedDataView<TEntity>
+            var paginationModel = new PaginationModel<TEntity>
             {
                 Items = items,
                 TotalCount = await _dbSet.CountAsync()

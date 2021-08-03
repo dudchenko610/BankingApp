@@ -45,7 +45,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             if (pageSize < 1)
                 throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
 
-            DataAccessLayer.Models.PagedDataView<User> usersAndTotalCount
+            DataAccessLayer.Models.PaginationModel<User> usersAndTotalCount
                 = await _userRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize);
 
             var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<UserGetAllAdminViewItem>

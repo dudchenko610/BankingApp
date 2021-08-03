@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BankingApp.DataAccessLayer.Models
 {
-    public class PagedDataView<T>
+    public class PaginationModel<T>
     {
         public IList<T> Items { get; set; }
         public int TotalCount { get; set; }

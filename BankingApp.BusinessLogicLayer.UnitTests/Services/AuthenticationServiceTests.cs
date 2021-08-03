@@ -446,24 +446,6 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             FluentActions.Awaiting(() => authenticationService.ResetPasswordAsync(validResetPasswordView)).Should().Throw<Exception>();
         }
 
-        private ConfirmEmailAuthenticationView GetConfirmEmailViewWithEmptyEmail()
-        {
-            return new ConfirmEmailAuthenticationView
-            {
-                Email = "",
-                Code = "the_code_here"
-            };
-        }
-
-        private ConfirmEmailAuthenticationView GetConfirmEmailViewWithEmptyCode()
-        {
-            return new ConfirmEmailAuthenticationView
-            {
-                Email = "a@a.com",
-                Code = ""
-            };
-        }
-
         private ConfirmEmailAuthenticationView GetValidConfirmEmailView()
         {
             return new ConfirmEmailAuthenticationView
@@ -535,14 +517,6 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             return new ForgotPasswordAuthenticationView
             {
                 Email = "a@a.com"
-            };
-        }
-
-        private ForgotPasswordAuthenticationView GetForgotPasswordViewWithEmptyEmail()
-        {
-            return new ForgotPasswordAuthenticationView
-            {
-                Email = ""
             };
         }
 

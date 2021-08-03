@@ -108,7 +108,7 @@ namespace BankingApp.BusinessLogicLayer.Services
 
             int userId = _userService.GetSignedInUserId();
 
-            DataAccessLayer.Models.PagedDataView<Deposit> depositsAndTotalCount
+            DataAccessLayer.Models.PaginationModel<Deposit> depositsAndTotalCount
                 = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize, userId);
 
             var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>

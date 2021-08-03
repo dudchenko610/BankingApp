@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System;
 using BankingApp.Shared;
 using BankingApp.Shared.Extensions;
-using BankingApp.DataAccessLayer.Models;
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.ViewModels.ViewModels.Deposit;
 using BankingApp.ViewModels.ViewModels.Pagination;
@@ -95,7 +94,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             resPagedDeposits
                 .Should().NotBeNull().And
-                .BeOfType<ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>>()
+                .BeOfType<PagedDataView<DepositGetAllDepositViewItem>>()
                 .Which.Items.Should().NotBeNull();
 
              depositsResponseOfRepository.Items
@@ -290,9 +289,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private DataAccessLayer.Models.PagedDataView<Deposit> GetValidDepositsAndTotalCount()
+        private DataAccessLayer.Models.PaginationModel<Deposit> GetValidDepositsAndTotalCount()
         {
-            return new DataAccessLayer.Models.PagedDataView<Deposit>
+            return new DataAccessLayer.Models.PaginationModel<Deposit>
             {
                 Items = new List<Deposit>
                 {
