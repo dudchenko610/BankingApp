@@ -45,7 +45,8 @@ namespace BankingApp.BusinessLogicLayer.Services
 
         public async Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView)
         {
-            var user = await GetUserIfExistsAndEmailPasswordAppropriativeAsync(signInAccountView);
+            var user = await GetUserIfExistsAsync(signInAccountView);
+            CheckIfUserIsBlocked(user);
             var tokensView = await GenerateTokensAsync(user);
             return tokensView;
         }
@@ -130,7 +131,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             }
         }
 
-        private async Task<User> GetUserIfExistsAndEmailPasswordAppropriativeAsync(SignInAuthenticationView signInAccountView)
+        private async Task<User> GetUserIfExistsAsync(SignInAuthenticationView signInAccountView)
         {
             var user = await _userManager.FindByEmailAsync(signInAccountView.Email);
 
@@ -138,13 +139,15 @@ namespace BankingApp.BusinessLogicLayer.Services
             {
                 throw new Exception(Constants.Errors.Authentication.InvalidNicknameOrPassword);
             }
+            return user;
+        }
 
+        private void CheckIfUserIsBlocked(User user)
+        {
             if (user.IsBlocked)
             {
                 throw new Exception(Constants.Errors.Authentication.UserIsBlocked);
             }
-
-            return user;
         }
 
         private async Task<User> GetUserIfExistsAsync(string email, string errorMessage)

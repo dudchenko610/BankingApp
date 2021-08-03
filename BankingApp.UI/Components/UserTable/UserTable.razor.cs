@@ -1,4 +1,5 @@
-﻿using BankingApp.ViewModels.Banking.Admin;
+﻿using BankingApp.UI.Models;
+using BankingApp.ViewModels.Banking.Admin;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,12 @@ namespace BankingApp.UI.Components.UserTable
         public IList<UserGetAllAdminViewItem> UsersViewList { get; set; }
 
         [Parameter]
-        public EventCallback<(int, bool)> OnBlockUserClick { get; set; }
+        public EventCallback<BlockUserModel> OnBlockUserClick { get; set; }
 
         private void OnUserBlockClicked(int userId, bool block)
         {
-            OnBlockUserClick.InvokeAsync((userId, block));
+            var userBlock = new BlockUserModel { UserId = userId, Block = block };
+            OnBlockUserClick.InvokeAsync(userBlock);
         }
     }
 }

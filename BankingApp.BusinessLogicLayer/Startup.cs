@@ -47,11 +47,11 @@ namespace BankingApp.BusinessLogicLayer
                     {
                         ClockSkew = TimeSpan.FromMinutes(0),
                         ValidateIssuer = true,
-                        ValidIssuer = configuration["jwtConfig:Issuer"],
+                        ValidIssuer = configuration["JwtConfig:Issuer"],
                         ValidateAudience = true,
-                        ValidAudience = configuration["jwtConfig:Audience"],
+                        ValidAudience = configuration["JwtConfig:Audience"],
                         ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["jwtConfig:SecretKey"])),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JwtConfig:SecretKey"])),
                         ValidateIssuerSigningKey = true,
                     };
                 });

@@ -1,4 +1,5 @@
 ﻿using BankingApp.UI.Core.Interfaces;
+using BankingApp.UI.Models;
 using BankingApp.ViewModels.Banking.Admin;
 using BankingApp.ViewModels.ViewModels.Pagination;
 using Blazored.Toast.Services;
@@ -48,12 +49,12 @@ namespace BankingApp.UI.Pages.UsersPage
             _navigationWrapper.NavigateTo($"{Routes.UsersPage}/{page}");
         }
 
-        private async Task BlockUserAsync(int userId, bool toBlock)
+        private async Task BlockUserAsync(BlockUserModel blockUserModel)
         {
             var blockUserView = new BlockUserAdminView
             {
-                UserId = userId,
-                Block = toBlock
+                UserId = blockUserModel.UserId,
+                Block = blockUserModel.Block
             };
 
             _loaderService.SwitchOn();
@@ -62,7 +63,7 @@ namespace BankingApp.UI.Pages.UsersPage
 
             if (blockedResult)
             {
-                _toastService.ShowSuccess(toBlock ? Notifications.UserSuccessfullyBlocked : Notifications.UserSuccessfullyUnblocked);
+                _toastService.ShowSuccess(blockUserModel.Block ? Notifications.UserSuccessfullyBlocked : Notifications.UserSuccessfullyUnblocked);
                 _navigationWrapper.NavigateTo($"{Routes.UsersPage}/{Page}");
             }
         }
