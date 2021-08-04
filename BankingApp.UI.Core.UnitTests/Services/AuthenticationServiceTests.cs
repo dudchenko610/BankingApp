@@ -14,20 +14,18 @@ namespace BankingApp.UI.Core.UnitTests.Services
 {
     public class AuthenticationServiceTests : TestContext
     {
-        private INavigationWrapper _navigationWrapper;
-        private ILocalStorageService _localStorageService;
-        private IHttpService _httpService;
+        private AuthenticationService _authenticationService;
+        private Mock<INavigationWrapper> _navigationWrapperMock;
+        private Mock<ILocalStorageService> _localStorageServiceMock;
+        private Mock<IHttpService> _httpServiceMock;
 
         public AuthenticationServiceTests()
         {
-            var navigationWrapperMock = new Mock<INavigationWrapper>();
-            _navigationWrapper = navigationWrapperMock.Object;
+            _navigationWrapperMock = new Mock<INavigationWrapper>();
+            _localStorageServiceMock = new Mock<ILocalStorageService>();
+            _httpServiceMock = new Mock<IHttpService>();
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            _localStorageService = localStorageMock.Object;
-
-            var httpServiceMock = new Mock<IHttpService>();
-            _httpService = httpServiceMock.Object;
+            _authenticationService = new AuthenticationService(_navigationWrapperMock.Object, _localStorageServiceMock.Object, _httpServiceMock.Object);
         }
 
         [Fact]
@@ -36,12 +34,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validTokensView = GetValidTokensViewWithAdminRole();
             string accesTokenKey = null;
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .Callback((string key, CancellationToken? cancellationToken) => { accesTokenKey = key; }).ReturnsAsync(validTokensView);
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, _httpService);
-            await authenticationService.InitializeAsync();
+            await _authenticationService.InitializeAsync();
 
             accesTokenKey.Should().BeEquivalentTo(Constants.Constants.Authentication.TokensView);
         } 
@@ -53,17 +49,15 @@ namespace BankingApp.UI.Core.UnitTests.Services
             string passedUrl = null;
             object signUpView = null;
 
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.PostAsync<object>(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
+            _httpServiceMock.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
                 .Callback((string url, object val, bool authorized) =>
                 {
                     passedUrl = url;
                     signUpView = val;
                 })
-                .ReturnsAsync(new object());
+                .ReturnsAsync(true);
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, _localStorageService, httpServiceMock.Object);
-            var execResult = await authenticationService.SignUpAsync(validSignUpView);
+            var execResult = await _authenticationService.SignUpAsync(validSignUpView);
 
             passedUrl.Should().BeEquivalentTo($"{Routes.Authentication.Route}/{Routes.Authentication.SignUp}");
             signUpView.Should().NotBeNull().And.BeOfType<SignUpAuthenticationView>().And.BeEquivalentTo(validSignUpView);
@@ -77,17 +71,15 @@ namespace BankingApp.UI.Core.UnitTests.Services
             string passedUrl = null;
             object confirmEmailView = null;
 
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.PostAsync<object>(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
+            _httpServiceMock.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
                 .Callback((string url, object val, bool authorized) =>
                 {
                     passedUrl = url;
                     confirmEmailView = val;
                 })
-                .ReturnsAsync(new object());
+                .ReturnsAsync(true);
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, _localStorageService, httpServiceMock.Object);
-            var execResult = await authenticationService.ConfirmEmailAsync(validConfirmEmailView);
+            var execResult = await _authenticationService.ConfirmEmailAsync(validConfirmEmailView);
 
             passedUrl.Should().BeEquivalentTo($"{Routes.Authentication.Route}/{Routes.Authentication.ConfirmEmail}");
             confirmEmailView.Should().NotBeNull().And.BeOfType<ConfirmEmailAuthenticationView>().And.BeEquivalentTo(validConfirmEmailView);
@@ -106,8 +98,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
             string accesTokenKey = null;
             object savedTokensView = null;
 
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.PostAsync<TokensView>(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
+            _httpServiceMock.Setup(x => x.PostAsync<TokensView>(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
                 .Callback((string url, object val, bool authorized) =>
                 {
                     passedUrl = url;
@@ -115,8 +106,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
                 })
                 .ReturnsAsync(validTokenItems);
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.SetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<TokensView>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.SetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<TokensView>(), It.IsAny<CancellationToken?>()))
                 .Callback((string key, TokensView data, CancellationToken? cancellationToken) => 
                     { 
                         accesTokenKey = key;
@@ -124,8 +114,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
                     }
                 );
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, httpServiceMock.Object);
-            var execResult = await authenticationService.SignInAsync(validSignInView);
+            var execResult = await _authenticationService.SignInAsync(validSignInView);
 
             passedUrl.Should().BeEquivalentTo($"{Routes.Authentication.Route}/{Routes.Authentication.SignIn}");
             signInView.Should().NotBeNull().And.BeOfType<SignInAuthenticationView>().And.BeEquivalentTo(validSignInView);
@@ -141,17 +130,14 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             string accesTokenKey = null;
             object navigatedToUri = null;
-            
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.RemoveItemAsync(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+
+            _localStorageServiceMock.Setup(x => x.RemoveItemAsync(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .Callback((string key, CancellationToken? cancellationToken) => { accesTokenKey = key; });
 
-            var navigationWrapperMock = new Mock<INavigationWrapper>();
-            navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
                 .Callback((string uri, bool forceLoad) => { navigatedToUri = uri; });
 
-            var authenticationService = new AuthenticationService(navigationWrapperMock.Object, localStorageMock.Object, _httpService);
-             await authenticationService.LogoutAsync();
+             await _authenticationService.LogoutAsync();
 
             accesTokenKey.Should().Be(Constants.Constants.Authentication.TokensView);
             navigatedToUri.Should().BeEquivalentTo(Constants.Constants.Routes.SignInPage);
@@ -164,17 +150,15 @@ namespace BankingApp.UI.Core.UnitTests.Services
             string passedUrl = null;
             object resetPasswordView = null;
 
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.PostAsync<object>(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
+            _httpServiceMock.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
                 .Callback((string url, object val, bool authorized) =>
                 {
                     passedUrl = url;
                     resetPasswordView = val;
                 })
-                .ReturnsAsync(new object());
+                .ReturnsAsync(true);
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, _localStorageService, httpServiceMock.Object);
-            var execResult = await authenticationService.ResetPasswordAsync(validResetPasswordView);
+            var execResult = await _authenticationService.ResetPasswordAsync(validResetPasswordView);
 
             passedUrl.Should().BeEquivalentTo($"{Routes.Authentication.Route}/{Routes.Authentication.ResetPassword}");
             resetPasswordView.Should().NotBeNull().And.BeOfType<ResetPasswordAuthenticationView>().And.BeEquivalentTo(validResetPasswordView);
@@ -188,17 +172,15 @@ namespace BankingApp.UI.Core.UnitTests.Services
             string passedUrl = null;
             object forgotPasswordView = null;
 
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.PostAsync<object>(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
+            _httpServiceMock.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
                 .Callback((string url, object val, bool authorized) =>
                 {
                     passedUrl = url;
                     forgotPasswordView = val;
                 })
-                .ReturnsAsync(new object());
+                .ReturnsAsync(true);
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, _localStorageService, httpServiceMock.Object);
-            var execResult = await authenticationService.ForgotPasswordAsync(validForgotPasswordView);
+            var execResult = await _authenticationService.ForgotPasswordAsync(validForgotPasswordView);
 
             passedUrl.Should().BeEquivalentTo($"{Routes.Authentication.Route}/{Routes.Authentication.ForgotPassword}");
             forgotPasswordView.Should().NotBeNull().And.BeOfType<ForgotPasswordAuthenticationView>().And.BeEquivalentTo(validForgotPasswordView);
@@ -210,14 +192,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             var validTokensView = GetValidTokensViewWithAdminRole();
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .ReturnsAsync(validTokensView);
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, _httpService);
-            await authenticationService.InitializeAsync();
-
-            var roleNames = authenticationService.GetRoles();
+            await _authenticationService.InitializeAsync();
+            var roleNames = _authenticationService.GetRoles();
             roleNames.Should().Contain(BankingApp.Shared.Constants.Roles.Admin);
         }
 
@@ -226,14 +205,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             var validTokensView = GetValidTokensViewWithClientRole();
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .ReturnsAsync(validTokensView);
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, _httpService);
-            await authenticationService.InitializeAsync();
-
-            var roleNames = authenticationService.GetRoles();
+            await _authenticationService.InitializeAsync();
+            var roleNames = _authenticationService.GetRoles();
             roleNames.Should().Contain(BankingApp.Shared.Constants.Roles.Client);
         }
 
@@ -242,14 +218,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             var validTokensView = GetValidTokensViewWithClientRole();
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .ReturnsAsync(validTokensView);
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, _httpService);
-            await authenticationService.InitializeAsync();
-
-            authenticationService.IsAdmin.Should().BeFalse();
+            await _authenticationService.InitializeAsync();
+            _authenticationService.IsAdmin.Should().BeFalse();
         }
 
         [Fact]
@@ -257,14 +230,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             var validTokensView = GetValidTokensViewWithAdminRole();
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .ReturnsAsync(validTokensView);
 
-            var authenticationService = new AuthenticationService(_navigationWrapper, localStorageMock.Object, _httpService);
-            await authenticationService.InitializeAsync();
-
-            authenticationService.IsAdmin.Should().BeTrue();
+            await _authenticationService.InitializeAsync();
+            _authenticationService.IsAdmin.Should().BeTrue();
         }
 
         private ForgotPasswordAuthenticationView GetValidForgotPasswordView()

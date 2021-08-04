@@ -28,6 +28,10 @@ namespace BankingApp.UI.UnitTests.Shared
             _navWrapperMock = new Mock<INavigationWrapper>();
             _navWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Verifiable();
             _navWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns("");
+
+            Services.AddSingleton(_authenticationServiceMock.Object);
+            Services.AddSingleton(_loaderServiceMock.Object);
+            Services.AddSingleton(_navWrapperMock.Object);
         }
 
         [Fact]
@@ -45,10 +49,6 @@ namespace BankingApp.UI.UnitTests.Shared
         [Fact]
         public void Header_UserClicksUrlLink_AppSwitchesToAnotherRoute()
         {
-            Services.AddSingleton(_authenticationServiceMock.Object);
-            Services.AddSingleton(_loaderServiceMock.Object);
-            Services.AddSingleton(_navWrapperMock.Object);
-
             var mainLayoutComp = RenderComponent<Header>();
             mainLayoutComp.Find("a").Click();
 
@@ -60,12 +60,7 @@ namespace BankingApp.UI.UnitTests.Shared
         {
             var validTokensView = GetValidTokensView();
 
-            var authenticationServiceMock = new Mock<IAuthenticationService>();
-            authenticationServiceMock.SetupGet(x => x.TokensView).Returns(GetValidTokensView());
-
-            Services.AddSingleton(authenticationServiceMock.Object);
-            Services.AddSingleton(_loaderServiceMock.Object);
-            Services.AddSingleton(_navWrapperMock.Object);
+            _authenticationServiceMock.SetupGet(x => x.TokensView).Returns(GetValidTokensView());
 
             var mainLayoutComp = RenderComponent<Header>();
             var headerLinks = mainLayoutComp.FindAll("a").Select(x => x.TextContent);
@@ -76,12 +71,7 @@ namespace BankingApp.UI.UnitTests.Shared
         [Fact]
         public void HeaderUserIsNotLogged_HeaderContainsCorrespondingLinks()
         {
-            var authenticationServiceMock = new Mock<IAuthenticationService>();
-            authenticationServiceMock.SetupGet(x => x.TokensView).Returns((TokensView) null);
-
-            Services.AddSingleton(authenticationServiceMock.Object);
-            Services.AddSingleton(_loaderServiceMock.Object);
-            Services.AddSingleton(_navWrapperMock.Object);
+            _authenticationServiceMock.SetupGet(x => x.TokensView).Returns((TokensView) null);
 
             var mainLayoutComp = RenderComponent<Header>();
             var headerLinks = mainLayoutComp.FindAll("a").Select(x => x.TextContent);
@@ -94,13 +84,8 @@ namespace BankingApp.UI.UnitTests.Shared
         {
             var validTokensView = GetValidTokensView();
 
-            var authenticationServiceMock = new Mock<IAuthenticationService>();
-            authenticationServiceMock.SetupGet(x => x.TokensView).Returns(validTokensView);
-            authenticationServiceMock.SetupGet(x => x.IsAdmin).Returns(true);
-
-            Services.AddSingleton(authenticationServiceMock.Object);
-            Services.AddSingleton(_loaderServiceMock.Object);
-            Services.AddSingleton(_navWrapperMock.Object);
+            _authenticationServiceMock.SetupGet(x => x.TokensView).Returns(validTokensView);
+            _authenticationServiceMock.SetupGet(x => x.IsAdmin).Returns(true);
 
             var mainLayoutComp = RenderComponent<Header>();
             var headerLinks = mainLayoutComp.FindAll("a").Select(x => x.TextContent);

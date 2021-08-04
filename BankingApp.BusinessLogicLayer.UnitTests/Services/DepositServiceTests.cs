@@ -26,8 +26,10 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         private const int ValidPageSize = 1;
         private const int ValidUserId = 1;
 
+        private DepositService _depositService;
         private IMapper _mapper;
-        private IUserService _userService;
+        private Mock<IUserService> _userServiceMock;
+        private Mock<IDepositRepository> _depositRepositoryMock;
 
         [SetUp]
         public void SetUp()
@@ -35,9 +37,11 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var mapperConfig = new MapperConfiguration(config => { config.AddProfile(new MapperProfile()); });
             _mapper = mapperConfig.CreateMapper();
 
-            var userServiceMock = new Mock<IUserService>();
-            userServiceMock.Setup(x => x.GetSignedInUserId()).Returns(ValidUserId);
-            _userService = userServiceMock.Object;
+            _depositRepositoryMock = new Mock<IDepositRepository>();
+            _userServiceMock = new Mock<IUserService>();
+            _userServiceMock.Setup(x => x.GetSignedInUserId()).Returns(ValidUserId);
+
+            _depositService = new DepositService(_mapper, _depositRepositoryMock.Object, _userServiceMock.Object);
         }
 
         [Test]
@@ -66,14 +70,12 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 
             Deposit deposit = null;
 
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
+            _depositRepositoryMock
                 .Setup(x => x.AddAsync(It.IsAny<Deposit>()))
                 .ReturnsAsync(DepositRepositoryAddReturnValue)
                 .Callback((Deposit depHistory) => deposit = depHistory);
 
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object, _userService);
-            await depositService.CalculateAsync(inputServiceModel);
+            await _depositService.CalculateAsync(inputServiceModel);
 
             deposit.Should().NotBeNull();
             deposit.MonthlyPayments.Count.Should().Be(validMonthlyPayments.Count);
@@ -84,13 +86,11 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         {
             var depositsResponseOfRepository = GetValidDepositsAndTotalCount();
 
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
+            _depositRepositoryMock
               .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(depositsResponseOfRepository);
 
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object, _userService);
-            var resPagedDeposits = await depositService.GetAllAsync(ValidPageNumber, ValidPageSize);
+            var resPagedDeposits = await _depositService.GetAllAsync(ValidPageNumber, ValidPageSize);
 
             resPagedDeposits
                 .Should().NotBeNull().And
@@ -114,14 +114,11 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             const int InvalidPageNumber = -1;
             var depositsResponseOfRepository = GetValidDepositsAndTotalCount();
 
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
+            _depositRepositoryMock
                 .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(depositsResponseOfRepository);
 
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object, _userService);
-            
-            FluentActions.Awaiting(() => depositService.GetAllAsync(InvalidPageNumber, ValidPageSize))
+            FluentActions.Awaiting(() => _depositService.GetAllAsync(InvalidPageNumber, ValidPageSize))
                 .Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageNumberFormat);
         }
 
@@ -131,14 +128,11 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             const int InvalidPageSize = -1;
             var depositsResponseOfRepository = GetValidDepositsAndTotalCount();
 
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
+            _depositRepositoryMock
                 .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(depositsResponseOfRepository);
 
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object, _userService);
-
-            FluentActions.Awaiting(() => depositService.GetAllAsync(ValidPageSize, InvalidPageSize))
+            FluentActions.Awaiting(() => _depositService.GetAllAsync(ValidPageSize, InvalidPageSize))
                 .Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageSizeFormat);
         }
 
@@ -148,14 +142,11 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             const int ValidDepositeHistoryId = 1;
             var depositsResponseOfRepository = GetValidDepositWithMonthlyPaymentItems();
 
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
+            _depositRepositoryMock
                 .Setup(x => x.GetDepositWithItemsByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(depositsResponseOfRepository);
 
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object, _userService);
-
-            var responseGetByIdDepositView = await depositService.GetByIdAsync(ValidDepositeHistoryId);
+            var responseGetByIdDepositView = await _depositService.GetByIdAsync(ValidDepositeHistoryId);
 
             responseGetByIdDepositView
                .Should().NotBeNull().And
@@ -178,17 +169,13 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             const int InvalidUserId = -1;
             var depositsResponseOfRepository = GetValidDepositWithMonthlyPaymentItems();
 
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
+            _depositRepositoryMock
                 .Setup(x => x.GetDepositWithItemsByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(depositsResponseOfRepository);
 
-            var userServiceMock = new Mock<IUserService>();
-            userServiceMock.Setup(x => x.GetSignedInUserId()).Returns(InvalidUserId);
+            _userServiceMock.Setup(x => x.GetSignedInUserId()).Returns(InvalidUserId);
 
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object, userServiceMock.Object);
-
-            FluentActions.Awaiting(() => depositService.GetByIdAsync(ValidDepositeHistoryId))
+            FluentActions.Awaiting(() => _depositService.GetByIdAsync(ValidDepositeHistoryId))
                .Should().Throw<Exception>().WithMessage(Constants.Errors.Deposit.DepositDoesNotExistsOrYouHaveNoAccess);
         }
 
@@ -197,14 +184,11 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         {
             const int InvalidDepositeHistoryId = -1;
 
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
+            _depositRepositoryMock
                 .Setup(x => x.GetDepositWithItemsByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(() => { return null; });
 
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object, _userService);
-
-            FluentActions.Awaiting(() => depositService.GetByIdAsync(InvalidDepositeHistoryId))
+            FluentActions.Awaiting(() => _depositService.GetByIdAsync(InvalidDepositeHistoryId))
                 .Should().Throw<Exception>().WithMessage(Constants.Errors.Deposit.IncorrectDepositHistoryId);
         }
 
@@ -212,15 +196,12 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         {
             Deposit deposit = null;
 
-            var depositRepositoryMock = new Mock<IDepositRepository>();
-            depositRepositoryMock
+            _depositRepositoryMock
                 .Setup(x => x.AddAsync(It.IsAny<Deposit>()))
                 .ReturnsAsync(DepositRepositoryAddReturnValue)
                 .Callback((Deposit depHistory) => deposit = depHistory);
 
-            var userServiceMock = new Mock<IUserService>();
-            DepositService depositService = new DepositService(_mapper, depositRepositoryMock.Object, userServiceMock.Object);
-            int response = await depositService.CalculateAsync(calculateDepositView);
+            int response = await _depositService.CalculateAsync(calculateDepositView);
 
             response.Should().Be(DepositRepositoryAddReturnValue);
             deposit

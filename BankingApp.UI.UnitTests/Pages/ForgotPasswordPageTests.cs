@@ -14,31 +14,32 @@ namespace BankingApp.UI.UnitTests.Pages
 {
     public class ForgotPasswordPageTests : TestContext
     {
-        private IAuthenticationService _authenticationService { get; set; }
+        private Mock<IAuthenticationService> _authenticationServiceMock { get; set; }
 
-        private INavigationWrapper _navigationWrapper { get; set; }
+        private Mock<INavigationWrapper> _navigationWrapperMock { get; set; }
 
-        private ILoaderService _loaderService { get; set; }
+        private Mock<ILoaderService> _loaderServiceMock { get; set; }
 
-        private IToastService _toastService { get; set; }
+        private Mock<IToastService> _toastServiceMock { get; set; }
 
         public ForgotPasswordPageTests()
         {
-            var authenticationServiceMock = new Mock<IAuthenticationService>();
-            _authenticationService = authenticationServiceMock.Object;
+            _authenticationServiceMock = new Mock<IAuthenticationService>();
 
-            var loaderServiceMock = new Mock<ILoaderService>();
-            loaderServiceMock.Setup(x => x.SwitchOn());
-            loaderServiceMock.Setup(x => x.SwitchOff());
-            _loaderService = loaderServiceMock.Object;
+            _loaderServiceMock = new Mock<ILoaderService>();
+            _loaderServiceMock.Setup(x => x.SwitchOn());
+            _loaderServiceMock.Setup(x => x.SwitchOff());
 
-            var navWrapperMock = new Mock<INavigationWrapper>();
-            navWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Verifiable();
-            navWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns("");
-            _navigationWrapper = navWrapperMock.Object;
+            _navigationWrapperMock = new Mock<INavigationWrapper>();
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Verifiable();
+            _navigationWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns("");
 
-            var toastServiceMock = new Mock<IToastService>();
-            _toastService = toastServiceMock.Object;
+            _toastServiceMock = new Mock<IToastService>();
+
+            Services.AddSingleton(_authenticationServiceMock.Object);
+            Services.AddSingleton(_loaderServiceMock.Object);
+            Services.AddSingleton(_navigationWrapperMock.Object);
+            Services.AddSingleton(_toastServiceMock.Object);
         }
 
         [Fact]
@@ -50,25 +51,13 @@ namespace BankingApp.UI.UnitTests.Pages
             string navigateToUri = null;
             string notificationMessage = null;
 
-            var authenticationServiceMock = new Mock<IAuthenticationService>();
-            authenticationServiceMock.Setup(x => x.ForgotPasswordAsync(It.IsAny<ForgotPasswordAuthenticationView>()))
+            _authenticationServiceMock.Setup(x => x.ForgotPasswordAsync(It.IsAny<ForgotPasswordAuthenticationView>()))
                 .Callback((ForgotPasswordAuthenticationView view) => { forgotPasswordViewSentToServer = view; })
                 .ReturnsAsync(true);
-
-            var loaderServiceMock = new Mock<ILoaderService>();
-            loaderServiceMock.Setup(x => x.SwitchOn()).Callback(() => { switchOnCalled = true; });
-            loaderServiceMock.Setup(x => x.SwitchOff()).Callback(() => { switchOffCalled = true; });
-
-            var navWrapperMock = new Mock<INavigationWrapper>();
-            navWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Callback((string uri, bool force) => { navigateToUri = uri; });
-
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowSuccess(It.IsAny<string>(), It.IsAny<string>())).Callback((string message, string heading) => { notificationMessage = message; });
-
-            Services.AddSingleton(authenticationServiceMock.Object);
-            Services.AddSingleton(loaderServiceMock.Object);
-            Services.AddSingleton(navWrapperMock.Object);
-            Services.AddSingleton(toastServiceMock.Object);
+            _loaderServiceMock.Setup(x => x.SwitchOn()).Callback(() => { switchOnCalled = true; });
+            _loaderServiceMock.Setup(x => x.SwitchOff()).Callback(() => { switchOffCalled = true; });
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Callback((string uri, bool force) => { navigateToUri = uri; });
+            _toastServiceMock.Setup(x => x.ShowSuccess(It.IsAny<string>(), It.IsAny<string>())).Callback((string message, string heading) => { notificationMessage = message; });
 
             var validForgotPasswordView = GetValidForgotPasswordView();
             var forgotPasswordForm = RenderComponent<ForgotPasswordPage>();
@@ -92,25 +81,16 @@ namespace BankingApp.UI.UnitTests.Pages
             string navigateToUri = null;
             string notificationMessage = null;
 
-            var authenticationServiceMock = new Mock<IAuthenticationService>();
-            authenticationServiceMock.Setup(x => x.ForgotPasswordAsync(It.IsAny<ForgotPasswordAuthenticationView>()))
+            _authenticationServiceMock.Setup(x => x.ForgotPasswordAsync(It.IsAny<ForgotPasswordAuthenticationView>()))
                 .Callback((ForgotPasswordAuthenticationView view) => { forgotPasswordViewSentToServer = view; })
                 .ReturnsAsync(false);
 
-            var loaderServiceMock = new Mock<ILoaderService>();
-            loaderServiceMock.Setup(x => x.SwitchOn()).Callback(() => { switchOnCalled = true; });
-            loaderServiceMock.Setup(x => x.SwitchOff()).Callback(() => { switchOffCalled = true; });
+            _loaderServiceMock.Setup(x => x.SwitchOn()).Callback(() => { switchOnCalled = true; });
+            _loaderServiceMock.Setup(x => x.SwitchOff()).Callback(() => { switchOffCalled = true; });
 
-            var navWrapperMock = new Mock<INavigationWrapper>();
-            navWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Callback((string uri, bool force) => { navigateToUri = uri; });
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Callback((string uri, bool force) => { navigateToUri = uri; });
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowSuccess(It.IsAny<string>(), It.IsAny<string>())).Callback((string message, string heading) => { notificationMessage = message; });
-
-            Services.AddSingleton(authenticationServiceMock.Object);
-            Services.AddSingleton(loaderServiceMock.Object);
-            Services.AddSingleton(navWrapperMock.Object);
-            Services.AddSingleton(toastServiceMock.Object);
+            _toastServiceMock.Setup(x => x.ShowSuccess(It.IsAny<string>(), It.IsAny<string>())).Callback((string message, string heading) => { notificationMessage = message; });
 
             var validForgotPasswordView = GetValidForgotPasswordView();
             var forgotPasswordForm = RenderComponent<ForgotPasswordPage>();
@@ -128,11 +108,6 @@ namespace BankingApp.UI.UnitTests.Pages
         [Fact]
         public void ForgotPasswordPage_UserSubmitsValidData_NoErrorMessagesWereShown()
         {
-            Services.AddSingleton(_authenticationService);
-            Services.AddSingleton(_loaderService);
-            Services.AddSingleton(_navigationWrapper);
-            Services.AddSingleton(_toastService);
-
             var validForgotPasswordView = GetValidForgotPasswordView();
             var forgotPasswordForm = RenderComponent<ForgotPasswordPage>();
 
@@ -146,11 +121,6 @@ namespace BankingApp.UI.UnitTests.Pages
         [Fact]
         public void ForgotPasswordPage_UserSubmitsDataWithEmptyEmail_CorrespondingErrorMessageWasShown()
         {
-            Services.AddSingleton(_authenticationService);
-            Services.AddSingleton(_loaderService);
-            Services.AddSingleton(_navigationWrapper);
-            Services.AddSingleton(_toastService);
-
             var validForgotPasswordView = GetValidForgotPasswordView();
             validForgotPasswordView.Email = "";
 
@@ -166,11 +136,6 @@ namespace BankingApp.UI.UnitTests.Pages
         [Fact]
         public void ForgotPasswordPage_UserSubmitsDataWithInvalidFormatEmail_CorrespondingErrorMessageWasShown()
         {
-            Services.AddSingleton(_authenticationService);
-            Services.AddSingleton(_loaderService);
-            Services.AddSingleton(_navigationWrapper);
-            Services.AddSingleton(_toastService);
-
             var validForgotPasswordView = GetValidForgotPasswordView();
             validForgotPasswordView.Email = "ksfdsfk";
 

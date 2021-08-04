@@ -15,17 +15,18 @@ namespace BankingApp.Api.UnitTests.Controllers
     public class AuthenticationControllerTests
     {
         private AuthenticationController _authenticationController;
+        private Mock<IAuthenticationService> _authenticationServiceMock;
 
         [SetUp]
         public void SetUp()
         {
-            var authenticationServiceMock = new Mock<IAuthenticationService>();
-            authenticationServiceMock.Setup(x => x.SignUpAsync(It.IsAny<SignUpAuthenticationView>()));
-            authenticationServiceMock.Setup(x => x.SignInAsync(It.IsAny<SignInAuthenticationView>())).ReturnsAsync(GetValidTokensView());
-            authenticationServiceMock.Setup(x => x.ForgotPasswordAsync(It.IsAny<ForgotPasswordAuthenticationView>()));
-            authenticationServiceMock.Setup(x => x.ResetPasswordAsync(It.IsAny<ResetPasswordAuthenticationView>()));
+            _authenticationServiceMock = new Mock<IAuthenticationService>();
+            _authenticationServiceMock.Setup(x => x.SignUpAsync(It.IsAny<SignUpAuthenticationView>()));
+            _authenticationServiceMock.Setup(x => x.SignInAsync(It.IsAny<SignInAuthenticationView>())).ReturnsAsync(GetValidTokensView());
+            _authenticationServiceMock.Setup(x => x.ForgotPasswordAsync(It.IsAny<ForgotPasswordAuthenticationView>()));
+            _authenticationServiceMock.Setup(x => x.ResetPasswordAsync(It.IsAny<ResetPasswordAuthenticationView>()));
 
-            _authenticationController = new AuthenticationController(authenticationServiceMock.Object);
+            _authenticationController = new AuthenticationController(_authenticationServiceMock.Object);
         }
 
         [Test]

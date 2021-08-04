@@ -22,10 +22,12 @@ namespace BankingApp.UI.Core.UnitTests.Services
         private const string GetModel = "GetModel";
         private const string InternalServerErrorErrorMessage = "GetModel";
 
+        private HttpService _httpService;
         private HttpClient _httpClient;
-        private INavigationWrapper _navigationWrapper;
-        private ILocalStorageService _localStorageService;
-        private IToastService _toastService;
+        private Mock<HttpMessageHandler> _httpMessageHandlerMock;
+        private Mock<INavigationWrapper> _navigationWrapperMock;
+        private Mock<ILocalStorageService> _localStorageServiceMock;
+        private Mock<IToastService> _toastServiceMock;
 
         private class ResponseTestModel
         {
@@ -44,22 +46,22 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validHttpResponse = GetValidHttpResponseMessage();
             var validTokensView = GetValidTokensView();
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(validHttpResponse).Verifiable();
-            _httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var navigationMamagerMock = new Mock<INavigationWrapper>();
-            navigationMamagerMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()));
-            _navigationWrapper = navigationMamagerMock.Object;
+            _httpClient = new HttpClient(_httpMessageHandlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()));
-            _toastService = toastServiceMock.Object;
+            _navigationWrapperMock = new Mock<INavigationWrapper>();
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()));
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>())).ReturnsAsync(validTokensView);
-            _localStorageService = localStorageMock.Object;
+            _toastServiceMock = new Mock<IToastService>();
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()));
+
+            _localStorageServiceMock = new Mock<ILocalStorageService>();
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>())).ReturnsAsync(validTokensView);
+
+            _httpService = new HttpService(_httpClient, _navigationWrapperMock.Object, _localStorageServiceMock.Object, _toastServiceMock.Object);
         }
 
         [Fact]
@@ -69,12 +71,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validTestModel = GetValidResponseTestModel();
             string messageFromShowError = null;
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var httpService = new HttpService(_httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            var fetchedTestModel = await httpService.GetAsync<ResponseTestModel>(GetModel, unauthorizedMode);
+            var fetchedTestModel = await _httpService.GetAsync<ResponseTestModel>(GetModel, unauthorizedMode);
 
             messageFromShowError.Should().BeNull();
             fetchedTestModel.Should().BeEquivalentTo(validTestModel);
@@ -88,12 +88,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validTokensView = GetValidTokensView();
             string accesTokenKey = null;
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .Callback((string key, CancellationToken? cancellationToken) => { accesTokenKey = key; }).ReturnsAsync(validTokensView);
 
-            var httpService = new HttpService(_httpClient, _navigationWrapper, localStorageMock.Object, _toastService);
-            await httpService.GetAsync<ResponseTestModel>(GetModel, authorizedMode);
+            await _httpService.GetAsync<ResponseTestModel>(GetModel, authorizedMode);
 
             accesTokenKey.Should().Be(Constants.Constants.Authentication.TokensView);
         }
@@ -108,21 +106,16 @@ namespace BankingApp.UI.Core.UnitTests.Services
             string messageFromShowError = null;
             string logoutUri = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(unauthorizedHttpResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var navigationWrapperMock = new Mock<INavigationWrapper>();
-            navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
                 .Callback((string uri, bool forceLoad) => { logoutUri = uri; });
 
-            var httpService = new HttpService(httpClient, navigationWrapperMock.Object, _localStorageService, toastServiceMock.Object);
-            await httpService.GetAsync<ResponseTestModel>(GetModel, authorizedMode);
+            await _httpService.GetAsync<ResponseTestModel>(GetModel, authorizedMode);
 
             messageFromShowError.Should().Be(Constants.Constants.Notifications.Unauthorized);
             logoutUri.Should().Be(Constants.Constants.Routes.LogoutPage);
@@ -136,17 +129,13 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
             string messageFromShowError = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(internalServerErrorResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            await httpService.GetAsync<ResponseTestModel>(GetModel, false);
+            await _httpService.GetAsync<ResponseTestModel>(GetModel, false);
 
             messageFromShowError.Should().Be(InternalServerErrorErrorMessage);
         }
@@ -159,17 +148,13 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
             string messageFromShowError = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(internalServerErrorResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            await httpService.GetAsync<ResponseTestModel>(GetModel, false);
+            await _httpService.GetAsync<ResponseTestModel>(GetModel, false);
 
             messageFromShowError.Should().Be(Constants.Constants.Notifications.UnexpectedError);
         }
@@ -180,13 +165,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var emptyTestModel = GetValidEmptyTestModel();
             var okResponse = GetOkResponseMessageWithNotDeserializableBody();
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(okResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, _toastService);
-            var fetchedTestModel = await httpService.GetAsync<ResponseTestModel>(GetModel, false);
+            var fetchedTestModel = await _httpService.GetAsync<ResponseTestModel>(GetModel, false);
 
             fetchedTestModel.Should().BeEquivalentTo(emptyTestModel);
         }
@@ -198,14 +180,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validTestModel = GetValidResponseTestModel();
             string messageFromShowError = null;
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var httpService = new HttpService(_httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-
             var validRequestTestModel = GetValidRequestTestModel();
-            var fetchedTestModel = await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, unauthorizedMode);
+            var fetchedTestModel = await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, unauthorizedMode);
 
             messageFromShowError.Should().BeNull();
             fetchedTestModel.Should().BeEquivalentTo(validTestModel);
@@ -219,14 +198,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validTokensView = GetValidTokensView();
             string accesTokenKey = null;
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .Callback((string key, CancellationToken? cancellationToken) => { accesTokenKey = key; }).ReturnsAsync(validTokensView);
 
-            var httpService = new HttpService(_httpClient, _navigationWrapper, localStorageMock.Object, _toastService);
-
             var validRequestTestModel = GetValidRequestTestModel();
-            await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, authorizedMode);
+            await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, authorizedMode);
 
             accesTokenKey.Should().Be(Constants.Constants.Authentication.TokensView);
         }
@@ -241,22 +217,17 @@ namespace BankingApp.UI.Core.UnitTests.Services
             string messageFromShowError = null;
             string logoutUri = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(unauthorizedHttpResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var navigationWrapperMock = new Mock<INavigationWrapper>();
-            navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
                 .Callback((string uri, bool forceLoad) => { logoutUri = uri; });
 
             var validRequestTestModel = GetValidRequestTestModel();
-            var httpService = new HttpService(httpClient, navigationWrapperMock.Object, _localStorageService, toastServiceMock.Object);
-            await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, authorizedMode);
+            await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, authorizedMode);
 
             messageFromShowError.Should().Be(Constants.Constants.Notifications.Unauthorized);
             logoutUri.Should().Be(Constants.Constants.Routes.LogoutPage);
@@ -270,18 +241,14 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
             string messageFromShowError = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(internalServerErrorResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
             var validRequestTestModel = GetValidRequestTestModel();
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
+            await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
 
             messageFromShowError.Should().Be(InternalServerErrorErrorMessage);
         }
@@ -294,18 +261,14 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
             string messageFromShowError = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(internalServerErrorResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
             var validRequestTestModel = GetValidRequestTestModel();
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
+            await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
 
             messageFromShowError.Should().Be(Constants.Constants.Notifications.UnexpectedError);
         }
@@ -316,14 +279,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var emptyTestModel = GetValidEmptyTestModel();
             var okResponse = GetOkResponseMessageWithNotDeserializableBody();
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(okResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
             var validRequestTestModel = GetValidRequestTestModel();
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, _toastService);
-            var fetchedTestModel = await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
+            var fetchedTestModel = await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
 
             fetchedTestModel.Should().BeEquivalentTo(emptyTestModel);
         }

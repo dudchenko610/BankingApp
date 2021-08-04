@@ -6,6 +6,7 @@ using BankingApp.ViewModels.ViewModels.Pagination;
 using BankingApp.ViewModels.Banking.Admin;
 using BankingApp.UI.Components.UserTable;
 using System.Linq;
+using BankingApp.UI.Models;
 
 namespace BankingApp.UI.UnitTests.Components
 {
@@ -47,8 +48,7 @@ namespace BankingApp.UI.UnitTests.Components
         [Fact]
         public void DepositList_UserClicksHistoryItem_EventTriggers()
         {
-            int userId = -1;
-            bool block = false;
+            BlockUserModel blockUserModel = null;
 
             var pagedUsers = GetValidPagedDataViewWithUserGetAllViewItems();
 
@@ -56,16 +56,15 @@ namespace BankingApp.UI.UnitTests.Components
                 .Add(p => p.UsersViewList, pagedUsers.Items)
                 .Add(p => p.Page, pagedUsers.PageNumber)
                 .Add(p => p.UsersOnPage, pagedUsers.PageSize)
-                .Add(p => p.OnBlockUserClick, args => 
+                .Add(p => p.OnBlockUserClick, x =>
                     {
-                        userId = args.Item1;
-                        block = args.Item2;
+                        blockUserModel = x;
                     })
             );
 
             userTableComponent.FindAll("input[type=checkbox]")[pagedUsers.Items.Count - 1].Change(true);
-            userId.Should().NotBe(-1);
-            block.Should().BeTrue();
+            blockUserModel.Should().NotBeNull();
+            blockUserModel.UserId.Should().Be(pagedUsers.Items.Last().Id);
         }
 
         private PagedDataView<UserGetAllAdminViewItem> GetValidPagedDataViewWithUserGetAllViewItems()
