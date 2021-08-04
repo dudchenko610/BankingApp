@@ -47,10 +47,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             var validSignUpView = GetValidSignUpView();
             string passedUrl = null;
-            object signUpView = null;
+            SignUpAuthenticationView signUpView = null;
 
-            _httpServiceMock.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
-                .Callback((string url, object val, bool authorized) =>
+            _httpServiceMock.Setup(x => x.PostAsync<SignUpAuthenticationView>(It.IsAny<string>(), It.IsAny<SignUpAuthenticationView>(), It.IsAny<bool>()))
+                .Callback((string url, SignUpAuthenticationView val, bool authorized) =>
                 {
                     passedUrl = url;
                     signUpView = val;
@@ -69,10 +69,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             var validConfirmEmailView = GetValidConfirmEmailView();
             string passedUrl = null;
-            object confirmEmailView = null;
+            ConfirmEmailAuthenticationView confirmEmailView = null;
 
-            _httpServiceMock.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
-                .Callback((string url, object val, bool authorized) =>
+            _httpServiceMock.Setup(x => x.PostAsync<ConfirmEmailAuthenticationView>(It.IsAny<string>(), It.IsAny<ConfirmEmailAuthenticationView>(), It.IsAny<bool>()))
+                .Callback((string url, ConfirmEmailAuthenticationView val, bool authorized) =>
                 {
                     passedUrl = url;
                     confirmEmailView = val;
@@ -93,13 +93,13 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validTokenItems = GetValidTokensViewWithAdminRole();
 
             string passedUrl = null;
-            object signInView = null;
+            SignInAuthenticationView signInView = null;
 
             string accesTokenKey = null;
             object savedTokensView = null;
 
-            _httpServiceMock.Setup(x => x.PostAsync<TokensView>(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
-                .Callback((string url, object val, bool authorized) =>
+            _httpServiceMock.Setup(x => x.PostAsync<TokensView, SignInAuthenticationView>(It.IsAny<string>(), It.IsAny<SignInAuthenticationView>(), It.IsAny<bool>()))
+                .Callback((string url, SignInAuthenticationView val, bool authorized) =>
                 {
                     passedUrl = url;
                     signInView = val;
@@ -148,10 +148,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             var validResetPasswordView = GetValidResetPasswordView();
             string passedUrl = null;
-            object resetPasswordView = null;
+            ResetPasswordAuthenticationView resetPasswordView = null;
 
-            _httpServiceMock.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
-                .Callback((string url, object val, bool authorized) =>
+            _httpServiceMock.Setup(x => x.PostAsync<ResetPasswordAuthenticationView>(It.IsAny<string>(), It.IsAny<ResetPasswordAuthenticationView>(), It.IsAny<bool>()))
+                .Callback((string url, ResetPasswordAuthenticationView val, bool authorized) =>
                 {
                     passedUrl = url;
                     resetPasswordView = val;
@@ -170,10 +170,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         {
             var validForgotPasswordView = GetValidForgotPasswordView();
             string passedUrl = null;
-            object forgotPasswordView = null;
+            ForgotPasswordAuthenticationView forgotPasswordView = null;
 
-            _httpServiceMock.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
-                .Callback((string url, object val, bool authorized) =>
+            _httpServiceMock.Setup(x => x.PostAsync<ForgotPasswordAuthenticationView>(It.IsAny<string>(), It.IsAny<ForgotPasswordAuthenticationView>(), It.IsAny<bool>()))
+                .Callback((string url, ForgotPasswordAuthenticationView val, bool authorized) =>
                 {
                     passedUrl = url;
                     forgotPasswordView = val;

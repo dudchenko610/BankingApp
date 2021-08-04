@@ -40,17 +40,17 @@ namespace BankingApp.UI.Core.Services
 
         public async Task<bool> SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
-            return await _httpService.PostAsync($"{Routes.Authentication.Route}/{Routes.Authentication.SignUp}", signUpAccountView, false);
+            return await _httpService.PostAsync<SignUpAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.SignUp}", signUpAccountView, false);
         }
 
         public async Task<bool> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)
         {
-            return await _httpService.PostAsync($"{Routes.Authentication.Route}/{Routes.Authentication.ConfirmEmail}", confirmEmailAccountView, false);
+            return await _httpService.PostAsync<ConfirmEmailAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.ConfirmEmail}", confirmEmailAccountView, false);
         }
 
         public async Task<bool> SignInAsync(SignInAuthenticationView signInAccountView)
         {
-            var tokensView = await _httpService.PostAsync<TokensView>($"{Routes.Authentication.Route}/{Routes.Authentication.SignIn}", signInAccountView, false);
+            var tokensView = await _httpService.PostAsync<TokensView, SignInAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.SignIn}", signInAccountView, false);
             await _localStorageService.SetItemAsync(Constants.Constants.Authentication.TokensView, tokensView);
             TokensView = tokensView;
             ExtractClaimsFromToken();
@@ -66,12 +66,12 @@ namespace BankingApp.UI.Core.Services
         
         public async Task<bool> ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordAuthenticationView)
         {
-            return await _httpService.PostAsync($"{Routes.Authentication.Route}/{Routes.Authentication.ResetPassword}", resetPasswordAuthenticationView, false);
+            return await _httpService.PostAsync<ResetPasswordAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.ResetPassword}", resetPasswordAuthenticationView, false);
         }
 
         public async Task<bool> ForgotPasswordAsync(ForgotPasswordAuthenticationView forgotPasswordAuthenticationView)
         {
-            return await _httpService.PostAsync($"{Routes.Authentication.Route}/{Routes.Authentication.ForgotPassword}", forgotPasswordAuthenticationView, false);
+            return await _httpService.PostAsync<ForgotPasswordAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.ForgotPassword}", forgotPasswordAuthenticationView, false);
         }
 
         public IList<string> GetRoles()

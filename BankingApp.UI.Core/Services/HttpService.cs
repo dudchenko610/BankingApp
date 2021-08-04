@@ -32,13 +32,13 @@ namespace BankingApp.UI.Core.Services
             _toastService = toastService;
         }
 
-        public async Task<T> GetAsync<T>(string uri, bool authorized = true)
+        public async Task<TResult> GetAsync<TResult>(string uri, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
             try
             {
-                return await SendRequestAsync<T>(request, authorized);
+                return await SendRequestAsync<TResult>(request, authorized);
             }
             catch
             {
@@ -47,13 +47,13 @@ namespace BankingApp.UI.Core.Services
             }
         }
 
-        public async Task<T> PostAsync<T>(string uri, object value, bool authorized = true)
+        public async Task<TResult> PostAsync<TResult, TEntity>(string uri, TEntity value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
             try
             {
-                return await SendRequestAsync<T>(request, authorized);
+                return await SendRequestAsync<TResult>(request, authorized);
             }
             catch
             {
@@ -77,7 +77,7 @@ namespace BankingApp.UI.Core.Services
             }
         }
 
-        public async Task<bool> PostAsync(string uri, object value, bool authorized = true)
+        public async Task<bool> PostAsync<TEntity>(string uri, TEntity value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");

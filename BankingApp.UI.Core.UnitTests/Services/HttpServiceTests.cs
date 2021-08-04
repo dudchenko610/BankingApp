@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using BankingApp.ViewModels.ViewModels.Authentication;
+using BankingApp.UI.Core.UnitTests.TestModels;
 
 namespace BankingApp.UI.Core.UnitTests.Services
 {
@@ -28,18 +29,6 @@ namespace BankingApp.UI.Core.UnitTests.Services
         private Mock<INavigationWrapper> _navigationWrapperMock;
         private Mock<ILocalStorageService> _localStorageServiceMock;
         private Mock<IToastService> _toastServiceMock;
-
-        private class ResponseTestModel
-        {
-            public int Id { get; set; }
-            public string Value { get; set; }
-        }
-
-        private class RequestTestModel
-        {
-            public int Id { get; set; }
-            public string Value { get; set; }
-        }
 
         public HttpServiceTests()
         {
@@ -184,7 +173,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
             var validRequestTestModel = GetValidRequestTestModel();
-            var fetchedTestModel = await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, unauthorizedMode);
+            var fetchedTestModel = await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, unauthorizedMode);
 
             messageFromShowError.Should().BeNull();
             fetchedTestModel.Should().BeEquivalentTo(validTestModel);
@@ -202,7 +191,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
                 .Callback((string key, CancellationToken? cancellationToken) => { accesTokenKey = key; }).ReturnsAsync(validTokensView);
 
             var validRequestTestModel = GetValidRequestTestModel();
-            await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, authorizedMode);
+            await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, authorizedMode);
 
             accesTokenKey.Should().Be(Constants.Constants.Authentication.TokensView);
         }
@@ -227,7 +216,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
                 .Callback((string uri, bool forceLoad) => { logoutUri = uri; });
 
             var validRequestTestModel = GetValidRequestTestModel();
-            await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, authorizedMode);
+            await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, authorizedMode);
 
             messageFromShowError.Should().Be(Constants.Constants.Notifications.Unauthorized);
             logoutUri.Should().Be(Constants.Constants.Routes.LogoutPage);
@@ -248,7 +237,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
             var validRequestTestModel = GetValidRequestTestModel();
-            await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
+            await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, false);
 
             messageFromShowError.Should().Be(InternalServerErrorErrorMessage);
         }
@@ -268,7 +257,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
             var validRequestTestModel = GetValidRequestTestModel();
-            await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
+            await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, false);
 
             messageFromShowError.Should().Be(Constants.Constants.Notifications.UnexpectedError);
         }
@@ -283,7 +272,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
                .ReturnsAsync(okResponse).Verifiable();
 
             var validRequestTestModel = GetValidRequestTestModel();
-            var fetchedTestModel = await _httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
+            var fetchedTestModel = await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, false);
 
             fetchedTestModel.Should().BeEquivalentTo(emptyTestModel);
         }

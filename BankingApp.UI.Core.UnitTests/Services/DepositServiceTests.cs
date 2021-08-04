@@ -31,11 +31,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
         public async Task Calculate_PassValidModel_CallsPostAsyncWithCorrespondingParameters()
         {
             var validCalculateView = GetValidCalculateView();
-            object depositViewPassedToHttpService = null;
+            CalculateDepositView depositViewPassedToHttpService = null;
             string passedUrl = null;
 
-            _httpServiceMock.Setup(x => x.PostAsync<int>(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
-                .Callback((string url, object val, bool authorized) => 
+            _httpServiceMock.Setup(x => x.PostAsync<int, CalculateDepositView>(It.IsAny<string>(), It.IsAny<CalculateDepositView>(), It.IsAny<bool>()))
+                .Callback((string url, CalculateDepositView val, bool authorized) => 
                     { 
                         passedUrl = url; 
                         depositViewPassedToHttpService =  val; 
