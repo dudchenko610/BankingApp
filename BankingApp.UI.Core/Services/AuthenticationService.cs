@@ -2,6 +2,7 @@
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.ViewModels.Authentication;
 using Blazored.LocalStorage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -60,6 +61,8 @@ namespace BankingApp.UI.Core.Services
         public async Task LogoutAsync()
         {
             TokensView = null;
+            _claims = new List<Claim>();
+            IsAdmin = false;
             await _localStorageService.RemoveItemAsync(Constants.Constants.Authentication.TokensView);
             _navigationWrapper.NavigateTo(Constants.Constants.Routes.SignInPage);
         }

@@ -151,7 +151,6 @@ namespace BankingApp.UI.Core.UnitTests.Services
         [Fact]
         public async Task Get_PassValidUrlModeButServerRespondsWithNotDeserializableBody_ReturnsEmptyModel()
         {
-            var emptyTestModel = GetValidEmptyTestModel();
             var okResponse = GetOkResponseMessageWithNotDeserializableBody();
 
             _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -159,7 +158,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
             var fetchedTestModel = await _httpService.GetAsync<ResponseTestModel>(GetModel, false);
 
-            fetchedTestModel.Should().BeEquivalentTo(emptyTestModel);
+            fetchedTestModel.Should().BeNull();
         }
 
         [Fact]
@@ -265,7 +264,6 @@ namespace BankingApp.UI.Core.UnitTests.Services
         [Fact]
         public async Task Post_PassValidUrlModeButServerRespondsWithNotDeserializableBody_ReturnsEmptyModel()
         {
-            var emptyTestModel = GetValidEmptyTestModel();
             var okResponse = GetOkResponseMessageWithNotDeserializableBody();
 
             _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -274,8 +272,113 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validRequestTestModel = GetValidRequestTestModel();
             var fetchedTestModel = await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, false);
 
-            fetchedTestModel.Should().BeEquivalentTo(emptyTestModel);
+            fetchedTestModel.Should().BeNull();
         }
+
+        [Fact]
+        public async Task PostEmptyResult_PassValidUrlWithUnauthorizedMode_ReturnsValidModelAndShowErrorShouldNotBeCalled()
+        {
+            bool unauthorizedMode = false;
+            var validTestModel = GetValidResponseTestModel();
+            string messageFromShowError = null;
+
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback((string message, string heading) => { messageFromShowError = message; });
+
+            var validRequestTestModel = GetValidRequestTestModel();
+            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, unauthorizedMode);
+
+            messageFromShowError.Should().BeNull();
+            responseResult.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task PostEmptyResult_PassValidUrlWithAuthorizedMode_CallsGetItemAsyncOfLocalStorageService()
+        {
+            bool authorizedMode = true;
+            var validTestModel = GetValidResponseTestModel();
+            var validTokensView = GetValidTokensView();
+            string accesTokenKey = null;
+
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+                .Callback((string key, CancellationToken? cancellationToken) => { accesTokenKey = key; }).ReturnsAsync(validTokensView);
+
+            var validRequestTestModel = GetValidRequestTestModel();
+            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, authorizedMode);
+
+            accesTokenKey.Should().Be(Constants.Constants.Authentication.TokensView);
+            responseResult.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task PostEmptyResult_PassValidUrlWithAuthorizedModeButServerRespondsWithStatusUnauthorized_CallsShowErrorAndNavigateToWithCorrespondingParameters()
+        {
+            bool authorizedMode = true;
+            var validTestModel = GetValidResponseTestModel();
+            var unauthorizedHttpResponse = GetUnauthorizedHttpResponseMessage();
+
+            string messageFromShowError = null;
+            string logoutUri = null;
+
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+               .ReturnsAsync(unauthorizedHttpResponse).Verifiable();
+
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback((string message, string heading) => { messageFromShowError = message; });
+
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
+                .Callback((string uri, bool forceLoad) => { logoutUri = uri; });
+
+            var validRequestTestModel = GetValidRequestTestModel();
+            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, authorizedMode);
+
+            messageFromShowError.Should().Be(Constants.Constants.Notifications.Unauthorized);
+            logoutUri.Should().Be(Constants.Constants.Routes.LogoutPage);
+            responseResult.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task PostEmptyResult_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorAndErrorMessage_CallsShowErrorWithCorrespondingErrorMessage()
+        {
+            var validTestModel = GetValidResponseTestModel();
+            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithMessage();
+
+            string messageFromShowError = null;
+
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+               .ReturnsAsync(internalServerErrorResponse).Verifiable();
+
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback((string message, string heading) => { messageFromShowError = message; });
+
+            var validRequestTestModel = GetValidRequestTestModel();
+            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, false);
+
+            messageFromShowError.Should().Be(InternalServerErrorErrorMessage);
+            responseResult.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task PostEmptyResult_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorWithoutErrorMessage_CallsShowErrorWithUnexpectedErrorMessage()
+        {
+            var validTestModel = GetValidResponseTestModel();
+            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithoutMessage();
+
+            string messageFromShowError = null;
+
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+               .ReturnsAsync(internalServerErrorResponse).Verifiable();
+
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback((string message, string heading) => { messageFromShowError = message; });
+
+            var validRequestTestModel = GetValidRequestTestModel();
+            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, false);
+
+            messageFromShowError.Should().Be(Constants.Constants.Notifications.UnexpectedError);
+            responseResult.Should().BeFalse();
+        }
+
 
         private HttpResponseMessage GetValidHttpResponseMessage()
         {
@@ -328,15 +431,6 @@ namespace BankingApp.UI.Core.UnitTests.Services
             { 
                 Id = 1,
                 Value = "1"
-            };
-        }
-
-        private ResponseTestModel GetValidEmptyTestModel()
-        {
-            return new ResponseTestModel
-            {
-                Id = 0,
-                Value = null
             };
         }
 

@@ -3,12 +3,11 @@ using Blazored.Toast.Services;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using BankingApp.ViewModels.ViewModels.Authentication;
+using Newtonsoft.Json;
 
 namespace BankingApp.UI.Core.Services
 {
@@ -38,7 +37,14 @@ namespace BankingApp.UI.Core.Services
 
             try
             {
-                return await SendRequestAsync<TResult>(request, authorized);
+                var content = await SendRequestAsync(request, authorized);
+
+                if (content is null)
+                {
+                    return default;
+                }
+
+                return JsonConvert.DeserializeObject<TResult>(content);
             }
             catch
             {
@@ -50,25 +56,17 @@ namespace BankingApp.UI.Core.Services
         public async Task<TResult> PostAsync<TResult, TEntity>(string uri, TEntity value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
-            request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
+            request.Content = new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
             try
             {
-                return await SendRequestAsync<TResult>(request, authorized);
-            }
-            catch
-            {
-                _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
-                return default;
-            }
-        }
+                var content = await SendRequestAsync(request, authorized);
 
-        public async Task<bool> GetAsync(string uri, bool authorized = true)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+                if (content is null)
+                {
+                    return default;
+                }
 
-            try
-            {
-                return await SendRequestAsync<bool>(request, authorized);
+                return JsonConvert.DeserializeObject<TResult>(content);
             }
             catch
             {
@@ -80,10 +78,17 @@ namespace BankingApp.UI.Core.Services
         public async Task<bool> PostAsync<TEntity>(string uri, TEntity value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
-            request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
+            request.Content = new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
             try
             {
-                return await SendRequestAsync<bool>(request, authorized);
+                var response = await SendRequestAsync(request, authorized);
+
+                if (response is null)
+                {
+                    return false;
+                }
+
+                return true;
             }
             catch
             {
@@ -92,25 +97,23 @@ namespace BankingApp.UI.Core.Services
             }
         }
 
-        private async Task<T> SendRequestAsync<T>(HttpRequestMessage request, bool authorized = true)
+        private async Task<string> SendRequestAsync(HttpRequestMessage request, bool authorized = true)
         {
             if (authorized)
             {
-                // add jwt auth header if user is logged in and request is to the api url
                 var tokensView = await _localStorageService.GetItemAsync<TokensView>(Constants.Constants.Authentication.TokensView);
                 var isApiUrl = !request.RequestUri.IsAbsoluteUri;
                 if (tokensView != null && isApiUrl)
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokensView.AccessToken);
             }
 
-            using var response = await _httpClient.SendAsync(request);
+            using HttpResponseMessage response = await _httpClient.SendAsync(request);
 
-            // auto logout on 401 response
             if (authorized && response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 _toastService.ShowError(Constants.Constants.Notifications.Unauthorized);
                 _navigationWrapper.NavigateTo(Constants.Constants.Routes.LogoutPage);
-                return default;
+                return null;
             }
 
             if (!response.IsSuccessStatusCode)
@@ -124,17 +127,10 @@ namespace BankingApp.UI.Core.Services
                 {
                     _toastService.ShowError(errorMessage);
                 }
-                return default;
+                return null;
             }
 
-            try
-            {
-                return await response.Content.ReadFromJsonAsync<T>();
-            }
-            catch  // object is not deserializable, but everything is ok!
-            {
-                return JsonSerializer.Deserialize<T>("{}");
-            }
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }
