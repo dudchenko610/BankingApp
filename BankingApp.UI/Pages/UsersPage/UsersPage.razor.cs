@@ -87,6 +87,7 @@ namespace BankingApp.UI.Pages.UsersPage
             _loaderService.SwitchOff();
 
             if (_pagedUsers is null || _pagedUsers.Items.Count == 0)
+            { 
                 return;
             }
 

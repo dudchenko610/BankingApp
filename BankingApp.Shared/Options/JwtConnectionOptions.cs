@@ -4,7 +4,7 @@ namespace BankingApp.Shared.Options
     /// <summary>
     /// View model fro jwt options.
     /// </summary>
-    public class JwtOptions
+    public class JwtConnectionOptions
     {
         /// <summary>
         /// Provider of access token.

@@ -1,6 +1,7 @@
 ﻿using BankingApp.ViewModels.ViewModels.Deposit;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BankingApp.UI.Components.MonthlyPaymentList
 {

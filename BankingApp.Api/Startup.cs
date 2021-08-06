@@ -8,9 +8,9 @@ using Microsoft.Extensions.Hosting;
 using BankingApp.Api.Validators;
 using BankingApp.ViewModels.ViewModels.Authentication;
 using BankingApp.ViewModels.ViewModels.Deposit;
-using Microsoft.Extensions.Options;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Admin;
+using BankingApp.Shared.Options;
 
 namespace BankingApp.Api
 {
@@ -38,7 +38,7 @@ namespace BankingApp.Api
         /// <param name="services">Used to connect services with dependency injection container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            BankingApp.BusinessLogicLayer.Startup.Initialize(services, Configuration);
+            BusinessLogicLayer.Startup.Initialize(services, Configuration);
 
             services.AddControllers().AddFluentValidation();
 

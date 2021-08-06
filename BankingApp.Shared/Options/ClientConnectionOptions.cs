@@ -9,7 +9,7 @@ namespace BankingApp.Shared.Options
         /// <summary>
         /// Url of client application server.
         /// </summary>
-        public string Localhost { get; set; }
+        public string Url { get; set; }
 
         /// <summary>
         /// Url of confirm email page on client server.

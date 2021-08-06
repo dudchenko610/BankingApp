@@ -234,22 +234,6 @@ namespace BankingApp.BusinessLogicLayer.Services
             await _userManager.UpdateAsync(user);
         }
 
-        private async Task SendEmailResetPasswordAsync(User user)
-        {
-            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var callbackUrl = new StringBuilder();
-            callbackUrl.Append($"{_clientConnectionOptions.Url}{_clientConnectionOptions.ResetPath}");
-            callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(resetPasswordToken)}");
-
-            var messageBody = $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
-
-            if (!await _emailProvider.SendEmailAsync(user.Email, Constants.Password.PasswordResetHeader, messageBody))
-            {
-                throw new Exception(Constants.Errors.Authentication.ErrorWhileSendingMessage);
-            }
-        }
-
         private async Task ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordView, User user)
         {
             var result = await _userManager.ResetPasswordAsync(user, resetPasswordView.Code, resetPasswordView.Password);
@@ -262,24 +246,12 @@ namespace BankingApp.BusinessLogicLayer.Services
             }
         }
 
-        private async Task<User> CheckUserForExistenceAsync(ResetPasswordAuthenticationView resetPasswordView)
-        {
-            var user = await _userManager.FindByEmailAsync(resetPasswordView.Email);
-
-            if (user == null)
-            {
-                throw new Exception(Constants.Errors.Authentication.UserWasNotFound);
-            }
-
-            return user;
-        }
-
         private async Task SendEmailResetPasswordAsync(User user)
         {
             var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             var callbackUrl = new StringBuilder();
-            callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ResetPath}");
+            callbackUrl.Append($"{_clientConnectionOptions.Url}{_clientConnectionOptions.ResetPath}");
             callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(resetPasswordToken)}");
 
             var messageBody = $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";

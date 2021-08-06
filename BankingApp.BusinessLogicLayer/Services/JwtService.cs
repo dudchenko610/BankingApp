@@ -21,7 +21,7 @@ namespace BankingApp.BusinessLogicLayer.Services
     [ExcludeFromCodeCoverage]
     public class JwtService : IJwtService
     {
-        private readonly JwtOptions _jwtOptions;
+        private readonly JwtConnectionOptions _jwtOptions;
         private readonly UserManager<User> _userManager;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// </summary>
         /// <param name="jwtOptions">Contains view model with jwt options mapped from appsettings</param>
         /// <param name="userManager">Allows make operations with users using ASP NET Identity.</param>
-        public JwtService(IOptions<JwtOptions> jwtOptions, UserManager<User> userManager)
+        public JwtService(IOptions<JwtConnectionOptions> jwtOptions, UserManager<User> userManager)
         {
             _jwtOptions = jwtOptions.Value;
             _userManager = userManager;

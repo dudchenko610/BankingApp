@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.DataAccessLayer.Interfaces;
+using BankingApp.DataAccessLayer.Models;
 using BankingApp.Entities.Entities;
 using BankingApp.Entities.Enums;
 using BankingApp.Shared;
