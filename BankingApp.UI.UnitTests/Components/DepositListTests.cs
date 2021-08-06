@@ -11,18 +11,7 @@ namespace BankingApp.UI.UnitTests.Components
     public class DepositListTests : TestContext
     {
         [Fact]
-        public void DepositList_PassValidListData_ComponentContainsAsMuchDivWithSpecifiedClassElementsAsListDataCount()
-        {
-            var depositGetAllDepositViewItems = GetValidDepositGetAllDepositViewItemList();
-            var depositHistoryList = RenderComponent<DepositList>(parameters => parameters
-                .Add(p => p.DepositViewList, depositGetAllDepositViewItems)
-            );
-
-            depositHistoryList.FindAll("div[class=card-header]").Count.Should().Be(depositGetAllDepositViewItems.Count);
-        }
-
-        [Fact]
-        public void DepositList_PassValidListData_ComponentRendersAllItemsFieldsInLabelTags()
+        public void WhenTheComponentIsRendered_PassValidListData_ExpectedMarkupRendered()
         {
             const int LabelCount = 4;
 
@@ -31,9 +20,11 @@ namespace BankingApp.UI.UnitTests.Components
                 .Add(p => p.DepositViewList, depositGetAllDepositViewItems)
             );
 
+            depositHistoryList.FindAll("div[class=card-header]").Count.Should().Be(depositGetAllDepositViewItems.Count);
+
             var listOfLabelTexts = depositHistoryList.FindAll("label").Select(x => x.TextContent).ToList();
 
-            for (int i = 0; i < depositGetAllDepositViewItems.Count; i ++)
+            for (int i = 0; i < depositGetAllDepositViewItems.Count; i++)
             {
                 listOfLabelTexts[i * LabelCount + 0].Should().Contain(depositGetAllDepositViewItems[i].CalculationFormula);
                 listOfLabelTexts[i * LabelCount + 1].Should().Contain(depositGetAllDepositViewItems[i].DepositSum.ToString());
@@ -43,7 +34,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void DepositList_UserClicksHistoryItem_EventTriggers()
+        public void WhenTheCallbackIsTriggered_UserClicksHistoryItem_OnDepositItemClickedInvoked()
         {
             int depositHistoryId = -1;
             var depositGetAllDepositViewItems = GetValidDepositGetAllDepositViewItemList();

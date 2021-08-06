@@ -11,7 +11,7 @@ namespace BankingApp.UI.UnitTests.Pages
     public class LogoutPageTests : TestContext
     {
         [Fact]
-        public void LogoutPage_UserSubmitsValidData_CallbacksTriggerAndReturnValidData()
+        public void WhenTheComponentIsRendered_UserSubmitsValidData_LogoutAsyncInvoked()
         {
             bool logoutWasCalled = false;
 

@@ -12,7 +12,7 @@ namespace BankingApp.UI.UnitTests.Components
         private const int CurrentPage = 5;
 
         [Fact]
-        public void PaginationSwitcher_UserClicksPagelink_CallbackReturnsClickedPageNumber()
+        public void WhenTheCallbackIsTriggered_UserClicksPagelink_OnPageClickInvoked()
         {
             int pageNumber = -1;
 
@@ -30,7 +30,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void PaginationSwitcher_UserClicksPagelink_PageLinkGetsActiveState()
+        public void WhenTheComponentIsRendered_UserClicksPagelink_ExpectedMarkupRendered()
         {
             var paginationSwitcher = RenderComponent<PaginationSwitcher>(parameters => parameters
                 .Add(p => p.PageCount, PageCount)
@@ -45,7 +45,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void PaginationSwitcher_PageCountLessThanFourElements_NextAndPreviousButtonsShouldBeDisabled()
+        public void WhenTheComponentIsRendered_PageCountLessThanFourElements_ExpectedMarkupRendered()
         {
             const int PageCountLessThanFour = 3;
 
@@ -62,7 +62,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void PaginationSwitcher_UserScrollsToRightMaximally_NextButtonShouldBeDisableWhilePreviousShouldNotBe()
+        public void WhenTheComponentIsRendered_UserScrollsToRightMaximally_ExpectedMarkupRendered()
         {
             const int CurrentPageMaximallyRight = PageCount;
 
@@ -79,7 +79,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void PaginationSwitcher_UserScrollsToLeftMaximally_NextButtonShouldNotBeDisableWhilePreviousShouldBe()
+        public void WhenTheComponentIsRendered_UserScrollsToLeftMaximally_ExpectedMarkupRendered()
         {
             const int CurrentPageMaximallyLeft = 1;
 
@@ -96,7 +96,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void PaginationSwitcher_PageCountParameterLessThanOne_PageSizeBecameOne()
+        public void WhenTheComponentIsRendered_PageCountParameterLessThanOne_ExpectedMarkupRendered()
         {
             const int PageCountLessThanOne = 0;
 
@@ -109,7 +109,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void PaginationSwitcher_CurrentPageParameterLessThanOne_CurrentPageBecameOne()
+        public void WhenTheComponentIsRendered_CurrentPageParameterLessThanOne_ExpectedMarkupRendered()
         {
             const int CurrentPageLessThanOne = 0;
 
@@ -122,7 +122,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void PaginationSwitcher_CurrentPageParameterBiggerThanPageCount_CurrentPageBecameOne()
+        public void WhenTheComponentIsRendered_CurrentPageParameterBiggerThanPageCount_ExpectedMarkupRendered()
         {
             const int CurrentPageBiggerThanPageCount = PageCount + 1;
 

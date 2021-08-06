@@ -28,7 +28,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Calculate_PassValidModel_CallsPostAsyncWithCorrespondingParameters()
+        public async Task Calculate_ValidCalculateView_PostAsyncInvoked()
         {
             var validCalculateView = GetValidCalculateView();
             CalculateDepositView depositViewPassedToHttpService = null;
@@ -54,7 +54,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task GetAll_PassValidModel_CallsGetAsyncWithCorrespondingParameters()
+        public async Task GetAll_ValidPageDataView_GetAsyncInvoked()
         {
             const int ValidPageNumber = 1;
             const int ValidPageSize = 10;
@@ -73,7 +73,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task GetById_PassValidModel_CallsGetAsyncWithCorrespondingParameters()
+        public async Task GetById_ValidGetByIdView_GetAsyncInvoked()
         {
             const int ValidDepositId = 1;
 

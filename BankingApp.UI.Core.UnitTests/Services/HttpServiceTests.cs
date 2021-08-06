@@ -32,7 +32,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
         public HttpServiceTests()
         {
-            var validHttpResponse = GetValidHttpResponseMessage();
+            var validHttpResponse = GetHttpResponseMessage(HttpStatusCode.OK, new StringContent("{\"Id\":1,\"Value\":\"1\"}"));
             var validTokensView = GetValidTokensView();
 
             _httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
@@ -54,7 +54,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Get_PassValidUrlWithUnauthorizedMode_ReturnsValidModelAndShowErrorShouldNotBeCalled()
+        public async Task Get_ValidResponseTestModel_ExpectedResults()
         {
             bool unauthorizedMode = false;
             var validTestModel = GetValidResponseTestModel();
@@ -70,7 +70,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Get_PassValidUrlWithAuthorizedMode_CallsGetItemAsyncOfLocalStorageService()
+        public async Task Get_ValidUrlWithAuthorizedMode_GetItemAsyncInvoked()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
@@ -86,11 +86,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Get_PassValidUrlWithAuthorizedModeButServerRespondsWithStatusUnauthorized_CallsShowErrorAndNavigateToWithCorrespondingParameters()
+        public async Task Get_UnauthorizedStatusCode_ExpectedResults()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
-            var unauthorizedHttpResponse = GetUnauthorizedHttpResponseMessage();
+            var unauthorizedHttpResponse = GetHttpResponseMessage(HttpStatusCode.Unauthorized, new StringContent("{}"));
 
             string messageFromShowError = null;
             string logoutUri = null;
@@ -111,10 +111,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Get_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorAndErrorMessage_CallsShowErrorWithCorrespondingErrorMessage()
+        public async Task Get_NotSucceededResultWithErrorMessage_ShowErrorInvoked()
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithMessage();
+            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(InternalServerErrorErrorMessage));
 
             string messageFromShowError = null;
 
@@ -130,10 +130,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Get_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorWithoutErrorMessage_CallsShowErrorWithUnexpectedErrorMessage()
+        public async Task Get_NotSucceededResultWithoutErrorMessage_ShowErrorInvoked()
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithoutMessage();
+            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(""));
 
             string messageFromShowError = null;
 
@@ -149,9 +149,9 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Get_PassValidUrlModeButServerRespondsWithNotDeserializableBody_ReturnsEmptyModel()
+        public async Task Get_ResponseBodyIsNotDeserializable_ExpectedResults()
         {
-            var okResponse = GetOkResponseMessageWithNotDeserializableBody();
+            var okResponse = GetHttpResponseMessage(HttpStatusCode.OK, new StringContent("{dfsfqq gd/.,}fd,"));
 
             _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(okResponse).Verifiable();
@@ -162,7 +162,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Post_PassValidUrlWithUnauthorizedMode_ReturnsValidModelAndShowErrorShouldNotBeCalled()
+        public async Task Post_UnauthorizedMode_ExpectedResults()
         {
             bool unauthorizedMode = false;
             var validTestModel = GetValidResponseTestModel();
@@ -179,7 +179,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Post_PassValidUrlWithAuthorizedMode_CallsGetItemAsyncOfLocalStorageService()
+        public async Task Post_AuthorizedMode_GetItemAsyncInvoked()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
@@ -196,11 +196,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Post_PassValidUrlWithAuthorizedModeButServerRespondsWithStatusUnauthorized_CallsShowErrorAndNavigateToWithCorrespondingParameters()
+        public async Task Post_UnauthorizedStatusCode_ExpectedResults()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
-            var unauthorizedHttpResponse = GetUnauthorizedHttpResponseMessage();
+            var unauthorizedHttpResponse = GetHttpResponseMessage(HttpStatusCode.Unauthorized, new StringContent("{}"));
 
             string messageFromShowError = null;
             string logoutUri = null;
@@ -222,10 +222,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Post_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorAndErrorMessage_CallsShowErrorWithCorrespondingErrorMessage()
+        public async Task Post_NotSucceededResultWithErrorMessage_ShowErrorInvoked()
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithMessage();
+            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(InternalServerErrorErrorMessage));
 
             string messageFromShowError = null;
 
@@ -242,10 +242,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Post_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorWithoutErrorMessage_CallsShowErrorWithUnexpectedErrorMessage()
+        public async Task Post_NotSucceededResultWithoutErrorMessage_ShowErrorInvoked()
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithoutMessage();
+            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(""));
 
             string messageFromShowError = null;
 
@@ -262,9 +262,9 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Post_PassValidUrlModeButServerRespondsWithNotDeserializableBody_ReturnsEmptyModel()
+        public async Task Post_ResponseBodyIsNotDeserializable_ExpectedResults()
         {
-            var okResponse = GetOkResponseMessageWithNotDeserializableBody();
+            var okResponse = GetHttpResponseMessage(HttpStatusCode.OK, new StringContent("{dfsfqq gd/.,}fd,"));
 
             _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(okResponse).Verifiable();
@@ -276,7 +276,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task PostEmptyResult_PassValidUrlWithUnauthorizedMode_ReturnsValidModelAndShowErrorShouldNotBeCalled()
+        public async Task PostEmptyResult_UnauthorizedMode_ExpectedResults()
         {
             bool unauthorizedMode = false;
             var validTestModel = GetValidResponseTestModel();
@@ -293,7 +293,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task PostEmptyResult_PassValidUrlWithAuthorizedMode_CallsGetItemAsyncOfLocalStorageService()
+        public async Task PostEmptyResult_AuthorizedMode_GetItemAsyncInvoked()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
@@ -311,11 +311,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task PostEmptyResult_PassValidUrlWithAuthorizedModeButServerRespondsWithStatusUnauthorized_CallsShowErrorAndNavigateToWithCorrespondingParameters()
+        public async Task PostEmptyResult_UnauthorizedStatusCode_ExpectedResults()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
-            var unauthorizedHttpResponse = GetUnauthorizedHttpResponseMessage();
+            var unauthorizedHttpResponse = GetHttpResponseMessage(HttpStatusCode.Unauthorized, new StringContent("{}"));
 
             string messageFromShowError = null;
             string logoutUri = null;
@@ -338,10 +338,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task PostEmptyResult_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorAndErrorMessage_CallsShowErrorWithCorrespondingErrorMessage()
+        public async Task PostEmptyResult_NotSucceededResultWithErrorMessage_ShowErrorInvoked()
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithMessage();
+            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(InternalServerErrorErrorMessage));
 
             string messageFromShowError = null;
 
@@ -359,10 +359,10 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task PostEmptyResult_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorWithoutErrorMessage_CallsShowErrorWithUnexpectedErrorMessage()
+        public async Task PostEmptyResult_NotSucceededResultWithoutErrorMessage_ShowErrorInvoked()
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithoutMessage();
+            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(""));
 
             string messageFromShowError = null;
 
@@ -379,52 +379,15 @@ namespace BankingApp.UI.Core.UnitTests.Services
             responseResult.Should().BeFalse();
         }
 
-
-        private HttpResponseMessage GetValidHttpResponseMessage()
+        private HttpResponseMessage GetHttpResponseMessage(HttpStatusCode statusCode, HttpContent httpContent)
         {
             return new HttpResponseMessage()
             {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("{\"Id\":1,\"Value\":\"1\"}"),
+                StatusCode = statusCode,
+                Content = httpContent,
             };
         }
-
-        private HttpResponseMessage GetOkResponseMessageWithNotDeserializableBody()
-        {
-            return new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("{dfsfqq gd/.,}fd,"),
-            };
-        }
-
-        private HttpResponseMessage GetUnauthorizedHttpResponseMessage()
-        {
-            return new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.Unauthorized,
-                Content = new StringContent("{}"),
-            };
-        }
-
-        private HttpResponseMessage GetInternalServerErrorHttpResponseMessageWithMessage()
-        {
-            return new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.InternalServerError,
-                Content = new StringContent(InternalServerErrorErrorMessage),
-            };
-        }
-        
-        private HttpResponseMessage GetInternalServerErrorHttpResponseMessageWithoutMessage()
-        {
-            return new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.InternalServerError,
-                Content = new StringContent(""),
-            };
-        }
-
+     
         private ResponseTestModel GetValidResponseTestModel()
         {
             return new ResponseTestModel

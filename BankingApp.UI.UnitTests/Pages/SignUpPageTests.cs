@@ -43,7 +43,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_UserSubmitsValidData_CallbacksTriggerAndReturnValidData()
+        public void WhenTheFormIsSubmited_ValidData_ExpectedResults()
         {
             bool switchOnCalled = false;
             bool switchOffCalled = false;
@@ -77,7 +77,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_UserSubmitsValidDataButSignUpAsyncDidNotSendMessage_CallbacksTriggerAndReturnValidData()
+        public void WhenTheFormIsSubmited_SendMessageFailure_ExpectedResults()
         {
             bool switchOnCalled = false;
             bool switchOffCalled = false;
@@ -111,7 +111,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_UserSubmitsValidData_NoErrorMessagesWereShown()
+        public void WhenTheFormIsSubmited_ValidData_ExpectedMarkupRendered()
         {
             var validSignUpView = GetValidSignUpView();
             var signUpForm = RenderComponent<SignUpPage>();
@@ -127,7 +127,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_UserSubmitsDataWithEmptyNickname_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_DataWithEmptyNickname_ExpectedMarkupRendered()
         {
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Nickname = "";
@@ -145,7 +145,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_UserSubmitsDataWithTooLongNickname_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_DataWithTooLongNickname_ExpectedMarkupRendered()
         {
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Nickname = "123456789abcd";
@@ -163,7 +163,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_UserSubmitsDataWithEmptyEmail_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_DataWithEmptyEmail_ExpectedMarkupRendered()
         {
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Email = "";
@@ -181,7 +181,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_UserSubmitsDataWithInvalidFormatEmail_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_DataWithInvalidFormatEmail_ExpectedMarkupRendered()
         {
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Email = "ksfdsfk";
@@ -199,7 +199,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_PasswwordIsTooShort_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_PasswwordIsTooShort_ExpectedMarkupRendered()
         {
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Password = "abc";
@@ -218,7 +218,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_PasswwordDoesNotMatchesRegularExpression_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_PasswwordDoesNotMatchesRegularExpression_ExpectedMarkupRendered()
         {
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Password = "abcdAAABBBBBBCCCCCC";
@@ -237,7 +237,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_PasswwordAndConfirmPasswordDoesNotMatch_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_PasswwordAndConfirmPasswordDoesNotMatch_ExpectedMarkupRendered()
         {
             var validSignUpView = GetValidSignUpView();
             validSignUpView.Password = "abcdAAABBBBBBCCCCCC12345";

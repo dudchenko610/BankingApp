@@ -43,7 +43,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ForgotPasswordPage_UserSubmitsValidData_CallbacksTriggerAndReturnValidData()
+        public void WhenTheFormIsSubmited_ValidData_ExpectedResults()
         {
             bool switchOnCalled = false;
             bool switchOffCalled = false;
@@ -73,7 +73,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ForgotPasswordPage_UserSubmitsValidDataButForgotPasswordAsyncDidNotSendMessage_CallbacksTriggerAndReturnValidData()
+        public void WhenTheFormIsSubmited_SendMessageFailure_ExpectedResults()
         {
             bool switchOnCalled = false;
             bool switchOffCalled = false;
@@ -106,7 +106,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ForgotPasswordPage_UserSubmitsValidData_NoErrorMessagesWereShown()
+        public void WhenTheComponentIsRendered_ValidData_ExpectedMarkupRendered()
         {
             var validForgotPasswordView = GetValidForgotPasswordView();
             var forgotPasswordForm = RenderComponent<ForgotPasswordPage>();
@@ -119,7 +119,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ForgotPasswordPage_UserSubmitsDataWithEmptyEmail_CorrespondingErrorMessageWasShown()
+        public void WhenTheComponentIsRendered_DataWithEmptyEmail_ExpectedMarkupRendered()
         {
             var validForgotPasswordView = GetValidForgotPasswordView();
             validForgotPasswordView.Email = "";
@@ -134,7 +134,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ForgotPasswordPage_UserSubmitsDataWithInvalidFormatEmail_CorrespondingErrorMessageWasShown()
+        public void WhenTheComponentIsRendered_DataWithInvalidFormatEmail_ExpectedMarkupRendered()
         {
             var validForgotPasswordView = GetValidForgotPasswordView();
             validForgotPasswordView.Email = "ksfdsfk";

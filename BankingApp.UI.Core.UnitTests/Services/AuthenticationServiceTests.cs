@@ -29,7 +29,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Initialize_CallMethod_CallsGetItemAsyncOfLocalStorageService()
+        public async Task Initialize_ValidTokens_GetItemAsyncInvoked()
         {
             var validTokensView = GetValidTokensViewWithAdminRole();
             string accesTokenKey = null;
@@ -43,7 +43,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         } 
         
         [Fact]
-        public async Task SignUp_PassValidParameter_CallsPostAsyncOfHttpService()
+        public async Task SignUp_ValidParameterSignUpView_PostAsyncInvoked()
         {
             var validSignUpView = GetValidSignUpView();
             string passedUrl = null;
@@ -65,7 +65,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task ConfirmEmail_PassValidParameter_CallsPostAsyncOfHttpService()
+        public async Task ConfirmEmail_ValidConfirmEmailView_PostAsyncInvoked()
         {
             var validConfirmEmailView = GetValidConfirmEmailView();
             string passedUrl = null;
@@ -87,7 +87,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task SignIn_PassValidParameter_CallsPostAsyncOfHttpServiceAndSetItemAsyncOfLocalStorageAsync()
+        public async Task SignIn_ValidSignInView_ExpectedResults()
         {
             var validSignInView = GetValidSignInView();
             var validTokenItems = GetValidTokensViewWithAdminRole();
@@ -126,7 +126,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Logout_PassValidParameter_CallsNavigateToOfNavigationWrapperAndRemoveItemAsyncOfLocalStorageAsync()
+        public async Task Logout_ValidParameters_ExpectedResults()
         {
             string accesTokenKey = null;
             object navigatedToUri = null;
@@ -144,7 +144,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task ResetPassword_PassValidParameter_CallsPostAsyncOfHttpService()
+        public async Task ResetPassword_ValidResetPasswordView_PostAsyncInvoked()
         {
             var validResetPasswordView = GetValidResetPasswordView();
             string passedUrl = null;
@@ -166,7 +166,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task ForgotPassword_PassValidParameter_CallsPostAsyncOfHttpService()
+        public async Task ForgotPassword_ValidForgotPasswordView_PostAsyncInvoked()
         {
             var validForgotPasswordView = GetValidForgotPasswordView();
             string passedUrl = null;
@@ -188,7 +188,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task GetRoles_AdminUserWasRegistered_ReturnsListWithCorrespondingRole()
+        public async Task GetRoles_AdminUserWasRegistered_ExpectedResults()
         {
             var validTokensView = GetValidTokensViewWithAdminRole();
 
@@ -201,7 +201,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task GetRoles_ClientUserWasRegistered_ReturnsListWithCorrespondingRole()
+        public async Task GetRoles_ValidTokens_ExpectedResults()
         {
             var validTokensView = GetValidTokensViewWithClientRole();
 
@@ -210,11 +210,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
             await _authenticationService.InitializeAsync();
             var roleNames = _authenticationService.GetRoles();
-            roleNames.Should().Contain(BankingApp.Shared.Constants.Roles.Client);
+            roleNames.Should().Contain(Roles.Client);
         }
 
         [Fact]
-        public async Task IsAdmin_ClientUserWasRegisteredAsClient_PropertyReturnsFalseValue()
+        public async Task IsAdmin_ClientUserWasRegisteredAsClient_ExpectedResults()
         {
             var validTokensView = GetValidTokensViewWithClientRole();
 
@@ -226,7 +226,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task IsAdmin_ClientUserWasRegisteredAsAdmin_PropertyReturnsTrueValue()
+        public async Task IsAdmin_ClientUserWasRegisteredAsAdmin_ExpectedResults()
         {
             var validTokensView = GetValidTokensViewWithAdminRole();
 

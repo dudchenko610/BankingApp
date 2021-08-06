@@ -13,8 +13,10 @@ namespace BankingApp.UI.UnitTests.Components
     public class UserTableTests : TestContext
     {
         [Fact]
-        public void UserTable_PassValidListData_ComponentContainsAsMuchDivWithSpecifiedClassElementsAsListDataCount()
+        public void WhenTheComponentIsRendered_PassValidListData_ExpectedMarkupRendered()
         {
+            const int TdCount = 3;
+
             var pagedUsers = GetValidPagedDataViewWithUserGetAllViewItems();
             var userTableComponent = RenderComponent<UserTable>(parameters => parameters
                 .Add(p => p.UsersViewList, pagedUsers.Items)
@@ -23,19 +25,6 @@ namespace BankingApp.UI.UnitTests.Components
             );
 
             userTableComponent.FindAll("tr").Count.Should().Be(pagedUsers.Items.Count + 1);
-        }
-
-        [Fact]
-        public void UserTable_PassValidListData_ComponentRendersAllItemsFieldsInTdTags()
-        {
-            const int TdCount = 3;
-            var pagedUsers = GetValidPagedDataViewWithUserGetAllViewItems();
-
-            var userTableComponent = RenderComponent<UserTable>(parameters => parameters
-                .Add(p => p.UsersViewList, pagedUsers.Items)
-                .Add(p => p.Page, pagedUsers.PageNumber)
-                .Add(p => p.UsersOnPage, pagedUsers.PageSize)
-            );
             var listOfLabelTexts = userTableComponent.FindAll("td").Select(x => x.TextContent).ToList();
 
             for (int i = 0; i < pagedUsers.Items.Count; i++)
@@ -46,7 +35,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void DepositList_UserClicksHistoryItem_EventTriggers()
+        public void WhenTheCallbackIsTriggered_UserClicksHistoryItem_OnBlockUserClickInvoked()
         {
             BlockUserModel blockUserModel = null;
 

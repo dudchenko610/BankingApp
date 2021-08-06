@@ -24,7 +24,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Block_PassValidData_PostAsyncOfHttpServiceCalled()
+        public async Task Block_ValidBlockUserView_PostAsyncInvoked()
         {
             BlockUserAdminView blockUserView = null;
             string passedUrl = null;
@@ -44,7 +44,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task GetAll_PassValidData_GetAllAsyncOfHttpServiceCalled()
+        public async Task GetAll_ValidBlockUserView_GetAllAsyncInvoked()
         {
             const int ValidPageNumber = 1;
             const int ValidPageSize = 2;

@@ -46,7 +46,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ResetPasswordPage_UserSubmitsValidData_CallbacksTriggerAndReturnValidData()
+        public void WhenTheFormIsSubmited_ValidData_ExpectedResults()
         {
             bool switchOnCalled = false;
             bool switchOffCalled = false;
@@ -86,7 +86,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ResetPasswordPage_UserSubmitsValidDataButResetPasswordAsyncDidNotSendMessage_CallbacksTriggerAndReturnValidData()
+        public void WhenTheFormIsSubmited_SendMessageFailure_ExpectedResults()
         {
             bool switchOnCalled = false;
             bool switchOffCalled = false;
@@ -95,27 +95,18 @@ namespace BankingApp.UI.UnitTests.Pages
             string notificationMessage = null;
             string toAbsoluteUriParameter = null;
 
-            var authenticationServiceMock = new Mock<IAuthenticationService>();
-            authenticationServiceMock.Setup(x => x.ResetPasswordAsync(It.IsAny<ResetPasswordAuthenticationView>()))
+            _authenticationServiceMock.Setup(x => x.ResetPasswordAsync(It.IsAny<ResetPasswordAuthenticationView>()))
                 .Callback((ResetPasswordAuthenticationView view) => { resetPasswordViewSentToServer = view; })
                 .ReturnsAsync(false);
 
-            var loaderServiceMock = new Mock<ILoaderService>();
-            loaderServiceMock.Setup(x => x.SwitchOn()).Callback(() => { switchOnCalled = true; });
-            loaderServiceMock.Setup(x => x.SwitchOff()).Callback(() => { switchOffCalled = true; });
+            _loaderServiceMock.Setup(x => x.SwitchOn()).Callback(() => { switchOnCalled = true; });
+            _loaderServiceMock.Setup(x => x.SwitchOff()).Callback(() => { switchOffCalled = true; });
 
-            var navWrapperMock = new Mock<INavigationWrapper>();
-            navWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Callback((string uri, bool force) => { navigateToUri = uri; });
-            navWrapperMock.Setup(x => x.ToAbsoluteUri(It.IsAny<string>())).Callback((string uri) => { toAbsoluteUriParameter = uri; }).Returns(GetValidUri());
-            navWrapperMock.Setup(x => x.Uri).Returns(ValidQueryUrl);
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Callback((string uri, bool force) => { navigateToUri = uri; });
+            _navigationWrapperMock.Setup(x => x.ToAbsoluteUri(It.IsAny<string>())).Callback((string uri) => { toAbsoluteUriParameter = uri; }).Returns(GetValidUri());
+            _navigationWrapperMock.Setup(x => x.Uri).Returns(ValidQueryUrl);
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowSuccess(It.IsAny<string>(), It.IsAny<string>())).Callback((string message, string heading) => { notificationMessage = message; });
-
-            Services.AddSingleton(authenticationServiceMock.Object);
-            Services.AddSingleton(loaderServiceMock.Object);
-            Services.AddSingleton(navWrapperMock.Object);
-            Services.AddSingleton(toastServiceMock.Object);
+            _toastServiceMock.Setup(x => x.ShowSuccess(It.IsAny<string>(), It.IsAny<string>())).Callback((string message, string heading) => { notificationMessage = message; });
 
             var validResetPasswordView = GetValidResetPasswordView();
             var resetPasswordForm = RenderComponent<ResetPasswordPage>();
@@ -124,7 +115,7 @@ namespace BankingApp.UI.UnitTests.Pages
             resetPasswordForm.Find("input[id=confirmPassword]").Change(validResetPasswordView.ConfirmPassword.ToString());
             resetPasswordForm.Find("form").Submit();
 
-            toAbsoluteUriParameter.Should().BeEquivalentTo(navWrapperMock.Object.Uri);
+            toAbsoluteUriParameter.Should().BeEquivalentTo(_navigationWrapperMock.Object.Uri);
             switchOnCalled.Should().BeTrue();
             switchOffCalled.Should().BeTrue();
             resetPasswordViewSentToServer.Password.Should().Be(validResetPasswordView.Password);
@@ -134,7 +125,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ResetPasswordPage_UserSubmitsValidData_NoErrorMessagesWereShown()
+        public void WhenTheFormIsSubmited_ValidData_ExpectedMarkupRendered()
         {
             var validResetPasswordView = GetValidResetPasswordView();
             var resetPasswordForm = RenderComponent<ResetPasswordPage>();
@@ -148,7 +139,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ResetPasswordPage_PasswwordIsTooShort_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_PasswwordIsTooShort_ExpectedMarkupRendered()
         {
             var validResetPasswordView = GetValidResetPasswordView();
             validResetPasswordView.Password = "abc";
@@ -165,7 +156,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void ResetPasswordPage_PasswwordDoesNotMatchesRegularExpression_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_PasswwordDoesNotMatchesRegularExpression_ExpectedMarkupRendered()
         {
             var validResetPasswordView = GetValidResetPasswordView();
             validResetPasswordView.Password = "abcdAAABBBBBBCCCCCC";
@@ -182,7 +173,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_PasswwordAndConfirmPasswordDoesNotMatch_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_PasswwordDoesNotMatchWithConfirmPassword_ExpectedMarkupRendered()
         {
             var validResetPasswordView = GetValidResetPasswordView();
             validResetPasswordView.Password = "abcdAAABBBBBBCCCCCC12345";

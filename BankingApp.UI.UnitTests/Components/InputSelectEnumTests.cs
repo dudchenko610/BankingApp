@@ -12,7 +12,7 @@ namespace BankingApp.UI.UnitTests.Components
     public class InputSelectEnumTests : TestContext
     {
         [Fact]
-        public void InputSelectEnum_PassEnumWithAttributeNames_OptionsContainsAttributeNames()
+        public void WhenTheComponentIsRendered_PassEnumWithAttributeNames_ExpectedMarkupRendered()
         {
             var editContext = new EditContext(new { });
             var myEnum = DepositCalculationFormulaEnumView.CompoundInterest;

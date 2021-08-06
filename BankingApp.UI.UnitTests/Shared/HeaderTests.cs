@@ -35,7 +35,7 @@ namespace BankingApp.UI.UnitTests.Shared
         }
 
         [Fact]
-        public void Header_UserClicksUrlLink_LinkGetsActiveState()
+        public void WhenTheComponentIsRendered_UserClicksUrlLink_ExpectedMarkupRendered()
         {
             Services.AddSingleton(_authenticationServiceMock.Object);
             Services.AddSingleton(_loaderServiceMock.Object);
@@ -44,19 +44,12 @@ namespace BankingApp.UI.UnitTests.Shared
             var headerComponent = RenderComponent<Header>();
             headerComponent.Find("a").Click();
             headerComponent.Find("li").ClassList.Should().Contain("active");
-        }
-
-        [Fact]
-        public void Header_UserClicksUrlLink_AppSwitchesToAnotherRoute()
-        {
-            var mainLayoutComp = RenderComponent<Header>();
-            mainLayoutComp.Find("a").Click();
 
             _navWrapperMock.Verify(mock => mock.NavigateTo(It.IsAny<string>(), false), Times.AtLeastOnce);
         }
 
         [Fact]
-        public void HeaderUserIsLoggedAsClient_HeaderContainsCorrespondingLinks()
+        public void WhenTheComponentIsRendered_UserIsLoggedAsClient_ExpectedMarkupRendered()
         {
             var validTokensView = GetValidTokensView();
 
@@ -69,7 +62,7 @@ namespace BankingApp.UI.UnitTests.Shared
         }
 
         [Fact]
-        public void HeaderUserIsNotLogged_HeaderContainsCorrespondingLinks()
+        public void WhenTheComponentIsRendered_UserIsNotLogged_ExpectedMarkupRendered()
         {
             _authenticationServiceMock.SetupGet(x => x.TokensView).Returns((TokensView) null);
 
@@ -80,7 +73,7 @@ namespace BankingApp.UI.UnitTests.Shared
         }
 
         [Fact]
-        public void HeaderUserIsLoggedAsAdmin_HeaderContainsCorrespondingLinks()
+        public void WhenTheComponentIsRendered_UserIsLoggedAsAdmin_ExpectedMarkupRendered()
         {
             var validTokensView = GetValidTokensView();
 

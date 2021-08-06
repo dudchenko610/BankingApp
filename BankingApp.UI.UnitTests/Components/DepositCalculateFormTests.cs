@@ -14,7 +14,7 @@ namespace BankingApp.UI.UnitTests.Components
         private const float ValidPercents = 10; 
 
         [Fact]
-        public void DepositCalculateForm_UserSubmitsValidData_CallbackTriggersAndReturnsValidData()
+        public void WhenTheFormIsSubmited_UserSubmitsValidData_OnFormSubmitInvoked()
         {
             CalculateDepositView depositViewModel = null;
 
@@ -36,7 +36,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void DepositCalculateForm_UserTypesNegativeDepositSum_RenderTreeContainsIncorrectPriceFormatMessage()
+        public void WhenTheComponentIsRendered_UserTypesNegativeDepositSum_ExpectedMarkupRendered()
         {
             const decimal InvalidDepositSum = -55.55m;
 
@@ -52,7 +52,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void DepositCalculateForm_UserTypesDepositSumWithMoreThanTwoDecimalPlaces_RenderTreeContainsIncorrectPriceFormatMessage()
+        public void WhenTheComponentIsRendered_UserTypesDepositSumWithMoreThanTwoDecimalPlaces_ExpectedMarkupRendered()
         {
             const decimal InvalidDepositSum = 95.589m;
 
@@ -68,7 +68,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void DepositCalculateForm_UserTypesPercentLessThanOne_RenderTreeContainsIncorrectPercentNumberMessage()
+        public void WhenTheComponentIsRendered_UserTypesPercentLessThanOne_ExpectedMarkupRendered()
         {
             const float InvalidPercents = 0;
 
@@ -84,7 +84,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void DepositCalculateForm_UserTypesPercentBiggerThan100_RenderTreeContainsIncorrectPercentNumberMessage()
+        public void WhenTheComponentIsRendered_UserTypesPercentBiggerThan100_ExpectedMarkupRendered()
         {
             const float InvalidPercents = 101;
 
@@ -100,7 +100,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
         
         [Fact]
-        public void DepositCalculateForm_UserTypesPercentsWithMoreThanTwoDecimalPlaces_RenderTreeContainsIncorrectPercentNumberMessage()
+        public void WhenTheComponentIsRendered_UserTypesPercentsWithMoreThanTwoDecimalPlaces_ExpectedMarkupRendered()
         {
             const decimal InvalidPercents = 95.589m;
 
@@ -116,7 +116,7 @@ namespace BankingApp.UI.UnitTests.Components
         }
 
         [Fact]
-        public void DepositCalculateForm_UserTypesMonthCountLessThan1_RenderTreeContainsIncorrectMonthFormatMessage()
+        public void WhenTheComponentIsRendered_UserTypesMonthCountLessThan1_ExpectedMarkupRendered()
         {
             const int InvalidMonthCount = 0;
 

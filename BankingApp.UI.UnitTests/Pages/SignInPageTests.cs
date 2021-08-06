@@ -43,7 +43,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignInPage_UserSubmitsValidData_CallbacksTriggerAndReturnValidData()
+        public void WhenTheFormIsSubmited_ValidData_SignInAsyncInvoked()
         {
             bool switchOnCalled = false;
             bool switchOffCalled = false;
@@ -76,7 +76,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignInPage_UserSubmitsValidDataButSignInAsyncDidNotSendMessage_CallbacksTriggerAndReturnValidData()
+        public void WhenTheFormIsSubmited_SendMesssageFailure_ExpectedResults()
         {
             bool switchOnCalled = false;
             bool switchOffCalled = false;
@@ -108,7 +108,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignInPage_UserSubmitsValidData_NoErrorMessagesWereShown()
+        public void WhenTheFormIsSubmited_ValidData_ExpectedMarkupRendered()
         {
             var validSignInView = GetValidSignInView();
             var signInForm = RenderComponent<SignInPage>();
@@ -122,7 +122,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignInPage_UserSubmitsDataWithEmptyEmail_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_DataWithEmptyEmail_ExpectedMarkupRendered()
         {
             var validSignInView = GetValidSignInView();
             validSignInView.Email = "";
@@ -138,7 +138,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignInPage_UserSubmitsDataWithInvalidFormatEmail_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_DataWithInvalidFormatEmail_ExpectedMarkupRendered()
         {
             var validSignInView = GetValidSignInView();
             validSignInView.Email = "ksfdsfk";
@@ -154,7 +154,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignInPage_PasswwordIsTooShort_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_PasswwordIsTooShort_ExpectedMarkupRendered()
         {
             var validSignInView = GetValidSignInView();
             validSignInView.Password = "abc";
@@ -170,7 +170,7 @@ namespace BankingApp.UI.UnitTests.Pages
         }
 
         [Fact]
-        public void SignUpPage_PasswwordDoesNotMatchesRegularExpression_CorrespondingErrorMessageWasShown()
+        public void WhenTheFormIsSubmited_PasswwordDoesNotMatchesRegularExpression_ExpectedMarkupRendered()
         {
             var validSignInView = GetValidSignInView();
             validSignInView.Password = "abcdAAABBBBBBCCCCCC";
