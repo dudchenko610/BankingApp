@@ -3,7 +3,6 @@ using BankingApp.BusinessLogicLayer.Interfaces;
 using System.Threading.Tasks;
 using static BankingApp.Shared.Constants;
 using System;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using BankingApp.ViewModels.ViewModels.Deposit;
 
@@ -23,11 +22,11 @@ namespace BankingApp.Api.Controllers
         [HttpPost]
         [Authorize]
         [Route(Routes.Deposit.Calculate)]
-        public async Task<IActionResult> Calculate(CalculateDepositView requestDepositeData)
+        public async Task<IActionResult> Calculate(CalculateDepositView calculateDepositView)
         {
             try
             {
-                var id = await _depositService.CalculateAsync(requestDepositeData);
+                var id = await _depositService.CalculateAsync(calculateDepositView);
 
                 return Ok(id);
             }
@@ -57,14 +56,13 @@ namespace BankingApp.Api.Controllers
         [HttpGet]
         [Authorize]
         [Route(Routes.Deposit.GetById)]
-        public async Task<IActionResult> GetById(int depositeHistoryId)
+        public async Task<IActionResult> GetById(int depositId)
         {
             try
             {
-                var responseCalculationHistoryViewItem
-                    = await _depositService.GetByIdAsync(depositeHistoryId);
+                var getByIdDepositView = await _depositService.GetByIdAsync(depositId);
 
-                return Ok(responseCalculationHistoryViewItem);
+                return Ok(getByIdDepositView);
             }
             catch (Exception e)
             {

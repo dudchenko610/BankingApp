@@ -114,10 +114,10 @@ namespace BankingApp.DataAccessLayer.Repositories
         /// <param name="skip">Offset from begining of the table.</param>
         /// <param name="take">Number of entities to take.</param>
         /// <returns>View model containing list of paged entities and total table size.</returns>
-        public async Task<PagedDataView<TEntity>> GetAllAsync(int skip, int take)
+        public async Task<PaginationModel<TEntity>> GetAllAsync(int skip, int take)
         {
             var items = await _dbSet.Skip(skip).Take(take).ToListAsync();
-            var paginationModel = new PagedDataView<TEntity>
+            var paginationModel = new PaginationModel<TEntity>
             {
                 Items = items,
                 TotalCount = await _dbSet.CountAsync()

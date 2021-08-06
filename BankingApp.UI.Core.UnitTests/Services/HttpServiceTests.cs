@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using BankingApp.ViewModels.ViewModels.Authentication;
+using BankingApp.UI.Core.UnitTests.TestModels;
 
 namespace BankingApp.UI.Core.UnitTests.Services
 {
@@ -22,372 +23,323 @@ namespace BankingApp.UI.Core.UnitTests.Services
         private const string GetModel = "GetModel";
         private const string InternalServerErrorErrorMessage = "GetModel";
 
+        private HttpService _httpService;
         private HttpClient _httpClient;
-        private INavigationWrapper _navigationWrapper;
-        private ILocalStorageService _localStorageService;
-        private IToastService _toastService;
-
-        private class ResponseTestModel
-        {
-            public int Id { get; set; }
-            public string Value { get; set; }
-        }
-
-        private class RequestTestModel
-        {
-            public int Id { get; set; }
-            public string Value { get; set; }
-        }
+        private Mock<HttpMessageHandler> _httpMessageHandlerMock;
+        private Mock<INavigationWrapper> _navigationWrapperMock;
+        private Mock<ILocalStorageService> _localStorageServiceMock;
+        private Mock<IToastService> _toastServiceMock;
 
         public HttpServiceTests()
         {
-            var validHttpResponse = GetValidHttpResponseMessage();
+            var validHttpResponse = GetHttpResponseMessage(HttpStatusCode.OK, new StringContent("{\"Id\":1,\"Value\":\"1\"}"));
             var validTokensView = GetValidTokensView();
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(validHttpResponse).Verifiable();
-            _httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var navigationMamagerMock = new Mock<INavigationWrapper>();
-            navigationMamagerMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()));
-            _navigationWrapper = navigationMamagerMock.Object;
+            _httpClient = new HttpClient(_httpMessageHandlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()));
-            _toastService = toastServiceMock.Object;
+            _navigationWrapperMock = new Mock<INavigationWrapper>();
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()));
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>())).ReturnsAsync(validTokensView);
-            _localStorageService = localStorageMock.Object;
+            _toastServiceMock = new Mock<IToastService>();
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()));
+
+            _localStorageServiceMock = new Mock<ILocalStorageService>();
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>())).ReturnsAsync(validTokensView);
+
+            _httpService = new HttpService(_httpClient, _navigationWrapperMock.Object, _localStorageServiceMock.Object, _toastServiceMock.Object);
         }
 
         [Fact]
-        public async Task Get_PassValidUrlWithUnauthorizedMode_ReturnsValidModelAndShowErrorShouldNotBeCalled()
+        public async Task Get_ValidResponseTestModel_ExpectedResults()
         {
             bool unauthorizedMode = false;
             var validTestModel = GetValidResponseTestModel();
             string messageFromShowError = null;
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var httpService = new HttpService(_httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            var fetchedTestModel = await httpService.GetAsync<ResponseTestModel>(GetModel, unauthorizedMode);
+            var fetchedTestModel = await _httpService.GetAsync<ResponseTestModel>(GetModel, unauthorizedMode);
 
             messageFromShowError.Should().BeNull();
             fetchedTestModel.Should().BeEquivalentTo(validTestModel);
         }
 
         [Fact]
-        public async Task Get_PassValidUrlWithAuthorizedMode_CallsGetItemAsyncOfLocalStorageService()
+        public async Task Get_AuthorizedMode_GetItemAsyncInvoked()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
             var validTokensView = GetValidTokensView();
             string accesTokenKey = null;
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .Callback((string key, CancellationToken? cancellationToken) => { accesTokenKey = key; }).ReturnsAsync(validTokensView);
 
-            var httpService = new HttpService(_httpClient, _navigationWrapper, localStorageMock.Object, _toastService);
-            await httpService.GetAsync<ResponseTestModel>(GetModel, authorizedMode);
+            await _httpService.GetAsync<ResponseTestModel>(GetModel, authorizedMode);
 
             accesTokenKey.Should().Be(Constants.Constants.Authentication.TokensView);
         }
 
         [Fact]
-        public async Task Get_PassValidUrlWithAuthorizedModeButServerRespondsWithStatusUnauthorized_CallsShowErrorAndNavigateToWithCorrespondingParameters()
+        public async Task Get_UnauthorizedStatusCode_ExpectedResults()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
-            var unauthorizedHttpResponse = GetUnauthorizedHttpResponseMessage();
+            var unauthorizedHttpResponse = GetHttpResponseMessage(HttpStatusCode.Unauthorized, new StringContent("{}"));
 
             string messageFromShowError = null;
             string logoutUri = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(unauthorizedHttpResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var navigationWrapperMock = new Mock<INavigationWrapper>();
-            navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
                 .Callback((string uri, bool forceLoad) => { logoutUri = uri; });
 
-            var httpService = new HttpService(httpClient, navigationWrapperMock.Object, _localStorageService, toastServiceMock.Object);
-            await httpService.GetAsync<ResponseTestModel>(GetModel, authorizedMode);
+            await _httpService.GetAsync<ResponseTestModel>(GetModel, authorizedMode);
 
             messageFromShowError.Should().Be(Constants.Constants.Notifications.Unauthorized);
             logoutUri.Should().Be(Constants.Constants.Routes.LogoutPage);
         }
 
-        [Fact]
-        public async Task Get_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorAndErrorMessage_CallsShowErrorWithCorrespondingErrorMessage()
+        [Theory]
+        [InlineData(HttpStatusCode.InternalServerError, InternalServerErrorErrorMessage, InternalServerErrorErrorMessage)] // NotSucceededResultWithErrorMessage
+        [InlineData(HttpStatusCode.InternalServerError, "", Constants.Constants.Notifications.UnexpectedError)]  // NotSucceededResultWithoutErrorMessage
+        public async Task Get_InternalServerErrorReturned_ShowErrorInvoked(HttpStatusCode httpStatusCode, string stringContent, string expectedError)
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithMessage();
+            var internalServerErrorResponse = GetHttpResponseMessage(httpStatusCode, new StringContent(stringContent));
 
             string messageFromShowError = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(internalServerErrorResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            await httpService.GetAsync<ResponseTestModel>(GetModel, false);
+            await _httpService.GetAsync<ResponseTestModel>(GetModel, false);
 
-            messageFromShowError.Should().Be(InternalServerErrorErrorMessage);
+            messageFromShowError.Should().Be(expectedError);
         }
 
         [Fact]
-        public async Task Get_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorWithoutErrorMessage_CallsShowErrorWithUnexpectedErrorMessage()
+        public async Task Get_ResponseBodyIsNotDeserializable_ExpectedResults()
         {
-            var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithoutMessage();
+            var okResponse = GetHttpResponseMessage(HttpStatusCode.OK, new StringContent("{dfsfqq gd/.,}fd,"));
 
-            string messageFromShowError = null;
-
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(internalServerErrorResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
-
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
-                .Callback((string message, string heading) => { messageFromShowError = message; });
-
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            await httpService.GetAsync<ResponseTestModel>(GetModel, false);
-
-            messageFromShowError.Should().Be(Constants.Constants.Notifications.UnexpectedError);
-        }
-
-        [Fact]
-        public async Task Get_PassValidUrlModeButServerRespondsWithNotDeserializableBody_ReturnsEmptyModel()
-        {
-            var emptyTestModel = GetValidEmptyTestModel();
-            var okResponse = GetOkResponseMessageWithNotDeserializableBody();
-
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(okResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, _toastService);
-            var fetchedTestModel = await httpService.GetAsync<ResponseTestModel>(GetModel, false);
+            var fetchedTestModel = await _httpService.GetAsync<ResponseTestModel>(GetModel, false);
 
-            fetchedTestModel.Should().BeEquivalentTo(emptyTestModel);
+            fetchedTestModel.Should().BeNull();
         }
 
         [Fact]
-        public async Task Post_PassValidUrlWithUnauthorizedMode_ReturnsValidModelAndShowErrorShouldNotBeCalled()
+        public async Task Post_UnauthorizedMode_ExpectedResults()
         {
             bool unauthorizedMode = false;
             var validTestModel = GetValidResponseTestModel();
             string messageFromShowError = null;
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var httpService = new HttpService(_httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-
             var validRequestTestModel = GetValidRequestTestModel();
-            var fetchedTestModel = await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, unauthorizedMode);
+            var fetchedTestModel = await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, unauthorizedMode);
 
             messageFromShowError.Should().BeNull();
             fetchedTestModel.Should().BeEquivalentTo(validTestModel);
         }
 
         [Fact]
-        public async Task Post_PassValidUrlWithAuthorizedMode_CallsGetItemAsyncOfLocalStorageService()
+        public async Task Post_AuthorizedMode_GetItemAsyncInvoked()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
             var validTokensView = GetValidTokensView();
             string accesTokenKey = null;
 
-            var localStorageMock = new Mock<ILocalStorageService>();
-            localStorageMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
                 .Callback((string key, CancellationToken? cancellationToken) => { accesTokenKey = key; }).ReturnsAsync(validTokensView);
 
-            var httpService = new HttpService(_httpClient, _navigationWrapper, localStorageMock.Object, _toastService);
-
             var validRequestTestModel = GetValidRequestTestModel();
-            await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, authorizedMode);
+            await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, authorizedMode);
 
             accesTokenKey.Should().Be(Constants.Constants.Authentication.TokensView);
         }
 
         [Fact]
-        public async Task Post_PassValidUrlWithAuthorizedModeButServerRespondsWithStatusUnauthorized_CallsShowErrorAndNavigateToWithCorrespondingParameters()
+        public async Task Post_UnauthorizedStatusCode_ExpectedResults()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
-            var unauthorizedHttpResponse = GetUnauthorizedHttpResponseMessage();
+            var unauthorizedHttpResponse = GetHttpResponseMessage(HttpStatusCode.Unauthorized, new StringContent("{}"));
 
             string messageFromShowError = null;
             string logoutUri = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(unauthorizedHttpResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
-            var navigationWrapperMock = new Mock<INavigationWrapper>();
-            navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
                 .Callback((string uri, bool forceLoad) => { logoutUri = uri; });
 
             var validRequestTestModel = GetValidRequestTestModel();
-            var httpService = new HttpService(httpClient, navigationWrapperMock.Object, _localStorageService, toastServiceMock.Object);
-            await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, authorizedMode);
+            await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, authorizedMode);
 
             messageFromShowError.Should().Be(Constants.Constants.Notifications.Unauthorized);
             logoutUri.Should().Be(Constants.Constants.Routes.LogoutPage);
         }
 
-        [Fact]
-        public async Task Post_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorAndErrorMessage_CallsShowErrorWithCorrespondingErrorMessage()
+        [Theory]
+        [InlineData(HttpStatusCode.InternalServerError, InternalServerErrorErrorMessage, InternalServerErrorErrorMessage)] // NotSucceededResultWithErrorMessage
+        [InlineData(HttpStatusCode.InternalServerError, "", Constants.Constants.Notifications.UnexpectedError)]  // NotSucceededResultWithoutErrorMessage
+        public async Task Post_InternalServerErrorReturned_ShowErrorInvoked(HttpStatusCode httpStatusCode, string stringContent, string expectedError)
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithMessage();
+            var internalServerErrorResponse = GetHttpResponseMessage(httpStatusCode, new StringContent(stringContent));
 
             string messageFromShowError = null;
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(internalServerErrorResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback((string message, string heading) => { messageFromShowError = message; });
 
             var validRequestTestModel = GetValidRequestTestModel();
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
+            await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, false);
 
-            messageFromShowError.Should().Be(InternalServerErrorErrorMessage);
+            messageFromShowError.Should().Be(expectedError);
         }
 
         [Fact]
-        public async Task Post_PassValidUrlModeButServerRespondsWithStatusInternalServerErrorWithoutErrorMessage_CallsShowErrorWithUnexpectedErrorMessage()
+        public async Task Post_ResponseBodyIsNotDeserializable_ExpectedResults()
         {
-            var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetInternalServerErrorHttpResponseMessageWithoutMessage();
+            var okResponse = GetHttpResponseMessage(HttpStatusCode.OK, new StringContent("{dfsfqq gd/.,}fd,"));
 
-            string messageFromShowError = null;
-
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(internalServerErrorResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
-
-            var toastServiceMock = new Mock<IToastService>();
-            toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
-                .Callback((string message, string heading) => { messageFromShowError = message; });
-
-            var validRequestTestModel = GetValidRequestTestModel();
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, toastServiceMock.Object);
-            await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
-
-            messageFromShowError.Should().Be(Constants.Constants.Notifications.UnexpectedError);
-        }
-
-        [Fact]
-        public async Task Post_PassValidUrlModeButServerRespondsWithNotDeserializableBody_ReturnsEmptyModel()
-        {
-            var emptyTestModel = GetValidEmptyTestModel();
-            var okResponse = GetOkResponseMessageWithNotDeserializableBody();
-
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                .ReturnsAsync(okResponse).Verifiable();
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestUrl) };
 
             var validRequestTestModel = GetValidRequestTestModel();
-            var httpService = new HttpService(httpClient, _navigationWrapper, _localStorageService, _toastService);
-            var fetchedTestModel = await httpService.PostAsync<ResponseTestModel>(GetModel, validRequestTestModel, false);
+            var fetchedTestModel = await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, false);
 
-            fetchedTestModel.Should().BeEquivalentTo(emptyTestModel);
+            fetchedTestModel.Should().BeNull();
         }
 
-        private HttpResponseMessage GetValidHttpResponseMessage()
+        [Fact]
+        public async Task PostEmptyResult_UnauthorizedMode_ExpectedResults()
+        {
+            bool unauthorizedMode = false;
+            var validTestModel = GetValidResponseTestModel();
+            string messageFromShowError = null;
+
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback((string message, string heading) => { messageFromShowError = message; });
+
+            var validRequestTestModel = GetValidRequestTestModel();
+            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, unauthorizedMode);
+
+            messageFromShowError.Should().BeNull();
+            responseResult.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task PostEmptyResult_AuthorizedMode_GetItemAsyncInvoked()
+        {
+            bool authorizedMode = true;
+            var validTestModel = GetValidResponseTestModel();
+            var validTokensView = GetValidTokensView();
+            string accesTokenKey = null;
+
+            _localStorageServiceMock.Setup(x => x.GetItemAsync<TokensView>(It.IsAny<string>(), It.IsAny<CancellationToken?>()))
+                .Callback((string key, CancellationToken? cancellationToken) => { accesTokenKey = key; }).ReturnsAsync(validTokensView);
+
+            var validRequestTestModel = GetValidRequestTestModel();
+            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, authorizedMode);
+
+            accesTokenKey.Should().Be(Constants.Constants.Authentication.TokensView);
+            responseResult.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task PostEmptyResult_UnauthorizedStatusCode_ExpectedResults()
+        {
+            bool authorizedMode = true;
+            var validTestModel = GetValidResponseTestModel();
+            var unauthorizedHttpResponse = GetHttpResponseMessage(HttpStatusCode.Unauthorized, new StringContent("{}"));
+
+            string messageFromShowError = null;
+            string logoutUri = null;
+
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+               .ReturnsAsync(unauthorizedHttpResponse).Verifiable();
+
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback((string message, string heading) => { messageFromShowError = message; });
+
+            _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), It.IsAny<bool>()))
+                .Callback((string uri, bool forceLoad) => { logoutUri = uri; });
+
+            var validRequestTestModel = GetValidRequestTestModel();
+            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, authorizedMode);
+
+            messageFromShowError.Should().Be(Constants.Constants.Notifications.Unauthorized);
+            logoutUri.Should().Be(Constants.Constants.Routes.LogoutPage);
+            responseResult.Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(HttpStatusCode.InternalServerError, InternalServerErrorErrorMessage, InternalServerErrorErrorMessage)] // NotSucceededResultWithErrorMessage
+        [InlineData(HttpStatusCode.InternalServerError, "", Constants.Constants.Notifications.UnexpectedError)]  // NotSucceededResultWithoutErrorMessage
+        public async Task PostEmptyResult_InternalServerErrorReturned_ShowErrorInvoked(HttpStatusCode httpStatusCode, string stringContent, string expectedError)
+        {
+            var validTestModel = GetValidResponseTestModel();
+            var internalServerErrorResponse = GetHttpResponseMessage(httpStatusCode, new StringContent(stringContent));
+
+            string messageFromShowError = null;
+
+            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+               .ReturnsAsync(internalServerErrorResponse).Verifiable();
+
+            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback((string message, string heading) => { messageFromShowError = message; });
+
+            var validRequestTestModel = GetValidRequestTestModel();
+            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, false);
+
+            messageFromShowError.Should().Be(expectedError);
+            responseResult.Should().BeFalse();
+        }
+
+        private HttpResponseMessage GetHttpResponseMessage(HttpStatusCode statusCode, HttpContent httpContent)
         {
             return new HttpResponseMessage()
             {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("{\"Id\":1,\"Value\":\"1\"}"),
-            };
-        }
-
-        private HttpResponseMessage GetOkResponseMessageWithNotDeserializableBody()
-        {
-            return new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("{dfsfqq gd/.,}fd,"),
-            };
-        }
-
-        private HttpResponseMessage GetUnauthorizedHttpResponseMessage()
-        {
-            return new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.Unauthorized,
-                Content = new StringContent("{}"),
-            };
-        }
-
-        private HttpResponseMessage GetInternalServerErrorHttpResponseMessageWithMessage()
-        {
-            return new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.InternalServerError,
-                Content = new StringContent(InternalServerErrorErrorMessage),
-            };
-        }
-        
-        private HttpResponseMessage GetInternalServerErrorHttpResponseMessageWithoutMessage()
-        {
-            return new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.InternalServerError,
-                Content = new StringContent(""),
+                StatusCode = statusCode,
+                Content = httpContent,
             };
         }
 
         private ResponseTestModel GetValidResponseTestModel()
         {
             return new ResponseTestModel
-            { 
+            {
                 Id = 1,
                 Value = "1"
-            };
-        }
-
-        private ResponseTestModel GetValidEmptyTestModel()
-        {
-            return new ResponseTestModel
-            {
-                Id = 0,
-                Value = null
             };
         }
 
@@ -402,7 +354,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         private RequestTestModel GetValidRequestTestModel()
         {
             return new RequestTestModel
-            { 
+            {
                 Id = 1,
                 Value = "value"
             };

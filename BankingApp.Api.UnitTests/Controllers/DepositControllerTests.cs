@@ -20,20 +20,28 @@ namespace BankingApp.Api.UnitTests.Controllers
         private const int ValidPageNumber = 1;
         private const int ValidPageSize = 1;
 
+        private DepositController _depositController;
+        private Mock<IDepositService> _depositServiceMock;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _depositServiceMock = new Mock<IDepositService>();
+            _depositController = new DepositController(_depositServiceMock.Object);
+        }
+
         [Test]
-        public async Task Calculate_СorrectInputData_ReturnsOkObjectResultWithBankingServiceReceivesValidModel()
+        public async Task Calculate_СorrectInputData_ExpectedResults()
         {
             var validCalculateDepositViw = GetValidCalculateDepositView();
             CalculateDepositView inputModelOfCalculateDepositeMethod = null;
 
-            var depositServiceMock = new Mock<IDepositService>();
-            depositServiceMock
+            _depositServiceMock
                 .Setup(x => x.CalculateAsync(It.IsAny<CalculateDepositView>()))
                 .ReturnsAsync(DepositeServiceCalculateReturnValue)
                 .Callback((CalculateDepositView x) => inputModelOfCalculateDepositeMethod = x);
-            var depositController = new DepositController(depositServiceMock.Object);
 
-            var controllerResult = await depositController.Calculate(validCalculateDepositViw);
+            var controllerResult = await _depositController.Calculate(validCalculateDepositViw);
 
             inputModelOfCalculateDepositeMethod
                 .Should().NotBeNull()
@@ -45,21 +53,19 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task GetById_ValidDepositIdPassed_ReturnsOkObjectResultWithGetByIdDepositView()
+        public async Task GetById_СorrectInputData_ExpectedResults()
         {
             const int DepositeHistoryId = 1;
 
             var getByIdDepositeViewResponseFromService = GetValidGetByIdDepositView();
             int inputOfBankingServiceDepositeHistoryId = -1;
 
-            var depositServiceMock = new Mock<IDepositService>();
-            depositServiceMock
+            _depositServiceMock
                 .Setup(x => x.GetByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(getByIdDepositeViewResponseFromService)
                 .Callback((int depositeHistoryId) => inputOfBankingServiceDepositeHistoryId = depositeHistoryId);
-            var depositController = new DepositController(depositServiceMock.Object);
 
-            var controllerResult = await depositController.GetById(DepositeHistoryId);
+            var controllerResult = await _depositController.GetById(DepositeHistoryId);
 
             inputOfBankingServiceDepositeHistoryId.Should().Be(DepositeHistoryId);
 
@@ -72,17 +78,15 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task GetAll_CallGetAllMethod_ReturnsNotNullModelWithNotNullMemberList()
+        public async Task GetAll_СorrectInputData_ExpectedResults()
         {
             var getPagedAllDepositViewItemResponseFromService = GetValidPagedGetAllDepositViewItemList();
-            var depositServiceMock = new Mock<IDepositService>();
-            depositServiceMock
+
+            _depositServiceMock
                 .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(getPagedAllDepositViewItemResponseFromService);
 
-            var depositController = new DepositController(depositServiceMock.Object);
-
-            var controllerResult = await depositController.GetAll(ValidPageNumber, ValidPageSize);
+            var controllerResult = await _depositController.GetAll(ValidPageNumber, ValidPageSize);
             var okResult = controllerResult as ObjectResult;
 
             var resultOfOkObjectResultValidation = okResult.Should().NotBeNull().And.BeOfType<OkObjectResult>();
@@ -93,13 +97,12 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task GetAll_CallGetAllMethod_PassesValidParametersToService()
+        public async Task GetAll_СorrectInputData_GetAllAsyncInvoked()
         {
             int passedPageNumber = -1;
             int passedPageSize = -1;
 
-            var depositServiceMock = new Mock<IDepositService>();
-            depositServiceMock
+            _depositServiceMock
                 .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .Callback(
                     (int pageNumber, int pageSize) => 
@@ -109,8 +112,7 @@ namespace BankingApp.Api.UnitTests.Controllers
                     }
                 );
 
-            var depositController = new DepositController(depositServiceMock.Object);
-            await depositController.GetAll(ValidPageNumber, ValidPageSize);
+            await _depositController.GetAll(ValidPageNumber, ValidPageSize);
 
             passedPageNumber.Should().Be(ValidPageNumber);
             passedPageSize.Should().Be(ValidPageSize);

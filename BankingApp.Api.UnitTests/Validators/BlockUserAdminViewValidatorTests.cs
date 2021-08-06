@@ -17,7 +17,7 @@ namespace BankingApp.Api.UnitTests.Validators
         }
 
         [Test]
-        public void Validate_UserIdLessThanZero_ValidErrorMessage()
+        public void Validate_UserIdLessThanZero_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetBlockUserAdminViewWithInvalidUserId());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Admin.UserIdOutOfRange);

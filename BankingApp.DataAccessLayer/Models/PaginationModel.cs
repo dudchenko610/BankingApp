@@ -6,7 +6,7 @@ namespace BankingApp.DataAccessLayer.Models
     /// View model to contain paged response from storage.
     /// </summary>
     /// <typeparam name="T">Type of paged elements.</typeparam>
-    public class PagedDataView<T>
+    public class PaginationModel<T>
     {
         /// <summary>
         /// Paged items.

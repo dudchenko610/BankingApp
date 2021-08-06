@@ -13,16 +13,23 @@ namespace BankingApp.Api.UnitTests.Controllers
     [TestFixture]
     public class AdminControllerTests
     {
+        private Mock<IUserService> _userServiceMock;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _userServiceMock = new Mock<IUserService>();
+        }
+
         [Test]
-        public async Task GetAll_СorrectInputData_ReturnsOkObjectResult()
+        public async Task GetAll_СorrectInputData_ExpectedResults()
         {
             const int ValidPageNumber = 1;
             const int ValidPageSize = 1;
 
-            var userServiceMock = new Mock<IUserService>();
-            userServiceMock.Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()));
+            _userServiceMock.Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()));
 
-            var adminController = new AdminController(userServiceMock.Object);
+            var adminController = new AdminController(_userServiceMock.Object);
 
             var controllerResult = await adminController.GetAll(ValidPageNumber, ValidPageSize);
             controllerResult.Should().NotBeNull().And.BeOfType<OkObjectResult>()
@@ -30,16 +37,15 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task BlockUser_СorrectInputData_ReturnsOkResult()
+        public async Task BlockUser_СorrectInputData_ExpectedResults()
         {
             var validBlockUserView = GetValidBlockUserAdminView();
             BlockUserAdminView inputOfblockAsyncMethod = null;
 
-            var userServiceMock = new Mock<IUserService>();
-            userServiceMock.Setup(x => x.BlockAsync(It.IsAny<BlockUserAdminView>()))
+            _userServiceMock.Setup(x => x.BlockAsync(It.IsAny<BlockUserAdminView>()))
                 .Callback((BlockUserAdminView x) => { inputOfblockAsyncMethod = x; });
 
-            var adminController = new AdminController(userServiceMock.Object);
+            var adminController = new AdminController(_userServiceMock.Object);
 
             var controllerResult = await adminController.BlockUser(validBlockUserView);
             controllerResult.Should().NotBeNull().And.BeOfType<OkResult>()

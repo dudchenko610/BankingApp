@@ -36,9 +36,9 @@ namespace BankingApp.BusinessLogicLayer
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IJwtService, JwtService>();
 
-            services.Configure<EmailConnectionOptions>(configuration.GetSection(Constants.AppSettings.EmailConfig));
-            services.Configure<ClientConnectionOptions>(configuration.GetSection(Constants.AppSettings.ClientConfig));
-            services.Configure<JwtOptions>(configuration.GetSection(Constants.AppSettings.JwtConfig));
+            services.Configure<EmailConnectionOptions>(configuration.GetSection(Constants.AppSettings.EmailConfiguration));
+            services.Configure<ClientConnectionOptions>(configuration.GetSection(Constants.AppSettings.ClientConfiguration));
+            services.Configure<JwtConnectionOptions>(configuration.GetSection(Constants.AppSettings.JwtConfiguration));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services.AddAuthentication(options =>
@@ -55,11 +55,11 @@ namespace BankingApp.BusinessLogicLayer
                     {
                         ClockSkew = TimeSpan.FromMinutes(0),
                         ValidateIssuer = true,
-                        ValidIssuer = configuration["jwtConfig:Issuer"],
+                        ValidIssuer = configuration["JwtConfiguration:Issuer"],
                         ValidateAudience = true,
-                        ValidAudience = configuration["jwtConfig:Audience"],
+                        ValidAudience = configuration["JwtConfiguration:Audience"],
                         ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["jwtConfig:SecretKey"])),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JwtConfiguration:SecretKey"])),
                         ValidateIssuerSigningKey = true,
                     };
                 });

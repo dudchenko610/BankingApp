@@ -27,10 +27,9 @@ namespace BankingApp.UI.Core.Services
         /// </summary>
         /// <param name="calculateDepositView">Contains input deposit data.</param>
         /// <returns>Id of saved deposit.</returns>
-        public async Task<int> CalculateAsync(CalculateDepositView reqDeposite)
+        public async Task<int> CalculateAsync(CalculateDepositView calculateDepositView)
         {
-            int depositId = await _httpService.PostAsync<int>($"{Routes.Deposit.Route}/{Routes.Deposit.Calculate}", reqDeposite);
-
+            int depositId = await _httpService.PostAsync<int, CalculateDepositView>($"{Routes.Deposit.Route}/{Routes.Deposit.Calculate}", calculateDepositView);
             return depositId;
         }
 
@@ -56,8 +55,7 @@ namespace BankingApp.UI.Core.Services
         public async Task<GetByIdDepositView> GetByIdAsync(int depositId)
         {
             var depositViewWithMonthyPaymentList = await _httpService
-                .GetAsync<GetByIdDepositView>($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositeHistoryId={depositId}");
-
+                .GetAsync<GetByIdDepositView>($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositId={depositId}");
             return depositViewWithMonthyPaymentList;
         }
     }

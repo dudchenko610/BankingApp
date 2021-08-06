@@ -14,7 +14,7 @@ namespace BankingApp.UI.Core.Interfaces
         /// <param name="uri">Url address.</param>
         /// <param name="authorized">Indicates whether access token should be attached to HTTP request.</param>
         /// <returns>Default value, if exception occured, otherwise, if nothing to return, it will be (T) new object().</returns>
-        Task<T> GetAsync<T>(string uri, bool authorized = true);
+        Task<TResult> GetAsync<TResult>(string uri, bool authorized = true);
 
         /// <summary>
         /// Sends POST request to specified address.
@@ -24,7 +24,8 @@ namespace BankingApp.UI.Core.Interfaces
         /// <param name="value">Object to be serialized and sent as request body.</param>
         /// <param name="authorized">Indicates whether access token should be attached to HTTP request.</param>
         /// <returns>Default value, if exception occured, otherwise, if nothing to return, it will be (T) new object().</returns>
-        Task<T> PostAsync<T>(string uri, object value, bool authorized = true);
+        Task<TResult> PostAsync<TResult, TModel>(string uri, TModel value, bool authorized = true);
+        Task<bool> PostAsync<TModel>(string uri, TModel value, bool authorized = true);
     }
 }
 

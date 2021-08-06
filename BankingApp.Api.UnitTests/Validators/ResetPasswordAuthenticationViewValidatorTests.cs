@@ -18,41 +18,41 @@ namespace BankingApp.Api.UnitTests.Validators
         }
 
         [Test]
-        public void Validate_ValidResetPasswordView_NoErrorMessage()
+        public void Validate_ValidResetPasswordView_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetValidResetPasswordView());
             validateResult.Errors.Should().BeEmpty();
         }
 
-        public void Validate_PasswordIsEmpty_ValidErrorMessage()
+        public void Validate_PasswordIsEmpty_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetResetPasswordViewWithEmptyPassword());
-            validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordEmpty);
+            validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordRequired);
         }
 
         [Test]
-        public void Validate_PasswordIsShorterThanMinPasswordLengthLetters_ValidErrorMessage()
+        public void Validate_PasswordIsShorterThanMinPasswordLengthLetters_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetResetPasswordViewWithShortPassword());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordIsTooShort);
         }
 
         [Test]
-        public void Validate_PasswordShouldContainUpperCaseLetter_ValidErrorMessage()
+        public void Validate_PasswordShouldContainUpperCaseLetter_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetResetPasswordViewWithPasswordMissingUpperCaseLetter());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordUppercaseLetter);
         }
 
         [Test]
-        public void Validate_PasswordShouldContainLowerCaseLetter_ValidErrorMessage()
+        public void Validate_PasswordShouldContainLowerCaseLetter_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetResetPasswordViewWithPasswordMissingLowerCaseLetter());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordLowercaseLetter);
         }
 
         [Test]
-        public void Validate_PasswordShouldContainDigit_ValidErrorMessage()
+        public void Validate_PasswordShouldContainDigit_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetResetPasswordViewWithPasswordMissingDigit());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordDigit);

@@ -14,14 +14,22 @@ namespace BankingApp.UI.Core.UnitTests.Services
 {
     public class UserServiceTests : TestContext
     {
+        private UserService _userService;
+        private Mock<IHttpService> _httpServiceMock; 
+
+        public UserServiceTests()
+        {
+            _httpServiceMock = new Mock<IHttpService>();
+            _userService = new UserService(_httpServiceMock.Object);
+        }
+
         [Fact]
-        public async Task Block_PassValidData_PostAsyncOfHttpServiceCalled()
+        public async Task Block_ValidBlockUserView_PostAsyncInvoked()
         {
             BlockUserAdminView blockUserView = null;
             string passedUrl = null;
-
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.PostAsync<object>(It.IsAny<string>(), It.IsAny<BlockUserAdminView>(), It.IsAny<bool>()))
+            
+            _httpServiceMock.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<BlockUserAdminView>(), It.IsAny<bool>()))
                 .Callback((string url, object blockUserAdminView, bool authorized) =>
                 {
                     passedUrl = url;
@@ -29,16 +37,14 @@ namespace BankingApp.UI.Core.UnitTests.Services
                 });
 
             var blockUserview = GetValidBlockUserView();
-
-            var userService = new UserService(httpServiceMock.Object);
-            await userService.BlockAsync(blockUserview);
+            await _userService.BlockAsync(blockUserview);
 
             passedUrl.Should().Be($"{Routes.Admin.Route}/{Routes.Admin.BlockUser}");
             blockUserView.Should().NotBeNull().And.BeEquivalentTo(blockUserview);
         }
 
         [Fact]
-        public async Task GetAll_PassValidData_GetAllAsyncOfHttpServiceCalled()
+        public async Task GetAll_ValidBlockUserView_GetAllAsyncInvoked()
         {
             const int ValidPageNumber = 1;
             const int ValidPageSize = 2;
@@ -46,8 +52,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
             string passedUrl = null;
 
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.GetAsync<PagedDataView<UserGetAllAdminViewItem>>(It.IsAny<string>(), It.IsAny<bool>()))
+            _httpServiceMock.Setup(x => x.GetAsync<PagedDataView<UserGetAllAdminViewItem>>(It.IsAny<string>(), It.IsAny<bool>()))
                 .Callback((string url, bool authorized) =>
                 {
                     passedUrl = url;
@@ -55,9 +60,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
                 .ReturnsAsync(validInputPagedDataView);
 
             var blockUserview = GetValidBlockUserView();
-
-            var userService = new UserService(httpServiceMock.Object);
-            var respondedPageDataView = await userService.GetAllAsync(ValidPageNumber, ValidPageSize);
+            var respondedPageDataView = await _userService.GetAllAsync(ValidPageNumber, ValidPageSize);
 
             passedUrl.Should().Be($"{Routes.Admin.Route}/{Routes.Admin.GetAll}?pageNumber={ValidPageNumber}&pageSize={ValidPageSize}");
             respondedPageDataView.Should().NotBeNull().And.BeEquivalentTo(respondedPageDataView);

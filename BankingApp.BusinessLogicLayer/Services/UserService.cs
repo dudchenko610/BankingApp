@@ -46,7 +46,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <param name="blockUserAdminView">View model containing user id and block operation type (block / unlock).</param>
         public async Task BlockAsync(BlockUserAdminView blockUserAdminView)
         {
-            await CheckUserForAdminRole();
+            await CheckUserForAdminRole(blockUserAdminView.UserId);
             await _userRepository.BlockAsync(blockUserAdminView.UserId, blockUserAdminView.Block);
         }
 
@@ -68,7 +68,7 @@ namespace BankingApp.BusinessLogicLayer.Services
                 throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
             }
 
-            DataAccessLayer.Models.PagedDataView<User> usersAndTotalCount
+            PaginationModel<User> usersAndTotalCount
                 = await _userRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize);
 
             var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<UserGetAllAdminViewItem>
@@ -110,9 +110,8 @@ namespace BankingApp.BusinessLogicLayer.Services
             return await _userManager.FindByEmailAsync(email);
         }
 
-        private async Task CheckUserForAdminRole()
+        private async Task CheckUserForAdminRole(int userId)
         {
-            var userId = GetSignedInUserId();
             var user = await _userManager.FindByIdAsync(userId.ToString());
             var roleNames = await _userManager.GetRolesAsync(user);
 

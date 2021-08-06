@@ -1,4 +1,5 @@
 ﻿using BankingApp.UI.Core.Interfaces;
+using BankingApp.UI.Models;
 using BankingApp.ViewModels.Banking.Admin;
 using BankingApp.ViewModels.ViewModels.Pagination;
 using Blazored.Toast.Services;
@@ -42,11 +43,6 @@ namespace BankingApp.UI.Pages.UsersPage
             _pagedUsers = null;
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await UpdateUsersDataAsync();
-        }
-
         protected override async Task OnParametersSetAsync()
         {
             await UpdateUsersDataAsync();
@@ -58,26 +54,22 @@ namespace BankingApp.UI.Pages.UsersPage
             _navigationWrapper.NavigateTo($"{Routes.UsersPage}/{page}");
         }
 
-        private async Task BlockUserAsync(int userId, bool blocked)
+        private async Task BlockUserAsync(BlockUserModel blockUserModel)
         {
             var blockUserView = new BlockUserAdminView
             {
-                UserId = userId,
-                Block = blocked
+                UserId = blockUserModel.UserId,
+                Block = blockUserModel.Block
             };
 
             _loaderService.SwitchOn();
+            bool blockedResult = await _userService.BlockAsync(blockUserView);
+            _loaderService.SwitchOff();
 
-            if (await _userService.BlockAsync(blockUserView))
+            if (blockedResult)
             {
-                _loaderService.SwitchOff();
-                _toastService.ShowSuccess(blocked ? Notifications.UserSuccessfullyBlocked : Notifications.UserSuccessfullyUnblocked);
+                _toastService.ShowSuccess(blockUserModel.Block ? Notifications.UserSuccessfullyBlocked : Notifications.UserSuccessfullyUnblocked);
                 _navigationWrapper.NavigateTo($"{Routes.UsersPage}/{Page}");
-            }
-            else
-            {
-                _loaderService.SwitchOff();
-                _toastService.ShowSuccess(blocked ? Notifications.ErrorWhileBlockingUser : Notifications.ErrorWhileUnblockingUser);
             }
         }
 
@@ -94,8 +86,7 @@ namespace BankingApp.UI.Pages.UsersPage
             _pagedUsers = await _userService.GetAllAsync(Page, UsersOnPage);
             _loaderService.SwitchOff();
 
-            if (_pagedUsers.Items.Count == 0)
-            {
+            if (_pagedUsers is null || _pagedUsers.Items.Count == 0)
                 return;
             }
 

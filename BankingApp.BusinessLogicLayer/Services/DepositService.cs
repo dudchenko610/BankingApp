@@ -76,14 +76,14 @@ namespace BankingApp.BusinessLogicLayer.Services
 
             if (depositWithItems == null)
             { 
-                throw new Exception(Constants.Errors.Deposit.IncorrectDepositeHistoryId);
+                throw new Exception(Constants.Errors.Deposit.IncorrectDepositHistoryId);
             }
 
             int userId = _userService.GetSignedInUserId();
 
             if (depositWithItems.UserId != userId)
             {
-                throw new Exception(Constants.Errors.Deposit.DepositDoesNotBelongsToYou);
+                throw new Exception(Constants.Errors.Deposit.DepositDoesNotExistsOrYouHaveNoAccess);
             }
 
             var depositWithItemsView = _mapper.Map<Deposit, GetByIdDepositView>(depositWithItems);
@@ -153,8 +153,31 @@ namespace BankingApp.BusinessLogicLayer.Services
             float percentsDevidedBy1200 = (float) calculateDepositView.Percents / 1200.0f;
             decimal monthSum = calculateDepositView.DepositSum * (decimal)Math.Pow(1.0 + percentsDevidedBy1200, monthNumber);
             float percents = (float)decimal.Round(((monthSum - calculateDepositView.DepositSum) / calculateDepositView.DepositSum) * 100.0m, 2);
-
             return (monthSum, percents);
+        }
+
+        public async Task<ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
+        {
+            if (pageNumber < 1)
+                throw new Exception(Constants.Errors.Page.IncorrectPageNumberFormat);
+
+            if (pageSize < 1)
+                throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
+
+            int userId = _userService.GetSignedInUserId();
+
+            PaginationModel<Deposit> depositsAndTotalCount
+                = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize, userId);
+
+            var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>
+            {
+                Items = _mapper.Map<IList<Deposit>, IList<DepositGetAllDepositViewItem>>(depositsAndTotalCount.Items),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = depositsAndTotalCount.TotalCount
+            };
+
+            return pagedResponse;
         }
     }
 }

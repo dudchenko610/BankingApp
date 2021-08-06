@@ -2,6 +2,7 @@
 using BankingApp.UI.Core.Interfaces;
 using BankingApp.ViewModels.ViewModels.Authentication;
 using Blazored.LocalStorage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -25,18 +26,11 @@ namespace BankingApp.UI.Core.Services
         /// Used to get actual information about access token.
         /// </summary>
         public TokensView TokensView { get; private set; }
-
         /// <summary>
         /// Gets list of roles.
         /// </summary>
         /// <returns>List of role names.</returns>
-        public bool IsAdmin 
-        { 
-            get 
-            {
-                return _claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultRoleClaimType && x.Value == Roles.Admin.ToString()) != null;
-            } 
-        }
+        public bool IsAdmin { get; private set; }
 
         /// <summary>
         /// Creates instance of <see cref="AuthenticationService"/>.
@@ -71,7 +65,7 @@ namespace BankingApp.UI.Core.Services
         /// <returns>True if operation succeed and false otherwise./></returns>
         public async Task<bool> SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.SignUp}", signUpAccountView, false) != null;
+            return await _httpService.PostAsync<SignUpAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.SignUp}", signUpAccountView, false);
         }
 
         /// <summary>
@@ -81,7 +75,7 @@ namespace BankingApp.UI.Core.Services
         /// <returns>True if operation succeed and false otherwise.</returns>
         public async Task<bool> ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ConfirmEmail}", confirmEmailAccountView, false) != null;
+            return await _httpService.PostAsync<ConfirmEmailAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.ConfirmEmail}", confirmEmailAccountView, false);
         }
 
         /// <summary>
@@ -91,7 +85,7 @@ namespace BankingApp.UI.Core.Services
         /// <returns>True if operation succeed and false otherwise.</returns>
         public async Task<bool> SignInAsync(SignInAuthenticationView signInAccountView)
         {
-            var tokensView = await _httpService.PostAsync<TokensView>($"{Routes.Authentication.Route}/{Routes.Authentication.SignIn}", signInAccountView, false);
+            var tokensView = await _httpService.PostAsync<TokensView, SignInAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.SignIn}", signInAccountView, false);
             await _localStorageService.SetItemAsync(Constants.Constants.Authentication.TokensView, tokensView);
             TokensView = tokensView;
             ExtractClaimsFromToken();
@@ -105,6 +99,8 @@ namespace BankingApp.UI.Core.Services
         public async Task LogoutAsync()
         {
             TokensView = null;
+            _claims = new List<Claim>();
+            IsAdmin = false;
             await _localStorageService.RemoveItemAsync(Constants.Constants.Authentication.TokensView);
             _navigationWrapper.NavigateTo(Constants.Constants.Routes.SignInPage);
         }
@@ -116,7 +112,7 @@ namespace BankingApp.UI.Core.Services
         /// <returns>True if operation succeed and false otherwise.</returns>
         public async Task<bool> ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordAuthenticationView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ResetPassword}", resetPasswordAuthenticationView, false) != null;
+            return await _httpService.PostAsync<ResetPasswordAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.ResetPassword}", resetPasswordAuthenticationView, false);
         }
 
         /// <summary>
@@ -126,7 +122,7 @@ namespace BankingApp.UI.Core.Services
         /// <returns>True if operation succeed and false otherwise.</returns>
         public async Task<bool> ForgotPasswordAsync(ForgotPasswordAuthenticationView forgotPasswordAuthenticationView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Authentication.Route}/{Routes.Authentication.ForgotPassword}", forgotPasswordAuthenticationView, false) != null;
+            return await _httpService.PostAsync<ForgotPasswordAuthenticationView>($"{Routes.Authentication.Route}/{Routes.Authentication.ForgotPassword}", forgotPasswordAuthenticationView, false);
         }
 
         /// <summary>
@@ -147,6 +143,7 @@ namespace BankingApp.UI.Core.Services
             else
             {
                 _claims = JwtDecodeHelper.ParseClaimsFromJwt(TokensView.AccessToken).ToList();
+                IsAdmin = _claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultRoleClaimType && x.Value == Roles.Admin.ToString()) != null;
             }
         }
     }

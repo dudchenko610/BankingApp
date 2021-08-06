@@ -39,11 +39,6 @@ namespace BankingApp.UI.Pages.HistoryPage
             _pagedDeposits = null;
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await UpdateDepositeHistoryDataAsync();
-        }
-
         protected override async Task OnParametersSetAsync()
         {
             await UpdateDepositeHistoryDataAsync();
@@ -64,9 +59,7 @@ namespace BankingApp.UI.Pages.HistoryPage
         {
             if (Page < 1)
             {
-                _navigationWrapper.NavigateTo($"{Routes.HistoryPage}/1");
-
-                return;
+                Page = 1;
             }
 
             _loaderService.SwitchOn();

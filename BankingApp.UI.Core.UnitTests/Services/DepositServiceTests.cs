@@ -18,24 +18,31 @@ namespace BankingApp.UI.Core.UnitTests.Services
     {
         private const int ValidDepositId = 1;
 
+        private DepositService _depositService;
+        private Mock<IHttpService> _httpServiceMock;
+
+        public DepositServiceTests()
+        {
+            _httpServiceMock = new Mock<IHttpService>();
+            _depositService = new DepositService(_httpServiceMock.Object);
+        }
+
         [Fact]
-        public async Task Calculate_PassValidModel_CallsPostAsyncWithCorrespondingParameters()
+        public async Task Calculate_ValidCalculateView_PostAsyncInvoked()
         {
             var validCalculateView = GetValidCalculateView();
-            object depositViewPassedToHttpService = null;
+            CalculateDepositView depositViewPassedToHttpService = null;
             string passedUrl = null;
 
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.PostAsync<int>(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<bool>()))
-                .Callback((string url, object val, bool authorized) => 
+            _httpServiceMock.Setup(x => x.PostAsync<int, CalculateDepositView>(It.IsAny<string>(), It.IsAny<CalculateDepositView>(), It.IsAny<bool>()))
+                .Callback((string url, CalculateDepositView val, bool authorized) => 
                     { 
                         passedUrl = url; 
                         depositViewPassedToHttpService =  val; 
                     })
                 .ReturnsAsync(ValidDepositId);
 
-            var depositService = new DepositService(httpServiceMock.Object);
-            var depositId = await depositService.CalculateAsync(validCalculateView);
+            var depositId = await _depositService.CalculateAsync(validCalculateView);
 
             depositViewPassedToHttpService
                 .Should().NotBeNull().And
@@ -47,7 +54,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task GetAll_PassValidModel_CallsGetAsyncWithCorrespondingParameters()
+        public async Task GetAll_ValidPageDataView_GetAsyncInvoked()
         {
             const int ValidPageNumber = 1;
             const int ValidPageSize = 10;
@@ -55,36 +62,32 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var getAsyncResponse = GetValidPageDataView();
             string passedUrl = null;
 
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.GetAsync<PagedDataView<DepositGetAllDepositViewItem>>(It.IsAny<string>(), It.IsAny<bool>()))
+            _httpServiceMock.Setup(x => x.GetAsync<PagedDataView<DepositGetAllDepositViewItem>>(It.IsAny<string>(), It.IsAny<bool>()))
                 .Callback((string url, bool authorized) => { passedUrl = url; })
                 .ReturnsAsync(getAsyncResponse);
 
-            var depositService = new DepositService(httpServiceMock.Object);
-            var pagedDataResponse = await depositService.GetAllAsync(ValidPageNumber, ValidPageSize);
+            var pagedDataResponse = await _depositService.GetAllAsync(ValidPageNumber, ValidPageSize);
 
             pagedDataResponse.Should().Be(getAsyncResponse);
             passedUrl.Should().Be($"{Routes.Deposit.Route}/{Routes.Deposit.GetAll}?pageNumber={ValidPageNumber}&pageSize={ValidPageSize}");
         }
 
         [Fact]
-        public async Task GetById_PassValidModel_CallsGetAsyncWithCorrespondingParameters()
+        public async Task GetById_ValidGetByIdView_GetAsyncInvoked()
         {
             const int ValidDepositId = 1;
 
             var getByIdHttpServiceResponse = GetValidGetByIdView();
             string passedUrl = null;
 
-            var httpServiceMock = new Mock<IHttpService>();
-            httpServiceMock.Setup(x => x.GetAsync<GetByIdDepositView>(It.IsAny<string>(), It.IsAny<bool>()))
+            _httpServiceMock.Setup(x => x.GetAsync<GetByIdDepositView>(It.IsAny<string>(), It.IsAny<bool>()))
                 .Callback((string url, bool authorized) => { passedUrl = url; })
                 .ReturnsAsync(getByIdHttpServiceResponse);
 
-            var depositService = new DepositService(httpServiceMock.Object);
-            var getByIdDepositServiceResponse = await depositService.GetByIdAsync(ValidDepositId);
+            var getByIdDepositServiceResponse = await _depositService.GetByIdAsync(ValidDepositId);
 
             getByIdDepositServiceResponse.Should().Be(getByIdHttpServiceResponse);
-            passedUrl.Should().Be($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositeHistoryId={ValidDepositId}");
+            passedUrl.Should().Be($"{Routes.Deposit.Route}/{Routes.Deposit.GetById}?depositId={ValidDepositId}");
         }
 
         private CalculateDepositView GetValidCalculateView()

@@ -28,11 +28,11 @@ namespace BankingApp.DataAccessLayer.Repositories
         /// <returns><see cref="Deposit"/> containing <see cref="MonthlyPayment"/>s.</returns>
         public async Task<Deposit> GetDepositWithItemsByIdAsync(int depositId)
         {
-            var depositeHistory = await _dbSet
+            var deposit = await _dbSet
                 .Include(dep => dep.MonthlyPayments)
                 .FirstOrDefaultAsync(dep => dep.Id == depositId);
 
-            return depositeHistory;
+            return deposit;
         }
 
         /// <summary>
@@ -42,10 +42,10 @@ namespace BankingApp.DataAccessLayer.Repositories
         /// <param name="take">Number of deposits to take.</param>
         /// <param name="userId">Id of user whose deposits should be returned.</param>
         /// <returns>Total deposits count and deposits for requested page.</returns>
-        public async Task<PagedDataView<Deposit>> GetAllAsync(int skip, int take, int userId)
+        public async Task<PaginationModel<Deposit>> GetAllAsync(int skip, int take, int userId)
         {
             var deposits = await _dbSet.Where(x => x.UserId == userId).Skip(skip).Take(take).ToListAsync();
-            var paginationModel = new PagedDataView<Deposit>
+            var paginationModel = new PaginationModel<Deposit>
             {
                 Items = deposits,
                 TotalCount = await _dbSet.CountAsync()

@@ -18,56 +18,56 @@ namespace BankingApp.Api.UnitTests.Validators
         }
 
         [Test]
-        public void Validate_ValidSignInView_NoErrorMessage()
+        public void Validate_ValidSignInView_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetValidSignInView());
             validateResult.Errors.Should().BeEmpty();
         }
 
         [Test]
-        public void Validate_EmailIsEmpty_ValidErrorMessage()
+        public void Validate_EmailIsEmpty_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignInViewWithEmptyEmail());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.EmailIsRequired);
         }
 
         [Test]
-        public void Validate_EmailInvalidFormat_ValidErrorMessage()
+        public void Validate_EmailInvalidFormat_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignInViewWithInvalidEmail());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.InvalidEmailFormat);
         }
 
         [Test]
-        public void Validate_PasswordIsEmpty_ValidErrorMessage()
+        public void Validate_PasswordIsEmpty_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignInViewWithEmptyPassword());
-            validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordEmpty);
+            validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordRequired);
         }
 
         [Test]
-        public void Validate_PasswordIsShorterThanMinPasswordLengthLetters_ValidErrorMessage()
+        public void Validate_PasswordIsShorterThanMinPasswordLengthLetters_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignInViewWithShortPassword());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordIsTooShort);
         }
 
         [Test]
-        public void Validate_PasswordShouldContainUpperCaseLetter_ValidErrorMessage()
+        public void Validate_PasswordShouldContainUpperCaseLetter_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignInViewWithPasswordMissingUpperCaseLetter());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordUppercaseLetter);
         }
 
         [Test]
-        public void Validate_PasswordShouldContainLowerCaseLetter_ValidErrorMessage()
+        public void Validate_PasswordShouldContainLowerCaseLetter_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignInViewWithPasswordMissingLowerCaseLetter());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordLowercaseLetter);
         }
 
         [Test]
-        public void Validate_PasswordShouldContainDigit_ValidErrorMessage()
+        public void Validate_PasswordShouldContainDigit_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignInViewWithPasswordMissingDigit());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordDigit);

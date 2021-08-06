@@ -28,7 +28,7 @@ namespace BankingApp.UI.Core.Services
         /// <param name="blockUserAdminView">View model containing user id and block operation type (block / unlock).</param>
         public async Task<bool> BlockAsync(BlockUserAdminView blockUserAdminView)
         {
-            return await _httpService.PostAsync<object>($"{Routes.Admin.Route}/{Routes.Admin.BlockUser}", blockUserAdminView) != null;
+            return await _httpService.PostAsync<BlockUserAdminView>($"{Routes.Admin.Route}/{Routes.Admin.BlockUser}", blockUserAdminView);
         }
 
         /// <summary>

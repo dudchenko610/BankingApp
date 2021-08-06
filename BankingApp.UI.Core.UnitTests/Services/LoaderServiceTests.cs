@@ -16,7 +16,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public void SwitchOn_SwitchOnLoader_CircleLoaderComponentAppearsInRendringTree()
+        public void SwitchOn_SwitchOnLoader_ExpectedResult()
         {
             bool switched = false;
             _loaderService.OnLoaderSwitch += (isSwitched) => { switched = isSwitched; };
@@ -26,7 +26,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public void SwitchOff_SwitchOffLoader_CircleLoaderComponentDisappearsFromRendringTree()
+        public void SwitchOff_SwitchOffLoader_ExpectedResult()
         {
             bool switched = true;
             _loaderService.OnLoaderSwitch += (isSwitched) => { switched = isSwitched; };

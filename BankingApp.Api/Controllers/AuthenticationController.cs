@@ -24,6 +24,7 @@ namespace BankingApp.Api.Controllers
         [Route(Routes.Authentication.SignUp)]
         public async Task<IActionResult> SignUp(SignUpAuthenticationView signUpAccountView)
         {
+
             try
             {
                 await _authenticationService.SignUpAsync(signUpAccountView);
@@ -34,12 +35,14 @@ namespace BankingApp.Api.Controllers
             {
                 return BadRequest(e.Message);
             }
+
         }
 
         [HttpPost]
         [Route(Routes.Authentication.SignIn)]
         public async Task<IActionResult> SignIn(SignInAuthenticationView signInAccountView)
         {
+
             try
             {
                 var tokensView = await _authenticationService.SignInAsync(signInAccountView);
@@ -50,12 +53,14 @@ namespace BankingApp.Api.Controllers
             {
                 return BadRequest(e.Message);
             }
+
         }
 
         [HttpPost]
         [Route(Routes.Authentication.ConfirmEmail)]
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailAuthenticationView confirmEmailAccountView)
         {
+
             try
             {
                 await _authenticationService.ConfirmEmailAsync(confirmEmailAccountView);

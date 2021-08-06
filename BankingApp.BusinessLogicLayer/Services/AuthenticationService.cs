@@ -25,7 +25,6 @@ namespace BankingApp.BusinessLogicLayer.Services
         private readonly IEmailService _emailProvider;
         private readonly IMapper _mapper;
         private readonly IJwtService _jwtProvider;
-        private readonly IUserService _userService;
         private readonly ClientConnectionOptions _clientConnectionOptions;
 
         /// <summary>
@@ -41,14 +40,12 @@ namespace BankingApp.BusinessLogicLayer.Services
             IEmailService emailProvider,
             IMapper mapper,
             IJwtService jwtProvider,
-            IUserService userService,
             IOptions<ClientConnectionOptions> clientConnectionOptions)
         {
             _userManager = userManager;
             _emailProvider = emailProvider;
             _mapper = mapper;
             _jwtProvider = jwtProvider;
-            _userService = userService;
             _clientConnectionOptions = clientConnectionOptions.Value;
         }
 
@@ -59,7 +56,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <param name="confirmEmailView">View model containing user's email and confirmation token.</param>
         public async Task ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailView)
         {
-            var user = await CheckUserForExistenceAsync(confirmEmailView);
+            var user = await GetUserIfExistsAsync(confirmEmailView.Email, Constants.Errors.Authentication.UserWasNotFound);
             await ConfirmUserEmailAsync(confirmEmailView, user);
         }
 
@@ -71,7 +68,8 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <returns>View model containing access token.</returns>
         public async Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView)
         {
-            var user = await CheckUserForExistenceAsync(signInAccountView);
+            var user = await GetUserIfExistsAsync(signInAccountView);
+            CheckIfUserIsBlocked(user);
             var tokensView = await GenerateTokensAsync(user);
 
             return tokensView;
@@ -96,7 +94,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <exception cref="Exception">If there is no such user or email sending failed.</exception>
         public async Task ForgotPasswordAsync(ForgotPasswordAuthenticationView resetPasswordAuthenticationView)
         {
-            var user = await CheckUserForExistenceAsync(resetPasswordAuthenticationView);
+            var user = await GetUserIfExistsAsync(resetPasswordAuthenticationView.Email, Constants.Errors.Authentication.ErrorWhileSendingMessage);
             await SendEmailResetPasswordAsync(user);
         }
 
@@ -107,7 +105,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <exception cref="Exception">If there is no such user or reset token is wrong.</exception>
         public async Task ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordView)
         {
-            var user = await CheckUserForExistenceAsync(resetPasswordView);
+            var user = await GetUserIfExistsAsync(resetPasswordView.Email, Constants.Errors.Authentication.UserWasNotFound);
             await ResetPasswordAsync(resetPasswordView, user);
         }
 
@@ -134,8 +132,7 @@ namespace BankingApp.BusinessLogicLayer.Services
                 throw new Exception(errors);
             }
 
-            result = await _userManager.AddToRoleAsync(user, RolesEnum.Admin.ToString());
-
+            result = await _userManager.AddToRoleAsync(user, RolesEnum.Client.ToString());
             if (!result.Succeeded)
             {
                 await _userManager.DeleteAsync(user);
@@ -165,7 +162,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             string tokenCode = WebEncoders.Base64UrlEncode(tokenGenerateBytes);
 
             var callbackUrl = new StringBuilder();
-            callbackUrl.Append($"{_clientConnectionOptions.Localhost}{_clientConnectionOptions.ConfirmPath}");
+            callbackUrl.Append($"{_clientConnectionOptions.Url}{_clientConnectionOptions.ConfirmPath}");
             callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{tokenCode}");
 
             var messageBody = $"{Constants.Email.ConfirmRegistration} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
@@ -178,7 +175,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             }
         }
 
-        private async Task<User> CheckUserForExistenceAsync(SignInAuthenticationView signInAccountView)
+        private async Task<User> GetUserIfExistsAsync(SignInAuthenticationView signInAccountView)
         {
             var user = await _userManager.FindByEmailAsync(signInAccountView.Email);
 
@@ -186,10 +183,24 @@ namespace BankingApp.BusinessLogicLayer.Services
             {
                 throw new Exception(Constants.Errors.Authentication.InvalidNicknameOrPassword);
             }
+            return user;
+        }
 
+        private void CheckIfUserIsBlocked(User user)
+        {
             if (user.IsBlocked)
             {
                 throw new Exception(Constants.Errors.Authentication.UserIsBlocked);
+            }
+        }
+
+        private async Task<User> GetUserIfExistsAsync(string email, string errorMessage)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+            {
+                throw new Exception(errorMessage);
             }
 
             return user;
@@ -208,18 +219,6 @@ namespace BankingApp.BusinessLogicLayer.Services
             return tokens;
         }
 
-        private async Task<User> CheckUserForExistenceAsync(ConfirmEmailAuthenticationView confirmEmailView)
-        {
-            var user = await _userManager.FindByEmailAsync(confirmEmailView.Email);
-
-            if (user is null)
-            {
-                throw new Exception(Constants.Errors.Authentication.UserWasNotFound);
-            }
-
-            return user;
-        }
-
         private async Task ConfirmUserEmailAsync(ConfirmEmailAuthenticationView confirmEmailView, User user)
         {
             byte[] codeDecodeBytes = WebEncoders.Base64UrlDecode(confirmEmailView.Code);
@@ -235,23 +234,20 @@ namespace BankingApp.BusinessLogicLayer.Services
             await _userManager.UpdateAsync(user);
         }
 
-        private async Task<User> CheckUserForExistenceAsync(ForgotPasswordAuthenticationView resetPasswordAuthenticationView)
+        private async Task SendEmailResetPasswordAsync(User user)
         {
-            var user = await _userService.GetUserByEmailAsync(resetPasswordAuthenticationView.Email);
+            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            if (user is null)
+            var callbackUrl = new StringBuilder();
+            callbackUrl.Append($"{_clientConnectionOptions.Url}{_clientConnectionOptions.ResetPath}");
+            callbackUrl.Append($"{Constants.Email.ParamEmail}{user.Email}{Constants.Email.ParamCode}{HttpUtility.UrlEncode(resetPasswordToken)}");
+
+            var messageBody = $"{Constants.Password.PasswordReset} {Constants.Email.OpenTagLink}{callbackUrl}{Constants.Email.CloseTagLink}";
+
+            if (!await _emailProvider.SendEmailAsync(user.Email, Constants.Password.PasswordResetHeader, messageBody))
             {
                 throw new Exception(Constants.Errors.Authentication.ErrorWhileSendingMessage);
             }
-
-            var userRoles = await _userManager.GetRolesAsync(user);
-
-            if (userRoles.Contains(RolesEnum.Admin.ToString()))
-            {
-                throw new Exception(Constants.Errors.Authentication.EmailWasNotDelivered);
-            }
-
-            return user;
         }
 
         private async Task ResetPasswordAsync(ResetPasswordAuthenticationView resetPasswordView, User user)

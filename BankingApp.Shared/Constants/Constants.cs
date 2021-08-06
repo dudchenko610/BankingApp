@@ -16,12 +16,12 @@ namespace BankingApp.Shared
             /// </summary>
             public static class Deposit
             {
-                public const string IncorrectPriceFormat = "Price can't have more than 2 decimal places";
-                public const string IncorrectMonthFormat = "Months number should be positive non-zero integer value";
-                public const string IncorrectPercentNumber = "Percent should be positive fractional value in range of [1; 100] with two decimal places";
+                public const string IncorrectPriceFormat = "The price can't have more than 2 decimal places";
+                public const string IncorrectMonthFormat = "Months number should be a positive non-zero integer value";
+                public const string IncorrectPercentNumber = "Percent should be positive fractional value in a range of [1; 100] with two decimal places";
 
-                public const string IncorrectDepositeHistoryId = "DepositeHistoryId should be integer, bigger than one number";
-                public const string DepositDoesNotBelongsToYou = "This deposit does not belongs to your account";
+                public const string IncorrectDepositHistoryId = "Id of deposit should be an integer, bigger than 1";
+                public const string DepositDoesNotExistsOrYouHaveNoAccess = "This deposit does not exist or you have no access to it";
             }
 
             /// <summary>
@@ -29,8 +29,8 @@ namespace BankingApp.Shared
             /// </summary>
             public static class Page
             {
-                public const string IncorrectPageNumberFormat = "Page number should be integer, bigger than one number";
-                public const string IncorrectPageSizeFormat = "Page size should be positive integer number, bigger than one number";
+                public const string IncorrectPageNumberFormat = "The page number should be an integer, bigger than 1";
+                public const string IncorrectPageSizeFormat = "Page size should be a positive integer number, bigger than 1";
             }
 
             /// <summary>
@@ -43,21 +43,21 @@ namespace BankingApp.Shared
                 public const string EmailIsRequired = "Email is required";
                 public const string EmailFormatIncorrect = "The Email field is not a valid e-mail address.";
                 public const string PasswordIsRequired = "Password is required";
-                public const string NicknameLengthIsTooLong = "Nickname name should be less or equal than 12";
+                public const string NicknameLengthIsTooLong = "Nickname name should be less or equal than 12 characters";
                 public const string InvalidEmailFormat = "Invalid email format";
-                public const string PasswordIsNotHardEnough = "Password is not hard enough";
-                public const string PasswordEmpty = "Password is empty";
+                public const string PasswordIsNotHardEnough = "Password is not strong enough";
+                public const string PasswordRequired = "Password is required";
                 public const string PasswordUppercaseLetter = "Password must contain at least one upper case letter";
                 public const string PasswordLowercaseLetter = "Password must contain at least one lowercase case letter";
                 public const string PasswordDigit = "Password must contain at least one digit";
                 public const string PasswordIsTooShort = "Password must be longer than 14 symbols";
                 public const string PasswordSpecialCharacter = "Password must contain at least one special character";
-                public const string ConfirmPasswordShouldMatchPassword = "Confirm password should match password";
+                public const string ConfirmPasswordShouldMatchPassword = "Confirm password should match the password";
                 public const string UserAlreadyExists = "User with such email already exists";
-                public const string UserWasNotRegistered = "Unexpected error happened. User was not registered, try again!";
-                public const string UserWasNotFound = "User was not found";
-                public const string EmailWasNotConfirmed = "Email was not confirmed";
-                public const string EmailWasNotDelivered = "Email, was not delivered";
+                public const string UserWasNotRegistered = "An unexpected error happened. The user was not registered, try again";
+                public const string UserWasNotFound = "The user was not found";
+                public const string EmailWasNotConfirmed = "The email was not confirmed";
+                public const string EmailWasNotDelivered = "The email was not delivered";
                 public const string InvalidPassword = "Password is invalid";
                 public const string SignInPlease = "Time expired, sign in please again!";
                 public const string ErrorWhileSendingMessage = "While sending message error occurred, try latter!";
@@ -122,7 +122,7 @@ namespace BankingApp.Shared
             {
                 public const string Route = "api/admin";
                 public const string GetAll = "getAll";
-                public const string BlockUser = "blockUserw";
+                public const string BlockUser = "blockUser";
             }
         }
 
@@ -142,10 +142,11 @@ namespace BankingApp.Shared
         /// </summary>
         public static class AppSettings
         {
-            public const string EmailConfig = "emailConfig";
-            public const string ClientConfig = "clientConfig";
-            public const string JwtConfig = "jwtConfig";
-            public const string AdminCredentials = "adminCredentials";
+            public const string EmailConfiguration = "EmailConfiguration";
+            public const string ClientConfiguration = "ClientConfiguration";
+            public const string JwtConfiguration = "JwtConfiguration";
+            public const string SqlServerConnection = "SQLServerConnection";
+            public const string AdminCredentials = "AdminCredentials";
         }
     
         /// <summary>
@@ -168,9 +169,8 @@ namespace BankingApp.Shared
         public static class Password
         {
             public const string PasswordValidSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-            public const int PasswordLength = 14;
             public const int MinPasswordLength = 14;
-            public const string PasswordReset = "To reset your password click the link: ";
+            public const string PasswordReset = "To reset your password click the ";
             public const string PasswordResetHeader = "Reset password";
         }
 
@@ -195,6 +195,11 @@ namespace BankingApp.Shared
         {
             public const string Admin = "Admin";
             public const string Client = "Client";
+        }
+
+        public static class Assembly
+        { 
+            public const string DataAccessLayer = "BankingApp.DataAccessLayer";
         }
     }
 }

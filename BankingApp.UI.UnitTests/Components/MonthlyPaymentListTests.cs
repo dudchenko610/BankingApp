@@ -11,19 +11,7 @@ namespace BankingApp.UI.UnitTests.Components
     public class MonthlyPaymentListTests : TestContext
     {
         [Fact]
-        public void MonthlyPaymentList_PassValidListData_ComponentContainsAsMuchLiElementsAsListDataCount()
-        {
-            var monthlyPaymentGetByIdDepositViewItemList = GetValidMonthlyPaymentGetByIdDepositViewItemList();
-
-            var depositeHistoryItemList = RenderComponent<MonthlyPaymentList>(parameters => parameters
-                .Add(p => p.MonthlyPaymentViewList, monthlyPaymentGetByIdDepositViewItemList)
-            );
-
-            depositeHistoryItemList.FindAll("li[class=list-group-item]").Count.Should().Be(monthlyPaymentGetByIdDepositViewItemList.Count);
-        }
-
-        [Fact]
-        public void MonthlyPaymentList_PassValidListData_ComponentRendersAllItemsFieldsInLabelTags()
+        public void WhenTheComponentIsRendered_PassValidListData_ExpectedMarkupRendered()
         {
             const int LabelCount = 3;
 
@@ -32,6 +20,7 @@ namespace BankingApp.UI.UnitTests.Components
                 .Add(p => p.MonthlyPaymentViewList, monthlyPaymentGetByIdDepositViewItems)
             );
 
+            monthlyPaymentList.FindAll("li[class=list-group-item]").Count.Should().Be(monthlyPaymentGetByIdDepositViewItems.Count);
             var listOfLabelTexts = monthlyPaymentList.FindAll("label").Select(x => x.TextContent).ToList();
 
             for (int i = 0; i < monthlyPaymentGetByIdDepositViewItems.Count; i++)

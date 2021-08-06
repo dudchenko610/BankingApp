@@ -24,6 +24,6 @@ namespace BankingApp.DataAccessLayer.Interfaces
         /// <param name="take">Number of deposits to take.</param>
         /// <param name="userId">Id of user whose deposits should be returned.</param>
         /// <returns>Total deposits count and deposits for requested page.</returns>
-        Task<PagedDataView<Deposit>> GetAllAsync(int skip, int take, int userId);
+        Task<PaginationModel<Deposit>> GetAllAsync(int skip, int take, int userId);
     }
 }

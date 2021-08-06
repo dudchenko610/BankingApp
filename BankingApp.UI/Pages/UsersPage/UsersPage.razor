@@ -8,7 +8,7 @@
     {
         <div class="d-flex align-items-center justify-content-center flex-column w-100">
             <div class="w-100">
-               <UserTable Page="Page" UsersOnPage="UsersOnPage" UsersViewList="_pagedUsers.Items" OnBlockUserClick="async (args)=> await BlockUserAsync(args.Item1, args.Item2)" />
+               <UserTable Page="Page" UsersOnPage="UsersOnPage" UsersViewList="_pagedUsers.Items" OnBlockUserClick="BlockUserAsync" />
             </div>
 
             <div class="mt-4">

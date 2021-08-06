@@ -26,6 +26,7 @@
             <label for="password" class="form-label">Password</label>
             <InputText @bind-Value="_signUpView.Password"
                          id="password"
+                         type="password"
                          placeholder="password"
                          class="form-control" />
             <ValidationMessage For="@(() => _signUpView.Password)" />
@@ -34,6 +35,7 @@
             <label for="confirmPassword" class="form-label">Confirm Password</label>
             <InputText @bind-Value="_signUpView.ConfirmPassword"
                          id="confirmPassword"
+                         type="password"
                          placeholder="password"
                          class="form-control" />
             <ValidationMessage For="@(() => _signUpView.ConfirmPassword)" />

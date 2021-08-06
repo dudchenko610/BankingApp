@@ -27,9 +27,11 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         private const string ValidUserId = "1";
         private const string InvalidUserId = "dds_123ds";
 
-        private UserManager<User> _userManager;
-        private IUserRepository _userRepository;
+        private UserService _userService;
         private IMapper _mapper;
+        private Mock<UserManager<User>> _userManagerMock;
+        private Mock<IUserRepository> _userRepositoryMock;
+        private Mock<ClaimsPrincipal> _claimsPrincipialMock;
 
         [SetUp]
         public void SetUp()
@@ -37,50 +39,54 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             var validUser = GetValidUser();
 
             var store = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
-            userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(validUser);
-            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
-
-            _userManager = userManagerMock.Object;
+            _userManagerMock = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
+            _userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(validUser);
+            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
 
             var mapperConfig = new MapperConfiguration(config => { config.AddProfile(new MapperProfile()); });
             _mapper = mapperConfig.CreateMapper();
 
-            var userRepositoryMock = new Mock<IUserRepository>();
-            _userRepository = userRepositoryMock.Object;
+            _userRepositoryMock = new Mock<IUserRepository>();
+
+
+            _claimsPrincipialMock = new Mock<ClaimsPrincipal>();
+
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock.Setup(x => x.User).Returns(_claimsPrincipialMock.Object);
+
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContextMock.Object);
+
+            _userService = new UserService(httpContextAccessorMock.Object, _userManagerMock.Object, _userRepositoryMock.Object, _mapper);
         }
 
         [Test]
-        public void GetSignedInUserId_InvalidHttpContextAccessorInjected_ReturnsMinusOne()
+        public void GetSignedInUserId_InvalidHttpContextAccessor_ExpectedResults()
         {
             const int MinusOne = -1;
+            _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, InvalidUserId));
 
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(InvalidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
-
-            int userId = userService.GetSignedInUserId();
+            int userId = _userService.GetSignedInUserId();
             userId.Should().Be(MinusOne);
         }
 
         [Test]
-        public void GetSignedInUserId_ValidHttpContextAccessorInjected_ReturnsValidId()
+        public void GetSignedInUserId_ValidHttpContextAccessor_ExpectedResults()
         {
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
+            _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, ValidUserId));
 
-            int userId = userService.GetSignedInUserId();
+            int userId = _userService.GetSignedInUserId();
             userId.Should().Be(int.Parse(ValidUserId));
         }
 
         [Test]
-        public async Task GetUserByEmail_ValidEmailPassed_ReturnsValidUser()
+        public async Task GetUserByEmail_ValidEmail_ExpectedResults()
         {
             const string ValidEmail = "a@a.com";
 
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
+            _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, ValidUserId));
 
-            var userByEmail = await userService.GetUserByEmailAsync(ValidEmail);
+            var userByEmail = await _userService.GetUserByEmailAsync(ValidEmail);
             var userReturnedByUserManager = GetValidUser();
 
             userByEmail.Id.Should().Be(userReturnedByUserManager.Id);
@@ -90,22 +96,19 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task GetUserByEmail_InvalidEmailPassed_ReturnsNull()
+        public async Task GetUserByEmail_InvalidEmail_ExpectedResults()
         {
             const string InvalidEmail = "aacom";
 
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var store = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
-            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+            _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, ValidUserId));
+            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
 
-            var userService = new UserService(validHttpContextAccessor, userManagerMock.Object, _userRepository, _mapper);
-            var userByEmail = await userService.GetUserByEmailAsync(InvalidEmail);
+            var userByEmail = await _userService.GetUserByEmailAsync(InvalidEmail);
             userByEmail.Should().BeNull();
         }
 
         [Test]
-        public async Task Block_ValidBlockUserViewPassed_CallsBlockAsyncOfUserRepository()
+        public async Task Block_ValidBlockUserView_BlockAsyncInvoked()
         {
             var validBlockUserView = GetValidBlockUserView();
             var validUser = GetValidUser();
@@ -113,60 +116,46 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             int userId = -1;
             bool block = false;
 
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-           
-            var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(x => x.BlockAsync(It.IsAny<int>(), It.IsAny<bool>()))
+            _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, ValidUserId));
+            _userRepositoryMock.Setup(x => x.BlockAsync(It.IsAny<int>(), It.IsAny<bool>()))
                 .Callback((int _userId, bool _block) => { userId = _userId; block = _block; });
+            _userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(validUser);
+            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+            _userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(new List<string>());
 
-            var store = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
-            userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(validUser);
-            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
-            userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(new List<string>());
-
-            var userService = new UserService(validHttpContextAccessor, userManagerMock.Object, userRepositoryMock.Object, _mapper);
-            await userService.BlockAsync(validBlockUserView);
+            await _userService.BlockAsync(validBlockUserView);
 
             userId.Should().Be(validBlockUserView.UserId);
             block.Should().Be(validBlockUserView.Block);
         }
 
         [Test]
-        public void Block_ValidBlockUserViewPassedButSignedInUserHasAdminRole_ThrowsExceptionWithCorrespondingMessage()
+        public void Block_SignedInUserHasAdminRole_ThrowsException()
         {
             var validBlockUserView = GetValidBlockUserView();
             var validUser = GetValidUser();
 
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
+            _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, ValidUserId));
+            _userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(validUser);
+            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
+            _userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(GetListOfRoleNamesWithAdminRole());
 
-            var store = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
-            userManagerMock.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(validUser);
-            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(validUser);
-            userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>())).ReturnsAsync(GetListOfRoleNamesWithAdminRole());
-
-            var userService = new UserService(validHttpContextAccessor, userManagerMock.Object, _userRepository, _mapper);
-
-            FluentActions.Awaiting(() => userService.BlockAsync(validBlockUserView))
+            FluentActions.Awaiting(() => _userService.BlockAsync(validBlockUserView))
                 .Should().Throw<Exception>().WithMessage(Constants.Errors.Admin.UnableToBlockUser);
         }
 
         [Test]
-        public async Task GetAllAsync_CallGetAllMethodPassingValidParameters_ReturnsNotNullModelContainingCorrectlyMappedList()
+        public async Task GetAllAsync_ValidParameters_ExpectedResults()
         {
             var validPagedDataView = GetValidPagedDataViewWithUserGetAllViewItems();
             var validPagedUsers = GetValidPagedDataViewWithUsers();
 
-            var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock
+            _userRepositoryMock
               .Setup(x => x.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .ReturnsAsync(validPagedUsers);
+            _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, ValidUserId));
 
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager, userRepositoryMock.Object, _mapper);
-
-            var resPagedGetAllViewItems = await userService.GetAllAsync(ValidPageNumber, ValidPageSize);
+            var resPagedGetAllViewItems = await _userService.GetAllAsync(ValidPageNumber, ValidPageSize);
 
             resPagedGetAllViewItems
                 .Should().NotBeNull().And
@@ -179,26 +168,24 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void GetAllAsync_CallGetAllMethodPassingInvalidPageNumber_ThrowsExceptionWithCorrespondingMessage()
+        public void GetAllAsync_InvalidPageNumber_ThrowsException()
         {
             const int InvalidPageNumber = -1;
 
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
+            _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, ValidUserId));
 
-            FluentActions.Awaiting(() => userService.GetAllAsync(InvalidPageNumber, ValidPageSize))
+            FluentActions.Awaiting(() => _userService.GetAllAsync(InvalidPageNumber, ValidPageSize))
                 .Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageNumberFormat);
         }
 
         [Test]
-        public void GetAllAsync_CallGetAllMethodPassingInvalidPageSize_ThrowsExceptionWithCorrespondingMessage()
+        public void GetAllAsync_InvalidPageSize_ThrowsException()
         {
             const int InvalidPageSize = -1;
 
-            var validHttpContextAccessor = GetMockedHttpContextAccessor(ValidUserId);
-            var userService = new UserService(validHttpContextAccessor, _userManager, _userRepository, _mapper);
+            _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, ValidUserId));
 
-            FluentActions.Awaiting(() => userService.GetAllAsync(ValidPageNumber, InvalidPageSize))
+            FluentActions.Awaiting(() => _userService.GetAllAsync(ValidPageNumber, InvalidPageSize))
                 .Should().Throw<Exception>().WithMessage(Constants.Errors.Page.IncorrectPageSizeFormat);
         }
 
@@ -214,20 +201,6 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private IHttpContextAccessor GetMockedHttpContextAccessor(string userId)
-        {
-            var claimsPrincipialMock = new Mock<ClaimsPrincipal>();
-            claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, userId));
-
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.User).Returns(claimsPrincipialMock.Object);
-
-            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-            httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContextMock.Object);
-
-            return httpContextAccessorMock.Object;
-        }
-
         private BlockUserAdminView GetValidBlockUserView()
         {
             return new BlockUserAdminView
@@ -237,9 +210,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private PagedDataView<UserGetAllAdminViewItem> GetValidPagedDataViewWithUserGetAllViewItems()
+        private PaginationModel<UserGetAllAdminViewItem> GetValidPagedDataViewWithUserGetAllViewItems()
         {
-            return new PagedDataView<UserGetAllAdminViewItem>
+            return new PaginationModel<UserGetAllAdminViewItem>
             {
                 Items = new List<UserGetAllAdminViewItem>
                 {
@@ -262,9 +235,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private PagedDataView<User> GetValidPagedDataViewWithUsers()
+        private PaginationModel<User> GetValidPagedDataViewWithUsers()
         {
-            return new PagedDataView<User>
+            return new PaginationModel<User>
             {
                 Items = new List<User>
                 {

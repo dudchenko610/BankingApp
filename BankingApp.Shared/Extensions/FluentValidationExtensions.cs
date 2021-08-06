@@ -16,7 +16,7 @@ namespace BankingApp.Shared.Extensions
         public static IRuleBuilder<T, string> Password<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             var options = ruleBuilder
-                .NotEmpty().WithMessage(Constants.Errors.Authentication.PasswordEmpty)
+                .NotEmpty().WithMessage(Constants.Errors.Authentication.PasswordRequired)
                 .MinimumLength(Constants.Password.MinPasswordLength).WithMessage(Constants.Errors.Authentication.PasswordIsTooShort)
                 .Matches("[A-Z]").WithMessage(Constants.Errors.Authentication.PasswordUppercaseLetter)
                 .Matches("[a-z]").WithMessage(Constants.Errors.Authentication.PasswordLowercaseLetter)
