@@ -33,11 +33,6 @@ namespace BankingApp.UI.Pages.UsersPage
             _pagedUsers = null;
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-        //    await UpdateUsersDataAsync();
-        }
-
         protected override async Task OnParametersSetAsync()
         {
             await UpdateUsersDataAsync();

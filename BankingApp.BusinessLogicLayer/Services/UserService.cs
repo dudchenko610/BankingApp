@@ -6,7 +6,6 @@ using BankingApp.Entities.Entities;
 using BankingApp.Entities.Enums;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Admin;
-using BankingApp.ViewModels.ViewModels.Pagination;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -45,7 +44,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             if (pageSize < 1)
                 throw new Exception(Constants.Errors.Page.IncorrectPageSizeFormat);
 
-            DataAccessLayer.Models.PaginationModel<User> usersAndTotalCount
+            PaginationModel<User> usersAndTotalCount
                 = await _userRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize);
 
             var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<UserGetAllAdminViewItem>

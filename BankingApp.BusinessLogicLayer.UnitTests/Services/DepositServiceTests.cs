@@ -15,6 +15,8 @@ using BankingApp.Shared.Extensions;
 using BankingApp.BusinessLogicLayer.Interfaces;
 using BankingApp.ViewModels.ViewModels.Deposit;
 using BankingApp.ViewModels.ViewModels.Pagination;
+using BankingApp.DataAccessLayer.Models;
+using BankingApp.Entities.Enums;
 
 namespace BankingApp.BusinessLogicLayer.UnitTests.Services
 {
@@ -270,28 +272,28 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             };
         }
 
-        private DataAccessLayer.Models.PaginationModel<Deposit> GetValidDepositsAndTotalCount()
+        private PaginationModel<Deposit> GetValidDepositsAndTotalCount()
         {
-            return new DataAccessLayer.Models.PaginationModel<Deposit>
+            return new PaginationModel<Deposit>
             {
                 Items = new List<Deposit>
                 {
                     new Deposit {
                         Id = 1,
                         DepositSum = 100,
-                        CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
+                        CalculationFormula = CalculationFormulaEnum.SimpleInterest,
                         Percents = 2.45f
                     },
                     new Deposit {
                         Id = 2,
                         DepositSum = 200,
-                        CalculationFormula = Entities.Enums.CalculationFormulaEnum.CompoundInterest,
+                        CalculationFormula = CalculationFormulaEnum.CompoundInterest,
                         Percents = 5
                     },
                     new Deposit {
                         Id = 3,
                         DepositSum = 300,
-                        CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
+                        CalculationFormula = CalculationFormulaEnum.SimpleInterest,
                         Percents = 6
                     }
                 },
@@ -305,7 +307,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             {
                 Id = 1,
                 UserId = ValidUserId,
-                CalculationFormula = Entities.Enums.CalculationFormulaEnum.SimpleInterest,
+                CalculationFormula = CalculationFormulaEnum.SimpleInterest,
                 CalсulationDateTime = System.DateTime.Now,
                 DepositSum = 100.00m,
                 MonthsCount = 4,

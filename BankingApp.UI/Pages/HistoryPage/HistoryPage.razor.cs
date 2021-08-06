@@ -29,11 +29,6 @@ namespace BankingApp.UI.Pages.HistoryPage
             _pagedDeposits = null;
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await UpdateDepositeHistoryDataAsync();
-        }
-
         protected override async Task OnParametersSetAsync()
         {
             await UpdateDepositeHistoryDataAsync();

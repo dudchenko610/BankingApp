@@ -6,7 +6,6 @@ using BankingApp.Entities.Entities;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Enums;
 using BankingApp.ViewModels.ViewModels.Deposit;
-using BankingApp.ViewModels.ViewModels.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -108,7 +107,7 @@ namespace BankingApp.BusinessLogicLayer.Services
 
             int userId = _userService.GetSignedInUserId();
 
-            DataAccessLayer.Models.PaginationModel<Deposit> depositsAndTotalCount
+            PaginationModel<Deposit> depositsAndTotalCount
                 = await _depositRepository.GetAllAsync((pageNumber - 1) * pageSize, pageSize, userId);
 
             var pagedResponse = new ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>
