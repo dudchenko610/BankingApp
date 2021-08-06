@@ -70,7 +70,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         }
 
         [Fact]
-        public async Task Get_ValidUrlWithAuthorizedMode_GetItemAsyncInvoked()
+        public async Task Get_AuthorizedMode_GetItemAsyncInvoked()
         {
             bool authorizedMode = true;
             var validTestModel = GetValidResponseTestModel();
@@ -110,11 +110,13 @@ namespace BankingApp.UI.Core.UnitTests.Services
             logoutUri.Should().Be(Constants.Constants.Routes.LogoutPage);
         }
 
-        [Fact]
-        public async Task Get_NotSucceededResultWithErrorMessage_ShowErrorInvoked()
+        [Theory]
+        [InlineData(HttpStatusCode.InternalServerError, InternalServerErrorErrorMessage, InternalServerErrorErrorMessage)] // NotSucceededResultWithErrorMessage
+        [InlineData(HttpStatusCode.InternalServerError, "", Constants.Constants.Notifications.UnexpectedError)]  // NotSucceededResultWithoutErrorMessage
+        public async Task Get_InternalServerErrorReturned_ShowErrorInvoked(HttpStatusCode httpStatusCode, string stringContent, string expectedError)
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(InternalServerErrorErrorMessage));
+            var internalServerErrorResponse = GetHttpResponseMessage(httpStatusCode, new StringContent(stringContent));
 
             string messageFromShowError = null;
 
@@ -126,26 +128,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
 
             await _httpService.GetAsync<ResponseTestModel>(GetModel, false);
 
-            messageFromShowError.Should().Be(InternalServerErrorErrorMessage);
-        }
-
-        [Fact]
-        public async Task Get_NotSucceededResultWithoutErrorMessage_ShowErrorInvoked()
-        {
-            var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(""));
-
-            string messageFromShowError = null;
-
-            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(internalServerErrorResponse).Verifiable();
-
-            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
-                .Callback((string message, string heading) => { messageFromShowError = message; });
-
-            await _httpService.GetAsync<ResponseTestModel>(GetModel, false);
-
-            messageFromShowError.Should().Be(Constants.Constants.Notifications.UnexpectedError);
+            messageFromShowError.Should().Be(expectedError);
         }
 
         [Fact]
@@ -221,11 +204,13 @@ namespace BankingApp.UI.Core.UnitTests.Services
             logoutUri.Should().Be(Constants.Constants.Routes.LogoutPage);
         }
 
-        [Fact]
-        public async Task Post_NotSucceededResultWithErrorMessage_ShowErrorInvoked()
+        [Theory]
+        [InlineData(HttpStatusCode.InternalServerError, InternalServerErrorErrorMessage, InternalServerErrorErrorMessage)] // NotSucceededResultWithErrorMessage
+        [InlineData(HttpStatusCode.InternalServerError, "", Constants.Constants.Notifications.UnexpectedError)]  // NotSucceededResultWithoutErrorMessage
+        public async Task Post_InternalServerErrorReturned_ShowErrorInvoked(HttpStatusCode httpStatusCode, string stringContent, string expectedError)
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(InternalServerErrorErrorMessage));
+            var internalServerErrorResponse = GetHttpResponseMessage(httpStatusCode, new StringContent(stringContent));
 
             string messageFromShowError = null;
 
@@ -238,27 +223,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validRequestTestModel = GetValidRequestTestModel();
             await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, false);
 
-            messageFromShowError.Should().Be(InternalServerErrorErrorMessage);
-        }
-
-        [Fact]
-        public async Task Post_NotSucceededResultWithoutErrorMessage_ShowErrorInvoked()
-        {
-            var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(""));
-
-            string messageFromShowError = null;
-
-            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(internalServerErrorResponse).Verifiable();
-
-            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
-                .Callback((string message, string heading) => { messageFromShowError = message; });
-
-            var validRequestTestModel = GetValidRequestTestModel();
-            await _httpService.PostAsync<ResponseTestModel, RequestTestModel>(GetModel, validRequestTestModel, false);
-
-            messageFromShowError.Should().Be(Constants.Constants.Notifications.UnexpectedError);
+            messageFromShowError.Should().Be(expectedError);
         }
 
         [Fact]
@@ -337,11 +302,13 @@ namespace BankingApp.UI.Core.UnitTests.Services
             responseResult.Should().BeFalse();
         }
 
-        [Fact]
-        public async Task PostEmptyResult_NotSucceededResultWithErrorMessage_ShowErrorInvoked()
+        [Theory]
+        [InlineData(HttpStatusCode.InternalServerError, InternalServerErrorErrorMessage, InternalServerErrorErrorMessage)] // NotSucceededResultWithErrorMessage
+        [InlineData(HttpStatusCode.InternalServerError, "", Constants.Constants.Notifications.UnexpectedError)]  // NotSucceededResultWithoutErrorMessage
+        public async Task PostEmptyResult_InternalServerErrorReturned_ShowErrorInvoked(HttpStatusCode httpStatusCode, string stringContent, string expectedError)
         {
             var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(InternalServerErrorErrorMessage));
+            var internalServerErrorResponse = GetHttpResponseMessage(httpStatusCode, new StringContent(stringContent));
 
             string messageFromShowError = null;
 
@@ -354,28 +321,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
             var validRequestTestModel = GetValidRequestTestModel();
             var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, false);
 
-            messageFromShowError.Should().Be(InternalServerErrorErrorMessage);
-            responseResult.Should().BeFalse();
-        }
-
-        [Fact]
-        public async Task PostEmptyResult_NotSucceededResultWithoutErrorMessage_ShowErrorInvoked()
-        {
-            var validTestModel = GetValidResponseTestModel();
-            var internalServerErrorResponse = GetHttpResponseMessage(HttpStatusCode.InternalServerError, new StringContent(""));
-
-            string messageFromShowError = null;
-
-            _httpMessageHandlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(internalServerErrorResponse).Verifiable();
-
-            _toastServiceMock.Setup(x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()))
-                .Callback((string message, string heading) => { messageFromShowError = message; });
-
-            var validRequestTestModel = GetValidRequestTestModel();
-            var responseResult = await _httpService.PostAsync<RequestTestModel>(GetModel, validRequestTestModel, false);
-
-            messageFromShowError.Should().Be(Constants.Constants.Notifications.UnexpectedError);
+            messageFromShowError.Should().Be(expectedError);
             responseResult.Should().BeFalse();
         }
 
@@ -387,11 +333,11 @@ namespace BankingApp.UI.Core.UnitTests.Services
                 Content = httpContent,
             };
         }
-     
+
         private ResponseTestModel GetValidResponseTestModel()
         {
             return new ResponseTestModel
-            { 
+            {
                 Id = 1,
                 Value = "1"
             };
@@ -408,7 +354,7 @@ namespace BankingApp.UI.Core.UnitTests.Services
         private RequestTestModel GetValidRequestTestModel()
         {
             return new RequestTestModel
-            { 
+            {
                 Id = 1,
                 Value = "value"
             };
