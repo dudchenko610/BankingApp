@@ -30,7 +30,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task SignUp_СorrectInputData_ReturnsOkResult()
+        public async Task SignUp_СorrectInputData_ExpectedResults()
         {
             var validSignUpView = GetValidSignUpView();
 
@@ -40,7 +40,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task SignIn_СorrectInputData_ReturnsOkObjectResultWithTokensView()
+        public async Task SignIn_СorrectInputData_ExpectedResults()
         {
             var validSignInView = GetValidSignInView();
             var validTokensView = GetValidTokensView();
@@ -52,7 +52,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task ConfirmEmail_СorrectInputData_ReturnsOkResult()
+        public async Task ConfirmEmail_СorrectInputData_ExpectedResults()
         {
             var confirmEmailView = GetValidConfirmEmailView();
             var controllerResult = await _authenticationController.ConfirmEmail(confirmEmailView);
@@ -62,7 +62,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task ResetPassword_СorrectInputData_ReturnsOkResult()
+        public async Task ResetPassword_СorrectInputData_ExpectedResults()
         {
             var validResetPasswordView = GetValidResetPasswordView();
             var controllerResult = await _authenticationController.ResetPassword(validResetPasswordView);
@@ -72,7 +72,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task ForgotPassword_СorrectInputData_ReturnsOkResult()
+        public async Task ForgotPassword_СorrectInputData_ExpectedResults()
         {
             var validForgotPassword = GetValidForgotPasswordView();
             var controllerResult = await _authenticationController.ForgotPassword(validForgotPassword);

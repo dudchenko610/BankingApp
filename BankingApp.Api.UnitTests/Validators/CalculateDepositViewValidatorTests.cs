@@ -19,28 +19,28 @@ namespace BankingApp.Api.UnitTests.Validators
         }
 
         [Test]
-        public void Validate_DepositeSumLessThanZero_ValidErrorMessage()
+        public void Validate_DepositeSumLessThanZero_ExpectedResults()
         {
             var validateResult = _validator.Validate(RequestCalculateDepositeBankingViews()[0]);
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Deposit.IncorrectPriceFormat);
         }
 
         [Test]
-        public void Validate_MonthCountLessThanZero_ValidErrorMessage()
+        public void Validate_MonthCountLessThanZero_ExpectedResults()
         {
             var validateResult = _validator.Validate(RequestCalculateDepositeBankingViews()[1]);
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Deposit.IncorrectMonthFormat);
         }
 
         [Test]
-        public void Validate_PercentBiggerThan100_ValidErrorMessage()
+        public void Validate_PercentBiggerThan100_ExpectedResults()
         {
             var validateResult = _validator.Validate(RequestCalculateDepositeBankingViews()[2]);
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Deposit.IncorrectPercentNumber);
         }
 
         [Test]
-        public void Validate_PercentLessThan1_ValidErrorMessage()
+        public void Validate_PercentLessThan1_ExpectedResults()
         {
             var validateResult = _validator.Validate(RequestCalculateDepositeBankingViews()[3]);
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Deposit.IncorrectPercentNumber);

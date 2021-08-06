@@ -31,7 +31,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task Calculate_СorrectInputData_ReturnsOkObjectResultWithBankingServiceReceivesValidModel()
+        public async Task Calculate_СorrectInputData_ExpectedResults()
         {
             var validCalculateDepositViw = GetValidCalculateDepositView();
             CalculateDepositView inputModelOfCalculateDepositeMethod = null;
@@ -53,7 +53,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task GetById_ValidDepositIdPassed_ReturnsOkObjectResultWithGetByIdDepositView()
+        public async Task GetById_СorrectInputData_ExpectedResults()
         {
             const int DepositeHistoryId = 1;
 
@@ -78,7 +78,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task GetAll_CallGetAllMethod_ReturnsNotNullModelWithNotNullMemberList()
+        public async Task GetAll_СorrectInputData_ExpectedResults()
         {
             var getPagedAllDepositViewItemResponseFromService = GetValidPagedGetAllDepositViewItemList();
 
@@ -97,7 +97,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task GetAll_CallGetAllMethod_PassesValidParametersToService()
+        public async Task GetAll_СorrectInputData_GetAllAsyncInvoked()
         {
             int passedPageNumber = -1;
             int passedPageSize = -1;

@@ -45,7 +45,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task Calculate_SimpleInterestCalculationFormula_ReturnsExpectedIdAndMappingHappensCorrectly()
+        public async Task Calculate_SimpleInterestCalculationFormula_ExpectedResults()
         {
             var inputServiceModel = GetValidSimpleInterestCalculateDepositeView();
             var validMonthlyPayments = GetValidSimpleInterestMonthlyPayments();
@@ -54,7 +54,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task Calculate_CompoundInterestCalculationFormula_ReturnsExpectedIdAndMappingHappensCorrectly()
+        public async Task Calculate_CompoundInterestCalculationFormula_ExpectedResults()
         {
             var inputServiceModel = GetValidCompoundInterestCalculateDepositeView();
             var validMonthlyPayments = GetValidCompoundInterestMonthlyPayments();
@@ -63,7 +63,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
         
         [Test]
-        public async Task Calculate_ValidDataPasses_MonthCountEqualsToMonthlyPaymentsCount()
+        public async Task Calculate_ValidData_AddAsyncInvoked()
         {
             var inputServiceModel = GetValidCompoundInterestCalculateDepositeView();
             var validMonthlyPayments = GetValidCompoundInterestMonthlyPayments();
@@ -82,7 +82,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task GetAllAsync_CallGetAllMethodPassingValidParameters_ReturnsNotNullModelContainingCorrectlyMappedList()
+        public async Task GetAllAsync_ValidParameters_ExpectedResults()
         {
             var depositsResponseOfRepository = GetValidDepositsAndTotalCount();
 
@@ -109,7 +109,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void GetAllAsync_CallGetAllMethodPassingInvalidPageNumber_ThrowsExceptionWithCorrespondingMessage()
+        public void GetAllAsync_InvalidPageNumber_ThrowsException()
         {
             const int InvalidPageNumber = -1;
             var depositsResponseOfRepository = GetValidDepositsAndTotalCount();
@@ -123,7 +123,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void GetAllAsync_CallGetAllMethodPassingInvalidPageSize_ThrowsExceptionWithCorrespondingMessage()
+        public void GetAllAsync_InvalidPageSize_ThrowsException()
         {
             const int InvalidPageSize = -1;
             var depositsResponseOfRepository = GetValidDepositsAndTotalCount();
@@ -137,7 +137,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task GetByIdAsync_CallGetByIdMethodPassingValidId_ReturnsNotNullModelContainingCorrectlyMappedList()
+        public async Task GetByIdAsync_ValidId_ExpectedResults()
         {
             const int ValidDepositeHistoryId = 1;
             var depositsResponseOfRepository = GetValidDepositWithMonthlyPaymentItems();
@@ -163,7 +163,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
         
         [Test]
-        public void GetByIdAsync_CallGetByIdMethodPassingValidIdAndUserServiceReturnsInvalidUserId_ThrowsExceptionWithCorrespondingMessage()
+        public void GetByIdAsync_ThereIsNoSuchUser_ThrowsException()
         {
             const int ValidDepositeHistoryId = 1;
             const int InvalidUserId = -1;
@@ -180,7 +180,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void GetByIdAsync_CallGetByIdMethodPassingInvalidId_ThrowsExceptionWithCorrespondingMessage()
+        public void GetByIdAsync_InvalidId_ThrowsException()
         {
             const int InvalidDepositeHistoryId = -1;
 

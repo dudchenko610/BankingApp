@@ -17,77 +17,77 @@ namespace BankingApp.Api.UnitTests.Validators
         }
 
         [Test]
-        public void Validate_ValidSignUpView_NoErrorMessage()
+        public void Validate_ValidSignUpView_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetValidSignUpView());
             validateResult.Errors.Should().BeEmpty();
         }
 
         [Test]
-        public void Validate_PasswordsAreNotMatching_ValidErrorMessage()
+        public void Validate_PasswordsAreNotMatching_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithNotMatchingPasswords());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.ConfirmPasswordShouldMatchPassword);
         }
 
         [Test]
-        public void Validate_EmailIsEmpty_ValidErrorMessage()
+        public void Validate_EmailIsEmpty_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithEmptyEmail());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.EmailIsRequired);
         }
 
         [Test]
-        public void Validate_EmailInvalidFormat_ValidErrorMessage()
+        public void Validate_EmailInvalidFormat_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithInvalidEmail());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.InvalidEmailFormat);
         }
 
         [Test]
-        public void Validate_NickNameIsLongerThan12Symbols_ValidErrorMessage()
+        public void Validate_NickNameIsLongerThan12Symbols_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithTooLongNickname());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.NicknameLengthIsTooLong);
         }
 
         [Test]
-        public void Validate_EmptyNickname_ValidErrorMessage()
+        public void Validate_EmptyNickname_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithEmptyNickname());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.NicknameIsRequired);
         }
 
         [Test]
-        public void Validate_PasswordIsEmpty_ValidErrorMessage()
+        public void Validate_PasswordIsEmpty_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithEmptyPassword());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordRequired);
         }
 
         [Test]
-        public void Validate_PasswordIsShorterThanMinPasswordLengthLetters_ValidErrorMessage()
+        public void Validate_PasswordIsShorterThanMinPasswordLengthLetters_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithShortPassword());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordIsTooShort);
         }
 
         [Test]
-        public void Validate_PasswordShouldContainUpperCaseLetter_ValidErrorMessage()
+        public void Validate_PasswordShouldContainUpperCaseLetter_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithPasswordMissingUpperCaseLetter());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordUppercaseLetter);
         }
 
         [Test]
-        public void Validate_PasswordShouldContainLowerCaseLetter_ValidErrorMessage()
+        public void Validate_PasswordShouldContainLowerCaseLetter_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithPasswordMissingLowerCaseLetter());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordLowercaseLetter);
         }
 
         [Test]
-        public void Validate_PasswordShouldContainDigit_ValidErrorMessage()
+        public void Validate_PasswordShouldContainDigit_ExpectedResults()
         {
             var validateResult = _validator.Validate(GetSignUpViewWithPasswordMissingDigit());
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.PasswordDigit);

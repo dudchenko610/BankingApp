@@ -18,47 +18,31 @@ namespace BankingApp.Api.UnitTests.Validators
         }
 
         [Test]
-        public void Validate_ValidConfirmEmailView_NoErrorMessage()
+        public void Validate_ValidConfirmEmailView_ExpectedResults()
         {
-            var validateResult = _validator.Validate(GetValidConfirmEmailView());
+            var validateResult = _validator.Validate(GetConfirmEmailView("rusland610@gmail.com"));
             validateResult.Errors.Should().BeEmpty();
         }
 
         [Test]
-        public void Validate_EmailIsEmpty_ValidErrorMessage()
+        public void Validate_EmailIsEmpty_ExpectedResults()
         {
-            var validateResult = _validator.Validate(GetConfirmEmailViewWithEmptyEmail());
+            var validateResult = _validator.Validate(GetConfirmEmailView(string.Empty));
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.EmailIsRequired);
         }
 
         [Test]
-        public void Validate_EmailInvalidFormat_ValidErrorMessage()
+        public void Validate_EmailInvalidFormat_ExpectedResults()
         {
-            var validateResult = _validator.Validate(GetConfirmEmailViewWithInvalidEmail());
+            var validateResult = _validator.Validate(GetConfirmEmailView("fsdfsdfds"));
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.InvalidEmailFormat);
         }
 
-        private ConfirmEmailAuthenticationView GetValidConfirmEmailView()
+        private ConfirmEmailAuthenticationView GetConfirmEmailView(string email)
         {
             return new ConfirmEmailAuthenticationView
             {
-                Email = "rusland610@gmail.com"
-            };
-        }
-
-        private ConfirmEmailAuthenticationView GetConfirmEmailViewWithEmptyEmail()
-        {
-            return new ConfirmEmailAuthenticationView
-            {
-                Email = ""
-            };
-        }
-
-        private ConfirmEmailAuthenticationView GetConfirmEmailViewWithInvalidEmail()
-        {
-            return new ConfirmEmailAuthenticationView
-            {
-                Email = "fsdfsdfds"
+                Email = email
             };
         }
     }

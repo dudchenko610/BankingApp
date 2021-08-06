@@ -60,7 +60,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task ConfirmEmail_PassedValidModel_CallsUpdateAsyncMethodOfUserManagerPassingInParameterReturnedByFindByEmailAsyncMethod()
+        public async Task ConfirmEmail_ValidModel_UpdateAsyncInvoked()
         {
             var validUser = GetValidUser();
             User inputOfUserManagerUpdateAsync = null;
@@ -78,7 +78,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ConfirmEmail_PassedValidModelButFindByEmailAsyncReturnsNull_ThrowsExceptionWithCorrespondingMessage()
+        public void ConfirmEmail_ThereIsNoSuchEmail_ThrowsException()
         {
             var validUser = GetValidUser();
 
@@ -92,7 +92,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ConfirmEmail_PassedValidModelButConfirmEmailReturnsNotSuccessIdentityResponse_ThrowsExceptionWithCorrespondingMessage()
+        public void ConfirmEmail_ConfirmEmailFailed_ThrowsException()
         {
             var validUser = GetValidUser();
 
@@ -106,7 +106,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task SignIn_PassedValidSignInView_ReturnsValidTokensView()
+        public async Task SignIn_ValidSignInView_ExpectedResults()
         {
             var validUser = GetValidUser();
 
@@ -120,7 +120,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void SignIn_UserManagerFindByEmailAsyncReturnsNull_ThrowsExceptionWithCorrespondingMessage()
+        public void SignIn_ThereIsNoUserWithSuchEmail_ThrowsException()
         {
             _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
 
@@ -130,7 +130,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void SignIn_FoundUserHasNotEmailConfirmed_ThrowsExceptionWithCorrespondingMessage()
+        public void SignIn_EmailIsNotConfirmed_ThrowsException()
         {
             var userWithEmailNotConfirmed = GetUserWithEmailNotConfirmed();
 
@@ -143,7 +143,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void SignIn_FoundUserIsBlocked_ThrowsExceptionWithCorrespondingMessage()
+        public void SignIn_FoundUserIsBlocked_ThrowsException()
         {
             var blockedUser = GetBlockedUser();
 
@@ -156,7 +156,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void SignIn_CheckPasswordFailed_ThrowsExceptionWithCorrespondingMessage()
+        public void SignIn_CheckPasswordFailed_ThrowsException()
         {
             var validUser = GetValidUser();
 
@@ -169,7 +169,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task SignUp_PassedValidSignUpView_SendEmailAsyncOfEmailProviderGetsCalledWithCorrespondingEmailParameter()
+        public async Task SignUp_ValidSignUpView_SendEmailAsyncInvoked()
         {
             string emailPassedToSendEmailMethod = null;
             _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
@@ -187,7 +187,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void SignUp_PassedValidSignUpViewButUserWithSuchEmailAlreadyExists_ThrowsExceptionWithCorrespondingMessage()
+        public void SignUp_UserWithSuchEmailAlreadyExists_ThrowsException()
         {
             var validUser = GetValidUser();
 
@@ -199,7 +199,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void SignUp_PassedValidSignUpViewButCreateAsyncDoesNotSuccesses_ThrowsExceptionAndDeleteAsyncShouldBeCalled()
+        public void SignUp_CreateAsyncDoesNotSuccesses_ThrowsException()
         {
             User userToDelete = null;
 
@@ -215,7 +215,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void SignUp_PassedValidSignUpViewButAddToRoleAsyncDoesNotSuccesses_ThrowsExceptionAndDeleteAsyncShouldBeCalled()
+        public void SignUp_AddToRoleAsyncDoesNotSuccesses_ThrowsException()
         {
             User userToDelete = null;
 
@@ -233,7 +233,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void SignUp_PassedValidSignUpViewButGenerateEmailConfirmationTokenAsyncThrowsException_ThrowsExceptionAndDeleteAsyncShouldBeCalled()
+        public void SignUp_GenerateEmailConfirmationTokenAsyncFailed_ThrowsException()
         {
             User userToDelete = null;
 
@@ -252,7 +252,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void SignUp_PassedValidSignUpViewButSendEmailAsyncReturnsFalse_ThrowsExceptionAndDeleteAsyncShouldBeCalled()
+        public void SignUp_SendEmailFailed_ThrowsException()
         {
             User userToDelete = null;
 
@@ -273,7 +273,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task ForgotPassword_PassedValidForgotPasswordView_SendEmailAsyncOfEmailProviderGetsCalledWithCorrespondingEmailParameter()
+        public async Task ForgotPassword_ValidForgotPasswordView_SendEmailAsyncInvoked()
         {
             var validUser = GetValidUser();
             string emailPassedToSendEmailMethod = null;
@@ -292,10 +292,9 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ForgotPassword_PassedValidForgotPasswordViewButThereIsNoUserWithSuchEmail_ThrowsExceptionWithCorrepondingException()
+        public void ForgotPassword_ThereIsNoUserWithSuchEmail_ThrowsException()
         {
             var validUser = GetValidUser();
-
             _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User)null);
 
             var validForgotPasswordView = GetValidForgotPasswordView();
@@ -304,7 +303,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ForgotPassword_PassedValidForgotPasswordViewButUserIsOfAdminRole_ThrowsExceptionWithCorrespondingMessage()
+        public void ForgotPassword_ButUserIsOfAdminRole_ThrowsException()
         {
             var validUser = GetValidUser();
             var rolesListWithAdmin = GetRolesWithAdminRole();
@@ -318,7 +317,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ForgotPassword_PassedValidForgotPasswordViewButMessageWereNotSent_ThrowsExceptionWithCorrespondingMessage()
+        public void ForgotPassword_SendEmailFailed_ThrowsException()
         {
             var validUser = GetValidUser();
 
@@ -337,7 +336,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ResetPassword_PassedValidResetPasswordView_CallsResetPasswordAsyncAndDoesNotThrowsExceptions()
+        public void ResetPassword_ValidResetPasswordView_ResetPasswordAsyncInvoked()
         {
             var validUser = GetValidUser();
             User userPassedToResetPasswordAsync = null;
@@ -353,7 +352,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ResetPassword_PassedValidResetPasswordViewButThereIsNoUserWithSuchEmail_ThrowsExceptionWithCorrespondingMessage()
+        public void ResetPassword_ThereIsNoUserWithSuchEmail_ThrowsException()
         {
             _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
 
@@ -363,7 +362,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void ResetPassword_PassedValidResetPasswordViewButResetPasswordAsyncFails_ThrowsException()
+        public void ResetPassword_ResetPasswordAsyncFails_ThrowsException()
         {
             var validUser = GetValidUser();
 

@@ -61,7 +61,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void GetSignedInUserId_InvalidHttpContextAccessorInjected_ReturnsMinusOne()
+        public void GetSignedInUserId_InvalidHttpContextAccessor_ExpectedResults()
         {
             const int MinusOne = -1;
             _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, InvalidUserId));
@@ -71,7 +71,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void GetSignedInUserId_ValidHttpContextAccessorInjected_ReturnsValidId()
+        public void GetSignedInUserId_ValidHttpContextAccessor_ExpectedResults()
         {
             _claimsPrincipialMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(string.Empty, ValidUserId));
 
@@ -80,7 +80,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task GetUserByEmail_ValidEmailPassed_ReturnsValidUser()
+        public async Task GetUserByEmail_ValidEmail_ExpectedResults()
         {
             const string ValidEmail = "a@a.com";
 
@@ -96,7 +96,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task GetUserByEmail_InvalidEmailPassed_ReturnsNull()
+        public async Task GetUserByEmail_InvalidEmail_ExpectedResults()
         {
             const string InvalidEmail = "aacom";
 
@@ -108,7 +108,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task Block_ValidBlockUserViewPassed_CallsBlockAsyncOfUserRepository()
+        public async Task Block_ValidBlockUserView_BlockAsyncInvoked()
         {
             var validBlockUserView = GetValidBlockUserView();
             var validUser = GetValidUser();
@@ -130,7 +130,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void Block_ValidBlockUserViewPassedButSignedInUserHasAdminRole_ThrowsExceptionWithCorrespondingMessage()
+        public void Block_SignedInUserHasAdminRole_ThrowsException()
         {
             var validBlockUserView = GetValidBlockUserView();
             var validUser = GetValidUser();
@@ -145,7 +145,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public async Task GetAllAsync_CallGetAllMethodPassingValidParameters_ReturnsNotNullModelContainingCorrectlyMappedList()
+        public async Task GetAllAsync_ValidParameters_ExpectedResults()
         {
             var validPagedDataView = GetValidPagedDataViewWithUserGetAllViewItems();
             var validPagedUsers = GetValidPagedDataViewWithUsers();
@@ -168,7 +168,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void GetAllAsync_CallGetAllMethodPassingInvalidPageNumber_ThrowsExceptionWithCorrespondingMessage()
+        public void GetAllAsync_InvalidPageNumber_ThrowsException()
         {
             const int InvalidPageNumber = -1;
 
@@ -179,7 +179,7 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
         }
 
         [Test]
-        public void GetAllAsync_CallGetAllMethodPassingInvalidPageSize_ThrowsExceptionWithCorrespondingMessage()
+        public void GetAllAsync_InvalidPageSize_ThrowsException()
         {
             const int InvalidPageSize = -1;
 

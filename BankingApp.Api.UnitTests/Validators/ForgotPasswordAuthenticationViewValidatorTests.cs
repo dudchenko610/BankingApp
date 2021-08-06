@@ -18,47 +18,31 @@ namespace BankingApp.Api.UnitTests.Validators
         }
 
         [Test]
-        public void Validate_ValidForgotPasswordView_NoErrorMessage()
+        public void Validate_ValidForgotPasswordView_ExpectedResults()
         {
-            var validateResult = _validator.Validate(GetValidForgotPasswordView());
+            var validateResult = _validator.Validate(GetForgotPasswordView("rusland610@gmail.com"));
             validateResult.Errors.Should().BeEmpty();
         }
 
         [Test]
-        public void Validate_EmailIsEmpty_ValidErrorMessage()
+        public void Validate_EmailIsEmpty_ExpectedResults()
         {
-            var validateResult = _validator.Validate(GetForgotPasswordViewWithEmptyEmail());
+            var validateResult = _validator.Validate(GetForgotPasswordView(string.Empty));
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.EmailIsRequired);
         }
 
         [Test]
-        public void Validate_EmailInvalidFormat_ValidErrorMessage()
+        public void Validate_EmailInvalidFormat_ExpectedResults()
         {
-            var validateResult = _validator.Validate(GetForgotPasswordViewWithInvalidEmail());
+            var validateResult = _validator.Validate(GetForgotPasswordView("fsdfsdfds"));
             validateResult.Errors.Should().Contain(x => x.ErrorMessage == Constants.Errors.Authentication.InvalidEmailFormat);
         }
 
-        private ForgotPasswordAuthenticationView GetValidForgotPasswordView()
+        private ForgotPasswordAuthenticationView GetForgotPasswordView(string email)
         {
             return new ForgotPasswordAuthenticationView
             {
-                Email = "rusland610@gmail.com"
-            };
-        }
-
-        private ForgotPasswordAuthenticationView GetForgotPasswordViewWithEmptyEmail()
-        {
-            return new ForgotPasswordAuthenticationView
-            {
-                Email = ""
-            };
-        }
-
-        private ForgotPasswordAuthenticationView GetForgotPasswordViewWithInvalidEmail()
-        {
-            return new ForgotPasswordAuthenticationView
-            {
-                Email = "fsdfsdfds"
+                Email = email
             };
         }
     }

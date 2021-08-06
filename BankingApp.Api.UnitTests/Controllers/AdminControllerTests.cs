@@ -22,7 +22,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task GetAll_СorrectInputData_ReturnsOkObjectResult()
+        public async Task GetAll_СorrectInputData_ExpectedResults()
         {
             const int ValidPageNumber = 1;
             const int ValidPageSize = 1;
@@ -37,7 +37,7 @@ namespace BankingApp.Api.UnitTests.Controllers
         }
 
         [Test]
-        public async Task BlockUser_СorrectInputData_ReturnsOkResult()
+        public async Task BlockUser_СorrectInputData_ExpectedResults()
         {
             var validBlockUserView = GetValidBlockUserAdminView();
             BlockUserAdminView inputOfblockAsyncMethod = null;
