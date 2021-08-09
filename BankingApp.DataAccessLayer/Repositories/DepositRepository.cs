@@ -16,7 +16,7 @@ namespace BankingApp.DataAccessLayer.Repositories
         /// <summary>
         /// Creates instance of <see cref="DepositRepository"/>.
         /// </summary>
-        /// <param name="dbContext">Gives access to database</param>
+        /// <param name="dbContext">Gives access to database.</param>
         public DepositRepository(BankingDbContext dbContext) : base(dbContext)
         { 
         }
@@ -48,7 +48,7 @@ namespace BankingApp.DataAccessLayer.Repositories
             var paginationModel = new PaginationModel<Deposit>
             {
                 Items = deposits,
-                TotalCount = await _dbSet.CountAsync()
+                TotalCount = await _dbSet.Where(x => x.UserId == userId).CountAsync()
             };
 
             return paginationModel;

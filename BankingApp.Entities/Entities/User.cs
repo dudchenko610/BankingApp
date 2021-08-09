@@ -15,7 +15,7 @@ namespace BankingApp.Entities.Entities
         public virtual IList<Deposit> Deposits { get; set; }
 
         /// <summary>
-        /// Marks user as blocked (true value) and unblocked otherwise
+        /// Marks user as blocked (true value) and unblocked otherwise.
         /// </summary>
         public bool IsBlocked { get; set; }
     }

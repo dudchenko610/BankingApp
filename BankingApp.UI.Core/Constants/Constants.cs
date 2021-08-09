@@ -7,7 +7,7 @@ namespace BankingApp.UI.Core.Constants
     public static class Constants
     {
         /// <summary>
-        /// Notifications used to inform user about some event happened.s
+        /// Notifications used to inform user about some event happened.
         /// </summary>
         public static class Notifications
         {

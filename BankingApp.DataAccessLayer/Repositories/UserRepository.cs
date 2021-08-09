@@ -12,9 +12,9 @@ namespace BankingApp.DataAccessLayer.Repositories
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
         /// <summary>
-        /// Creates instance of <see cref="UserRepository"/>
+        /// Creates instance of <see cref="UserRepository"/>.
         /// </summary>
-        /// <param name="dbContext">Gives access to database</param>
+        /// <param name="dbContext">Gives access to database.</param>
         public UserRepository(BankingDbContext dbContext) : base(dbContext)
         {
         }
@@ -28,6 +28,7 @@ namespace BankingApp.DataAccessLayer.Repositories
         {
             var user = await _dbSet.FirstOrDefaultAsync(x => x.Id == userId);
             user.IsBlocked = block;
+
             await _context.SaveChangesAsync();
         }
     }

@@ -20,7 +20,7 @@ namespace BankingApp.DataAccessLayer.Repositories
         /// <summary>
         /// Creates instance of <see cref="GenericRepository"/>.
         /// </summary>
-        /// <param name="context">Gives access to database</param>
+        /// <param name="context">Gives access to database.</param>
         public GenericRepository(DbContext context)
         {
             _context = context;

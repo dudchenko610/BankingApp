@@ -20,7 +20,6 @@ namespace BankingApp.UI
         /// Application entry point.
         /// </summary>
         /// <param name="args">Command-line arguments.</param>
-        /// <returns></returns>
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);

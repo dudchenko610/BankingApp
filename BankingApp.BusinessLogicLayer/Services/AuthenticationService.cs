@@ -30,7 +30,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <summary>
         /// Creates instance of <see cref="AuthenticationService"/>.
         /// </summary>
-        /// <param name="userManager">Allows make operations with users using ASP NET Identity.</param>
+        /// <param name="userManager">Allows to make operations with users using ASP NET Identity.</param>
         /// <param name="emailProvider">Allows to send email messages.</param>
         /// <param name="mapper">Allows to map models.</param>
         /// <param name="jwtProvider">Allows to generate access token.</param>
@@ -183,6 +183,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             {
                 throw new Exception(Constants.Errors.Authentication.InvalidNicknameOrPassword);
             }
+
             return user;
         }
 

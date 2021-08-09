@@ -22,7 +22,7 @@ namespace BankingApp.UI.Core.Services
         private readonly IToastService _toastService;
 
         /// <summary>
-        /// Creates instance of <see cref="HttpService"/>
+        /// Creates instance of <see cref="HttpService"/>.
         /// </summary>
         /// <param name="httpClient">Allows send HTTP request to server.</param>
         /// <param name="navigationWrapper">Allows to navigate the application routes.</param>
@@ -42,12 +42,13 @@ namespace BankingApp.UI.Core.Services
         }
 
         /// <summary>
-        /// Sends GET request to specified address.
+        /// Sends POST request to specified address, expects nothing to retrieve from server.
         /// </summary>
-        /// <typeparam name="T">Data type of view model should be received.</typeparam>
+        /// <typeparam name="TModel"></typeparam>
         /// <param name="uri">Url address.</param>
+        /// <param name="value">Object to be serialized and sent as request body.</param>
         /// <param name="authorized">Indicates whether access token should be attached to HTTP request.</param>
-        /// <returns>Default value, if exception occured, otherwise, if nothing to return, it will be (T) new object().</returns>
+        /// <returns>Flag indicating whether server responded with success.</returns>
         public async Task<TResult> GetAsync<TResult>(string uri, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -66,10 +67,20 @@ namespace BankingApp.UI.Core.Services
             catch
             {
                 _toastService.ShowError(Constants.Constants.Notifications.UnexpectedError);
+
                 return default;
             }
         }
 
+        /// <summary>
+        /// Sends POST request to specified address, expects object of specified type.
+        /// </summary>
+        /// <typeparam name="TResult">Data type of view model should be received.</typeparam>
+        /// <typeparam name="TModel">Data type of view model should be sent as request body.</typeparam>
+        /// <param name="uri">Url address.</param>
+        /// <param name="value">Object to be serialized and sent as request body.</param>
+        /// <param name="authorized">Indicates whether access token should be attached to HTTP request.</param>
+        /// <returns>Default value, if exception occured, otherwise expected object.</returns>
         public async Task<TResult> PostAsync<TResult, TEntity>(string uri, TEntity value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
@@ -143,6 +154,7 @@ namespace BankingApp.UI.Core.Services
             {
                 _toastService.ShowError(Constants.Constants.Notifications.Unauthorized);
                 _navigationWrapper.NavigateTo(Constants.Constants.Routes.LogoutPage);
+
                 return null;
             }
 
@@ -158,6 +170,7 @@ namespace BankingApp.UI.Core.Services
                 {
                     _toastService.ShowError(errorMessage);
                 }
+
                 return null;
             }
 

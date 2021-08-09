@@ -2,17 +2,17 @@
 namespace BankingApp.Entities.Enums
 {
     /// <summary>
-    /// Represents possible roles of users
+    /// Represents possible roles of users.
     /// </summary>
     public enum RolesEnum : int
     {
         /// <summary>
-        /// Admin role
+        /// Admin role.
         /// </summary>
         Admin = 1,
 
         /// <summary>
-        /// Client role
+        /// Client role.
         /// </summary>
         Client = 2
     }

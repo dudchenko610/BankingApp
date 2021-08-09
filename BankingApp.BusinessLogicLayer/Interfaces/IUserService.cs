@@ -32,7 +32,7 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
         Task<PagedDataView<UserGetAllAdminViewItem>> GetAllAsync(int pageNumber, int pageSize);
 
         /// <summary>
-        /// Allow to block / unblock specified user.
+        /// Allows to block / unblock specified user.
         /// </summary>
         /// <param name="blockUserAdminView">View model containing user id and block operation type (block / unlock).</param>
         Task BlockAsync(BlockUserAdminView blockUserAdminView);

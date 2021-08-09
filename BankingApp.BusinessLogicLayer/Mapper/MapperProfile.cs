@@ -14,7 +14,7 @@ namespace BankingApp.BusinessLogicLayer.Mapper
     public class MapperProfile : Profile
     {
         /// <summary>
-        /// Assign rules for models mapping
+        /// Assigns rules for model mapping
         /// </summary>
         public MapperProfile()
         {

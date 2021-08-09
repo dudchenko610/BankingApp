@@ -43,17 +43,17 @@ namespace BankingApp.Entities.Entities
         public int MonthsCount { get; set; }
 
         /// <summary>
-        /// Percent passed by user
+        /// Percent passed by user.
         /// </summary>
         public float Percents { get; set; }
 
         /// <summary>
-        /// Time of deposit calculation
+        /// Time of deposit calculation.
         /// </summary>
         public DateTime CalсulationDateTime { get; set; }
 
         /// <summary>
-        /// Calculated deposit per month
+        /// Calculated deposit per month.
         /// </summary>
         public virtual IList<MonthlyPayment> MonthlyPayments { get; set; }
     }

@@ -69,7 +69,7 @@ namespace BankingApp.UI.Core.Services
         }
 
         /// <summary>
-        /// Confirms user's email in system
+        /// Confirms user's email in system.
         /// </summary>
         /// <param name="confirmEmailAccountView">View model containing user's email and confirmation token.</param>
         /// <returns>True if operation succeed and false otherwise.</returns>

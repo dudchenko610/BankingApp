@@ -59,8 +59,8 @@ namespace BankingApp.BusinessLogicLayer.Services
                     Percents = res.Percents
                 });
             }
-            depositModel.UserId = _userService.GetSignedInUserId();
 
+            depositModel.UserId = _userService.GetSignedInUserId();
             int savedId = await _depositRepository.AddAsync(depositModel);
 
             return savedId;
@@ -155,6 +155,7 @@ namespace BankingApp.BusinessLogicLayer.Services
             float percentsDevidedBy1200 = (float) calculateDepositView.Percents / 1200.0f;
             decimal monthSum = calculateDepositView.DepositSum * (decimal)Math.Pow(1.0 + percentsDevidedBy1200, monthNumber);
             float percents = (float)decimal.Round(((monthSum - calculateDepositView.DepositSum) / calculateDepositView.DepositSum) * 100.0m, 2);
+
             return (monthSum, percents);
         }
     }

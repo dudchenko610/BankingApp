@@ -77,9 +77,7 @@ namespace BankingApp.UI.Pages.UsersPage
         {
             if (Page < 1)
             {
-                _navigationWrapper.NavigateTo($"{Routes.UsersPage}/1");
-
-                return;
+                Page = 1;
             }
 
             _loaderService.SwitchOn();
