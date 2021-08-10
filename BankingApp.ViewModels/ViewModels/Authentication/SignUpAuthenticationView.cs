@@ -9,7 +9,7 @@ namespace BankingApp.ViewModels.ViewModels.Authentication
     public class SignUpAuthenticationView
     {
         /// <summary>
-        /// User nickname
+        /// User nickname.
         /// </summary>
         [Required(ErrorMessage = Constants.Errors.Authentication.NicknameIsRequired)]
         [StringLength(12, ErrorMessage = Constants.Errors.Authentication.NicknameLengthIsTooLong)]

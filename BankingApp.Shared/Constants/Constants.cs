@@ -12,7 +12,7 @@ namespace BankingApp.Shared
         public static class Errors
         {
             /// <summary>
-            /// Error messages fro deposit controller.
+            /// Error messages for deposit controller.
             /// </summary>
             public static class Deposit
             {

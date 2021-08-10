@@ -30,11 +30,10 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <summary>
         /// Creates instance of <see cref="AuthenticationService"/>.
         /// </summary>
-        /// <param name="userManager">Allows to make operations with users using ASP NET Identity.</param>
-        /// <param name="emailProvider">Allows to send email messages.</param>
-        /// <param name="mapper">Allows to map models.</param>
-        /// <param name="jwtProvider">Allows to generate access token.</param>
-        /// <param name="userService">Allows to provide operations with users.</param>
+        /// <param name="userManager">An instance of <see cref="UserManager{User}"/>.</param>
+        /// <param name="emailProvider">An instance of <see cref="IEmailService"/>.</param>
+        /// <param name="mapper">An instance of <see cref="IMapper"/>.</param>
+        /// <param name="jwtProvider">An instance of <see cref="IJwtService"/>.</param>
         /// <param name="clientConnectionOptions">Contains view model with client connection options mapped from appsettings.</param>
         public AuthenticationService(UserManager<User> userManager,
             IEmailService emailProvider,
@@ -50,10 +49,10 @@ namespace BankingApp.BusinessLogicLayer.Services
         }
 
         /// <summary>
-        /// Confirms user's email in system
+        /// Confirms user's email in system.
         /// </summary>
-        /// <exception cref="Exception">When user confirmation fails.</exception>
         /// <param name="confirmEmailView">View model containing user's email and confirmation token.</param>
+        /// <exception cref="Exception">When user confirmation fails.</exception>
         public async Task ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailView)
         {
             var user = await GetUserIfExistsAsync(confirmEmailView.Email, Constants.Errors.Authentication.UserWasNotFound);
@@ -64,8 +63,8 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// Makes user logged in the system.
         /// </summary>
         /// <param name="signInAccountView">View model containing data needed to sign in user.</param>
-        /// <exception cref="Exception">If there is no such user or invalid credentials</exception>
         /// <returns>View model containing access token.</returns>
+        /// <exception cref="Exception">If there is no such user or invalid credentials.</exception>
         public async Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView)
         {
             var user = await GetUserIfExistsAsync(signInAccountView);
@@ -78,7 +77,7 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <summary>
         /// Makes user registered the system.
         /// </summary>
-        /// <param name="signUpAccountView"></param>
+        /// <param name="signUpAccountView">View model containing data needed to sign up user.</param>
         /// <exception cref="Exception">When occurred error while creating user or sending email message.</exception>
         public async Task SignUpAsync(SignUpAuthenticationView signUpAccountView)
         {

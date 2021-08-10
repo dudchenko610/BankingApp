@@ -24,10 +24,10 @@ namespace BankingApp.UI.Core.Services
         /// <summary>
         /// Creates instance of <see cref="HttpService"/>.
         /// </summary>
-        /// <param name="httpClient">Allows send HTTP request to server.</param>
-        /// <param name="navigationWrapper">Allows to navigate the application routes.</param>
-        /// <param name="localStorageService">Allows to perform read / write operations with browser local storage.</param>
-        /// <param name="toastService">Allows to notificate user with message without blocking UI.</param>
+        /// <param name="httpClient">An instance of <see cref="HttpClient"/>.</param>
+        /// <param name="navigationWrapper">An instance of <see cref="INavigationWrapper"/>.</param>
+        /// <param name="localStorageService">An instance of <see cref="ILocalStorageService"/>.</param>
+        /// <param name="toastService">An instance of <see cref="IToastService"/>.</param>
         public HttpService(
             HttpClient httpClient,
             INavigationWrapper navigationWrapper,
@@ -40,15 +40,14 @@ namespace BankingApp.UI.Core.Services
             _localStorageService = localStorageService;
             _toastService = toastService;
         }
-
+        
         /// <summary>
-        /// Sends POST request to specified address, expects nothing to retrieve from server.
+        /// Sends GET request to specified address, expects nothing to retrieve from server.
         /// </summary>
-        /// <typeparam name="TModel"></typeparam>
+        /// <typeparam name="TResult">Data type of view model should be received.</typeparam>
         /// <param name="uri">Url address.</param>
-        /// <param name="value">Object to be serialized and sent as request body.</param>
         /// <param name="authorized">Indicates whether access token should be attached to HTTP request.</param>
-        /// <returns>Flag indicating whether server responded with success.</returns>
+        /// <returns>Default value, if exception occured, otherwise expected object.</returns>
         public async Task<TResult> GetAsync<TResult>(string uri, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -81,7 +80,7 @@ namespace BankingApp.UI.Core.Services
         /// <param name="value">Object to be serialized and sent as request body.</param>
         /// <param name="authorized">Indicates whether access token should be attached to HTTP request.</param>
         /// <returns>Default value, if exception occured, otherwise expected object.</returns>
-        public async Task<TResult> PostAsync<TResult, TEntity>(string uri, TEntity value, bool authorized = true)
+        public async Task<TResult> PostAsync<TResult, TModel>(string uri, TModel value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
@@ -107,12 +106,12 @@ namespace BankingApp.UI.Core.Services
         /// <summary>
         /// Sends POST request to specified address.
         /// </summary>
-        /// <typeparam name="T">Data type of view model should be received.</typeparam>
+        /// <typeparam name="TModel">Data type of view model should be received.</typeparam>
         /// <param name="uri">Url address.</param>
         /// <param name="value">Object to be serialized and sent as request body.</param>
         /// <param name="authorized">Indicates whether access token should be attached to HTTP request.</param>
-        /// <returns>Default value, if exception occured, otherwise, if nothing to return, it will be (T) new object().</returns>
-        public async Task<bool> PostAsync<TEntity>(string uri, TEntity value, bool authorized = true)
+        /// <returns>Flag indicating whether server responded with success.</returns>
+        public async Task<bool> PostAsync<TModel>(string uri, TModel value, bool authorized = true)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");

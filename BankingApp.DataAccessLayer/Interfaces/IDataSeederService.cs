@@ -8,7 +8,7 @@ namespace BankingApp.DataAccessLayer.Interfaces
     public interface IDataSeederService
     {
         /// <summary>
-        /// Inserts initial data in storage
+        /// Inserts initial data in storage.
         /// </summary>
         Task SeedDataAsync();
     }

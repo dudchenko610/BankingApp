@@ -26,12 +26,12 @@ namespace BankingApp.BusinessLogicLayer.Services
         private readonly IMapper _mapper;
 
         /// <summary>
-        /// Creates instance of <see cref="UserService"/>
+        /// Creates instance of <see cref="UserService"/>.
         /// </summary>
-        /// <param name="httpContextAccessor">Provides access to claims of requester</param>
-        /// <param name="userManager">Allows make operations with users using ASP NET Identity.</param>
-        /// <param name="userRepository">Allows manipulate with users in storage.</param>
-        /// <param name="mapper">Allows to map models.</param>
+        /// <param name="httpContextAccessor">An instance of <see cref="IHttpContextAccessor"/>.</param>
+        /// <param name="userManager">An instance of <see cref="UserManager{TUser}"/>.</param>
+        /// <param name="userRepository">An instance of <see cref="IUserRepository"/>.</param>
+        /// <param name="mapper">An instance of <see cref="IMapper"/>.</param>
         public UserService(IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, IUserRepository userRepository, IMapper mapper)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -43,8 +43,8 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <summary>
         /// Allow to block / unblock specified user.
         /// </summary>
-        /// <exception cref="Exception">If the user that is blocking has the admin role.</exception>
         /// <param name="blockUserAdminView">View model containing user id and block operation type (block / unlock).</param>
+        /// <exception cref="Exception">If the user that is blocking has the admin role.</exception>
         public async Task BlockAsync(BlockUserAdminView blockUserAdminView)
         {
             await CheckUserForAdminRole(blockUserAdminView.UserId);

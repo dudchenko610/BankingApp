@@ -25,10 +25,10 @@ namespace BankingApp.BusinessLogicLayer.Services
         private readonly UserManager<User> _userManager;
 
         /// <summary>
-        /// Creates instance of <see cref="JwtService"/>
+        /// Creates instance of <see cref="JwtService"/>.
         /// </summary>
-        /// <param name="jwtOptions">Contains view model with jwt options mapped from appsettings</param>
-        /// <param name="userManager">Allows make operations with users using ASP NET Identity.</param>
+        /// <param name="jwtOptions">Contains view model with jwt options mapped from appsettings.</param>
+        /// <param name="userManager">An instance of <see cref="UserManager{User}"/>.</param>
         public JwtService(IOptions<JwtConnectionOptions> jwtOptions, UserManager<User> userManager)
         {
             _jwtOptions = jwtOptions.Value;
@@ -36,10 +36,10 @@ namespace BankingApp.BusinessLogicLayer.Services
         }
 
         /// <summary>
-        /// Generates new access by given user's claims
+        /// Generates new access by given user's claims.
         /// </summary>
-        /// <param name="claims">User's claims</param>
-        /// <returns>Access token</returns>
+        /// <param name="claims">User's claims.</param>
+        /// <returns>Access token.</returns>
         public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
             var token = new JwtSecurityToken(
@@ -59,8 +59,8 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// Allows users to get their claims by email.
         /// </summary>
         /// <param name="email">User's email.</param>
-        /// <exception cref="Exception">If user has more or less than 1 role</exception>
         /// <returns>Collection with created claims.</returns>
+        /// <exception cref="Exception">If user has more or less than 1 role.</exception>
         public async Task<IEnumerable<Claim>> GetUserClaimsAsync(string email)
         {
             if (string.IsNullOrWhiteSpace(email))

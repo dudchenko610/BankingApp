@@ -26,6 +26,7 @@ namespace BankingApp.UI.Core.Services
         /// Used to get actual information about access token.
         /// </summary>
         public TokensView TokensView { get; private set; }
+
         /// <summary>
         /// Gets list of roles.
         /// </summary>
@@ -35,9 +36,9 @@ namespace BankingApp.UI.Core.Services
         /// <summary>
         /// Creates instance of <see cref="AuthenticationService"/>.
         /// </summary>
-        /// <param name="navigationWrapper">Allows to navigate the application routes.</param>
-        /// <param name="localStorageService">Allows to perform read / write operations with browser local storage.</param>
-        /// <param name="httpService">Allows send HTTP request to server.</param>
+        /// <param name="navigationWrapper">An instance of <see cref="INavigationWrapper"/>.</param>
+        /// <param name="localStorageService">An instance of <see cref="ILocalStorageService"/>.</param>
+        /// <param name="httpService">An instance of <see cref="IHttpService"/>.</param>
         public AuthenticationService(INavigationWrapper navigationWrapper, 
             ILocalStorageService localStorageService,
             IHttpService httpService)

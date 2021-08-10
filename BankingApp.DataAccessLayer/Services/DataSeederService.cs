@@ -26,10 +26,10 @@ namespace BankingApp.DataAccessLayer.Services
         /// <summary>
         /// Creates instance of <see cref="DataSeederService"/>.
         /// </summary>
-        /// <param name="dbContext">Gives access to database.</param>
+        /// <param name="dbContext">An instance of <see cref="BankingDbContext"/>.</param>
         /// <param name="adminCredentialsOptions">Contains view model with admin credential options mapped from appsettings.</param>
-        /// <param name="userManager">Allows make operations with users using ASP NET Identity.</param>
-        /// <param name="roleManager">Allows make operations with user roles using ASP NET Identity.</param>
+        /// <param name="userManager">An instance of <see cref="UserManager{User}"/>.</param>
+        /// <param name="roleManager">An instance of <see cref="RoleManager{IdentityRole{int}}"/>.</param>
         public DataSeederService(BankingDbContext dbContext, IOptions<AdminCredentialsOptions> adminCredentialsOptions, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
             _dbContext = dbContext;

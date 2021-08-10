@@ -16,7 +16,7 @@ namespace BankingApp.DataAccessLayer.Repositories
         /// <summary>
         /// Creates instance of <see cref="DepositRepository"/>.
         /// </summary>
-        /// <param name="dbContext">Gives access to database.</param>
+        /// <param name="dbContext">An instance of <see cref="BankingDbContext"/>.</param>
         public DepositRepository(BankingDbContext dbContext) : base(dbContext)
         { 
         }

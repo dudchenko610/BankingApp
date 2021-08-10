@@ -22,6 +22,7 @@ namespace BankingApp.Entities.Entities
         /// Number of month.
         /// </summary>
         public int MonthNumber { get; set; }
+
         /// <summary>
         /// Calculated sum of deposit for this month.
         /// </summary>

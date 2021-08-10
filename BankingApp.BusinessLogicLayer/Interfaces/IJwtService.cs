@@ -17,10 +17,10 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
         Task<IEnumerable<Claim>> GetUserClaimsAsync(string email);
 
         /// <summary>
-        /// Generates new access by given user's claims
+        /// Generates new access by given user's claims.
         /// </summary>
-        /// <param name="claims">User's claims</param>
-        /// <returns>Access token</returns>
+        /// <param name="claims">User's claims.</param>
+        /// <returns>Access token.</returns>
         string GenerateAccessToken(IEnumerable<Claim> claims);
     }
 }

@@ -14,9 +14,9 @@ namespace BankingApp.UI.Core.Services
         private readonly IHttpService _httpService;
 
         /// <summary>
-        /// Creates instance of <see cref="UserService"/>
+        /// Creates instance of <see cref="UserService"/>.
         /// </summary>
-        /// <param name="httpService">Allows send HTTP request to server.</param>
+        /// <param name="httpService">An instance of <see cref="IHttpService"/>.</param>
         public UserService(IHttpService httpService)
         {
             _httpService = httpService;

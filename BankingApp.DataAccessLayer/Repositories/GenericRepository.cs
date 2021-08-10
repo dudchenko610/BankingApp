@@ -18,9 +18,9 @@ namespace BankingApp.DataAccessLayer.Repositories
         protected DbSet<TEntity> _dbSet;
 
         /// <summary>
-        /// Creates instance of <see cref="GenericRepository"/>.
+        /// Creates instance of <see cref="GenericRepository{TEntity}"/>.
         /// </summary>
-        /// <param name="context">Gives access to database.</param>
+        /// <param name="context">An instqance of <see cref="DbContext"/>.</param>
         public GenericRepository(DbContext context)
         {
             _context = context;

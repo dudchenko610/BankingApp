@@ -27,9 +27,9 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// <summary>
         /// Creates instance of <see cref="DepositService"/>.
         /// </summary>
-        /// <param name="mapper">Allows to map models.</param>
-        /// <param name="depositRepository">Allows manipulate with deposits in storage.</param>
-        /// <param name="userService">Allows to provide operations with users.</param>
+        /// <param name="mapper">An instance of <see cref="IMapper"/>.</param>
+        /// <param name="depositRepository">An instance of <see cref="IDepositRepository"/>.</param>
+        /// <param name="userService">An instance of <see cref="IUserService"/>.</param>
         public DepositService(IMapper mapper, IDepositRepository depositRepository, IUserService userService)
         {
             _mapper = mapper;
@@ -70,8 +70,8 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// Allows to get information about deposit with monthly payments information.
         /// </summary>
         /// <param name="depositId">Id of deposit in storage.</param>
-        /// <exception cref="Exception">If there is no deposit with such id or fetched deposit belong to another user.</exception>
         /// <returns>View model representing deposit.</returns>
+        /// <exception cref="Exception">If there is no deposit with such id or fetched deposit belong to another user.</exception>
         public async Task<GetByIdDepositView> GetByIdAsync(int depositId)
         {
             var depositWithItems = await _depositRepository.GetDepositWithItemsByIdAsync(depositId);
@@ -98,9 +98,9 @@ namespace BankingApp.BusinessLogicLayer.Services
         /// </summary>
         /// <param name="pageNumber">Requested page number.</param>
         /// <param name="pageSize">How much elements contains single page.</param>
-        /// <exception cref="Exception">If some of the parameters or both are invalid</exception>
         /// <returns>View model with data about all deposits in storage and deposits list for specified page.</returns>
-        public async Task<ViewModels.ViewModels.Pagination.PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
+        /// <exception cref="Exception">If some of the parameters or both are invalid.</exception>
+        public async Task<PagedDataView<DepositGetAllDepositViewItem>> GetAllAsync(int pageNumber, int pageSize)
         {
             if (pageNumber < 1)
             {

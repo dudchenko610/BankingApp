@@ -19,9 +19,9 @@ namespace BankingApp.BusinessLogicLayer.Services
         private readonly EmailConnectionOptions _emailConnectionOptions;
 
         /// <summary>
-        /// Creates instance of <see cref="EmailService"/>
+        /// Creates instance of <see cref="EmailService"/>.
         /// </summary>
-        /// <param name="emailConnectionOptions">Contains view model with email connection options mapped from appsettings</param>
+        /// <param name="emailConnectionOptions">Contains view model with email connection options mapped from appsettings.</param>
         public EmailService(IOptions<EmailConnectionOptions> emailConnectionOptions)
         {
             _emailConnectionOptions = emailConnectionOptions.Value;

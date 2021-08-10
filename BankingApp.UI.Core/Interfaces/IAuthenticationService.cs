@@ -1,5 +1,4 @@
-﻿using BankingApp.Entities.Entities;
-using BankingApp.ViewModels.ViewModels.Authentication;
+﻿using BankingApp.ViewModels.ViewModels.Authentication;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -40,7 +39,7 @@ namespace BankingApp.UI.Core.Interfaces
 
 
         /// <summary>
-        /// Confirms user's email in system
+        /// Confirms user's email in system.
         /// </summary>
         /// <param name="confirmEmailAccountView">View model containing user's email and confirmation token.</param>
         /// <returns>True if operation succeed and false otherwise.</returns>

@@ -16,13 +16,13 @@ namespace BankingApp.BusinessLogicLayer.Interfaces
         Task<TokensView> SignInAsync(SignInAuthenticationView signInAccountView);
 
         /// <summary>
-        /// Makes user registered the system.
+        /// Makes user registered in the system.
         /// </summary>
         /// <param name="signUpAccountView">View model containing data needed to register user.</param>
         Task SignUpAsync(SignUpAuthenticationView signUpAccountView);
 
         /// <summary>
-        /// Confirms user's email in system
+        /// Confirms user's email in system.
         /// </summary>
         /// <param name="confirmEmailAccountView">View model containing user's email and confirmation token.</param>
         Task ConfirmEmailAsync(ConfirmEmailAuthenticationView confirmEmailAccountView);

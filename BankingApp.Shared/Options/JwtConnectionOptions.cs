@@ -22,7 +22,7 @@ namespace BankingApp.Shared.Options
         public int Lifetime { get; set; }
 
         /// <summary>
-        /// Secret key for generation access token.
+        /// Secret key to generate access token.
         /// </summary>
         public string SecretKey { get; set; }
     }

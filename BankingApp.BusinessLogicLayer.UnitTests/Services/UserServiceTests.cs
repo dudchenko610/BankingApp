@@ -23,7 +23,6 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
     {
         private const int ValidPageNumber = 1;
         private const int ValidPageSize = 1;
-
         private const string ValidUserId = "1";
         private const string InvalidUserId = "dds_123ds";
 
@@ -47,8 +46,6 @@ namespace BankingApp.BusinessLogicLayer.UnitTests.Services
             _mapper = mapperConfig.CreateMapper();
 
             _userRepositoryMock = new Mock<IUserRepository>();
-
-
             _claimsPrincipialMock = new Mock<ClaimsPrincipal>();
 
             var httpContextMock = new Mock<HttpContext>();

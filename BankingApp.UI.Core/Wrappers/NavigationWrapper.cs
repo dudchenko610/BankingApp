@@ -39,9 +39,9 @@ namespace BankingApp.UI.Core.Wrappers
         }
 
         /// <summary>
-        /// Creates instance of <see cref="NavigationWrapper"/>
+        /// Creates instance of <see cref="NavigationWrapper"/>.
         /// </summary>
-        /// <param name="navigationManager">Provides an abstraction for querying and managing URI navigation.</param>
+        /// <param name="navigationManager">An instance of <see cref="NavigationManager"/>.</param>
         public NavigationWrapper(NavigationManager navigationManager)
         {
             _navigationManager = navigationManager;

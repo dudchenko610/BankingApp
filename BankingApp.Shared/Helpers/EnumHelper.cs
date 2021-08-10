@@ -7,7 +7,7 @@ using BankingApp.Shared.Extensions;
 namespace BankingApp.Shared.Helpers
 {
     /// <summary>
-    /// Enum helper methds.
+    /// Enum helper methods.
     /// </summary>
     public static class EnumHelper
     {
