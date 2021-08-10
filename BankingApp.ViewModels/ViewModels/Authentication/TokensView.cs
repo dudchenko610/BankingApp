@@ -1,7 +1,7 @@
 ﻿namespace BankingApp.ViewModels.ViewModels.Authentication
 {
     /// <summary>
-    /// View model represens access token.
+    /// View model represents access token.
     /// </summary>
     public class TokensView
     {

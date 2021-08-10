@@ -3,6 +3,7 @@ using BankingApp.ViewModels.ViewModels.Deposit;
 using BankingApp.ViewModels.ViewModels.Pagination;
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using static BankingApp.UI.Core.Constants.Constants;
 
@@ -13,7 +14,7 @@ namespace BankingApp.UI.Pages.HistoryPage
     /// </summary>
     public partial class HistoryPage
     {
-        private static readonly int DepositsOnPage = 2;
+        private const int DepositsOnPage = 2;
 
         private int _totalPageCount;
         private PagedDataView<DepositGetAllDepositViewItem> _pagedDeposits;
@@ -30,14 +31,6 @@ namespace BankingApp.UI.Pages.HistoryPage
         /// </summary>
         [Parameter]
         public int Page { get; set; }
-
-        /// <summary>
-        /// Creates instance of <see cref="HistoryPage"/>.
-        /// </summary>
-        public HistoryPage()
-        {
-            _pagedDeposits = null;
-        }
 
         protected override async Task OnParametersSetAsync()
         {
@@ -66,7 +59,7 @@ namespace BankingApp.UI.Pages.HistoryPage
             _pagedDeposits = await _depositService.GetAllAsync(Page, DepositsOnPage);
             _loaderService.SwitchOff();
 
-            if (_pagedDeposits is null || _pagedDeposits.Items.Count == 0)
+            if (_pagedDeposits is null || _pagedDeposits.Items.Any())
             {
                 return;
             }

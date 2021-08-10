@@ -5,6 +5,7 @@ using BankingApp.ViewModels.ViewModels.Pagination;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using static BankingApp.UI.Core.Constants.Constants;
 
@@ -15,7 +16,7 @@ namespace BankingApp.UI.Pages.UsersPage
     /// </summary>
     public partial class UsersPage
     {
-        private static readonly int UsersOnPage = 2;
+        private const int UsersOnPage = 2;
 
         private int _totalPageCount;
         private PagedDataView<UserGetAllAdminViewItem> _pagedUsers;
@@ -34,14 +35,6 @@ namespace BankingApp.UI.Pages.UsersPage
         /// </summary>
         [Parameter]
         public int Page { get; set; }
-
-        /// <summary>
-        /// Creates instance of <see cref="UsersPage"/>.
-        /// </summary>
-        public UsersPage()
-        {
-            _pagedUsers = null;
-        }
 
         protected override async Task OnParametersSetAsync()
         {
@@ -84,7 +77,7 @@ namespace BankingApp.UI.Pages.UsersPage
             _pagedUsers = await _userService.GetAllAsync(Page, UsersOnPage);
             _loaderService.SwitchOff();
 
-            if (_pagedUsers is null || _pagedUsers.Items.Count == 0)
+            if (_pagedUsers is null || _pagedUsers.Items.Any())
             { 
                 return;
             }
