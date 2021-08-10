@@ -16,6 +16,7 @@ namespace BankingApp.UI.UnitTests.Shared
         private readonly Mock<INavigationWrapper> _navWrapperMock;
         private readonly Mock<IAuthenticationService> _authenticationServiceMock;
         private readonly Mock<ILoaderService> _loaderServiceMock;
+
         public HeaderTests()
         {
             _authenticationServiceMock = new Mock<IAuthenticationService>();
@@ -27,7 +28,7 @@ namespace BankingApp.UI.UnitTests.Shared
 
             _navWrapperMock = new Mock<INavigationWrapper>();
             _navWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Verifiable();
-            _navWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns("");
+            _navWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns(string.Empty);
 
             Services.AddSingleton(_authenticationServiceMock.Object);
             Services.AddSingleton(_loaderServiceMock.Object);

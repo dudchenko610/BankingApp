@@ -14,13 +14,10 @@ namespace BankingApp.UI.UnitTests.Pages
 {
     public class SignInPageTests : TestContext
     {
-        private Mock<IAuthenticationService> _authenticationServiceMock { get; set; }
-
-        private Mock<INavigationWrapper> _navigationWrapperMock { get; set; }
-
-        private Mock<ILoaderService> _loaderServiceMock { get; set; }
-
-        private Mock<IToastService> _toastServiceMock { get; set; }
+        private readonly Mock<IAuthenticationService> _authenticationServiceMock;
+        private readonly Mock<INavigationWrapper> _navigationWrapperMock;
+        private readonly Mock<ILoaderService> _loaderServiceMock;
+        private readonly Mock<IToastService> _toastServiceMock;
 
         public SignInPageTests()
         {
@@ -32,7 +29,7 @@ namespace BankingApp.UI.UnitTests.Pages
 
             _navigationWrapperMock = new Mock<INavigationWrapper>();
             _navigationWrapperMock.Setup(x => x.NavigateTo(It.IsAny<string>(), false)).Verifiable();
-            _navigationWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns("");
+            _navigationWrapperMock.Setup(x => x.ToBaseRelativePath(It.IsAny<string>())).Returns(string.Empty);
 
             _toastServiceMock = new Mock<IToastService>();
 
@@ -125,7 +122,7 @@ namespace BankingApp.UI.UnitTests.Pages
         public void WhenTheFormIsSubmited_DataWithEmptyEmail_ExpectedMarkupRendered()
         {
             var validSignInView = GetValidSignInView();
-            validSignInView.Email = "";
+            validSignInView.Email = string.Empty;
 
             var signInForm = RenderComponent<SignInPage>();
 

@@ -17,13 +17,10 @@ namespace BankingApp.UI.UnitTests.Pages
     {
         private const string ValidQueryUrl = "http://test.com?email=a@a.com&code=fdkfgdffkdsdsfdsfdsfdsfsd2342dfsf";
 
-        private Mock<IAuthenticationService> _authenticationServiceMock { get; set; }
-
-        private Mock<INavigationWrapper> _navigationWrapperMock { get; set; }
-
-        private Mock<ILoaderService> _loaderServiceMock { get; set; }
-
-        private Mock<IToastService> _toastServiceMock { get; set; }
+        private readonly Mock<IAuthenticationService> _authenticationServiceMock;
+        private readonly Mock<INavigationWrapper> _navigationWrapperMock;
+        private readonly Mock<ILoaderService> _loaderServiceMock;
+        private readonly Mock<IToastService> _toastServiceMock;
 
         public ResetPasswordPageTests()
         {

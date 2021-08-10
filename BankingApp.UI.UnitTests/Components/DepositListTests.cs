@@ -5,6 +5,7 @@ using FluentAssertions;
 using Bunit;
 using System.Linq;
 using BankingApp.ViewModels.ViewModels.Deposit;
+using System;
 
 namespace BankingApp.UI.UnitTests.Components
 {
@@ -61,7 +62,7 @@ namespace BankingApp.UI.UnitTests.Components
                     DepositSum = 100,
                     MonthsCount = 12,
                     Percents = 4,
-                    CalсulationDateTime = System.DateTime.MaxValue
+                    CalсulationDateTime = DateTime.MaxValue
                 },
                 new DepositGetAllDepositViewItem 
                 {
@@ -70,7 +71,7 @@ namespace BankingApp.UI.UnitTests.Components
                     DepositSum = 200,
                     MonthsCount = 6,
                     Percents = 5,
-                    CalсulationDateTime = System.DateTime.MinValue
+                    CalсulationDateTime = DateTime.MinValue
                 },
                 new DepositGetAllDepositViewItem 
                 { 
@@ -79,7 +80,7 @@ namespace BankingApp.UI.UnitTests.Components
                     DepositSum = 300,
                     MonthsCount = 2,
                     Percents = 2,
-                    CalсulationDateTime = System.DateTime.MinValue
+                    CalсulationDateTime = DateTime.MinValue
                 }
             };
         }
