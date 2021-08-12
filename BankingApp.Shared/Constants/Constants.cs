@@ -197,21 +197,9 @@ namespace BankingApp.Shared
             public const string Client = "Client";
         }
 
-        /// <summary>
-        /// Assembly related.
-        /// </summary>
         public static class Assembly
         { 
             public const string DataAccessLayer = "BankingApp.DataAccessLayer";
-        }
-
-        /// <summary>
-        /// Swagger lib related.
-        /// </summary>
-        public static class Swagger
-        {
-            public const string Version = "v1";
-            public const string Title = "BankingApp API";
         }
     }
 }
