@@ -11,6 +11,7 @@ using BankingApp.ViewModels.ViewModels.Deposit;
 using BankingApp.Shared;
 using BankingApp.ViewModels.Banking.Admin;
 using BankingApp.Shared.Options;
+using Microsoft.OpenApi.Models;
 
 namespace BankingApp.Api
 {
@@ -59,6 +60,11 @@ namespace BankingApp.Api
                        .AllowAnyMethod()
                        .AllowAnyHeader());
             });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(Constants.Swagger.Version, new OpenApiInfo { Title = Constants.Swagger.Title, Version = Constants.Swagger.Version });
+            });
         }
 
         /// <summary>
@@ -68,6 +74,9 @@ namespace BankingApp.Api
         /// <param name="env">Used to get information about the web hosting environment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
